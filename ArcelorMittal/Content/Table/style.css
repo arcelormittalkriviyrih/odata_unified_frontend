@@ -1,0 +1,40 @@
+.grid_area{
+    display: inline-block;
+    min-height: 500px;
+    vertical-align:top;
+} 
+
+.grid_area table, .grid_area tr, .grid_area td{
+    outline:1px solid #000;
+    border-collapse:collapse;
+}
+
+.grid_area table{
+    width:100%;
+}
+
+.grid_area th{
+    background: pink;
+    outline:1px solid #000;
+}
+
+.grid_area td, .grid_area th{
+    padding:5px
+}
+
+.grid_area caption{
+    text-align: left;
+    font-size: 30px;
+    background: lightGreen;
+    padding: 5px;
+}
+
+.content{
+    padding:10px 30px;
+}
+
+.jsGrid{    
+    display: inline-block;
+    width: 1000px;
+    height: 550px;
+}

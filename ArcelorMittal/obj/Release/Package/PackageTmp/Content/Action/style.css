@@ -1,0 +1,45 @@
+﻿form#action{
+    display: inline-block;
+    min-height: 100px;
+    margin-left: 10px;
+    box-sizing: border-box;
+    position: relative;
+    background: #f9f9f9;
+}
+
+form#action label{
+    height: 40px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 26px;
+    vertical-align: bottom;
+    font-size: 18px;
+    font-family: Times New Roman;
+}
+
+form#action input{
+    display: inline-block;
+    width: 300px;
+    height: 40px;
+    margin: 10px;
+    vertical-align: middle;
+    font-size: 25px;
+    outline: none;
+    box-sizing: border-box;
+    padding-left: 10px;
+    font-family: Times New Roman;
+}
+
+form#action button{
+    width: 100px;
+    height: 28px;
+    background: #2f90b2;
+    color: #fff;
+    border: none;
+    outline: none;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size:15px;
+}
