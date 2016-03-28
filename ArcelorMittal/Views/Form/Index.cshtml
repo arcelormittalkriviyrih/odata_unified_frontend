@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Forms";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/scripts/form/index.js"></script>
+
+<div class="row show-grid">
+    <div class="span5">
+        <ul id="item_list" class="pre-scrollable"></ul>
+    </div>
+
+    <div class="span8">
+        <form id="form" class="form-inline" style="display: none">
+            <input type="text" id="rowId"/><button id="getRow" class="btn">get row</button>
+
+            <p id="error" class="text-error" style="display:none">cannot get row by this id!</p>
+        </form>
+        <form id="row" class="form-horizontal">
+
+        </form>
+    </div>
+</div>
