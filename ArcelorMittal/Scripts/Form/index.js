@@ -27,22 +27,24 @@ function vmLoadItem(name) {
             })
             .get(0);
 
-            vmBuildForm(table);
+            vmBuildForm(table, $('.form_container'));
 
         });
 };
 
-function vmBuildForm(table) {
+function vmBuildForm(table, root) {
 
-    console.log(table);
-    // clear form
-    var $form = $('form#form').show();
+    root.empty();
 
-    var $rowIdControl = $('input#rowId');
-    var $getRowButton = $('button#getRow');
-    var $errorMsg = $('#error').hide();
+    var $form = $('form#form').clone();
 
-    var $rowForm = $('form#row').empty();
+    $form.appendTo(root).show();
+
+    var $rowIdControl = $form.children('input#rowId');
+    var $getRowButton = $form.children('button#getRow');
+    var $errorMsg = $form.children('#error').hide();
+
+    var $rowForm = $('<form id="row" />').addClass('form-horizontal').appendTo(root);
 
     $rowIdControl.focus(function () {
 
@@ -63,38 +65,103 @@ function vmBuildForm(table) {
                 if (field != '@odata.context') {
                     var controlsControlGroup = controlGroup.clone().appendTo($rowForm);
 
-                    $('<label />').addClass('control-label').text(field)
+                    $('<label />').addClass('control-label').text(field+":")
                         .appendTo(controlsControlGroup);
 
-                    var input = $('<input />').addClass('form').attr('type', 'text')
-                        .val(row[field])
-                        .appendTo(controlsControlGroup);
+                    var fieldProperties = $.grep(table.fields, function (e) {
+                        return e.name == field;
+                    })[0];
 
-                    table.fields.each(function (i, item) {
 
-                        if (item.name == field)
-                            item.input = input;
-                    })
-                }                
+                    var input;
+
+                    if (field != table.key) {
+
+                        switch (fieldProperties.type) {
+
+                            case 'Edm.Int32':
+
+                                input = $('<input />').addClass('form').attr({
+                                    'type': 'number',
+                                    'required': fieldProperties.mandatory
+                                })
+                                .val(row[field]);
+
+                                break;
+
+                            case 'Edm.Single':
+
+                                input = $('<input />').addClass('form').attr({
+                                    'type': 'number',
+                                    'step': '0.0000000001'
+                                })
+                                .val(row[field]);
+                                break;
+
+                            case 'Edm.String':
+
+                                input = $('<input />').addClass('form').attr({
+                                    'type': 'text',
+                                    'required': fieldProperties.mandatory
+                                })
+                                .val(row[field]);
+
+                                if (fieldProperties.maxlength && fieldProperties.maxlength > 0)
+                                    input.attr('maxlength', fieldProperties.maxlength);
+
+                                break;
+
+                            case 'Edm.Date':
+
+                                input = $('<input />').addClass('form')
+                                .attr('type', 'text')
+                                .val(row[field])
+                                .datepicker({
+                                    dateFormat: 'yy-mm-dd'
+                                });
+                                break;
+
+                            case 'Edm.Boolean':
+
+                                input = $('<input type="checkbox" class="bool-checkbox"/>')
+                                            .attr('checked', Boolean(row[field]));
+
+                                break;
+
+                            case 'Edm.Binary':
+
+                                input = $('<input type="file" name="file" id="file" class="inputfile" /><label for="file" class="btn" disabled>Choose a file</label>');
+
+                                break;
+                        }
+
+                        input.attr('required', fieldProperties.mandatory)
+                             .appendTo(controlsControlGroup).on('change', function () {
+
+                                 vmUpdateRow(table, _key, $(this));
+
+                             });
+
+                        var state = $('<span class="state" />').appendTo(controlsControlGroup).hide();
+
+                        table.fields.each(function (i, item) {
+
+                            if (item.name == field) {
+                                item.input = input;
+                                item.state = state;
+                            };
+                        });
+
+                    }else {
+
+                        $('<p class="not-editable-field" />').text(row[field])
+                            .appendTo(controlsControlGroup);
+
+                    };
+                    
+                };
 
             };
-
-            var controlsSubmitGroup = controlGroup.clone().appendTo($rowForm);
-
-            $('<button />').attr('id', 'update-row').addClass('btn offset4').text('Update')
-                            .appendTo(controlsSubmitGroup)
-                            .click(function (e) {
-
-                                e.preventDefault();
-                                
-                                vmUpdateRow(table, _key).done(function () {
-
-                                    alert('row is updated!')
-                                }).fail(function () {
-
-                                    alert('update is failed')
-                                });
-                            })
 
         }).fail(function () {
 
@@ -115,13 +182,38 @@ function vmGetTableRowInfo(table, key) {
     });
 };
 
-function vmUpdateRow(table, id) {
+function vmUpdateRow(table, id, input) {
+
+    var updatedField = $.grep(table.fields.toArray(), function (e) {
+
+        if (e.input)
+            return e.input[0] == input[0];
+
+    })[0];
+
+    var state = updatedField.state.show(0).text('saving...');
 
     var data = table.fields
                    .toArray()
+                   .filter(x =>x.name!= table.key)
                    .reduce(function (p, n) {
 
-                       p[n.name] = n.input.val();
+                       if (n.input.attr('type') == 'checkbox')
+                           p[n.name] = n.input.is(':checked');
+                       else if (n.input.attr('type') == 'file') {
+
+                           var file = $('#file').get(0).files;
+
+                           if (file.length > 0) {
+                               
+                               var reader = new FileReader();
+
+                               p[n.name] = reader.readAsDataURL(file);
+                           }
+                       }
+                       else
+                           p[n.name] = n.input.val();
+
                        return p;
 
                    }, {});
@@ -132,8 +224,15 @@ function vmUpdateRow(table, id) {
         data: JSON.stringify(data),
         contentType: "application/json;odata=verbose"
     })
-    .fail(function () {
-        alert('Update failed');
+    .done(function () {
+      
+        state.addClass('success').text('saved').delay(5000).fadeOut(1000);
+    })
+    .fail(function (err) {
+
+        state.addClass('failed').text('failed');
+
+        handleError(err);
     });
 
 }

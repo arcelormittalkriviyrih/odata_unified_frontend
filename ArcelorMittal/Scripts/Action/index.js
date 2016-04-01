@@ -60,10 +60,7 @@ function vmBuildForm(action) {
                 .done(function (result) {
                     alert('Success: ' + result.value);
                 })
-                .fail(function () {
-
-                    alert('Action failed');
-                });
+                .fail(handleError);
 
             // prevent default action
             return false;

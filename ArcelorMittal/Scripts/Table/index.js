@@ -43,16 +43,73 @@ function vmBuildGrid(table) {
 
                         var field = {
                             name: item.name,
-                            width: vmGetWidth(item.name)
+                            width: vmGetWidth(item.name),
+                            maxlength: item.maxlength,
+                        };
+
+                        var validatorString = {
+                            validator: "maxLength",
+                            param: item.maxlength
                         };
 
                         switch (item.type) {
 
                             case 'Edm.Int32':
                                 field.type = 'number';
+
+                                if (item.mandatory == true)
+                                    field.validate = 'required';
+
                                 break;
+
+                            case 'Edm.Single':
+                                field.type = 'floatNumber';
+
+                                if (item.mandatory == true)
+                                    field.validate = 'required';
+
+                                break;
+
                             case 'Edm.String':
                                 field.type = 'text';
+
+                                if (item.mandatory == true && field.maxlength > 0) 
+                                    field.validate = ['required', validatorString]
+                                
+                                if (item.mandatory == true && field.maxlength == 0)
+                                    field.validate = 'required';
+
+                                if (item.mandatory == false && field.maxlength > 0)
+                                    field.validate = validatorString;
+
+                                break;
+
+                            case 'Edm.Date':
+                                field.type = 'date';
+
+                                if (item.mandatory == true)
+                                    field.validate = 'required';
+
+                                break;
+
+                            case 'Edm.Boolean':
+
+                                field = {
+                                    name: item.name,
+                                    autosearch: true,
+                                    type: "select",
+                                    items: [
+                                         { Name: "", Id: "" },
+                                         { Name: 'false', Id: false },
+                                         { Name: 'true', Id: true },
+                                    ],
+                                    valueField: "Id",
+                                    textField: "Name"
+                                };
+
+                                if (item.mandatory == true)
+                                    field.validate = 'required';
+
                                 break;
                         };
 
@@ -65,7 +122,7 @@ function vmBuildGrid(table) {
         height: "500px",
         width: "1000px",
 
-        sorting: true,
+        sorting: false,
         paging: true,
         editing: true,
         filtering: true,
@@ -121,8 +178,30 @@ function vmBuildGrid(table) {
                 if (field && field.type) {
                     if (field.type == 'text')
                         filter.push("contains({0},'{1}')".format(field.name, conditions[field.name]));
-                    else if (field.type == 'number')
+
+                    else if (field.type == 'date') {
+
+                        var date = new Date(conditions[field.name]);
+                        var year = date.getFullYear();
+                        var month = date.getMonth() + 1;
+                        if (month < 10)
+                            month = '0' + month;
+
+                        var day = date.getDate();
+
+                        if (day < 10)
+                            day = '0' + day;
+
+                        filter.push("year({0}) eq {1}".format(field.name, year.toString()));
+                        filter.push("month({0}) eq {1}".format(field.name, month.toString()));
+                        filter.push("day({0}) eq {1}".format(field.name, day.toString()));
+                    }
+                        
+                    else if (field.type == 'number' || field.type == 'select')
                         filter.push("{0} eq {1}".format(field.name, conditions[field.name]));
+
+                    else if (field.type == 'floatNumber')
+                        filter.push("{0} eq {1}f".format(field.name, conditions[field.name]));
                     else
                         alert('Filtering by {0} not supported'.format(field.type));
                 }               
@@ -133,15 +212,27 @@ function vmBuildGrid(table) {
 
     function insertItem(item) {
 
-        return $.ajax({
-            url: serviceUrl + table.name,
-            type: "POST",
-            data: JSON.stringify(item),
-            contentType: "application/json;odata=verbose"
-        })
-        .fail(function () {
-            alert('Insert failed');
-        });
+        var isEmpty = isEmptyRow(item);
+        
+        if (!isEmpty && (item[table.key] != 0 || item[table.key] != '')) {
+
+            return $.ajax({
+                url: serviceUrl + table.name,
+                type: "POST",
+                data: JSON.stringify(item),
+                contentType: "application/json;odata=verbose"
+            })
+            .fail(
+                handleError);
+        }
+        else if (item[table.key] == 0 || item[table.key] == '') {
+
+            alert('you cannot push empty ' + table.key + ' field!');
+        }
+        else {
+            alert('You cannot push empty row!');
+        }
+        
     };
 
     function updateItem(item) {
@@ -154,9 +245,7 @@ function vmBuildGrid(table) {
             data: JSON.stringify(item),
             contentType: "application/json;odata=verbose"
         })
-        .fail(function () {
-            alert('Update failed');
-        });
+        .fail(handleError);
     };
 
     function deleteItem(item) {
@@ -167,11 +256,22 @@ function vmBuildGrid(table) {
             type: "DELETE",
             url: serviceUrl + table.name + '(' + id + ')'
         })
-        .fail(function () {
-            alert('Delete failed');
-        });
+        .fail(handleError);
     };    
 };
+
+function isEmptyRow(row) {
+
+    var isEmpty = true;
+
+    for (prop in row) {
+
+        if (row[prop] != 0 || row[prop] != '')
+            isEmpty = false;
+    }
+
+    return isEmpty;
+}
 
 function vmGetWidth(name) {
 
@@ -194,7 +294,8 @@ function autoRefreshGrid(table, interval) {
         vmBuildGrid(table);
         console.log('>refresh');
     }, interval);
-}
+};
+
 
 
 

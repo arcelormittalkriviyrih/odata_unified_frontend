@@ -75,7 +75,8 @@ function vmGetActions(metadata) {
                                             return {
                                                 name: $(param).attr('Name'),
                                                 type: $(param).attr('Type'),
-                                                mandatory: $(param).attr('Nullable')
+                                                maxlength: $(param).attr('MaxLength'),
+                                                mandatory: $(param).attr('Nullable') ? true : false
                                             };
                                         });
 
@@ -99,7 +100,8 @@ function vmGetTables(metadata) {
                                         return {
                                             name: $(param).attr('Name'),
                                             type: $(param).attr('Type'),
-                                            mandatory: $(param).attr('Nullable')
+                                            maxlength: $(param).attr('MaxLength'),
+                                            mandatory: $(param).attr('Nullable') ? true : false
                                         };
                                     });
 
@@ -135,3 +137,28 @@ function vmLoadItem(name) {
     // should be overriden
     // with specific load case
 };
+
+//method for finding last child object in JSON
+//uses for finding most priorited 
+function getLastChild(obj, parents, child) {
+
+    var message = null;
+
+    parents.forEach(function (parent) {
+
+        if (obj.hasOwnProperty(parent)) {
+            message = getLastChild(obj[parent], parents, child);
+        }
+    })
+
+    return message || obj[child];
+
+};
+
+//method for handling AJAX errors
+function handleError(err) {
+
+    err = JSON.parse(err.responseText);
+    var msg = getLastChild(err, ['error', 'innererror', 'internalexception'], 'message');
+    alert(msg);
+}

@@ -1140,10 +1140,6 @@ input[type="color"],
           transition: border linear 0.2s, box-shadow linear 0.2s;             
 }
 
-input.form{
-    margin-left: 12px;
-}
-
 textarea:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
@@ -6170,6 +6166,4 @@ a.badge:focus {
   position: fixed;
 }
 
-ul#item_list.pre-scrollable{
-    max-height:500px;
-}
+
