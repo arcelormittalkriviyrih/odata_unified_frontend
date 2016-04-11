@@ -92,6 +92,14 @@ function vmBuildGrid(table) {
 
                                 break;
 
+                            case 'Edm.DateTimeOffset':
+                                field.type = 'dateTime';
+
+                                if (item.mandatory == true)
+                                    field.validate = 'required';
+
+                                break;
+
                             case 'Edm.Boolean':
 
                                 field = {
@@ -130,7 +138,7 @@ function vmBuildGrid(table) {
         pageLoading: true,
         inserting: true,
         pageIndex: 1,
-        pageSize: 5,
+        pageSize: 10,
 
         controller: {
             loadData: loadData,
@@ -181,20 +189,12 @@ function vmBuildGrid(table) {
 
                     else if (field.type == 'date') {
 
-                        var date = new Date(conditions[field.name]);
-                        var year = date.getFullYear();
-                        var month = date.getMonth() + 1;
-                        if (month < 10)
-                            month = '0' + month;
+                        getDateFilterParams(['year', 'month', 'day'], filter, field, new Date(conditions[field.name]));
+                    }
 
-                        var day = date.getDate();
+                    else if (field.type == 'dateTime') {
 
-                        if (day < 10)
-                            day = '0' + day;
-
-                        filter.push("year({0}) eq {1}".format(field.name, year.toString()));
-                        filter.push("month({0}) eq {1}".format(field.name, month.toString()));
-                        filter.push("day({0}) eq {1}".format(field.name, day.toString()));
+                        getDateFilterParams(['year', 'month', 'day', 'hour', 'minute', 'second'], filter, field, new Date(conditions[field.name]));
                     }
                         
                     else if (field.type == 'number' || field.type == 'select')
@@ -274,16 +274,33 @@ function isEmptyRow(row) {
 }
 
 function vmGetWidth(name) {
-
-    if (name.length <= 15)
+    return getTextWidth(name, "regular 14pt Helvetica")+20;
+    /*if (name.length <= 15)
         return "150px"
     else if (name.length > 15 && name.length <= 25)
         return "220px"
     else if (name.length > 25 && name.length <= 35)
         return "250px"
     else
-        return "300px"
+        return "300px"*/
 }
+
+/**
+ * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
+ * 
+ * @param {String} text The text to be rendered.
+ * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
+ * 
+ * @see http://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
+ */
+function getTextWidth(text, font) {
+    // re-use canvas object for better performance
+    var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+    var context = canvas.getContext("2d");
+    context.font = font;
+    var metrics = context.measureText(text);
+    return metrics.width;
+};
 
 function autoRefreshGrid(table, interval) {
 
@@ -295,6 +312,20 @@ function autoRefreshGrid(table, interval) {
         console.log('>refresh');
     }, interval);
 };
+
+function getDateFilterParams(timeProperties, filter, field, time) {
+
+    var date = getTimeToUpdate(time);
+
+    for (var i in date) {
+
+        if (timeProperties.indexOf(i) > -1) {
+
+            filter.push("{0}({1}) eq {2}".format(i, field.name, date[i].toString()));
+        }            
+    }
+}
+
 
 
 

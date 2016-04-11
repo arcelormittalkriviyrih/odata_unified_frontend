@@ -81,3 +81,24 @@ input#fileUpload{
 	margin-left: 12px;
 }
 
+/*modified datetimepicker*/
+
+span.ui-spinner.ui-widget.ui-widget-content.ui-corner-all{
+    height: 30px;
+    display: inline-block;
+    width: 80px;
+    position: relative;
+}
+
+a.ui-spinner-button.ui-spinner-up.ui-corner-tr.ui-button.ui-widget.ui-state-default.ui-button-text-only{
+    position:absolute;
+    top:-1px;
+    cursor: pointer;
+}
+
+a.ui-spinner-button.ui-spinner-down.ui-corner-br.ui-button.ui-widget.ui-state-default.ui-button-text-only{
+    position:absolute;
+    bottom: -1px;
+    cursor: pointer;
+}
+

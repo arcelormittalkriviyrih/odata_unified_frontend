@@ -1,5 +1,6 @@
 ﻿var serviceUrl = '../../ODataWebApp/api/Static/';
-var interval = 5000; //grid auto refresh interval (30 sec)
+//var serviceUrl = '../../ODataRestierDynamic/api/Dynamic/';
+var interval = 5000; //grid auto refresh interval (5 sec)
 var _intervalID; //initiate interval ID
 
 $(function () {
@@ -37,7 +38,6 @@ $(function () {
         if (_intervalID)
             clearInterval(_intervalID);
     });
-
 
     $('div#grid').on('grid_is_loaded', function (e, table) {
 
@@ -161,4 +161,46 @@ function handleError(err) {
     err = JSON.parse(err.responseText);
     var msg = getLastChild(err, ['error', 'innererror', 'internalexception'], 'message');
     alert(msg);
+}
+
+function getTimeToUpdate(time) {
+
+    var date = new Date(time);
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+
+    return {
+
+        year: year,
+        month: addZero(month),
+        day: addZero(day),
+        hour: addZero(hour),
+        minute: addZero(minute),
+        second: addZero(second)
+    }
+}
+
+function addZero(item) {
+
+    if (item < 10)
+        return item = '0' + item;
+    else
+        return item;
+
+}
+
+//add bootstrap class to buttons 'now' and 'done' in datetimepicker
+function addBootstrapClassToControls(input) {
+    setTimeout(function () {
+        var btn = $(input).datepicker("widget").find(".ui-datepicker-buttonpane button");
+
+        btn.each(function (i, btn) {
+
+            $(btn).addClass('btn');
+        })
+    }, 1)
 }
