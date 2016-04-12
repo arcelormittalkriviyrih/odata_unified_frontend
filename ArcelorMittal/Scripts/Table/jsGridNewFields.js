@@ -120,6 +120,14 @@
                         // don't call if api was used and not key press
                         if (e.originalEvent !== undefined)
                             tp_inst._onTimeChange();
+
+                        if (tp_inst.hour && tp_inst.hour > 23)
+                            tp_inst.hour = 23;
+                        if (tp_inst.minute && tp_inst.minute > 59)
+                            tp_inst.minute = 59;
+                        if (tp_inst.second && tp_inst.second > 59)
+                            tp_inst.second = 59;
+
                         tp_inst._onSelectHandler();
                     },
                     spin: function (e, ui) { // spin events

@@ -136,8 +136,18 @@ function vmBuildForm(table, root) {
                                                 step: step,
                                                 change: function (e, ui) { // key events
                                                     // don't call if api was used and not key press
-                                                    if (e.originalEvent !== undefined)
+                                                    if (e.originalEvent !== undefined) {
+                                                                                                               
                                                         tp_inst._onTimeChange();
+                                                    }
+
+                                                    if (tp_inst.hour && tp_inst.hour > 23)
+                                                        tp_inst.hour = 23;
+                                                    if (tp_inst.minute && tp_inst.minute > 59)
+                                                        tp_inst.minute = 59;
+                                                    if (tp_inst.second && tp_inst.second > 59)
+                                                        tp_inst.second = 59;
+
                                                     tp_inst._onSelectHandler();
                                                 },
                                                 spin: function (e, ui) { // spin events
@@ -154,8 +164,13 @@ function vmBuildForm(table, root) {
                                         return obj.find('.ui-timepicker-input').spinner(opts);
                                     },
                                     value: function (tp_inst, obj, unit, val) {
-                                        if (val !== undefined)
+                                        if (val !== undefined) {
+
+                                            unit == 'hour' ? (val > 23 ? val = 23: val = val) : (val > 59 ? val = 59: val = val)   ;
+
                                             return obj.find('.ui-timepicker-input').spinner('value', val);
+                                        }
+                                            
                                         return obj.find('.ui-timepicker-input').spinner('value');
                                     }
                                 };
