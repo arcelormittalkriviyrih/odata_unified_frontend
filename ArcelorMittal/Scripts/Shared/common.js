@@ -1,6 +1,6 @@
-﻿var serviceUrl = '../../ODataRestierDynamic/api/Dynamic/';
-//var serviceUrl = '../../ODataRestierDynamic/api/Dynamic/';
-var interval = 5000; //grid auto refresh interval (5 sec)
+﻿//var serviceUrl = '../../ODataWebApp/api/Static/';
+var serviceUrl = '../../ODataRestierDynamic/api/Dynamic/';
+var interval = 300000; //grid auto refresh interval (5 min)
 var _intervalID; //initiate interval ID
 
 $(function () {
@@ -60,6 +60,14 @@ function vmGetMetadata() {
             .error(function () {
                 alert('failed to read metadata');
             });
+};
+
+function vmReadTable(table) {
+
+    return $.ajax({
+        url: serviceUrl + table,
+        dataType: "json"
+    });
 };
 
 function vmGetActions(metadata) {

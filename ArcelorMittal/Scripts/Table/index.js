@@ -33,11 +33,6 @@ function vmLoadItem(name) {
 
 function vmBuildGrid(table) {
 
-    // clear grid
-    var $grid = $('div#grid').empty();
-
-    _$grid = $grid;
-
     var fields = table.fields
                     .map(function (ind, item) {
 
@@ -124,31 +119,42 @@ function vmBuildGrid(table) {
                         return field;
                     });
 
-    fields.push({ type: "control" });
+    fields.push({ type: "control" });    
 
-    $grid.jsGrid({
-        height: "500px",
-        width: "1000px",
+    // clear grid component
+    // create jsGrid
+    $('div#grid').empty()
+                .jsGrid({
+                    height: "500px",
+                    width: "1000px",
 
-        sorting: false,
-        paging: true,
-        editing: true,
-        filtering: true,
-        autoload: true,
-        pageLoading: true,
-        inserting: true,
-        pageIndex: 1,
-        pageSize: 10,
+                    sorting: false,
+                    paging: true,
+                    editing: true,
+                    filtering: true,
+                    autoload: true,
+                    pageLoading: true,
+                    inserting: true,
+                    pageIndex: 1,
+                    pageSize: 10,
 
-        controller: {
-            loadData: loadData,
-            insertItem: insertItem,
-            updateItem: updateItem,
-            deleteItem: deleteItem
-        },
+                    controller: {
+                        loadData: loadData,
+                        insertItem: insertItem,
+                        updateItem: updateItem,
+                        deleteItem: deleteItem
+                    },
 
-        fields: fields
-    });   
+                    fields: fields
+                });   
+
+    //$.extend(jsGrid.Grid.prototype, {
+    //    red: function () {
+    //        console.log('red');
+    //    }
+    //});
+
+    //$grid.jsGrid('red');
 
     function loadData(filter) {
 

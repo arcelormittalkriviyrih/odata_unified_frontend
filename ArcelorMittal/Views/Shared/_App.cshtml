@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title | ArcelorMital</title>
+
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.1/jquery-ui-timepicker-addon.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.4.1/jsgrid.min.js"></script>
+
+    <script src="~/scripts/shared/common.js"></script>
+    <script src="~/scripts/shared/util.js"></script>
+    <script src="~/scripts/app/index.js"></script>
+
+    <link rel="stylesheet" href="~/Content/shared/layout.css" />
+    <link rel="stylesheet" href="~/Content/shared/bootstrap/css/bootstrap.css" />
+
+</head>
+<body>
+
+    <section class="container">
+
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="index">ArcelorMital</a>
+                <ul id="navigation" class="nav"></ul>
+            </div>
+        </div>
+
+        @RenderBody()        
+
+    </section>
+
+</body>
+</html>

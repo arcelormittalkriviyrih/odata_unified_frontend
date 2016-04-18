@@ -112,17 +112,29 @@
     <Content Include="Content\Table\style.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
+    <Content Include="Scripts\App\Index.js" />
+    <Content Include="Scripts\App\Marker.js" />
+    <Content Include="Scripts\App\Market.js" />
+    <Content Include="Scripts\App\PA.js" />
+    <Content Include="Scripts\App\WorkshopSpecs.js" />
     <Content Include="Scripts\Form\index.js" />
     <Content Include="Scripts\Shared\common.js" />
     <Content Include="Scripts\Shared\util.js" />
     <Content Include="Scripts\Table\index.js" />
     <Content Include="Scripts\Table\jsGridNewFields.js" />
-    <Content Include="Web.config" />
+    <Content Include="Scripts\Vendor\jquery-2.2.3.min.js" />
+    <Content Include="Scripts\Vendor\jquery-ui-timepicker-addon.js" />
+    <Content Include="Scripts\Vendor\jquery-ui.min.js" />
+    <Content Include="Scripts\Vendor\jsgrid.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\actionController.cs" />
     <Compile Include="Controllers\formController.cs" />
+    <Compile Include="Controllers\appController.cs" />
     <Compile Include="Controllers\tableController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -137,6 +149,12 @@
     <Content Include="Views\Action\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Views\Form\Index.cshtml" />
+    <Content Include="Views\App\Index.cshtml" />
+    <Content Include="Views\App\Market.cshtml" />
+    <Content Include="Views\App\Marker.cshtml" />
+    <Content Include="Views\App\PA.cshtml" />
+    <Content Include="Views\App\WorkshopSpecs.cshtml" />
+    <Content Include="Views\Shared\_App.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
