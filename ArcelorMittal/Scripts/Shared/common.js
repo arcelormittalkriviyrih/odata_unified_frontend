@@ -1,4 +1,4 @@
-﻿var serviceUrl = '../../ODataWebApp/api/Static/';
+﻿var serviceUrl = '../../ODataRestierDynamic/api/Dynamic/';
 //var serviceUrl = '../../ODataRestierDynamic/api/Dynamic/';
 var interval = 5000; //grid auto refresh interval (5 sec)
 var _intervalID; //initiate interval ID
