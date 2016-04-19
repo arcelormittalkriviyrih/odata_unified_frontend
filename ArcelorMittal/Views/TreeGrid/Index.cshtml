@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "TreeGrids";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.4.1/jsgrid.js"></script>
+
+<script src="~/Scripts/Table/index.js"></script>
+<script src="~/Scripts/Table/jsGridNewFields.js"></script>
+<script src="~/Scripts/TreeGrid/index.js"></script>
+
+<link href="~/content/table/jsgrid.css" rel="stylesheet" />
+<link href="~/content/table/jsgrid-theme.css" rel="stylesheet" />
+<link href="~/content/shared/datetimepicker.css" rel="stylesheet" />
+
+<div class="row">
+
+    <div class="treeContainer span5">
+
+        <div class="mainButtonsControls">
+            <button class="btn" id="createTreeItem">Create new node</button>
+            <button class="btn" id="removeNode" disabled>Delete node</button>
+        </div>
+        
+        <div class="createNodeControls">
+            <input type="text" id="nodeName" />
+            <button class="btn" id="accept">create</button>
+            <button class="btn" id="cancel">cancel</button>
+        </div>
+        
+        <div id="jstree">
+
+        </div>
+    </div>
+
+    
+    <div id="treeGrid" class="span8">
+
+    </div>
+</div>
+

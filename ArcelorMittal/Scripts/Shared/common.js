@@ -1,6 +1,6 @@
 ﻿//var serviceUrl = '../../ODataWebApp/api/Static/';
 var serviceUrl = '../../ODataRestierDynamic/api/Dynamic/';
-var interval = 300000; //grid auto refresh interval (5 min)
+var interval = 5000; //grid auto refresh interval (5 min)
 var _intervalID; //initiate interval ID
 
 $(function () {
@@ -37,11 +37,6 @@ $(function () {
 
         if (_intervalID)
             clearInterval(_intervalID);
-    });
-
-    $('div#grid').on('grid_is_loaded', function (e, table) {
-
-        autoRefreshGrid(table, interval);
     });
 
 });

@@ -102,3 +102,17 @@ a.ui-spinner-button.ui-spinner-down.ui-corner-br.ui-button.ui-widget.ui-state-de
     cursor: pointer;
 }
 
+/*tree grid modified*/
+
+div.mainButtonsControls input[type='text'], div.createNodeControls input[type='text']{
+    margin: 0;
+}
+
+div.treeContainer{
+    padding: 10px;
+}
+
+div#jstree{
+    margin-top:10px;
+}
+

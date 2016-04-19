@@ -9,29 +9,88 @@
             // populate item list
             vmPopulateList(tables);
         });
+
+    //$('.testGo').click(function () {
+
+
+    //    $('div#test')                
+    //            .jsGrid({
+    //                height: "500px",
+    //                width: "1000px",
+
+    //                sorting: false,
+    //                paging: true,
+    //                editing: true,
+    //                filtering: true,
+    //                autoload: true,
+    //                pageLoading: true,
+    //                inserting: true,
+    //                pageIndex: 1,
+    //                pageSize: 10,
+
+    //            }).jsGrid('initOdata', {
+    //                serviceUrl: '../../ODataRestierDynamic/api/Dynamic/',
+    //                table: 'Equipment',
+    //                defaultFilter: ''
+    //            });
+    //})
 });
 
 function vmLoadItem(name) {
 
     console.log('> Loading table: ' + name);
 
-    vmGetMetadata()
-        .done(function (metadata) {
+    $('div#test')
+                .empty()
+                .jsGrid({
+                    height: "500px",
+                    width: "1000px",
 
-            // find action by name
-            var table = vmGetTables(metadata).filter(function (ind, table) {
+                    sorting: false,
+                    paging: true,
+                    editing: true,
+                    filtering: true,
+                    autoload: true,
+                    pageLoading: true,
+                    inserting: true,
+                    pageIndex: 1,
+                    pageSize: 10,
 
-                return table.name == name;
-            })
-            .get(0);
-
-            vmBuildGrid(table);
-
-            $("div#grid").trigger('grid_is_loaded', table);
-        });
+                }).jsGrid('initOdata', {
+                    serviceUrl: '../../ODataRestierDynamic/api/Dynamic/',
+                    table: name,
+                    defaultFilter: ''
+                });
+    
+    //vmCreateGrid($("div#grid"), name, 300000);
 };
 
-function vmBuildGrid(table) {
+//container - $("div#grid")
+//name - table name for grid building
+//interval - count of milisec for autorefresh interval
+//filter - uses in treegrid (temporary)
+function vmCreateGrid(container, name, interval, defaultFilter) {
+
+    vmGetMetadata()
+    .done(function (metadata) {
+
+        // find action by name
+        var table = vmGetTables(metadata).filter(function (ind, table) {
+
+            return table.name == name;
+        })
+        .get(0);
+
+        vmBuildGrid(container, table, defaultFilter);
+
+        if (interval) {
+
+            autoRefreshGrid(container, table, defaultFilter, interval);
+        }
+    });
+}
+
+function vmBuildGrid(container, table, defaultFilter) {
 
     var fields = table.fields
                     .map(function (ind, item) {
@@ -123,7 +182,7 @@ function vmBuildGrid(table) {
 
     // clear grid component
     // create jsGrid
-    $('div#grid').empty()
+    container.empty()
                 .jsGrid({
                     height: "500px",
                     width: "1000px",
@@ -147,19 +206,11 @@ function vmBuildGrid(table) {
 
                     fields: fields
                 });   
-
-    //$.extend(jsGrid.Grid.prototype, {
-    //    red: function () {
-    //        console.log('red');
-    //    }
-    //});
-
-    //$grid.jsGrid('red');
-
+    
     function loadData(filter) {
 
         var data = {
-            $filter: vmGetFilter(filter, fields),
+            $filter: vmGetFilter(filter, fields, defaultFilter),
             $count: true,
             $top: filter.pageSize,
             $skip: (filter.pageIndex - 1) * filter.pageSize
@@ -178,9 +229,14 @@ function vmBuildGrid(table) {
         });
     };
 
-    function vmGetFilter(conditions, fields) {
+    function vmGetFilter(conditions, fields, defaultFilter) {
 
         var filter = [];
+
+        if (defaultFilter) {
+
+            filter.push(defaultFilter)
+        };
        
         for (field in conditions)
             if (conditions[field]) {
@@ -281,14 +337,7 @@ function isEmptyRow(row) {
 
 function vmGetWidth(name) {
     return getTextWidth(name, "regular 14pt Helvetica")+20;
-    /*if (name.length <= 15)
-        return "150px"
-    else if (name.length > 15 && name.length <= 25)
-        return "220px"
-    else if (name.length > 25 && name.length <= 35)
-        return "250px"
-    else
-        return "300px"*/
+
 }
 
 /**
@@ -308,13 +357,13 @@ function getTextWidth(text, font) {
     return metrics.width;
 };
 
-function autoRefreshGrid(table, interval) {
+function autoRefreshGrid(container, table, defaultFilter, interval) {
 
     //set interval and every interval time
     //read current situation for table data
     _intervalID = setInterval(function () {
 
-        vmBuildGrid(table);
+        vmBuildGrid(container, table, defaultFilter);
         console.log('>refresh');
     }, interval);
 };
