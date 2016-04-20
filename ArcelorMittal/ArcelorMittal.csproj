@@ -125,6 +125,11 @@
     <Content Include="Scripts\Table\jsGridExt.js" />
     <Content Include="Scripts\Table\jsGridNewFields.js" />
     <Content Include="Scripts\TreeGrid\index.js" />
+    <Content Include="Scripts\Vendor\jquery-2.2.3.min.js" />
+    <Content Include="Scripts\Vendor\jquery-ui-timepicker-addon.js" />
+    <Content Include="Scripts\Vendor\jquery-ui.min.js" />
+    <Content Include="Scripts\Vendor\jsgrid.js" />
+    <Content Include="Scripts\Vendor\jsgrid.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
