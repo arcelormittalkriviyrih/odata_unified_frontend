@@ -302,11 +302,17 @@ function vmUpdateRow(table, id, input) {
                                var time = getTimeToUpdate(n.input.val());
                                p[n.name] = '{0}-{1}-{2}T{3}:{4}:{5}.000Z'.format(time.year, time.month, time.day, time.hour, time.minute, time.second);
                            }
-                           else
-                               p[n.name] = n.input.val();
+                           else {
 
-                       }
-                           
+                               // get value from input
+                               // if field is optional than set null for empty
+                               var val = n.input.val();
+                               if (!n.mandatory && val == '')
+                                   val = null;
+
+                               p[n.name] = val;
+                           }                               
+                       }                           
 
                        return p;
 
