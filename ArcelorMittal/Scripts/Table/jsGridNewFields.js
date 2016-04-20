@@ -1,4 +1,142 @@
-﻿//control for float counts
+﻿// control for String
+(function (jsGrid, $, undefined) {
+
+    var Field = jsGrid.Field;
+
+    function TextField(config) {
+        Field.call(this, config);
+    }
+
+    TextField.prototype = new Field({
+
+        autosearch: true,
+        readOnly: false,
+
+        filterTemplate: function () {
+            if (!this.filtering)
+                return "";
+
+            var grid = this._grid,
+                $result = this.filterControl = this._createTextBox();
+
+            if (this.autosearch) {
+                $result.on("keypress", function (e) {
+                    if (e.which === 13) {
+                        grid.search();
+                        e.preventDefault();
+                    }
+                });
+            }
+
+            return $result;
+        },
+
+        insertTemplate: function () {
+            if (!this.inserting)
+                return "";
+
+            return this.insertControl = this._createTextBox();
+        },
+
+        editTemplate: function (value) {
+            if (!this.editing)
+                return this.itemTemplate(value);
+
+            var $result = this.editControl = this._createTextBox();
+            $result.val(value);
+            return $result;
+        },
+
+        filterValue: function () {
+
+            var val = this.filterControl.val();
+            if (this.nullable && val == '')
+                return null
+            else
+                return this.filterControl.val();
+        },
+
+        insertValue: function () {
+            
+            var val = this.insertControl.val();
+            if (this.nullable && val == '')
+                return null
+            else
+                return this.insertControl.val();
+        },
+
+        editValue: function () {
+            
+            var val = this.editControl.val();
+            if (this.nullable && val == '')
+                return null
+            else
+                return this.editControl.val();
+        },
+
+        _createTextBox: function () {
+            return $("<input>").attr("type", "text")
+                .prop("readonly", !!this.readOnly);
+        }
+    });
+
+    jsGrid.fields.text = jsGrid.TextField = TextField;
+
+}(jsGrid, jQuery));
+
+// control for integer
+(function (jsGrid, $, undefined) {
+
+    var TextField = jsGrid.TextField;
+
+    function NumberField(config) {
+        TextField.call(this, config);
+    }
+
+    NumberField.prototype = new TextField({
+
+        sorter: "number",
+        align: "right",
+        readOnly: false,
+
+        filterValue: function () {
+
+            var val = this.filterControl.val();
+            if (this.nullable && val == '')
+                return null
+            else
+                return parseInt(this.filterControl.val() || 0, 10);
+        },
+
+        insertValue: function () {
+
+            var val = this.insertControl.val();
+            if (this.nullable && val == '')
+                return null
+            else
+                return parseInt(this.insertControl.val() || 0, 10);
+        },
+
+        editValue: function () {
+
+            var val = this.editControl.val();
+            if (this.nullable && val == '')
+                return null
+            else
+                return parseInt(this.editControl.val() || 0, 10);
+        },
+
+        _createTextBox: function () {
+            return $("<input>").attr("type", "number")
+                .prop("readonly", !!this.readOnly);
+        }
+    });
+
+    jsGrid.fields.number = jsGrid.NumberField = NumberField;
+
+}(jsGrid, jQuery));
+
+//control for float counts
 (function (jsGrid, $, undefined) {
 
     var TextField = jsGrid.TextField;
@@ -14,15 +152,30 @@
         readOnly: false,
 
         filterValue: function () {
-            return parseFloat(this.filterControl.val() || 0, 10);
+
+            var val = this.filterControl.val();
+            if (this.nullable && val == '')
+                return null
+            else
+                return parseInt(this.filterControl.val() || 0, 10);
         },
 
         insertValue: function () {
-            return parseFloat(this.insertControl.val() || 0, 10);
+
+            var val = this.insertControl.val();
+            if (this.nullable && val == '')
+                return null
+            else
+                return parseInt(this.insertControl.val() || 0, 10);
         },
 
         editValue: function () {
-            return parseFloat(this.editControl.val() || 0, 10);
+
+            var val = this.editControl.val();
+            if (this.nullable && val == '')
+                return null
+            else
+                return parseInt(this.editControl.val() || 0, 10);
         },
 
         _createTextBox: function () {

@@ -2,108 +2,111 @@
     initOdata: function (properties) {
 
         var self = this;
+        var _table, _fields;
 
         vmGetMetadata(properties.serviceUrl)
             .done(function (metadata) {
 
-                // find action by name
-                var table = vmGetTables(metadata).filter(function (ind, table) {
+                // get table information
+                // from metadata
+                _table = vmGetTableInfo(metadata, properties.table);
 
-                    return table.name == properties.table;
-                })
-                .get(0);
+                _fields = _table.fields
+                                .map(function (ind, item) {
 
-                _table = table;
+                                    var field = {
+                                        name: item.name,
+                                        width: vmGetWidth(item.name),
+                                        maxlength: item.maxlength,
+                                    };
 
-                var fields = table.fields
-                .map(function (ind, item) {
+                                    var validatorString = {
+                                        validator: "maxLength",
+                                        param: item.maxlength
+                                    };
 
-                    var field = {
-                        name: item.name,
-                        width: vmGetWidth(item.name),
-                        maxlength: item.maxlength,
-                    };
+                                    switch (item.type) {
 
-                    var validatorString = {
-                        validator: "maxLength",
-                        param: item.maxlength
-                    };
+                                        case 'Edm.Int32':
+                                            field.type = 'number';
 
-                    switch (item.type) {
+                                            if (item.mandatory == true)
+                                                field.validate = 'required';
+                                            else
+                                                field.nullable = true;
 
-                        case 'Edm.Int32':
-                            field.type = 'number';
+                                            break;
 
-                            if (item.mandatory == true)
-                                field.validate = 'required';
+                                        case 'Edm.Single':
+                                            field.type = 'floatNumber';
 
-                            break;
+                                            if (item.mandatory == true)
+                                                field.validate = 'required';
+                                            else
+                                                field.nullable = true;
 
-                        case 'Edm.Single':
-                            field.type = 'floatNumber';
+                                            break;
 
-                            if (item.mandatory == true)
-                                field.validate = 'required';
+                                        case 'Edm.String':
+                                            field.type = 'text';
 
-                            break;
+                                            if (item.mandatory == true && field.maxlength > 0)
+                                                field.validate = ['required', validatorString]
 
-                        case 'Edm.String':
-                            field.type = 'text';
+                                            if (item.mandatory == true && field.maxlength == 0)
+                                                field.validate = 'required';
 
-                            if (item.mandatory == true && field.maxlength > 0)
-                                field.validate = ['required', validatorString]
+                                            // this validation is conflicting
+                                            // with nullable field functionality
+                                            //if (item.mandatory == false && field.maxlength > 0)
+                                            //    field.validate = validatorString;
 
-                            if (item.mandatory == true && field.maxlength == 0)
-                                field.validate = 'required';
+                                            field.nullable = !item.mandatory;
 
-                            if (item.mandatory == false && field.maxlength > 0)
-                                field.validate = validatorString;
+                                            break;
 
-                            break;
+                                        case 'Edm.Date':
+                                            field.type = 'date';
 
-                        case 'Edm.Date':
-                            field.type = 'date';
+                                            if (item.mandatory == true)
+                                                field.validate = 'required';
 
-                            if (item.mandatory == true)
-                                field.validate = 'required';
+                                            break;
 
-                            break;
+                                        case 'Edm.DateTimeOffset':
+                                            field.type = 'dateTime';
 
-                        case 'Edm.DateTimeOffset':
-                            field.type = 'dateTime';
+                                            if (item.mandatory == true)
+                                                field.validate = 'required';
 
-                            if (item.mandatory == true)
-                                field.validate = 'required';
+                                            break;
 
-                            break;
+                                        case 'Edm.Boolean':
 
-                        case 'Edm.Boolean':
+                                            field = {
+                                                name: item.name,
+                                                autosearch: true,
+                                                type: "select",
+                                                items: [
+                                                     { Name: "", Id: "" },
+                                                     { Name: 'false', Id: false },
+                                                     { Name: 'true', Id: true },
+                                                ],
+                                                valueField: "Id",
+                                                textField: "Name"
+                                            };
 
-                            field = {
-                                name: item.name,
-                                autosearch: true,
-                                type: "select",
-                                items: [
-                                     { Name: "", Id: "" },
-                                     { Name: 'false', Id: false },
-                                     { Name: 'true', Id: true },
-                                ],
-                                valueField: "Id",
-                                textField: "Name"
-                            };
+                                            if (item.mandatory == true)
+                                                field.validate = 'required';
 
-                            if (item.mandatory == true)
-                                field.validate = 'required';
+                                            break;
+                                    };
 
-                            break;
-                    };
+                                    return field;
+                                });
 
-                    return field;
-                });
-
-                fields.push({ type: "control" });
-
-                _fields = fields.toArray();
+                _fields.push({ type: "control" });
+                _fields = _fields.toArray();
 
                 self.fields = _fields;
                 self.controller.loadData = loadData;
@@ -127,19 +130,25 @@
                     withCredentials: true
                 }
             })
-                    // show alert message in case of error
-                    .error(function () {
-                        alert('failed to read metadata');
-                    });
+            // show alert message in case of error
+            .error(function () {
+                alert('failed to read metadata');
+            });
         };
 
-        function vmGetTables(metadata) {
+        function vmGetTableInfo(metadata, table) {
 
-            // find entities (table information)
-            // in metadata xml file
+            // filter metadata to find requested table
+            // build table information object
             return $(metadata).find('EntityType')
+                        .filter(function (ind, item) {
+
+                            // filter by table name
+                            return $(item).attr('Name') == table;
+                        })                        
                         .map(function (ind, entity) {
 
+                            // get table fields
                             var fields = $(entity).find('Property')
                                             .map(function (idx, param) {
 
@@ -151,6 +160,7 @@
                                                 };
                                             });
 
+                            // get table key
                             var key = $(entity).find('Key')
                                             .children('PropertyRef')
                                             .attr('Name');
@@ -160,7 +170,8 @@
                                 key: key,
                                 fields: fields
                             };
-                        });
+                        })
+                        .get(0);
         };
 
         function loadData(filter) {
@@ -197,36 +208,45 @@
                 filter.push(defaultFilter)
             };
 
-            for (field in conditions)
-                if (conditions[field]) {
+            for (key in conditions) {
 
-                    var field = fields.find(function (x) {
-                        return x.name == field
-                    });
+                var field = fields.find(function (x) {
+                    return x.name == key
+                });
 
-                    if (field && field.type) {
-                        if (field.type == 'text')
-                            filter.push("contains({0},'{1}')".format(field.name, conditions[field.name]));
+                if (!field || !field.type)
+                    continue;
 
-                        else if (field.type == 'date') {
+                var condition = conditions[field.name];
 
-                            getDateFilterParams(['year', 'month', 'day'], filter, field, new Date(conditions[field.name]));
-                        }
+                if ((field.nullable && condition != null) || (!field.nullable && condition)) {
 
-                        else if (field.type == 'dateTime') {
+                    if (field.type == 'text') {
 
-                            getDateFilterParams(['year', 'month', 'day', 'hour', 'minute', 'second'], filter, field, new Date(conditions[field.name]));
-                        }
+                        filter.push("contains({0},'{1}')".format(field.name, condition));
 
-                        else if (field.type == 'number' || field.type == 'select')
-                            filter.push("{0} eq {1}".format(field.name, conditions[field.name]));
+                    } else if (field.type == 'date') {
 
-                        else if (field.type == 'floatNumber')
-                            filter.push("{0} eq {1}f".format(field.name, conditions[field.name]));
-                        else
-                            alert('Filtering by {0} not supported'.format(field.type));
-                    }
+                        getDateFilterParams(['year', 'month', 'day'], filter, field, new Date(condition));
+
+                    } else if (field.type == 'dateTime') {
+
+                        getDateFilterParams(['year', 'month', 'day', 'hour', 'minute', 'second'], filter, field, new Date(condition));
+
+                    } else if (field.type == 'number' || field.type == 'select') {
+
+                        filter.push("{0} eq {1}".format(field.name, condition));
+
+                    } else if (field.type == 'floatNumber') {
+
+                        filter.push("{0} eq {1}f".format(field.name, condition));
+
+                    } else {
+
+                        alert('Filtering by {0} not supported'.format(field.type));
+                    };
                 };
+            };
 
             return filter.length > 1 ? filter.join(' and ') : filter[0];
         };
