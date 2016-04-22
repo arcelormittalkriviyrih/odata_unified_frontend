@@ -3,6 +3,11 @@
 
         var self = this;
         var _table, _fields;
+        var COMPONENT_KEY = 'vmArselorGrid';
+
+        $.data(self, COMPONENT_KEY, {
+            defaultFilter: properties.defaultFilter
+        });        
 
         vmGetMetadata(properties.serviceUrl)
             .done(function (metadata) {
@@ -118,6 +123,21 @@
                 // re-render control with new properties
                 self._init();
                 self.render();
+
+                if (properties.autoRefresh) {
+
+                    console.log('>refresh:' + _table.name);
+
+                    //
+                    // REMOVE THIS INTERVALID VARIABLE
+                    //
+                    _intervalID = setInterval(function () {
+
+                        self.loadData();
+
+                    }, properties.autoRefresh);
+                }
+
             });
 
         function vmGetMetadata(serviceUrl) {
@@ -176,11 +196,13 @@
 
         function loadData(filter) {
 
+            var defaultFilter = $.data(self, COMPONENT_KEY).defaultFilter;
+                
             var table = _table;
             var fields = _fields;
 
             var data = {
-                $filter: vmGetFilter(filter, fields, properties.defaultFilter),
+                $filter: vmGetFilter(filter, fields, defaultFilter),
                 $count: true,
                 $top: filter.pageSize,
                 $skip: (filter.pageIndex - 1) * filter.pageSize
@@ -265,8 +287,7 @@
                     data: JSON.stringify(item),
                     contentType: "application/json;odata=verbose"
                 })
-                .fail(
-                    handleError);
+                .fail(handleError);
             }
             else if (item[table.key] == 0 || item[table.key] == '') {
 
