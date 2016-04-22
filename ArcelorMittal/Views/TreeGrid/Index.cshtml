@@ -10,6 +10,8 @@
 <script src="~/Scripts/Table/index.js"></script>
 <script src="~/Scripts/Table/jsGridNewFields.js"></script>
 <script src="~/Scripts/TreeGrid/index.js"></script>
+<script src="~/Scripts/Table/jsGridExt.js"></script>
+<script src="~/Scripts/TreeGrid/treeExt.js"></script>
 
 <link href="~/content/table/jsgrid.css" rel="stylesheet" />
 <link href="~/content/table/jsgrid-theme.css" rel="stylesheet" />
@@ -17,27 +19,15 @@
 
 <div class="row">
 
-    <div class="treeContainer span5">
-
-        <div class="mainButtonsControls">
-            <button class="btn" id="createTreeItem">Create new node</button>
-            <button class="btn" id="removeNode" disabled>Delete node</button>
-        </div>
-        
-        <div class="createNodeControls">
-            <input type="text" id="nodeName" />
-            <button class="btn" id="accept">create</button>
-            <button class="btn" id="cancel">cancel</button>
-        </div>
-        
+    <div class="treeContainer span5">       
         <div id="jstree">
-
         </div>
     </div>
-
     
     <div id="treeGrid" class="span8">
-
     </div>
+       
 </div>
+
+
 
