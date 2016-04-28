@@ -3,16 +3,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.4.1/jsgrid.js"></script>
-
-<script src="~/Scripts/Table/index.js"></script>
-<script src="~/Scripts/Table/jsGridNewFields.js"></script>
-<script src="~/Scripts/TreeGrid/index.js"></script>
-<script src="~/Scripts/Table/jsGridExt.js"></script>
+<!--add tree scripts-->
+<script src="~/Scripts/Vendor/jstree.js"></script>
 <script src="~/Scripts/TreeGrid/treeExt.js"></script>
 
+<!--add grid scripts-->
+<script src="~/Scripts/Vendor/jsgrid.js"></script>
+<script src="~/Scripts/Table/jsGridExt.js"></script>
+<script src="~/Scripts/Table/jsGridNewFields.js"></script>
+
+<script src="~/Scripts/TreeGrid/index.js"></script>
+
+<!--add tree styles-->
+<link rel="stylesheet" href="~/Content/Tree/tree.css" />
+
+<!--add grid styles-->
 <link href="~/content/table/jsgrid.css" rel="stylesheet" />
 <link href="~/content/table/jsgrid-theme.css" rel="stylesheet" />
 <link href="~/content/shared/datetimepicker.css" rel="stylesheet" />

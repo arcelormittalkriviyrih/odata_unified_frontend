@@ -108,6 +108,18 @@ div.mainButtonsControls input[type='text'], div.createNodeControls input[type='t
     margin: 0;
 }
 
+div.mainButtonsControls button{
+    margin-right: 5px;
+}
+
+div.createNodeControls button#accept{
+    margin: 0 5px 0 5px;
+}
+
+div#treeRoot{
+    margin-top:10px;
+}
+
 div.treeContainer{
     padding: 10px;
 }

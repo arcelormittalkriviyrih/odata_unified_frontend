@@ -390,3 +390,160 @@
     jsGrid.fields.dateTime = dateTimePicker;
 
 }(jsGrid, jQuery));
+
+(function (jsGrid, $, undefined) {
+
+    var NumberField = jsGrid.NumberField;
+
+    function combo(config) {
+        this.items = [];
+        this.selectedIndex = -1;
+
+        NumberField.call(this, config);
+    }
+
+    combo.prototype = new NumberField({
+
+        align: "center",
+        valueType: "number",
+
+        itemTemplate: function (value, item) {
+
+            var tableInfo = this.tableInfo;
+            var id = this.id;
+            var result;
+            var items = this.items,
+                valueField = this.valueField,
+                textField = this.textField,
+                resultItem;
+
+            if (valueField) {
+                resultItem = $.grep(items, function (item, index) {
+                    return item[valueField] === value;
+                })[0] || {};
+            }
+            else {
+                resultItem = items[value];
+            }
+
+            var result = (textField ? resultItem[textField] : resultItem);
+
+            return result;
+        },
+
+        filterTemplate: function () {
+
+            var self = this;
+            if (!self.filtering)
+                return "";
+
+            var grid = self._grid,
+                $result = self.filterControl = self._createSelect();
+
+
+                if (self.autosearch) {
+                    $result.on("change", function (e) {
+                        grid.search();
+                    });
+                }
+
+                return $result;
+                                  
+        },
+
+        insertTemplate: function () {
+            if (!this.inserting)
+                return "";
+
+            return this.insertControl = this._createSelect();
+        },
+
+        editTemplate: function (value) {
+
+            var $result = this.result;
+
+            if (!this.editing)
+                return this.itemTemplate(value);
+            
+            (value !== undefined) && $result.val(value);
+            return $result;
+        },
+
+        filterValue: function () {
+
+            var self = this;
+
+            var filterControl = this.filterControl;
+            
+            var val = filterControl.val();
+                return this.valueType === "number" ? parseInt(val || 0, 10) : val;            
+        },
+
+        insertValue: function () {
+            var val = this.insertControl.val();
+            return this.valueType === "number" ? parseInt(val || 0, 10) : val;
+        },
+
+        editValue: function () {
+            var val = this.editControl.val();
+            return this.valueType === "number" ? parseInt(val || 0, 10) : val;
+        },
+
+        _createSelect: function () {
+            var $result = $("<select>"),
+                valueField = 'id',
+                textField = 'name',
+                selectedIndex = this.selectedIndex,
+                tableInfo = this.tableInfo,
+                field = this,
+                filter = field.filter,
+                serviceUrl = this.serviceUrl,
+                url = serviceUrl + tableInfo.name;
+
+            if (filter)
+                url += '?$filter={0} eq {1}'.format(filter.property, filter.value)
+                      
+            $.get(url).then(function (data) {
+
+                        var items = data.value.map(function (item) {
+
+                            return {
+                                'id': item[tableInfo.id],
+                                'name': item[tableInfo.title]
+                            }
+                        });                        
+                
+                        field.items = items;
+
+                        $emptyOption = $("<option>")
+                                            .attr('value', '')
+                                            .text('')
+                                            .appendTo($result);
+
+                        $.each(items, function (index, item) {
+                            var value = valueField ? item[valueField] : index,
+                                text = textField ? item[textField] : item;
+
+                            var $option = $("<option>")
+                                .attr("value", value)
+                                .text(text)
+                                .appendTo($result);
+
+                            $option.prop("selected", (selectedIndex === index));
+                        });
+
+                        $result.prop("disabled", !!this.readOnly);
+
+                        field.result = $result;
+
+                        return $result;
+                });
+
+            return $result;
+            
+        }
+    });
+
+    jsGrid.fields.combo = jsGrid.combo = combo;
+
+}(jsGrid, jQuery));

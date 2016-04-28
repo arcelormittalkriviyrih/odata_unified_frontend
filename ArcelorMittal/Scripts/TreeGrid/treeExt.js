@@ -12,7 +12,7 @@
             createNodeControlsRoot = $('<div />').addClass('createNodeControls').appendTo(navigationBar).hide(),
             createBtn = $('<button />').attr('id', 'createTreeItem')
                                         .addClass('btn')
-                                        .text('Create new node')
+                                        .append('<i class="icon-plus"></i>')
                                         .appendTo(mainButtonsRoot)
                                         .on('click', vmCreate),
             renameBtn = $('<button />').attr({
@@ -20,7 +20,7 @@
                                             'disabled': true
                                         })
                                         .addClass('btn')
-                                        .text('Rename node')
+                                        .append('<i class="icon-pencil"></i>')
                                         .appendTo(mainButtonsRoot)
                                         .on('click', vmEdit),
             removeBtn = $('<button />').attr({
@@ -28,7 +28,7 @@
                                             'disabled': true
                                         })
                                         .addClass('btn')
-                                        .text('Delete node')
+                                        .append('<i class="icon-remove"></i>')
                                         .appendTo(mainButtonsRoot)
                                         .on('click', vmRemove),
             nodeNameInput = $('<input />').attr({
@@ -42,12 +42,12 @@
                                             'disabled': true
                                         })
                                         .addClass('btn')
-                                        .text('create')
+                                        .append('<i class="icon-ok"></i>')
                                         .appendTo(createNodeControlsRoot)
                                         .on('click', vmAccept),
             cancelBtn = $('<button />').attr({ 'id': 'cancel' })
                                         .addClass('btn')
-                                        .text('cancel')
+                                        .append('<i class="icon-remove"></i>')
                                         .appendTo(createNodeControlsRoot)
                                         .on('click', vmCancel);
 
@@ -151,8 +151,6 @@
                         if (!sel.length) { return false; }
                         sel = sel[0];
                         sel = ref.create_node(sel, node);
-
-                        location.reload();
 
                     }).fail(handleError)
 

@@ -4,6 +4,8 @@
         var self = this;
         var _table, _fields;
         var COMPONENT_KEY = 'vmArselorGrid';
+        //get list of fields must be shown
+        fields = properties.fields;
 
         $.data(self, COMPONENT_KEY, {
             defaultFilter: properties.defaultFilter
@@ -11,13 +13,34 @@
 
         vmGetMetadata(properties.serviceUrl)
             .done(function (metadata) {
-
+                
                 // get table information
                 // from metadata
                 _table = vmGetTableInfo(metadata, properties.table);
 
+
+                var fieldsIds = fields.map(function (item) {
+
+                    return item.id;
+                });
+
+                var fieldsOrder = fields.map(function (item) {
+
+                    return {
+                        id: item.id,
+                        order: item.order
+                    };
+                })
+                                
+                //there we must get fom table only shown fields
                 _fields = _table.fields
-                                .map(function (ind, item) {
+                                .filter(function (item) {
+                                    
+                                    if (fieldsIds.indexOf(item.name) > -1)
+                                        return item;
+                                                                                                           
+                                })
+                                .map(function (item) {
 
                                     var field = {
                                         name: item.name,
@@ -30,89 +53,134 @@
                                         param: item.maxlength
                                     };
 
-                                    switch (item.type) {
+                                   
+                                    var filteredFields = fields.filter(function (field) {
 
-                                        case 'Edm.Int32':
-                                            field.type = 'number';
+                                        if (field.id == item.name)
+                                            return field;
+                                    })[0];
 
-                                            if (item.mandatory == true)
-                                                field.validate = 'required';
-                                            else
-                                                field.nullable = true;
+                                    //init fields controls types
+                                    //1. we leave only shown fields
+                                    //2. id shown field has not property type - get this property from _table.fields
+                                    //3. else set type as property
 
-                                            break;
+                                    if (filteredFields.title)
+                                        field.title = filteredFields.title;
 
-                                        case 'Edm.Single':
-                                            field.type = 'floatNumber';
+                                    if (!filteredFields.type) {
+                                        switch (item.type) {
 
-                                            if (item.mandatory == true)
-                                                field.validate = 'required';
-                                            else
-                                                field.nullable = true;
+                                            case 'Edm.Int32':
+                                                field.type = 'number';
 
-                                            break;
+                                                if (item.mandatory == true)
+                                                    field.validate = 'required';
+                                                else
+                                                    field.nullable = true;
 
-                                        case 'Edm.String':
-                                            field.type = 'text';
+                                                break;
 
-                                            if (item.mandatory == true && field.maxlength > 0)
-                                                field.validate = ['required', validatorString]
+                                            case 'Edm.Single':
+                                                field.type = 'floatNumber';
 
-                                            if (item.mandatory == true && field.maxlength == 0)
-                                                field.validate = 'required';
+                                                if (item.mandatory == true)
+                                                    field.validate = 'required';
+                                                else
+                                                    field.nullable = true;
 
-                                            // this validation is conflicting
-                                            // with nullable field functionality
-                                            //if (item.mandatory == false && field.maxlength > 0)
-                                            //    field.validate = validatorString;
+                                                break;
 
-                                            field.nullable = !item.mandatory;
+                                            case 'Edm.String':
+                                                field.type = 'text';
 
-                                            break;
+                                                if (item.mandatory == true && field.maxlength > 0)
+                                                    field.validate = ['required', validatorString]
 
-                                        case 'Edm.Date':
-                                            field.type = 'date';
+                                                if (item.mandatory == true && field.maxlength == 0)
+                                                    field.validate = 'required';
 
-                                            if (item.mandatory == true)
-                                                field.validate = 'required';
+                                                // this validation is conflicting
+                                                // with nullable field functionality
+                                                //if (item.mandatory == false && field.maxlength > 0)
+                                                //    field.validate = validatorString;
 
-                                            break;
+                                                field.nullable = !item.mandatory;
 
-                                        case 'Edm.DateTimeOffset':
-                                            field.type = 'dateTime';
+                                                break;
 
-                                            if (item.mandatory == true)
-                                                field.validate = 'required';
+                                            case 'Edm.Date':
+                                                field.type = 'date';
 
-                                            break;
+                                                if (item.mandatory == true)
+                                                    field.validate = 'required';
 
-                                        case 'Edm.Boolean':
+                                                break;
 
-                                            field = {
-                                                name: item.name,
-                                                autosearch: true,
-                                                type: "select",
-                                                items: [
-                                                     { Name: "", Id: "" },
-                                                     { Name: 'false', Id: false },
-                                                     { Name: 'true', Id: true },
-                                                ],
-                                                valueField: "Id",
-                                                textField: "Name"
-                                            };
+                                            case 'Edm.DateTimeOffset':
+                                                field.type = 'dateTime';
 
-                                            if (item.mandatory == true)
-                                                field.validate = 'required';
+                                                if (item.mandatory == true)
+                                                    field.validate = 'required';
 
-                                            break;
-                                    };
+                                                break;
 
+                                            case 'Edm.Boolean':
+
+                                                field = {
+                                                    name: item.name,
+                                                    autosearch: true,
+                                                    type: "select",
+                                                    items: [
+                                                            { Name: "", Id: "" },
+                                                            { Name: 'false', Id: false },
+                                                            { Name: 'true', Id: true },
+                                                    ],
+                                                };
+
+                                                if (item.mandatory == true)
+                                                    field.validate = 'required';
+
+                                                break;
+                                        };
+                                    }
+                                    else {
+                                        field.type = filteredFields.type;
+                                        field.tableInfo = filteredFields.table;
+                                        field.name = filteredFields.name;
+                                        field.id = filteredFields.id;
+                                        field.valueField = filteredFields.valueField;
+                                        field.textField = filteredFields.textField;
+                                        field.serviceUrl = properties.serviceUrl;
+                                        field.filter = filteredFields.filter;
+                                        
+                                        
+                                    }
+                                                                                                             
                                     return field;
                                 });
 
-                _fields.push({ type: "control" });
-                _fields = _fields.toArray();
+                fieldsOrder.forEach(function (item) {
 
+                    _fields.find(function (el) {
+
+                        if (el.name == item.id)
+                            el.order = item.order;
+                    });
+                });
+
+                _fields = _fields.sort(function (a, b) {
+
+                    if (a.order < b.order)
+                        return -1;
+                    else if (a.order > b.order)
+                        return 1;
+                    else
+                        return 0;
+                });
+
+                _fields.push({ type: "control" });
+               
                 self.fields = _fields;
                 self.controller.loadData = loadData;
                 self.controller.insertItem = insertItem;
@@ -188,7 +256,7 @@
                             return {
                                 name: $(entity).attr('Name'),
                                 key: key,
-                                fields: fields
+                                fields: fields.toArray()
                             };
                         })
                         .get(0);
@@ -262,6 +330,10 @@
                     } else if (field.type == 'floatNumber') {
 
                         filter.push("{0} eq {1}f".format(field.name, condition));
+
+                    } else if (field.type == 'combo') {
+
+                        filter.push("{0} eq {1}".format(field.name, condition));
 
                     } else {
 

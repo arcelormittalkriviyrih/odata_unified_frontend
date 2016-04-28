@@ -113,6 +113,9 @@
     <Content Include="Content\Table\jsgrid-theme.css" />
     <Content Include="Content\Table\jsgrid.css" />
     <Content Include="Content\Table\style.css" />
+    <Content Include="Content\Tree\img\32px.png" />
+    <Content Include="Content\Tree\img\throbber.gif" />
+    <Content Include="Content\Tree\tree.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
     <Content Include="Scripts\App\Index.js" />
@@ -120,6 +123,7 @@
     <Content Include="Scripts\App\Market.js" />
     <Content Include="Scripts\App\PA.js" />
     <Content Include="Scripts\App\WorkshopSpecs.js" />
+    <Content Include="Scripts\Chart\index.js" />
     <Content Include="Scripts\Form\index.js" />
     <Content Include="Scripts\Shared\common.js" />
     <Content Include="Scripts\Shared\util.js" />
@@ -132,11 +136,14 @@
     <Content Include="Scripts\Vendor\jquery-ui.min.js" />
     <Content Include="Scripts\Vendor\jsgrid.js" />
     <Content Include="Scripts\Vendor\jsgrid.min.js" />
+    <Content Include="Scripts\TreeGrid\treeExt.js" />
+    <Content Include="Scripts\Vendor\jstree.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\actionController.cs" />
+    <Compile Include="Controllers\chartController.cs" />
     <Compile Include="Controllers\treeGridController.cs" />
     <Compile Include="Controllers\formController.cs" />
     <Compile Include="Controllers\appController.cs" />
@@ -161,6 +168,7 @@
     <Content Include="Views\App\WorkshopSpecs.cshtml" />
     <Content Include="Views\Shared\_App.cshtml" />
     <Content Include="Views\TreeGrid\Index.cshtml" />
+    <Content Include="Views\Chart\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
