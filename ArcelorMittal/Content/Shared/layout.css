@@ -128,3 +128,8 @@ div#jstree{
     margin-top:10px;
 }
 
+.disabled-grid{
+    opacity:0.5;
+    pointer-events:none;
+}
+

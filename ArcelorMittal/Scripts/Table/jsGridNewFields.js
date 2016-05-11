@@ -452,6 +452,7 @@
         },
 
         insertTemplate: function () {
+
             if (!this.inserting)
                 return "";
 
@@ -460,12 +461,13 @@
 
         editTemplate: function (value) {
 
-            var $result = this.result;
-
             if (!this.editing)
                 return this.itemTemplate(value);
-            
-            (value !== undefined) && $result.val(value);
+
+            var $result = this.editControl = this.result;
+
+            $result.val(value);
+
             return $result;
         },
 
@@ -496,12 +498,12 @@
                 selectedIndex = this.selectedIndex,
                 tableInfo = this.tableInfo,
                 field = this,
-                filter = field.filter,
+                comboFilter = field.comboFilter,
                 serviceUrl = this.serviceUrl,
                 url = serviceUrl + tableInfo.name;
 
-            if (filter)
-                url += '?$filter={0} eq {1}'.format(filter.property, filter.value)
+            if (comboFilter)
+                url += '?$filter=' + comboFilter;
                       
             $.get(url).then(function (data) {
 

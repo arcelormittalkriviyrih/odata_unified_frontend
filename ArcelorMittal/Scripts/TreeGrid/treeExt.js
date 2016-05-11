@@ -148,7 +148,7 @@
 
                         var ref = treeRoot.jstree(true),
                                     sel = ref.get_selected();
-                        if (!sel.length) { return false; }
+                        if (!sel.length) { location.reload() }
                         sel = sel[0];
                         sel = ref.create_node(sel, node);
 

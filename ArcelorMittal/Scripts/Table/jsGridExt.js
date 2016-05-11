@@ -3,14 +3,10 @@
 
         var self = this;
         var _table, _fields;
-        var COMPONENT_KEY = 'vmArselorGrid';
+
         //get list of fields must be shown
         fields = properties.fields;
-
-        $.data(self, COMPONENT_KEY, {
-            defaultFilter: properties.defaultFilter
-        });        
-
+       
         vmGetMetadata(properties.serviceUrl)
             .done(function (metadata) {
                 
@@ -179,33 +175,17 @@
                         return 0;
                 });
 
-                _fields.push({ type: "control" });
+                if (properties.controlProperties) 
+                    _fields.push(properties.controlProperties)
+                else
+                    _fields.push({ type: "control" });
                
                 self.fields = _fields;
-                self.controller.loadData = loadData;
-                self.controller.insertItem = insertItem;
-                self.controller.updateItem = updateItem;
-                self.controller.deleteItem = deleteItem;
+                self.table = _table;
 
-                // re-initialize properties
-                // re-render control with new properties
                 self._init();
                 self.render();
-
-                if (properties.autoRefresh) {
-
-                    console.log('>refresh:' + _table.name);
-
-                    //
-                    // REMOVE THIS INTERVALID VARIABLE
-                    //
-                    _intervalID = setInterval(function () {
-
-                        self.loadData();
-
-                    }, properties.autoRefresh);
-                }
-
+                
             });
 
         function vmGetMetadata(serviceUrl) {
@@ -262,10 +242,81 @@
                         .get(0);
         };
 
+        function vmGetWidth(name) {
+            return getTextWidth(name, "regular 14pt Helvetica") + 20;
+
+        }
+
+        function getTextWidth(text, font) {
+            // re-use canvas object for better performance
+            var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+            var context = canvas.getContext("2d");
+            context.font = font;
+            var metrics = context.measureText(text);
+            return metrics.width;
+        };
+    },
+
+    loadOdata: function(properties){
+
+        var self = this;
+        var COMPONENT_KEY = 'vmArselorGrid';
+        var _table = self.table;
+        var _fields = self.fields;
+
+        //if we want filter our oData combobox 
+        //1.we get comboFilter array from properties.
+        //This array is array of objects.
+        //Each object has 2 property - name of grid field where we want filter oData combobox
+        //and filter property.
+        //2. Add this filter as additional setting of combobox field
+        if (properties.comboFilter) {
+
+            var combosFiltered = properties.comboFilter.map(function (item) {
+
+                return item.name;
+            })
+
+            _fields.forEach(function (item) {
+
+                var index = combosFiltered.indexOf(item.name);
+
+                if (index > -1)
+                    item.comboFilter = properties.comboFilter[index].filter;
+            })
+
+        }
+
+        $.data(self, COMPONENT_KEY, {
+            defaultFilter: properties.defaultFilter
+        });
+
+        self.controller.loadData = loadData;
+        self.controller.insertItem = insertItem;
+        self.controller.updateItem = updateItem;
+        self.controller.deleteItem = deleteItem;
+
+        self._init();
+        self.render();
+
+        if (properties.autoRefresh) {
+
+            console.log('>refresh:' + _table.name);
+
+            //
+            // REMOVE THIS INTERVALID VARIABLE
+            //
+            _intervalID = setInterval(function () {
+
+                self.loadData();
+
+            }, properties.autoRefresh);
+        }
+
         function loadData(filter) {
 
             var defaultFilter = $.data(self, COMPONENT_KEY).defaultFilter;
-                
+
             var table = _table;
             var fields = _fields;
 
@@ -347,6 +398,19 @@
 
         function insertItem(item) {
 
+            //inserting additional value from outer sourse
+            //(for example, we select item in tree
+            //and show grid data agree with this selection.
+            //Then, if we want add new row in grid according selected tree item
+            //we add this item meaning as property of JSON object)
+            if (properties.insertedAdditionalFields) {
+
+                properties.insertedAdditionalFields.forEach(function (field) {
+
+                    item[field.name] = field.value;
+                })                
+            }
+
             var table = _table;
 
             var isEmpty = isEmptyRow(item);
@@ -412,20 +476,6 @@
             return isEmpty;
         }
 
-        function vmGetWidth(name) {
-            return getTextWidth(name, "regular 14pt Helvetica") + 20;
-
-        }
-
-        function getTextWidth(text, font) {
-            // re-use canvas object for better performance
-            var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-            var context = canvas.getContext("2d");
-            context.font = font;
-            var metrics = context.measureText(text);
-            return metrics.width;
-        };
-
         function getDateFilterParams(timeProperties, filter, field, time) {
 
             var date = getTimeToUpdate(time);
@@ -438,6 +488,7 @@
                 }
             }
         }
+
     }
 
 
