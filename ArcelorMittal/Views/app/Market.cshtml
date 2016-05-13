@@ -3,10 +3,28 @@
     Layout = "~/Views/Shared/_App.cshtml";
 }
 
+<!--add grid scripts-->
+<script src="~/Scripts/Vendor/jsgrid.js"></script>
+<script src="~/Scripts/Table/jsGridExt.js"></script>
+<script src="~/Scripts/Table/jsGridNewFields.js"></script>
+
+<!--add grid styles-->
+<link href="~/content/table/jsgrid.css" rel="stylesheet" />
+<link href="~/content/table/jsgrid-theme.css" rel="stylesheet" />
+<link href="~/content/shared/datetimepicker.css" rel="stylesheet" />
+
 <script src="~/scripts/app/market.js"></script>
 
-<div class="hero-unit">
+<div id="files"></div>
 
-    <h1>Market</h1>
+<form action="http://mssql2014srv/odata_unified_svc/api/Dynamic/Files" method="post" enctype="multipart/form-data">
 
-</div>
+    <input name="ID" />
+    <input name="FileName" />
+    <input name="Encoding" />
+    <input name="FileType" />
+    <input type="file" name="Data" />
+
+    <button type="submit">Submit</button>
+
+</form>

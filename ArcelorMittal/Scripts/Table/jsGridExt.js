@@ -67,7 +67,8 @@
                                     if (!filteredFields.type) {
                                         switch (item.type) {
 
-                                            case 'Edm.Int32':
+                                            case 'Edm.Int32': 
+
                                                 field.type = 'number';
 
                                                 if (item.mandatory == true)
@@ -78,6 +79,7 @@
                                                 break;
 
                                             case 'Edm.Single':
+
                                                 field.type = 'floatNumber';
 
                                                 if (item.mandatory == true)
@@ -88,6 +90,7 @@
                                                 break;
 
                                             case 'Edm.String':
+
                                                 field.type = 'text';
 
                                                 if (item.mandatory == true && field.maxlength > 0)
@@ -106,6 +109,7 @@
                                                 break;
 
                                             case 'Edm.Date':
+
                                                 field.type = 'date';
 
                                                 if (item.mandatory == true)
@@ -114,6 +118,7 @@
                                                 break;
 
                                             case 'Edm.DateTimeOffset':
+
                                                 field.type = 'dateTime';
 
                                                 if (item.mandatory == true)
@@ -136,6 +141,12 @@
 
                                                 if (item.mandatory == true)
                                                     field.validate = 'required';
+
+                                                break;
+
+                                            case 'Edm.Binary':
+
+                                                field.type = 'binary';
 
                                                 break;
                                         };
@@ -187,22 +198,6 @@
                 self.render();
                 
             });
-
-        function vmGetMetadata(serviceUrl) {
-
-            // get metadata xml by service url
-            // service requires user credentials
-            return $.ajax({
-                url: serviceUrl + '$metadata',
-                xhrFields: {
-                    withCredentials: true
-                }
-            })
-            // show alert message in case of error
-            .error(function () {
-                alert('failed to read metadata');
-            });
-        };
 
         function vmGetTableInfo(metadata, table) {
 
@@ -301,7 +296,7 @@
 
         if (properties.autoRefresh) {
 
-            console.log('>refresh:' + _table.name);
+            console.log('>refresh:' + self.table.name);
 
             //
             // REMOVE THIS INTERVALID VARIABLE
@@ -315,10 +310,15 @@
 
         function loadData(filter) {
 
+            // if not initialized
+            // than skip and do nothing
+            if (!self.table)
+                return;
+
             var defaultFilter = $.data(self, COMPONENT_KEY).defaultFilter;
 
-            var table = _table;
-            var fields = _fields;
+            var table = self.table;
+            var fields = self.fields;
 
             var data = {
                 $filter: vmGetFilter(filter, fields, defaultFilter),
@@ -411,7 +411,7 @@
                 })                
             }
 
-            var table = _table;
+            var table = self.table;
 
             var isEmpty = isEmptyRow(item);
 
@@ -437,7 +437,7 @@
 
         function updateItem(item) {
 
-            var table = _table;
+            var table = self.table;
 
             var id = item[table.key];
 
@@ -452,7 +452,7 @@
 
         function deleteItem(item) {
 
-            var table = _table;
+            var table = self.table;
 
             var id = item[table.key];
 
@@ -462,6 +462,7 @@
             })
             .fail(handleError);
         };
+
 
         function isEmptyRow(row) {
 

@@ -33,7 +33,7 @@ function vmLoadItem(name) {
                 pageSize: 10,
 
             }).jsGrid('initOdata', {
-                serviceUrl: '../../ODataRestierDynamic/api/Dynamic/',
+                serviceUrl: serviceUrl,
                 table: name,
                 defaultFilter: '',
                 autoRefresh: 5000

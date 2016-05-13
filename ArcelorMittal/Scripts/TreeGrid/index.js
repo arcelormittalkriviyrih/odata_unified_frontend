@@ -3,7 +3,7 @@
     $treeContainer = $('#jstree');
 
     $treeContainer.odataTree({
-        serviceUrl: '../../ODataRestierDynamic/api/Dynamic/',
+        serviceUrl: serviceUrl,
         table: 'EquipmentClass',
         keys: {
             id: 'ID', 
@@ -33,7 +33,7 @@
                 pageSize: 10,
 
             }).jsGrid('initOdata', {
-                serviceUrl: '../../ODataRestierDynamic/api/Dynamic/',
+                serviceUrl: serviceUrl,
                 table: 'Equipment',
                 defaultFilter: 'EquipmentClassID eq ({0})'.format(data.id)
             });
