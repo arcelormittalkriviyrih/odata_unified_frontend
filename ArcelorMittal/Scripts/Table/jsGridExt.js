@@ -4,11 +4,13 @@
         var self = this;
         var _table, _fields;
 
-        //get list of fields must be shown
-        fields = properties.fields;
+        
        
         vmGetMetadata(properties.serviceUrl)
             .done(function (metadata) {
+
+                //get list of fields must be shown
+                var fields = properties.fields;
                 
                 // get table information
                 // from metadata
