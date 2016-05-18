@@ -562,72 +562,48 @@
         css: "binary-field",        // redefine general property 'css'
         align: "left",              // redefine general property 'align'
 
-        sorter: function (date1, date2) {
-            return new Date(date1) - new Date(date2);
+        sorter: function () {
+            return 0;
         },
 
         itemTemplate: function (value, item) {
 
-            return dowloadTemlpate(value, item);
+            // get name of table
+            // current ID and filename
+            var table = this._grid.table.name;
+            var id = item[this._grid.table.key];
+            var filename = item['FileName'].split('\\').pop();            
+
+            // create download link
+            var link = serviceUrl + table + '(' + id + ')/$value';
+            return $('<a />').attr({ target: '_blank', download: filename, href: link })
+                            .text('Download');
         },
 
         insertTemplate: function (value) {
-            return this._insertPicker = $("<input type='text'>").datepicker({ defaultDate: new Date(), dateFormat: 'yy-mm-dd' });
+            return null;
         },
 
         filterTemplate: function (value) {
-
-            var grid = this._grid;
-
-            return this._filterPicker = $("<input type='text'>").datepicker(
-                {
-                    defaultDate: new Date(),
-                    dateFormat: 'yy-mm-dd',
-                    onSelect: function (dateText, inst) {
-
-                        grid.search();
-                    }
-                }).on('keypress', function (e) {
-
-                    if (e.which === 13) {
-                        grid.search();
-                        e.preventDefault();
-                    }
-                });
+            return null;
         },
 
         editTemplate: function (value, item) {
-            return dowloadTemlpate(value, item);
-            //return this._editPicker = $('<input type="file" />'); // dowloadTemlpate(value, item);
+            return null;
         },
 
         filterValue: function () {
-            return this._filterPicker.val();
+            return null;
         },
 
         insertValue: function () {
-            return this._insertPicker.val();
+            return null;
         },
 
         editValue: function () {
-
             return null;
-
-            //return dowloadTemlpate(value, item);
-            //var file = this._editPicker[0].files[0];
         }
     });
-
-    function dowloadTemlpate(value, item) {
-
-        var filename = item['FileName'].split('\\').pop();
-
-        //var link = 'http://192.168.100.52/Host/api/Images(\'TestExcel\')/$value';
-        var link = 'http://mssql2014srv/odata_unified_svc/api/Dynamic/Files(' + item['ID'] + ')/Data/$value';
-
-        return $('<a />').attr({ target: '_blank', download: filename, href: link })
-                        .text('Download');
-    }
 
     jsGrid.fields.binary = binary;
 

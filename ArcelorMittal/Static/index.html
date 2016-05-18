@@ -1,0 +1,26 @@
+﻿<div class="container loading" ng-show="state=='loading'">
+
+    <div class="loading-msg">
+        loading...
+    </div>
+
+</div>
+
+<div class="navbar">
+    <div class="navbar-inner">
+
+        <a class="brand" ui-sref="app.welcome">ArcelorMital</a>
+
+        <ul id="navigation" class="nav">
+
+            <li ng-repeat="role in roles"
+                ng-class="{'active': activeTab == role.RoleName}">
+                <a ui-sref="app.{{role.RoleName}}">{{role.RoleName}}</a>
+            </li>
+        </ul>
+
+        <p class="navbar-text pull-right">User: {{user}}</p>
+    </div>
+</div>
+
+<ui-view></ui-view>

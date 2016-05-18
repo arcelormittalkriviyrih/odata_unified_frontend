@@ -1,0 +1,86 @@
+﻿<!--add tree scripts-->
+<script src="../scripts/Vendor/jstree.js"></script>
+<script src="../scripts/TreeGrid/treeExt.js"></script>
+
+<!--add grid scripts-->
+<script src="../scripts/Vendor/jsgrid.js"></script>
+<script src="../scripts/Table/jsGridExt.js"></script>
+<script src="../scripts/Table/jsGridNewFields.js"></script>
+
+<!--add tree styles-->
+<link rel="stylesheet" href="../Content/Tree/tree.css" />
+
+<!--add grid styles-->
+<link href="../content/table/jsgrid.css" rel="stylesheet" />
+<link href="../content/table/jsgrid-theme.css" rel="stylesheet" />
+<link href="../content/shared/datetimepicker.css" rel="stylesheet" />
+
+
+<!--<script src="/scripts/app/workshopspecs.js"></script>-->
+
+<ul class="nav nav-tabs">
+
+    <li class="tab tab1">Оборудование</li>
+    <li class="tab tab2">Материал</li>
+    <li class="tab tab3">Персонал</li>
+    <li class="tab tab4">Бирки</li>
+</ul>
+
+
+<div class="row tab1-content">
+
+    <div class="treeContainer span5">
+        <div id="hierarchy">
+        </div>
+    </div>
+
+    <div class="span5">
+        <div id="equipment"></div>
+        <div id="equipment_property"></div>
+    </div>
+
+</div>
+
+<div class="row tab2-content">
+
+    <div class="treeContainer span5">
+        <div id="hierarchy_material_class">
+        </div>
+    </div>
+
+    <div class="span5">
+        <div id="material_definition"></div>
+        <div id="material_definition_property"></div>
+    </div>
+
+</div>
+
+<div class="row tab3-content">
+
+    <div class="treeContainer span5">
+        <div id="personnel_class">
+        </div>
+    </div>
+
+    <div class="span5">
+        <div id="person"></div>
+        <div id="person_property"></div>
+    </div>
+
+</div>
+
+<div class="row tab4-content">
+
+    <div class="span8">
+        <div id="material_lot">
+            1
+        </div>
+    </div>
+
+    <div class="span8">
+        <div id="material_lot_property">
+            2
+        </div>
+    </div>
+
+</div>

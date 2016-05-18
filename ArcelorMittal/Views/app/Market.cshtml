@@ -17,14 +17,36 @@
 
 <div id="files"></div>
 
-<form action="http://mssql2014srv/odata_unified_svc/api/Dynamic/Files" method="post" enctype="multipart/form-data">
+<form id="fileForm"
+      method="post"
+      enctype="multipart/form-data">
 
-    <input name="ID" />
-    <input name="FileName" />
-    <input name="Encoding" />
-    <input name="FileType" />
-    <input type="file" name="Data" />
+    <table>
+        <tr>
+            <td>File name</td>
+            <td><input name="FileName" /></td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>
+                <select name="Status">
+                    <option>Разработка</option>
+                    <option>Использование</option>
+                    <option>История</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>File type</td>
+            <td><input name="FileType" readonly /></td>
+        </tr>
+        <tr>
+            <td>Data</td>
+            <td><input name="Data" type="file" /></td>
+        </tr>
+    </table>           
 
+    <button type="button" id="addFile">Add</button>
     <button type="submit">Submit</button>
 
 </form>
