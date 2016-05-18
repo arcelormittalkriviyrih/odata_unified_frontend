@@ -18,6 +18,13 @@ $(function () {
 
         rowClick: function (args) {
             vmPopulateForm(args.item);
+        },
+
+        onItemDeleted: function () {
+
+            // hide edit form
+            // on successfull delete
+            $form.hide();
         }
     })
     .jsGrid('initOdata', {
@@ -35,20 +42,25 @@ $(function () {
             title: 'File Name',
             order: 2
         }, {
+            id: 'Name',
+            name: 'Name',
+            title: 'Name',
+            order: 3
+        }, {
             id: 'Status',
             name: 'Status',
             title: 'Status',
-            order: 3
+            order: 4
         }, {
             id: 'FileType',
             name: 'FileType',
             title: 'File Type',
-            order: 4
+            order: 5
         }, {
             id: 'Data',
             name: 'Data',
             title: 'Data',
-            order: 5
+            order: 6
         }],
 
         controlProperties: {
@@ -60,27 +72,28 @@ $(function () {
     })
     .jsGrid('loadOdata', {});
 
-    // a
+    // get form element
+    var $form = $('#fileForm');
+
+    // add new record
     $('#addFile').click(vmAddRecord);
+    $('#fileData').change(vmFileSelected);
 
-    // as default set form
-    // to INSERT mode
-    vmAddRecord();
-
-    function vmPopulateForm(item) {
-
-        // get form element
-        var $form = $('#fileForm');
+    function vmPopulateForm(item) {        
 
         // create service URL
         // to create / update file by ID
         // and assign it as form action
-        var action = serviceUrl + '/Files(' + item.ID + ')/$value';
+        var action = serviceUrl + 'Files(' + item.ID + ')/$value';
         $form.attr('action', action);
 
         $form.find('[name="FileName"]').val(item.FileName);
+        $form.find('[name="Name"]').val(item.Name);
         $form.find('[name="Status"]').val(item.Status);
         $form.find('[name="FileType"]').val(item.FileType);
+
+        // show form
+        $form.show();
     };
 
     function vmAddRecord() {
@@ -91,9 +104,27 @@ $(function () {
         vmPopulateForm({
             ID: -1,
             FileName: '',
+            Name: '',
             FileType: 'Excel label'
         });
 
         return false;
-    }    
+    }
+
+    // on file selected
+    function vmFileSelected() {
+
+        // get filename
+        var filename = $form.find('[name="Data"]')
+                            .val()
+                            .split('\\')
+                            .pop();
+
+        // get "file name" control
+        // and if it's empty
+        // update with name of file selected
+        var $input = $form.find('[name="FileName"]');
+        if (!$input.val())
+            $input.val(filename)
+    }
 });

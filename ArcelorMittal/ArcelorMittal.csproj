@@ -29,8 +29,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<OutputPath>bin\</OutputPath>
-	<DeployManagedRuntimeVersion>v4.0</DeployManagedRuntimeVersion>
+    <OutputPath>bin\</OutputPath>
+    <DeployManagedRuntimeVersion>v4.0</DeployManagedRuntimeVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -105,6 +105,7 @@
   <ItemGroup>
     <Content Include="Content\Action\style.css" />
     <Content Include="Content\Shared\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\Shared\bootstrap\extend.css" />
     <Content Include="Content\Shared\bootstrap\img\glyphicons-halflings-white.png" />
     <Content Include="Content\Shared\bootstrap\img\glyphicons-halflings.png" />
     <Content Include="Content\Shared\favicon.ico" />
@@ -125,12 +126,20 @@
     <Content Include="Scripts\App\WorkshopSpecs.js" />
     <Content Include="Scripts\Chart\index.js" />
     <Content Include="Scripts\Form\index.js" />
+    <Content Include="Scripts\Angular\Index.js" />
+    <Content Include="Scripts\Angular\Marker.js" />
+    <Content Include="Scripts\Angular\Market.js" />
+    <Content Include="Scripts\Angular\PA.js" />
+    <Content Include="Scripts\Angular\WorkshopSpecs.js" />
     <Content Include="Scripts\Shared\common.js" />
     <Content Include="Scripts\Shared\util.js" />
     <Content Include="Scripts\Table\index.js" />
     <Content Include="Scripts\Table\jsGridExt.js" />
     <Content Include="Scripts\Table\jsGridNewFields.js" />
     <Content Include="Scripts\TreeGrid\index.js" />
+    <Content Include="Scripts\Vendor\angular-route.js" />
+    <Content Include="Scripts\Vendor\angular-ui-router.js" />
+    <Content Include="Scripts\Vendor\angular.min.js" />
     <Content Include="Scripts\Vendor\jquery-2.2.3.min.js" />
     <Content Include="Scripts\Vendor\jquery-ui-timepicker-addon.js" />
     <Content Include="Scripts\Vendor\jquery-ui.min.js" />
@@ -138,12 +147,20 @@
     <Content Include="Scripts\Vendor\jsgrid.min.js" />
     <Content Include="Scripts\TreeGrid\treeExt.js" />
     <Content Include="Scripts\Vendor\jstree.js" />
+    <Content Include="Static\error.html" />
+    <Content Include="Static\marker.html" />
+    <Content Include="Static\market.html" />
+    <Content Include="Static\pa.html" />
+    <Content Include="Static\index.html" />
+    <Content Include="Static\welcome.html" />
+    <Content Include="Static\workshopspecs.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\actionController.cs" />
     <Compile Include="Controllers\chartController.cs" />
+    <Compile Include="Controllers\angularController.cs" />
     <Compile Include="Controllers\treeGridController.cs" />
     <Compile Include="Controllers\formController.cs" />
     <Compile Include="Controllers\appController.cs" />
@@ -169,6 +186,7 @@
     <Content Include="Views\Shared\_App.cshtml" />
     <Content Include="Views\TreeGrid\Index.cshtml" />
     <Content Include="Views\Chart\Index.cshtml" />
+    <Content Include="Views\Angular\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
