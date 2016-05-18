@@ -133,6 +133,8 @@ div#jstree{
     pointer-events:none;
 }
 
+/*workshop specs*/
+
 li.tab{
     padding: 15px;    
     border-radius: 4px 4px 0 0;
@@ -166,5 +168,22 @@ li.tab.active{
 .active-row > td{
     background: #c4e2ff!important;
     border-color: #c4e2ff!important;
+}
+
+/*index page*/
+
+.loading{
+
+    position: fixed;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    display: table;
+    z-index:1;
+}
+
+.loading-msg{
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
 }
 

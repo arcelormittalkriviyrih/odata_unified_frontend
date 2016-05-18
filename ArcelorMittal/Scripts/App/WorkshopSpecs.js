@@ -5,16 +5,19 @@ $(function () {
     $('.tab1-content').hide();
     $('.tab2-content').hide();
     $('.tab3-content').hide();
+    $('.tab4-content').hide();
 
     $('.tab1').click(function () {
 
         $(this).addClass('active');
         $('.tab2').removeClass('active');
         $('.tab3').removeClass('active');
+        $('.tab4').removeClass('active');
 
         $('.tab1-content').show();
         $('.tab2-content').hide();
         $('.tab3-content').hide();
+        $('.tab4-content').hide();
 
         $treeContainer = $('#hierarchy').empty();
 
@@ -175,10 +178,12 @@ $(function () {
         $(this).addClass('active');
         $('.tab1').removeClass('active');
         $('.tab3').removeClass('active');
+        $('.tab4').removeClass('active');
 
         $('.tab2-content').show();
         $('.tab1-content').hide();
         $('.tab3-content').hide();
+        $('.tab4-content').hide();
 
         $hierarchyMaterialClass = $('#hierarchy_material_class').empty();
 
@@ -338,10 +343,12 @@ $(function () {
         $(this).addClass('active');
         $('.tab1').removeClass('active');
         $('.tab2').removeClass('active');
+        $('.tab4').removeClass('active');
 
         $('.tab3-content').show();
         $('.tab1-content').hide();
         $('.tab2-content').hide();
+        $('.tab4-content').hide();
 
         $personnelClass = $('#personnel_class').empty();
 
@@ -500,6 +507,131 @@ $(function () {
 
 
     });
+
+    $('.tab4').click(function () {
+
+        $(this).addClass('active');
+        $('.tab1').removeClass('active');
+        $('.tab2').removeClass('active');
+        $('.tab3').removeClass('active');
+
+        $('.tab4-content').show();
+        $('.tab1-content').hide();
+        $('.tab2-content').hide();
+        $('.tab3-content').hide();
+
+        $('div#material_lot').jsGrid({
+            height: "500px",
+            width: "1000px",
+
+            sorting: false,
+            paging: true,
+            editing: true,
+            filtering: true,
+            autoload: true,
+            pageLoading: true,
+            inserting: true,
+            pageIndex: 1,
+            pageSize: 10,
+
+            rowClick: function (args) {
+
+                vmActiveRow(args);
+
+                $('div#material_lot_property').removeClass('disabled-grid');
+
+                $('div#material_lot_property').jsGrid('loadOdata', {
+                    defaultFilter: 'MaterialLotID eq ({0})'.format(args.item.ID),
+
+                });
+
+            }
+
+        }).jsGrid('initOdata', {
+            serviceUrl: serviceUrl,
+            table: 'MaterialLot',
+
+            fields: [{
+                id: 'FactoryNumber',
+                name: 'FactoryNumber',
+                title: 'Номер',
+                order: 1
+            }, {
+                id: 'Quantity',
+                name: 'Quantity',
+                title: 'Количество',
+                order: 2
+            },
+            {
+                id: 'Status',
+                name: 'Status',
+                title: 'Статус',
+                order: 3
+            },
+            {
+                id: 'Description',
+                name: 'Description',
+                title: 'Описание',
+                order: 4
+            }],
+
+            controlProperties: {
+                type: 'control',
+                editButton: true,
+                deleteButton: true,
+                clearFilterButton: true,
+                modeSwitchButton: true
+            }
+        }).jsGrid('loadOdata', {});
+
+        $('div#material_lot_property').addClass('disabled-grid').jsGrid({
+            height: "500px",
+            width: "1000px",
+
+            sorting: false,
+            paging: true,
+            editing: true,
+            filtering: true,
+            autoload: true,
+            pageLoading: true,
+            inserting: true,
+            pageIndex: 1,
+            pageSize: 10,
+
+            rowClick: vmActiveRow
+
+        }).jsGrid('initOdata', {
+            serviceUrl: serviceUrl,
+            table: 'MaterialLotProperty',
+
+            fields: [{
+                id: 'PropertyType',
+                name: 'PropertyType',
+                title: 'Свойство',
+                order: 1
+            },
+            {
+                id: 'Value',
+                name: 'Value',
+                title: 'Значение',
+                order: 2
+            },
+            {
+                id: 'Description',
+                name: 'Description',
+                title: 'Описание',
+                order: 3
+            }],
+
+            controlProperties: {
+                type: 'control',
+                editButton: true,
+                deleteButton: true,
+                clearFilterButton: true,
+                modeSwitchButton: true
+            }
+        });
+    })
 
     function vmActiveRow(args) {
 
