@@ -119,18 +119,13 @@
     <Content Include="Content\Tree\tree.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
+    <Content Include="Scripts\Chart\index.js" />
+    <Content Include="Scripts\Form\index.js" />
     <Content Include="Scripts\App\Index.js" />
     <Content Include="Scripts\App\Marker.js" />
     <Content Include="Scripts\App\Market.js" />
     <Content Include="Scripts\App\PA.js" />
     <Content Include="Scripts\App\WorkshopSpecs.js" />
-    <Content Include="Scripts\Chart\index.js" />
-    <Content Include="Scripts\Form\index.js" />
-    <Content Include="Scripts\Angular\Index.js" />
-    <Content Include="Scripts\Angular\Marker.js" />
-    <Content Include="Scripts\Angular\Market.js" />
-    <Content Include="Scripts\Angular\PA.js" />
-    <Content Include="Scripts\Angular\WorkshopSpecs.js" />
     <Content Include="Scripts\Shared\common.js" />
     <Content Include="Scripts\Shared\util.js" />
     <Content Include="Scripts\Table\index.js" />
@@ -164,10 +159,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\actionController.cs" />
     <Compile Include="Controllers\chartController.cs" />
-    <Compile Include="Controllers\angularController.cs" />
+    <Compile Include="Controllers\appController.cs" />
     <Compile Include="Controllers\treeGridController.cs" />
     <Compile Include="Controllers\formController.cs" />
-    <Compile Include="Controllers\appController.cs" />
     <Compile Include="Controllers\tableController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -182,15 +176,10 @@
     <Content Include="Views\Action\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Views\Form\Index.cshtml" />
-    <Content Include="Views\App\Index.cshtml" />
-    <Content Include="Views\App\Market.cshtml" />
-    <Content Include="Views\App\Marker.cshtml" />
-    <Content Include="Views\App\PA.cshtml" />
-    <Content Include="Views\App\WorkshopSpecs.cshtml" />
     <Content Include="Views\Shared\_App.cshtml" />
     <Content Include="Views\TreeGrid\Index.cshtml" />
     <Content Include="Views\Chart\Index.cshtml" />
-    <Content Include="Views\Angular\Index.cshtml" />
+    <Content Include="Views\App\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

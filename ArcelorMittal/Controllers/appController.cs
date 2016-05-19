@@ -8,28 +8,8 @@ namespace ArcelorMittal.Controllers
 {
     public class appController : Controller
     {
-        // GET: singlePage
+        // GET: html
         public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult Market()
-        {
-            return View();
-        }
-
-        public ActionResult Marker()
-        {
-            return View();
-        }
-
-        public ActionResult PA()
-        {
-            return View();
-        }
-
-        public ActionResult WorkshopSpecs()
         {
             return View();
         }

@@ -1,647 +1,643 @@
-﻿var activePage = 'WorkshopSpecs';
+﻿angular.module('indexApp')
 
-$(function () {
+.config(['$stateProvider', function ($stateProvider) {
 
-    $('.tab1-content').hide();
-    $('.tab2-content').hide();
-    $('.tab3-content').hide();
-    $('.tab4-content').hide();
+    $stateProvider
+        .state('app.WorkshopSpecs.Equipment', {
 
-    $('.tab1').click(function () {
+            url: '/equipment',
+            templateUrl: 'Static/workshopspecs/equipment.html',
+            controller: 'equipmentCtrl'
+        })
 
-        $(this).addClass('active');
-        $('.tab2').removeClass('active');
-        $('.tab3').removeClass('active');
-        $('.tab4').removeClass('active');
+        .state('app.WorkshopSpecs.Material', {
 
-        $('.tab1-content').show();
-        $('.tab2-content').hide();
-        $('.tab3-content').hide();
-        $('.tab4-content').hide();
+            url: '/material',
+            templateUrl: 'Static/workshopspecs/material.html',
+            controller: 'materialCtrl'
+        })
 
-        $treeContainer = $('#hierarchy').empty();
+        .state('app.WorkshopSpecs.Personnel', {
 
-        $treeContainer.odataTree({
-            serviceUrl: serviceUrl,
-            table: 'EquipmentClass',
-            keys: {
-                id: 'ID',
-                parent: 'ParentID',
-                text: 'Description'
-            }
+            url: '/personnel',
+            templateUrl: 'Static/workshopspecs/personnel.html',
+            controller: 'personnelCtrl'
+        })
+
+        .state('app.WorkshopSpecs.Label', {
+
+            url: '/label',
+            templateUrl: 'Static/workshopspecs/label.html',
+            controller: 'labelCtrl'
+        })
+}])
+
+.controller('WorkshopSpecsCtrl', ['$scope', 'indexService', '$state', 'roles', function ($scope, indexService, $state, roles) {
+
+    // throw main tab change
+    $scope.$emit('mainTabChange', 'WorkshopSpecs');
+
+    $scope.$on('WorkshopSpecsTabChange', function (event, data) {
+        $scope.activeWorkshopSpecsTab = data;
+    });
+    
+}])
+
+.controller('equipmentCtrl', ['$scope', function ($scope) {
+
+    // throw main tab change
+    $scope.$emit('WorkshopSpecsTabChange', 'Equipment');
+
+    $treeContainer = $('#hierarchy').empty();
+
+    $treeContainer.odataTree({
+        serviceUrl: serviceUrl,
+        table: 'EquipmentClass',
+        keys: {
+            id: 'ID',
+            parent: 'ParentID',
+            text: 'Description'
+        }
+    });
+
+    $treeContainer.on('tree-item-selected', function (e, data) {
+
+        var EquipmentClassID = data.id;
+
+        $('div#equipment').removeClass('disabled-grid');
+
+        $('div#equipment').jsGrid('loadOdata', {
+
+            defaultFilter: 'EquipmentClassID eq ({0})'.format(EquipmentClassID),
+
+            //set field 'EquipmentClassID' from tree which will be included in JSON for inserting
+            insertedAdditionalFields: [{
+                name: 'EquipmentClassID',
+                value: EquipmentClassID
+            }]
         });
 
-        $treeContainer.on('tree-item-selected', function (e, data) {
+        $('div#equipment_property').jsGrid('loadOdata', {
+            defaultFilter: 'EquipmentID eq -1'
+        });
 
-            var EquipmentClassID = data.id;
+    });
 
-            $('div#equipment').removeClass('disabled-grid');
+    $('div#equipment').addClass('disabled-grid').jsGrid({
+        height: "500px",
+        width: "500px",
 
-            $('div#equipment').jsGrid('loadOdata', {
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 10,
+        rowClick: function (args) {
 
-                defaultFilter: 'EquipmentClassID eq ({0})'.format(EquipmentClassID),
+            vmActiveRow(args);
 
-                //set field 'EquipmentClassID' from tree which will be included in JSON for inserting
-                insertedAdditionalFields: [{
-                    name: 'EquipmentClassID',
-                    value: EquipmentClassID
-                }]
-            });
+            $('div#equipment_property').removeClass('disabled-grid');
 
             $('div#equipment_property').jsGrid('loadOdata', {
-                defaultFilter: 'EquipmentID eq -1'
+                defaultFilter: 'EquipmentID eq ({0})'.format(args.item.ID),
+
+                //settings for filtering of oData combobox by EquipmentClassID parent field
+                comboFilter: [{
+                    name: 'ClassPropertyID',
+                    filter: 'EquipmentClassID eq ({0})'.format(args.item.EquipmentClassID)
+                }],
+
+                //set field 'EquipmentID' from parent grid which will be included in JSON for inserting
+                insertedAdditionalFields: [{
+                    name: 'EquipmentID',
+                    value: args.item.ID
+                }]
             });
+        },
 
-        });
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'Equipment',
 
-        $('div#equipment').addClass('disabled-grid').jsGrid({
-            height: "500px",
-            width: "500px",
+        fields: [{
+            id: 'Description',
+            name: 'Description',
+            title: 'Имя',
+            order: 1
+        }],
 
-            sorting: false,
-            paging: true,
-            editing: true,
-            filtering: true,
-            autoload: true,
-            pageLoading: true,
-            inserting: true,
-            pageIndex: 1,
-            pageSize: 10,
-            rowClick: function (args) {
-
-                vmActiveRow(args);
-
-                $('div#equipment_property').removeClass('disabled-grid');
-
-                $('div#equipment_property').jsGrid('loadOdata', {
-                    defaultFilter: 'EquipmentID eq ({0})'.format(args.item.ID),
-
-                    //settings for filtering of oData combobox by EquipmentClassID parent field
-                    comboFilter: [{
-                        name: 'ClassPropertyID',
-                        filter: 'EquipmentClassID eq ({0})'.format(args.item.EquipmentClassID)
-                    }],
-
-                    //set field 'EquipmentID' from parent grid which will be included in JSON for inserting
-                    insertedAdditionalFields: [{
-                        name: 'EquipmentID',
-                        value: args.item.ID
-                    }]
-                });
-            },
-
-        }).jsGrid('initOdata', {
-            serviceUrl: serviceUrl,
-            table: 'Equipment',
-
-            fields: [{
-                id: 'Description',
-                name: 'Description',
-                title: 'Имя',
-                order: 1
-            }],
-
-            controlProperties: {
-                type: 'control',
-                editButton: true,
-                deleteButton: true,
-                clearFilterButton: true,
-                modeSwitchButton: true
-            }
-        }).jsGrid('loadOdata', {
-            defaultFilter: 'ID eq -1'
-        });
-
-
-
-        $('div#equipment_property').addClass('disabled-grid').jsGrid({
-            height: "500px",
-            width: "500px",
-
-            sorting: false,
-            paging: true,
-            editing: true,
-            filtering: true,
-            autoload: true,
-            pageLoading: true,
-            inserting: true,
-            pageIndex: 1,
-            pageSize: 10,
-
-            rowClick: vmActiveRow
-
-        }).jsGrid('initOdata', {
-            serviceUrl: serviceUrl,
-            table: 'EquipmentProperty',
-
-            fields: [{
-                id: 'ClassPropertyID',
-                name: 'ClassPropertyID',
-                title: 'Свойство',
-                order: 1,
-                type: 'combo',
-                table: {
-                    name: 'EquipmentClassProperty',
-                    id: 'ID',
-                    title: 'Description'
-                },
-                textField: 'name',
-                valueField: 'id'
-            },
-            {
-                id: 'Value',
-                name: 'Value',
-                title: 'Значение',
-                order: 2
-            },
-            {
-                id: 'Description',
-                name: 'Description',
-                title: 'Описание',
-                order: 3
-            }],
-            controlProperties: {
-                type: 'control',
-                editButton: true,
-                deleteButton: true,
-                clearFilterButton: true,
-                modeSwitchButton: true
-            }
-        }).jsGrid('loadOdata', {
-            defaultFilter: 'ID eq -1'
-        });
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
     });
 
 
-    $('.tab2').click(function () {
 
-        $(this).addClass('active');
-        $('.tab1').removeClass('active');
-        $('.tab3').removeClass('active');
-        $('.tab4').removeClass('active');
+    $('div#equipment_property').addClass('disabled-grid').jsGrid({
+        height: "500px",
+        width: "500px",
 
-        $('.tab2-content').show();
-        $('.tab1-content').hide();
-        $('.tab3-content').hide();
-        $('.tab4-content').hide();
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 10,
 
-        $hierarchyMaterialClass = $('#hierarchy_material_class').empty();
+        rowClick: vmActiveRow
 
-        $hierarchyMaterialClass.odataTree({
-            serviceUrl: serviceUrl,
-            table: 'MaterialClass',
-            keys: {
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'EquipmentProperty',
+
+        fields: [{
+            id: 'ClassPropertyID',
+            name: 'ClassPropertyID',
+            title: 'Свойство',
+            order: 1,
+            type: 'combo',
+            table: {
+                name: 'EquipmentClassProperty',
                 id: 'ID',
-                parent: 'ParentID',
-                text: 'Description'
-            }
+                title: 'Description'
+            },
+            textField: 'name',
+            valueField: 'id'
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: 'Значение',
+            order: 2
+        },
+        {
+            id: 'Description',
+            name: 'Description',
+            title: 'Описание',
+            order: 3
+        }],
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
+
+}])
+
+.controller('materialCtrl', ['$scope', function ($scope) {
+
+    // throw main tab change
+    $scope.$emit('WorkshopSpecsTabChange', 'Material');
+
+    $hierarchyMaterialClass = $('#hierarchy_material_class').empty();
+
+    $hierarchyMaterialClass.odataTree({
+        serviceUrl: serviceUrl,
+        table: 'MaterialClass',
+        keys: {
+            id: 'ID',
+            parent: 'ParentID',
+            text: 'Description'
+        }
+    });
+
+    $hierarchyMaterialClass.on('tree-item-selected', function (e, data) {
+
+        var MaterialClassID = data.id;
+
+        $('div#material_definition').removeClass('disabled-grid');
+
+        $('div#material_definition').jsGrid('loadOdata', {
+
+            defaultFilter: 'MaterialClassID eq ({0})'.format(MaterialClassID),
+
+            //set field 'MaterialClassID' from tree which will be included in JSON for inserting
+            insertedAdditionalFields: [{
+                name: 'MaterialClassID',
+                value: MaterialClassID
+            }]
         });
 
-        $hierarchyMaterialClass.on('tree-item-selected', function (e, data) {
+        $('div#material_definition_property').jsGrid('loadOdata', {
+            defaultFilter: 'MaterialDefinitionID eq -1'
+        });
 
-            var MaterialClassID = data.id;
+    });
 
-            $('div#material_definition').removeClass('disabled-grid');
+    $('div#material_definition').addClass('disabled-grid').jsGrid({
+        height: "500px",
+        width: "500px",
 
-            $('div#material_definition').jsGrid('loadOdata', {
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 10,
+        rowClick: function (args) {
 
-                defaultFilter: 'MaterialClassID eq ({0})'.format(MaterialClassID),
+            vmActiveRow(args);
 
-                //set field 'MaterialClassID' from tree which will be included in JSON for inserting
-                insertedAdditionalFields: [{
-                    name: 'MaterialClassID',
-                    value: MaterialClassID
-                }]
-            });
+            $('div#material_definition_property').removeClass('disabled-grid');
 
             $('div#material_definition_property').jsGrid('loadOdata', {
-                defaultFilter: 'MaterialDefinitionID eq -1'
-            });
+                defaultFilter: 'MaterialDefinitionID eq ({0})'.format(args.item.ID),
 
-        });
+                //settings for filtering of oData combobox by EquipmentClassID parent field
+                comboFilter: [{
+                    name: 'ClassPropertyID',
+                    filter: 'MaterialClassID eq ({0})'.format(args.item.MaterialClassID)
+                }],
 
-        $('div#material_definition').addClass('disabled-grid').jsGrid({
-            height: "500px",
-            width: "500px",
-
-            sorting: false,
-            paging: true,
-            editing: true,
-            filtering: true,
-            autoload: true,
-            pageLoading: true,
-            inserting: true,
-            pageIndex: 1,
-            pageSize: 10,
-            rowClick: function (args) {
-               
-                vmActiveRow(args);
-
-                $('div#material_definition_property').removeClass('disabled-grid');
-
-                $('div#material_definition_property').jsGrid('loadOdata', {
-                    defaultFilter: 'MaterialDefinitionID eq ({0})'.format(args.item.ID),
-
-                    //settings for filtering of oData combobox by EquipmentClassID parent field
-                    comboFilter: [{
-                        name: 'ClassPropertyID',
-                        filter: 'MaterialClassID eq ({0})'.format(args.item.MaterialClassID)
-                    }],
-
-                    //set field 'EquipmentID' from parent grid which will be included in JSON for inserting
-                    insertedAdditionalFields: [{
-                        name: 'MaterialDefinitionID',
-                        value: args.item.ID
-                    }]
-                });
-            },
-
-        }).jsGrid('initOdata', {
-            serviceUrl: serviceUrl,
-            table: 'MaterialDefinition',
-
-            fields: [{
-                id: 'Description',
-                name: 'Description',
-                title: 'Название',
-                order: 1
-            }],
-
-            controlProperties: {
-                type: 'control',
-                editButton: true,
-                deleteButton: true,
-                clearFilterButton: true,
-                modeSwitchButton: true
-            }
-        }).jsGrid('loadOdata', {
-            defaultFilter: 'ID eq -1'
-        });
-
-        $('div#material_definition_property').addClass('disabled-grid').jsGrid({
-            height: "500px",
-            width: "500px",
-
-            sorting: false,
-            paging: true,
-            editing: true,
-            filtering: true,
-            autoload: true,
-            pageLoading: true,
-            inserting: true,
-            pageIndex: 1,
-            pageSize: 10,
-
-            rowClick: vmActiveRow
-
-        }).jsGrid('initOdata', {
-            serviceUrl: serviceUrl,
-            table: 'MaterialDefinitionProperty',
-
-            fields: [{
-                id: 'ClassPropertyID',
-                name: 'ClassPropertyID',
-                title: 'Свойство',
-                order: 1,
-                type: 'combo',
-                table: {
-                    name: 'MaterialClassProperty',
-                    id: 'ID',
-                    title: 'Description'
-                },
-                textField: 'name',
-                valueField: 'id'
-            },
-            {
-                id: 'Value',
-                name: 'Value',
-                title: 'Значение',
-                order: 2
-            },
-            {
-                id: 'Description',
-                name: 'Description',
-                title: 'Описание',
-                order: 3
-            }],
-            controlProperties: {
-                type: 'control',
-                editButton: true,
-                deleteButton: true,
-                clearFilterButton: true,
-                modeSwitchButton: true
-            }
-        }).jsGrid('loadOdata', {
-            defaultFilter: 'ID eq -1'
-        });
-
-
-    });
-
-    $('.tab3').click(function () {
-
-        $(this).addClass('active');
-        $('.tab1').removeClass('active');
-        $('.tab2').removeClass('active');
-        $('.tab4').removeClass('active');
-
-        $('.tab3-content').show();
-        $('.tab1-content').hide();
-        $('.tab2-content').hide();
-        $('.tab4-content').hide();
-
-        $personnelClass = $('#personnel_class').empty();
-
-        $personnelClass.odataTree({
-            serviceUrl: serviceUrl,
-            table: 'PersonnelClass',
-            keys: {
-                id: 'ID',
-                parent: 'ParentID',
-                text: 'Description'
-            }
-        });
-
-        $personnelClass.on('tree-item-selected', function (e, data) {
-
-            var PersonnelClassID = data.id;
-
-            $('div#person').removeClass('disabled-grid');
-
-            $('div#person').jsGrid('loadOdata', {
-
-                defaultFilter: 'PersonnelClassID eq ({0})'.format(PersonnelClassID),
-
-                //set field 'MaterialClassID' from tree which will be included in JSON for inserting
+                //set field 'EquipmentID' from parent grid which will be included in JSON for inserting
                 insertedAdditionalFields: [{
-                    name: 'PersonnelClassID',
-                    value: PersonnelClassID
+                    name: 'MaterialDefinitionID',
+                    value: args.item.ID
                 }]
             });
+        },
 
-            $('div#person_property').jsGrid('loadOdata', {
-                defaultFilter: 'PersonID eq -1'
-            });
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'MaterialDefinition',
 
+        fields: [{
+            id: 'Description',
+            name: 'Description',
+            title: 'Название',
+            order: 1
+        }],
+
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
+
+    $('div#material_definition_property').addClass('disabled-grid').jsGrid({
+        height: "500px",
+        width: "500px",
+
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 10,
+
+        rowClick: vmActiveRow
+
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'MaterialDefinitionProperty',
+
+        fields: [{
+            id: 'ClassPropertyID',
+            name: 'ClassPropertyID',
+            title: 'Свойство',
+            order: 1,
+            type: 'combo',
+            table: {
+                name: 'MaterialClassProperty',
+                id: 'ID',
+                title: 'Description'
+            },
+            textField: 'name',
+            valueField: 'id'
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: 'Значение',
+            order: 2
+        },
+        {
+            id: 'Description',
+            name: 'Description',
+            title: 'Описание',
+            order: 3
+        }],
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
+
+}])
+
+.controller('personnelCtrl', ['$scope', function ($scope) {
+
+    // throw main tab change
+    $scope.$emit('WorkshopSpecsTabChange', 'Personnel');
+
+    $personnelClass = $('#personnel_class').empty();
+
+    $personnelClass.odataTree({
+        serviceUrl: serviceUrl,
+        table: 'PersonnelClass',
+        keys: {
+            id: 'ID',
+            parent: 'ParentID',
+            text: 'Description'
+        }
+    });
+
+    $personnelClass.on('tree-item-selected', function (e, data) {
+
+        var PersonnelClassID = data.id;
+
+        $('div#person').removeClass('disabled-grid');
+
+        $('div#person').jsGrid('loadOdata', {
+
+            defaultFilter: 'PersonnelClassID eq ({0})'.format(PersonnelClassID),
+
+            //set field 'MaterialClassID' from tree which will be included in JSON for inserting
+            insertedAdditionalFields: [{
+                name: 'PersonnelClassID',
+                value: PersonnelClassID
+            }]
         });
 
-        $('div#person').addClass('disabled-grid').jsGrid({
-            height: "500px",
-            width: "500px",
-
-            sorting: false,
-            paging: true,
-            editing: true,
-            filtering: true,
-            autoload: true,
-            pageLoading: true,
-            inserting: true,
-            pageIndex: 1,
-            pageSize: 10,
-            rowClick: function (args) {
-
-                vmActiveRow(args);
-
-                $('div#person_property').removeClass('disabled-grid');
-
-                $('div#person_property').jsGrid('loadOdata', {
-                    defaultFilter: 'PersonID eq ({0})'.format(args.item.ID),
-
-                    //settings for filtering of oData combobox by EquipmentClassID parent field
-                    comboFilter: [{
-                        name: 'ClassPropertyID',
-                        filter: 'PersonnelClassID eq ({0})'.format(args.item.PersonnelClassID)
-                    }],
-
-                    //set field 'EquipmentID' from parent grid which will be included in JSON for inserting
-                    insertedAdditionalFields: [{
-                        name: 'PersonID',
-                        value: args.item.ID
-                    }]
-                });
-            },
-
-        }).jsGrid('initOdata', {
-            serviceUrl: serviceUrl,
-            table: 'Person',
-
-            fields: [{
-                id: 'PersonName',
-                name: 'PersonName',
-                title: 'Имя',
-                order: 1
-            },{
-                id: 'Description',
-                name: 'Description',
-                title: 'Описание',
-                order: 2
-            }],
-
-            controlProperties: {
-                type: 'control',
-                editButton: true,
-                deleteButton: true,
-                clearFilterButton: true,
-                modeSwitchButton: true
-            }
-        }).jsGrid('loadOdata', {
-            defaultFilter: 'ID eq -1'
+        $('div#person_property').jsGrid('loadOdata', {
+            defaultFilter: 'PersonID eq -1'
         });
-
-        $('div#person_property').addClass('disabled-grid').jsGrid({
-            height: "500px",
-            width: "500px",
-
-            sorting: false,
-            paging: true,
-            editing: true,
-            filtering: true,
-            autoload: true,
-            pageLoading: true,
-            inserting: true,
-            pageIndex: 1,
-            pageSize: 10,
-
-            rowClick: vmActiveRow
-
-        }).jsGrid('initOdata', {
-            serviceUrl: serviceUrl,
-            table: 'PersonProperty',
-
-            fields: [{
-                id: 'ClassPropertyID',
-                name: 'ClassPropertyID',
-                title: 'Свойство',
-                order: 1,
-                type: 'combo',
-                table: {
-                    name: 'PersonnelClassProperty',
-                    id: 'ID',
-                    title: 'Description'
-                },
-                textField: 'name',
-                valueField: 'id'
-            },
-            {
-                id: 'Value',
-                name: 'Value',
-                title: 'Значение',
-                order: 2
-            },
-            {
-                id: 'Description',
-                name: 'Description',
-                title: 'Описание',
-                order: 3
-            }],
-            controlProperties: {
-                type: 'control',
-                editButton: true,
-                deleteButton: true,
-                clearFilterButton: true,
-                modeSwitchButton: true
-            }
-        }).jsGrid('loadOdata', {
-            defaultFilter: 'ID eq -1'
-        });
-
 
     });
 
-    $('.tab4').click(function () {
+    $('div#person').addClass('disabled-grid').jsGrid({
+        height: "500px",
+        width: "500px",
 
-        $(this).addClass('active');
-        $('.tab1').removeClass('active');
-        $('.tab2').removeClass('active');
-        $('.tab3').removeClass('active');
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 10,
+        rowClick: function (args) {
 
-        $('.tab4-content').show();
-        $('.tab1-content').hide();
-        $('.tab2-content').hide();
-        $('.tab3-content').hide();
+            vmActiveRow(args);
 
-        $('div#material_lot').jsGrid({
-            height: "500px",
-            width: "1000px",
+            $('div#person_property').removeClass('disabled-grid');
 
-            sorting: false,
-            paging: true,
-            editing: true,
-            filtering: true,
-            autoload: true,
-            pageLoading: true,
-            inserting: true,
-            pageIndex: 1,
-            pageSize: 10,
+            $('div#person_property').jsGrid('loadOdata', {
+                defaultFilter: 'PersonID eq ({0})'.format(args.item.ID),
 
-            rowClick: function (args) {
+                //settings for filtering of oData combobox by EquipmentClassID parent field
+                comboFilter: [{
+                    name: 'ClassPropertyID',
+                    filter: 'PersonnelClassID eq ({0})'.format(args.item.PersonnelClassID)
+                }],
 
-                vmActiveRow(args);
+                //set field 'EquipmentID' from parent grid which will be included in JSON for inserting
+                insertedAdditionalFields: [{
+                    name: 'PersonID',
+                    value: args.item.ID
+                }]
+            });
+        },
 
-                $('div#material_lot_property').removeClass('disabled-grid');
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'Person',
 
-                $('div#material_lot_property').jsGrid('loadOdata', {
-                    defaultFilter: 'MaterialLotID eq ({0})'.format(args.item.ID),
+        fields: [{
+            id: 'PersonName',
+            name: 'PersonName',
+            title: 'Имя',
+            order: 1
+        }, {
+            id: 'Description',
+            name: 'Description',
+            title: 'Описание',
+            order: 2
+        }],
 
-                });
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
 
-            }
+    $('div#person_property').addClass('disabled-grid').jsGrid({
+        height: "500px",
+        width: "500px",
 
-        }).jsGrid('initOdata', {
-            serviceUrl: serviceUrl,
-            table: 'MaterialLot',
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 10,
 
-            fields: [{
-                id: 'FactoryNumber',
-                name: 'FactoryNumber',
-                title: 'Номер',
-                order: 1
-            }, {
-                id: 'Quantity',
-                name: 'Quantity',
-                title: 'Количество',
-                order: 2
+        rowClick: vmActiveRow
+
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'PersonProperty',
+
+        fields: [{
+            id: 'ClassPropertyID',
+            name: 'ClassPropertyID',
+            title: 'Свойство',
+            order: 1,
+            type: 'combo',
+            table: {
+                name: 'PersonnelClassProperty',
+                id: 'ID',
+                title: 'Description'
             },
-            {
-                id: 'Status',
-                name: 'Status',
-                title: 'Статус',
-                order: 3
-            },
-            {
-                id: 'Description',
-                name: 'Description',
-                title: 'Описание',
-                order: 4
-            }],
+            textField: 'name',
+            valueField: 'id'
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: 'Значение',
+            order: 2
+        },
+        {
+            id: 'Description',
+            name: 'Description',
+            title: 'Описание',
+            order: 3
+        }],
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
 
-            controlProperties: {
-                type: 'control',
-                editButton: true,
-                deleteButton: true,
-                clearFilterButton: true,
-                modeSwitchButton: true
-            }
-        }).jsGrid('loadOdata', {});
+}])
 
-        $('div#material_lot_property').addClass('disabled-grid').jsGrid({
-            height: "500px",
-            width: "1000px",
+.controller('labelCtrl', ['$scope', function ($scope) {
 
-            sorting: false,
-            paging: true,
-            editing: true,
-            filtering: true,
-            autoload: true,
-            pageLoading: true,
-            inserting: true,
-            pageIndex: 1,
-            pageSize: 10,
+    // throw main tab change
+    $scope.$emit('WorkshopSpecsTabChange', 'Label');
 
-            rowClick: vmActiveRow
+    $('div#material_lot').jsGrid({
+        height: "500px",
+        width: "1000px",
 
-        }).jsGrid('initOdata', {
-            serviceUrl: serviceUrl,
-            table: 'MaterialLotProperty',
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 10,
 
-            fields: [{
-                id: 'PropertyType',
-                name: 'PropertyType',
-                title: 'Свойство',
-                order: 1
-            },
-            {
-                id: 'Value',
-                name: 'Value',
-                title: 'Значение',
-                order: 2
-            },
-            {
-                id: 'Description',
-                name: 'Description',
-                title: 'Описание',
-                order: 3
-            }],
+        rowClick: function (args) {
 
-            controlProperties: {
-                type: 'control',
-                editButton: true,
-                deleteButton: true,
-                clearFilterButton: true,
-                modeSwitchButton: true
-            }
-        });
-    })
+            vmActiveRow(args);
 
-    function vmActiveRow(args) {
+            $('div#material_lot_property').removeClass('disabled-grid');
 
-        var $tr = $(args.event.currentTarget);
+            $('div#material_lot_property').jsGrid('loadOdata', {
+                defaultFilter: 'MaterialLotID eq ({0})'.format(args.item.ID),
 
-        $tr.addClass('active-row');
-        $tr.siblings('tr').removeClass('active-row');
+            });
 
-    }
+        }
 
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'MaterialLot',
+
+        fields: [{
+            id: 'FactoryNumber',
+            name: 'FactoryNumber',
+            title: 'Номер',
+            order: 1
+        }, {
+            id: 'Quantity',
+            name: 'Quantity',
+            title: 'Количество',
+            order: 2
+        },
+        {
+            id: 'Status',
+            name: 'Status',
+            title: 'Статус',
+            order: 3
+        },
+        {
+            id: 'Description',
+            name: 'Description',
+            title: 'Описание',
+            order: 4
+        }],
+
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {});
+
+    $('div#material_lot_property').addClass('disabled-grid').jsGrid({
+        height: "500px",
+        width: "1000px",
+
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 10,
+
+        rowClick: vmActiveRow
+
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'MaterialLotProperty',
+
+        fields: [{
+            id: 'PropertyType',
+            name: 'PropertyType',
+            title: 'Свойство',
+            order: 1
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: 'Значение',
+            order: 2
+        },
+        {
+            id: 'Description',
+            name: 'Description',
+            title: 'Описание',
+            order: 3
+        }],
+
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    });
     
+}])
 
-});
+
