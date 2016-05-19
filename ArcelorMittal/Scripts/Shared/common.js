@@ -1,7 +1,7 @@
 ﻿//var serviceUrl = '../../ODataWebApp/api/Static/';
 //var serviceUrl = '../../odata_unified_svc/api/Dynamic/';
 //var serviceUrl = '../../odata_unified_svc/api/Dynamic/';
-var serviceUrl = ''../../odata_unified_svc/api/Dynamic/';
+var serviceUrl = '../../odata_unified_svc/api/Dynamic/';
 var interval = 5000; //grid auto refresh interval (5 sec)
 var _intervalID; //initiate interval ID
 
@@ -208,5 +208,15 @@ function addBootstrapClassToControls(input) {
             $(btn).addClass('btn');
         })
     }, 1)
+}
+
+//change active row in grid
+function vmActiveRow(args) {
+
+    var $tr = $(args.event.currentTarget);
+
+    $tr.addClass('active-row');
+    $tr.siblings('tr').removeClass('active-row');
+
 }
 
