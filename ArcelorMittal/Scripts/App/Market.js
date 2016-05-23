@@ -5,6 +5,41 @@
 
     $(function () {
 
+        //handling required fields for IE
+        if ($("<input />").prop("required") === undefined) {
+
+            $('input, select').click(function () {
+
+                if ($(this).attr('type') == 'file') {
+                    $(this).parent().removeClass('wrong');
+                } else
+                    $(this).removeClass('wrong');
+            })
+
+            $(document).on("submit", function (e) {
+               
+                $(this)                    
+                        .find("input, select")
+                        .filter("[required]")
+                        .filter(function () { return this.value == ''; })
+                        .each(function () {
+                            e.preventDefault();
+                            
+
+                            if ($(this).attr('type') == 'file') {
+
+                                if ($('input#fileName').val() == '')
+                                    $(this).parent().addClass('wrong');
+
+                            } else
+                                $(this).addClass('wrong');
+
+                            alert($('label[for=' + $(this).attr('id') + ']').html() + " is required!");
+                        });
+            });
+
+        }
+
         $('div#files').jsGrid({
             height: "500px",
             width: "950px",
@@ -21,6 +56,9 @@
 
             rowClick: function (args) {
                 vmPopulateForm(args.item);
+
+                $form.find('input[type=file]').prop('required', false);
+                $form.find('input[type=file]').attr('required', false);
             },
 
             onItemDeleted: function () {
@@ -80,6 +118,7 @@
 
         // add new record
         $('#addFile').click(vmAddRecord);
+        $('#cancel').click(vmResetForm);
         $('#fileData').change(vmFileSelected);
 
         function vmPopulateForm(item) {
@@ -90,6 +129,9 @@
             var action = serviceUrl + 'Files(' + item.ID + ')/$value';
             $form.attr('action', action);
 
+            $('input[type=text], select').removeClass('wrong');
+            $('input[type=file]').parent().removeClass('wrong');
+            
             $form.find('[name="FileName"]').val(item.FileName);
             $form.find('[name="Name"]').val(item.Name);
             $form.find('[name="Status"]').val(item.Status);
@@ -111,6 +153,9 @@
                 FileType: 'Excel label'
             });
 
+            $form.find('input[type=file]').prop('required', true);
+            $form.find('input[type=file]').attr('required', true);
+
             return false;
         }
 
@@ -129,6 +174,15 @@
             var $input = $form.find('[name="FileName"]');
             if (!$input.val())
                 $input.val(filename)
+        }
+
+        function vmResetForm() {
+
+            //reset form entered data
+            $form[0].reset();
+
+            //and hide it
+            $form.hide();
         }
     });
 

@@ -157,4 +157,14 @@ div#jstree{
     vertical-align: middle;
 }
 
+/*market page*/
+
+div#files{
+    margin-top:20px;
+}
+
+.wrong{
+    border-color:red!important
+}
+
 
