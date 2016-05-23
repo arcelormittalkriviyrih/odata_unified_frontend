@@ -1,4 +1,4 @@
-﻿var app = angular.module('indexApp', ["ui.router"])
+﻿var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate'])
 
 .config(['$stateProvider', function ($stateProvider) {
 
@@ -63,7 +63,7 @@
             .state('app.PA', {
 
                 url: '/pa',
-                templateUrl: 'Static/pa.html',
+                templateUrl: 'Static/pa/index.html',
                 controller: 'PACtrl',
                 onEnter: function ($state, roles) {
 
@@ -100,15 +100,32 @@
 
 }])
 
-.controller('indexCtrl', ['$scope', 'indexService', '$state', 'roles', 'user', function ($scope, indexService, $state, roles, user) {
+.config(function ($translateProvider) {
+    
+    $translateProvider.translations('ru', translations.ru);
+    $translateProvider.translations('ua', translations.ua);
+    $translateProvider.translations('en', translations.en);
+
+    $translateProvider.preferredLanguage('ru');
+})
+
+.controller('indexCtrl', ['$scope', '$state', '$translate', 'roles', 'user', function ($scope, $state, $translate, roles, user) {
 
     $scope.user = user;
     $scope.roles = roles;
+
+    // set preferred language
+    $scope.language = $translate.proposedLanguage();
 
     // watch for library tab changed
     $scope.$on('mainTabChange', function (event, data) {
         $scope.activeTab = data;
     });
+
+    // change language
+    $scope.changeLanguage = function (key) {
+        $translate.use(key);
+    };
 
     // if on root state
     // than open welcome screen

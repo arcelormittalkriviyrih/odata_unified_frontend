@@ -119,6 +119,7 @@
     <Content Include="Content\Tree\tree.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
+    <Content Include="Scripts\App\Resources.js" />
     <Content Include="Scripts\Chart\index.js" />
     <Content Include="Scripts\Form\index.js" />
     <Content Include="Scripts\App\Index.js" />
@@ -133,6 +134,7 @@
     <Content Include="Scripts\Table\jsGridNewFields.js" />
     <Content Include="Scripts\TreeGrid\index.js" />
     <Content Include="Scripts\Vendor\angular-route.js" />
+    <Content Include="Scripts\Vendor\angular-translate.min.js" />
     <Content Include="Scripts\Vendor\angular-ui-router.js" />
     <Content Include="Scripts\Vendor\angular.min.js" />
     <Content Include="Scripts\Vendor\jquery-2.2.3.min.js" />
@@ -145,14 +147,14 @@
     <Content Include="Static\error.html" />
     <Content Include="Static\marker.html" />
     <Content Include="Static\market.html" />
-    <Content Include="Static\pa.html" />
+    <Content Include="Static\workshopspecs.html" />
     <Content Include="Static\index.html" />
     <Content Include="Static\welcome.html" />
-    <Content Include="Static\workshopspecs.html" />
-    <Content Include="Static\workshopspecs\equipment.html" />
-    <Content Include="Static\workshopspecs\label.html" />
-    <Content Include="Static\workshopspecs\material.html" />
-    <Content Include="Static\workshopspecs\personnel.html" />
+    <Content Include="Static\pa\index.html" />
+    <Content Include="Static\pa\equipment.html" />
+    <Content Include="Static\pa\label.html" />
+    <Content Include="Static\pa\material.html" />
+    <Content Include="Static\pa\personnel.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
