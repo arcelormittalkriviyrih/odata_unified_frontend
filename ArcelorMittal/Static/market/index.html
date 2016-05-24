@@ -2,12 +2,12 @@
 
     <li class="tab"
         ng-class="{'active': activeMarketTab == 'Order'}">
-        <a ui-sref=".Order" ui-sref-opts="{reload: true}">Заказы</a>
+        <a ui-sref=".Order" ui-sref-opts="{reload: true}">{{ 'market.Order' | translate }}</a>
     </li>
 
     <li class="tab"
         ng-class="{'active': activeMarketTab == 'LabelTemplate'}">
-        <a ui-sref=".LabelTemplate" ui-sref-opts="{reload: true}">Шаблоны бирок</a>
+        <a ui-sref=".LabelTemplate" ui-sref-opts="{reload: true}">{{ 'market.LabelTemplate' | translate }}</a>
     </li>
 
 </ul>

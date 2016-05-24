@@ -114,21 +114,28 @@
     $translateProvider.translations('ru', translations.ru);
     $translateProvider.translations('ua', translations.ua);
 
-    $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+    $translateProvider.useSanitizeValueStrategy('sanitizeParameters');    
 })
-
-.value('defaultLocale', 'ua')
 
 .value('serviceUrl', serviceUrl)
 
 .value('withCredentials', true)
 
-.controller('rootCtrl', ['$scope', '$state', 'defaultLocale', function ($scope, $state, defaultLocale) {
+.controller('rootCtrl', ['$scope', '$state', function ($scope, $state) {
 
     // if locale not specified
     // select default one
-    if (!$state.params.locale)
-        $state.go('app', { locale: defaultLocale });
+    if (!$state.params.locale) {
+
+        // get system language ( for IE "browserLanguage" )
+        // get first two letters - language code
+        var language = navigator.language || navigator.browserLanguage;
+        var locale = language.substr(0, 2);
+
+        // open application
+        // with default locale
+        $state.go('app', { locale: locale });
+    };
 }])
 
 .controller('indexCtrl', ['$scope', '$state', '$translate', 'roles', 'user', function ($scope, $state, $translate, roles, user) {
