@@ -134,6 +134,7 @@
     <Content Include="Scripts\Table\jsGridNewFields.js" />
     <Content Include="Scripts\TreeGrid\index.js" />
     <Content Include="Scripts\Vendor\angular-route.js" />
+    <Content Include="Scripts\Vendor\angular-sanitize.min.js" />
     <Content Include="Scripts\Vendor\angular-translate.min.js" />
     <Content Include="Scripts\Vendor\angular-ui-router.js" />
     <Content Include="Scripts\Vendor\angular.min.js" />
@@ -146,7 +147,9 @@
     <Content Include="Scripts\Vendor\jstree.js" />
     <Content Include="Static\error.html" />
     <Content Include="Static\marker.html" />
-    <Content Include="Static\market.html" />
+    <Content Include="Static\market\index.html" />
+    <Content Include="Static\market\labeltemplate.html" />
+    <Content Include="Static\market\order.html" />
     <Content Include="Static\workshopspecs.html" />
     <Content Include="Static\index.html" />
     <Content Include="Static\welcome.html" />

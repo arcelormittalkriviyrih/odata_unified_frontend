@@ -37,7 +37,7 @@
     // throw main tab change
     $scope.$emit('mainTabChange', 'PA');
 
-    $scope.$on('WorkshopSpecsTabChange', function (event, data) {
+    $scope.$on('PATabChange', function (event, data) {
         $scope.activeWorkshopSpecsTab = data;
     });
 
@@ -46,7 +46,7 @@
 .controller('PAequipmentCtrl', ['$scope', function ($scope) {
 
     // throw main tab change
-    $scope.$emit('WorkshopSpecsTabChange', 'Equipment');
+    $scope.$emit('PATabChange', 'Equipment');
 
     $treeContainer = $('#hierarchy').empty();
 
@@ -205,7 +205,7 @@
 .controller('PAmaterialCtrl', ['$scope', function ($scope) {
 
     // throw main tab change
-    $scope.$emit('WorkshopSpecsTabChange', 'Material');
+    $scope.$emit('PATabChange', 'Material');
 
     $hierarchyMaterialClass = $('#hierarchy_material_class').empty();
 
@@ -356,13 +356,14 @@
     }).jsGrid('loadOdata', {
         defaultFilter: 'ID eq -1'
     });
+    
 
 }])
 
 .controller('PApersonnelCtrl', ['$scope', function ($scope) {
 
     // throw main tab change
-    $scope.$emit('WorkshopSpecsTabChange', 'Personnel');
+    $scope.$emit('PATabChange', 'Personnel');
 
     $personnelClass = $('#personnel_class').empty();
 
@@ -524,7 +525,7 @@
 .controller('PAlabelCtrl', ['$scope', function ($scope) {
 
     // throw main tab change
-    $scope.$emit('WorkshopSpecsTabChange', 'Label');
+    $scope.$emit('PATabChange', 'Label');
 
     $('div#material_lot').jsGrid({
         height: "500px",

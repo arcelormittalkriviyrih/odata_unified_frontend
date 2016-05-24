@@ -3,9 +3,7 @@
 
         var self = this;
         var _table, _fields;
-
-        
-       
+            
         vmGetMetadata(properties.serviceUrl)
             .done(function (metadata) {
 
@@ -190,8 +188,8 @@
 
                 if (properties.controlProperties) 
                     _fields.push(properties.controlProperties)
-                else
-                    _fields.push({ type: "control" });
+                //else
+                //    _fields.push({ type: "control" });
                
                 self.fields = _fields;
                 self.table = _table;
@@ -258,8 +256,11 @@
 
         var self = this;
         var COMPONENT_KEY = 'vmArselorGrid';
+
         var _table = self.table;
         var _fields = self.fields;
+
+        var _currentTableName = properties.table;
 
         //if we want filter our oData combobox 
         //1.we get comboFilter array from properties.
@@ -311,6 +312,8 @@
         }
 
         function loadData(filter) {
+
+            _currentTableName;
 
             // if not initialized
             // than skip and do nothing

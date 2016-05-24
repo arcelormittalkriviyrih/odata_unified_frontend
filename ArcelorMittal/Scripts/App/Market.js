@@ -1,7 +1,146 @@
-﻿app.controller('marketCtrl', ['$scope', 'indexService', '$state', 'roles', function ($scope, indexService, $state, roles) {
+﻿angular.module('indexApp')
+
+.config(['$stateProvider', function ($stateProvider) {
+
+    $stateProvider
+        .state('app.Market.Order', {
+
+            url: '/order',
+            templateUrl: 'Static/market/order.html',
+            controller: 'marketOrderCtrl'
+        })
+        .state('app.Market.LabelTemplate', {
+
+            url: '/labeltemplate',
+            templateUrl: 'Static/market/labeltemplate.html',
+            controller: 'marketLabelTemplateCtrl'
+        })
+}])
+
+.controller('marketCtrl', ['$scope', 'indexService', '$state', 'roles', function ($scope, indexService, $state, roles) {
 
     // throw main tab change
     $scope.$emit('mainTabChange', 'Market');
+
+    $scope.$on('MarketTabChange', function (event, data) {
+        $scope.activeMarketTab = data;
+    });
+    
+}])
+
+.controller('marketOrderCtrl', ['$scope', 'indexService', function ($scope, indexService) {
+
+    $scope.$emit('MarketTabChange', 'Order');
+
+    $scope.orderDetails = [];
+
+    $(function () {
+
+        $('#orders').jsGrid({
+            height: "500px",
+            width: "950px",
+
+            sorting: false,
+            paging: true,
+            editing: false,
+            filtering: true,
+            autoload: true,
+            pageLoading: true,
+            inserting: false,
+            pageIndex: 1,
+            pageSize: 10,
+
+            rowClick: function (args) {
+
+                vmActiveRow(args);
+                vmGetOrderDetails(args);              
+            }
+        }).jsGrid('initOdata', {
+            serviceUrl: serviceUrl,
+            table: 'v_Orders',
+
+            fields: [{
+                id: 'STD',
+                name: 'STD',
+                title: 'STD',
+                order: 1
+            }, {
+                id: 'CONTR',
+                name: 'CONTR',
+                title: 'Контракт №',
+                order: 2
+            }, {
+                id: 'DIR',
+                name: 'DIR',
+                title: 'Направление',
+                order: 3
+            }, {
+                id: 'ORDER',
+                name: 'ORDER',
+                title: 'Заказ',
+                order: 4
+            }, {
+                id: 'TMPL',
+                name: 'TMPL',
+                title: 'Шаблон бирки',
+                order: 5
+            }],
+
+            controlProperties: {
+                type: 'control',
+                editButton: false,
+                deleteButton: true,
+                clearFilterButton: true,
+                modeSwitchButton: true
+            }
+        }).jsGrid('loadOdata', {})
+
+        $("#orderDetails").addClass('disabled-grid').jsGrid({
+            height: "500px",
+            width: "950px",
+
+            sorting: false,
+            paging: true,
+            editing: false,
+            filtering: true,
+            autoload: true,
+            pageLoading: true,
+            inserting: false,
+            pageIndex: 1,
+            pageSize: 10,
+
+        });
+
+    });
+
+    function vmGetOrderDetails(args) {
+
+        var id = args.item.id;
+
+        $("#orderDetails").removeClass('disabled-grid').jsGrid('initOdata', {
+            serviceUrl: serviceUrl,
+            table: 'v_OrderProperties',
+            fields: [{
+                id: 'Value',
+                name: 'Value',
+                title: 'Значение',
+                order: 1
+            }, {
+                id: 'Description',
+                name: 'Description',
+                title: 'Описание',
+                order: 2
+            }]
+        }).jsGrid('loadOdata', {
+            defaultFilter: 'OperationsRequest eq {0}'.format(id)
+        })
+    }
+    
+}])
+
+.controller('marketLabelTemplateCtrl', ['$scope', '$state', function ($scope, $state) {
+
+    $scope.$emit('MarketTabChange', 'LabelTemplate');
 
     $(function () {
 
@@ -17,14 +156,14 @@
             })
 
             $(document).on("submit", function (e) {
-               
-                $(this)                    
+
+                $(this)
                         .find("input, select")
                         .filter("[required]")
                         .filter(function () { return this.value == ''; })
                         .each(function () {
                             e.preventDefault();
-                            
+
 
                             if ($(this).attr('type') == 'file') {
 
@@ -131,7 +270,7 @@
 
             $('input[type=text], select').removeClass('wrong');
             $('input[type=file]').parent().removeClass('wrong');
-            
+
             $form.find('[name="FileName"]').val(item.FileName);
             $form.find('[name="Name"]').val(item.Name);
             $form.find('[name="Status"]').val(item.Status);
@@ -184,8 +323,15 @@
             //and hide it
             $form.hide();
         }
-    });
 
+        //refresh page after submit
+        $form.on('submit', function () {
+
+            setTimeout(function () {
+                window.location.reload();
+        }, 1000);
+        })
+    });
 }])
 
 

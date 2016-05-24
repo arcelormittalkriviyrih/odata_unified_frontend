@@ -1,0 +1,15 @@
+﻿<ul class="nav nav-tabs">
+
+    <li class="tab"
+        ng-class="{'active': activeMarketTab == 'Order'}">
+        <a ui-sref=".Order" ui-sref-opts="{reload: true}">Заказы</a>
+    </li>
+
+    <li class="tab"
+        ng-class="{'active': activeMarketTab == 'LabelTemplate'}">
+        <a ui-sref=".LabelTemplate" ui-sref-opts="{reload: true}">Шаблоны бирок</a>
+    </li>
+
+</ul>
+
+<ui-view></ui-view>
