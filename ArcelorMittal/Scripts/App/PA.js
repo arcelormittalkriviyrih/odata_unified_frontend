@@ -85,7 +85,7 @@
 
     $('div#equipment').addClass('disabled-grid').jsGrid({
         height: "500px",
-        width: "500px",
+        width: "720px",
 
         sorting: false,
         paging: true,
@@ -145,7 +145,7 @@
 
     $('div#equipment_property').addClass('disabled-grid').jsGrid({
         height: "500px",
-        width: "500px",
+        width: "720px",
 
         sorting: false,
         paging: true,
@@ -167,6 +167,7 @@
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
             title: 'Свойство',
+            width: 200,
             order: 1,
             type: 'combo',
             table: {
@@ -181,12 +182,14 @@
             id: 'Value',
             name: 'Value',
             title: 'Значение',
+            width: 200,
             order: 2
         },
         {
             id: 'Description',
             name: 'Description',
             title: 'Описание',
+            width: 200,
             order: 3
         }],
         controlProperties: {
@@ -244,7 +247,7 @@
 
     $('div#material_definition').addClass('disabled-grid').jsGrid({
         height: "500px",
-        width: "500px",
+        width: "720px",
 
         sorting: false,
         paging: true,
@@ -302,7 +305,7 @@
 
     $('div#material_definition_property').addClass('disabled-grid').jsGrid({
         height: "500px",
-        width: "500px",
+        width: "720px",
 
         sorting: false,
         paging: true,
@@ -324,6 +327,7 @@
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
             title: 'Свойство',
+            width: 200,
             order: 1,
             type: 'combo',
             table: {
@@ -338,12 +342,14 @@
             id: 'Value',
             name: 'Value',
             title: 'Значение',
+            width: 200,
             order: 2
         },
         {
             id: 'Description',
             name: 'Description',
             title: 'Описание',
+            width: 200,
             order: 3
         }],
         controlProperties: {
@@ -402,7 +408,7 @@
 
     $('div#person').addClass('disabled-grid').jsGrid({
         height: "500px",
-        width: "500px",
+        width: "720px",
 
         sorting: false,
         paging: true,
@@ -465,7 +471,7 @@
 
     $('div#person_property').addClass('disabled-grid').jsGrid({
         height: "500px",
-        width: "500px",
+        width: "720px",
 
         sorting: false,
         paging: true,
@@ -487,6 +493,7 @@
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
             title: 'Свойство',
+            width: 200,
             order: 1,
             type: 'combo',
             table: {
@@ -501,12 +508,14 @@
             id: 'Value',
             name: 'Value',
             title: 'Значение',
+            width: 200,
             order: 2
         },
         {
             id: 'Description',
             name: 'Description',
             title: 'Описание',
+            width: 200,
             order: 3
         }],
         controlProperties: {

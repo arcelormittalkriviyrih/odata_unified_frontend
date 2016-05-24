@@ -3,6 +3,8 @@
 
         var self = this;
         var _table, _fields;
+
+        
             
         vmGetMetadata(properties.serviceUrl)
             .done(function (metadata) {
@@ -40,7 +42,7 @@
 
                                     var field = {
                                         name: item.name,
-                                        width: vmGetWidth(item.name),
+                                        width: vmGetWidth(fields, item.name),
                                         maxlength: item.maxlength,
                                     };
 
@@ -160,8 +162,7 @@
                                         field.textField = filteredFields.textField;
                                         field.serviceUrl = properties.serviceUrl;
                                         field.filter = filteredFields.filter;
-                                        
-                                        
+                                                                                
                                     }
                                                                                                              
                                     return field;
@@ -188,13 +189,12 @@
 
                 if (properties.controlProperties) 
                     _fields.push(properties.controlProperties)
-                //else
-                //    _fields.push({ type: "control" });
                
                 self.fields = _fields;
                 self.table = _table;
 
                 self._init();
+                self.data = [];
                 self.render();
                 
             });
@@ -237,9 +237,16 @@
                         .get(0);
         };
 
-        function vmGetWidth(name) {
-            return getTextWidth(name, "regular 14pt Helvetica") + 20;
+        function vmGetWidth(fields, name) {
 
+            var field = $.grep(fields, function (e) {
+                return e.id == name
+            });
+
+            if (field.length > 0 && field[0].width)
+                return field[0].width;
+            else
+                return getTextWidth(name, "regular 14pt Helvetica") + 20;
         }
 
         function getTextWidth(text, font) {
@@ -259,8 +266,6 @@
 
         var _table = self.table;
         var _fields = self.fields;
-
-        var _currentTableName = properties.table;
 
         //if we want filter our oData combobox 
         //1.we get comboFilter array from properties.
@@ -312,8 +317,6 @@
         }
 
         function loadData(filter) {
-
-            _currentTableName;
 
             // if not initialized
             // than skip and do nothing

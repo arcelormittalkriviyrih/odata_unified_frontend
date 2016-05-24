@@ -81,6 +81,22 @@ input#fileUpload{
 	margin-left: 12px;
 }
 
+.modal{
+    box-sizing:border-box;
+    padding: 10px;
+}
+
+.btn-circle{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+    outline:none;
+}
+
 /*modified datetimepicker*/
 
 span.ui-spinner.ui-widget.ui-widget-content.ui-corner-all{
@@ -159,12 +175,37 @@ div#jstree{
 
 /*market page*/
 
-div#files{
-    margin-top:20px;
+button.add{
+    margin-bottom:20px;
 }
 
 .wrong{
     border-color:red!important
+}
+
+.input-group input{
+    height: 20px;
+    margin-bottom: 0;
+}
+
+.black-wrapper{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    top: 0;
+    left: 0;
+}
+
+/*modified tree*/
+
+.jstree-anchor{
+    white-space: pre-wrap!important
+}
+
+.jstree-default .jstree-anchor{
+    height:auto!important;
 }
 
 
