@@ -22,6 +22,9 @@
             Material: 'Material',
             Personnel: 'Personnel',
             Label: 'Label'
+        },
+        error: {
+            Unauthorized: 'This role is unavailable for you!'
         }
     },
 
@@ -47,6 +50,9 @@
             Material: 'Материал',
             Personnel: 'Персонал',
             Label: 'Бирки'
+        },
+        error: {
+            Unauthorized: 'Эта роль Вам недоступна'
         }
 
     },
@@ -73,6 +79,9 @@
             Material: 'Матеріал',
             Personnel: 'Персонал',
             Label: 'Бірки'
+        },
+        error: {
+            Unauthorized: 'У доступі відмолвено'
         }
 
     }

@@ -6,7 +6,7 @@
 
             .state('root', {
                 url: '',
-                template: '<ui-view></ui-view>',
+                templateUrl: 'Static/root.html',
                 controller: 'rootCtrl'
             })
 
@@ -23,6 +23,10 @@
 
                                         return responce.data.value;
                                     })
+                                    .catch(function (a, b) {
+
+                                        throw { code: 'no_roles', accessError: true };
+                                    });
                     },
                     user: function (indexService) {
 
@@ -30,8 +34,11 @@
                                     .then(function (responce) {
 
                                         return responce.data.value[0].SYSTEM_USER;
-                                    });
+                                    })
+                                    .catch(function () {
 
+                                        throw { code: 'no_user_info', accessError: true };
+                                    })
                     }
                 }
             })
@@ -91,6 +98,13 @@
                 }
             })
 
+            .state('accessError', {
+
+                url: '/accesserror/:code?',
+                templateUrl: 'Static/access_error.html',
+                controller: 'errorCtrl'
+            })
+
             .state('app.error', {
 
                 url: '/error/:code?',
@@ -121,21 +135,27 @@
 
 .value('withCredentials', true)
 
+.run(function ($rootScope, $state) {
+
+    $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+
+        // preevnt default workflow
+        event.preventDefault();
+
+        // open errors depending on type
+        // access or app
+        if (error.accessError)
+            $state.go('accessError', { code: error.code });
+        else
+            $state.go('app.error', { code: error.code });
+    });
+})
+
 .controller('rootCtrl', ['$scope', '$state', function ($scope, $state) {
 
-    // if locale not specified
-    // select default one
-    if (!$state.params.locale) {
-
-        // get system language ( for IE "browserLanguage" )
-        // get first two letters - language code
-        var language = navigator.language || navigator.browserLanguage;
-        var locale = language.substr(0, 2);
-
-        // open application
-        // with default locale
-        $state.go('app', { locale: locale });
-    };
+    // just open rool state
+    // in case empty URL was provided
+    $state.go('app');
 }])
 
 .controller('indexCtrl', ['$scope', '$state', '$translate', 'roles', 'user', function ($scope, $state, $translate, roles, user) {
@@ -143,9 +163,29 @@
     $scope.user = user;
     $scope.roles = roles;
 
-    // set interface language
-    $scope.language = $state.params.locale;
-    $translate.use($scope.language);
+    // check if locale specified    
+    if (!$state.params.locale) {
+
+        // get system language ( for IE "browserLanguage" )
+        // get first two letters - language code
+        var language = navigator.language || navigator.browserLanguage;
+        var locale = language.substr(0, 2);
+
+        // reload state
+        // with locale specified
+        $state.go($state.current.name, { locale: locale }, { reload: true });
+        
+    } else {
+
+        // set interface language
+        $scope.language = $state.params.locale;
+        $translate.use($scope.language);
+
+        // if on root state
+        // than open welcome screen
+        if ($state.current.name == 'app')
+            $state.go('app.welcome');
+    }
 
     // watch for library tab changed
     $scope.$on('mainTabChange', function (event, data) {
@@ -162,10 +202,6 @@
         $state.go($state.current.name, $state.params, { reload: true});
     };
 
-    // if on root state
-    // than open welcome screen
-    if ($state.current.name == 'app')
-        $state.go('app.welcome');
 }])
 
 .controller('welcomeCtrl', ['$scope', 'roles', function ($scope, roles) {
@@ -179,7 +215,7 @@
 
 }])
 
-.controller('errorCtrl', ['$scope', '$state', function ($scope, $state) {
+.controller('errorCtrl', ['$scope', '$state', '$translate', function ($scope, $state, $translate) {
 
     // throw main tab change
     $scope.$emit('mainTabChange', 'error');
@@ -188,9 +224,17 @@
     // depending on error code
     switch ($state.params.code)
     {
-        case 'unauthorized':
-            $scope.message = 'This role is unavailable for you!';
+        case 'no_roles':
+            $scope.message = 'Service unavailable or failed to load user roles';
             break;
+        case 'no_user_info':
+            $scope.message = 'Service unavailable or failed to load user info';
+            break;
+        case 'unauthorized':
+            $scope.message = 'error.Unauthorized';
+            break;
+        default:
+            $scope.message = 'Oops something is broken';
     }
 
 }])

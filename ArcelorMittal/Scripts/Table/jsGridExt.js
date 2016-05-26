@@ -339,6 +339,9 @@
                 url: serviceUrl + table.name,
                 dataType: "json",
                 data: data,
+                xhrFields: {
+                    withCredentials: true
+                }
             }).then(function (response) {
 
                 return {

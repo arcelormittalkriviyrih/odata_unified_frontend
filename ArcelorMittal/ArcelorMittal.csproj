@@ -146,10 +146,12 @@
     <Content Include="Scripts\TreeGrid\treeExt.js" />
     <Content Include="Scripts\Vendor\jstree.js" />
     <Content Include="Static\error.html" />
+    <Content Include="Static\access_error.html" />
     <Content Include="Static\marker.html" />
     <Content Include="Static\market\index.html" />
     <Content Include="Static\market\labeltemplate.html" />
     <Content Include="Static\market\order.html" />
+    <Content Include="Static\root.html" />
     <Content Include="Static\workshopspecs.html" />
     <Content Include="Static\index.html" />
     <Content Include="Static\welcome.html" />
