@@ -1,7 +1,23 @@
-﻿<div id="orders">
+﻿<button class="add btn btn-default" ng-click="createForm()">Create</button>
+
+<div id="orders">
 
 </div>
 
 <div id="orderDetails">
 
+</div>
+
+<div class="black-wrapper" ng-class="{'show': isShowModal}" ng-show="isShowModal">
+    <div class="modal">
+        <button class="pull-right btn btn-circle"
+                ng-click="toggleModal(false)">
+            <i class="icon-remove"></i>            
+        </button> 
+
+        <div class="formWrapper">
+            <form id="createOrderForm"></form>
+        </div>
+        
+    </div>
 </div>

@@ -193,6 +193,7 @@
                 self.fields = _fields;
                 self.table = _table;
 
+                //initialize grid, then clear old data and render grid
                 self._init();
                 self.data = [];
                 self.render();
@@ -336,6 +337,7 @@
             };
 
             return $.ajax({
+
                 url: serviceUrl + table.name,
                 dataType: "json",
                 data: data,
@@ -432,7 +434,10 @@
                     url: serviceUrl + table.name,
                     type: "POST",
                     data: JSON.stringify(item),
-                    contentType: "application/json;odata=verbose"
+                    contentType: "application/json;odata=verbose",
+                    //xhrFields: {
+                    //    withCredentials: true
+                    //}
                 })
                 .fail(handleError);
             }
@@ -454,9 +459,13 @@
 
             return $.ajax({
                 url: serviceUrl + table.name + '(' + id + ')',
+                xhrFields: {
+                    withCredentials: true
+                },
                 type: "PUT",
                 data: JSON.stringify(item),
-                contentType: "application/json;odata=verbose"
+                contentType: "application/json;odata=verbose",
+                
             })
             .fail(handleError);
         };
@@ -469,7 +478,10 @@
 
             return $.ajax({
                 type: "DELETE",
-                url: serviceUrl + table.name + '(' + id + ')'
+                url: serviceUrl + table.name + '(' + id + ')',
+                //xhrFields: {
+                //    withCredentials: true
+                //}
             })
             .fail(handleError);
         };

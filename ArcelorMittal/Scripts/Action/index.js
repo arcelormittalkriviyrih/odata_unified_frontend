@@ -1,89 +1,171 @@
-﻿$(function () {
+﻿(function ($) {
 
-    vmGetMetadata()
-        .done(function (metadata) {
+    jQuery.fn.oDataAction = function (options) {
 
-            // read actions from metadata
-            var actions = vmGetActions(metadata);
+        var self = $(this),
+            procedureName = options.action,
+            fieldsList = options.fields;
+            //specialFields = options.specialFields,
+            //requiredFields = options.requiredFields;
+            
 
-            // populate item list
-            vmPopulateList(actions);
-        });
-});
-
-function vmLoadItem(name) {
-
-    console.log('> Loading action: ' + name);
-
-    vmGetMetadata()
+        vmGetMetadata()
         .done(function (metadata) {
 
             // find action by name
             var action = vmGetActions(metadata).filter(function (ind, action) {
 
-                return action.name == name;
+                return action.name == procedureName;
             })
             .get(0);
 
-            vmBuildForm(action);
+            vmBuildForm(self, action);
         });
-};
 
-function vmBuildForm(action) {
+        function vmBuildForm(container, action) {
 
-    // clear form
-    var $form = $('form#action').empty();
+            // clear form
+            var $form = container.empty();
 
-    var controlGroup = $('<div />').addClass('control-group');
-                                    
-    // build fields
-    action.fields.each(function (ind, field) {
+            var controlGroup = $('<div />').addClass('control-group');
 
-        var controlsControlGroup = controlGroup.clone().appendTo($form);
+            // build fields
 
-        $('<label />').addClass('control-label').text(field.name)
-            .appendTo(controlsControlGroup);
+            action.fields.toArray()
+                .forEach(function (field) {
 
-        field.input = $('<input />').addClass('form').attr('type', 'text')
-            .appendTo(controlsControlGroup);
-    });
+                    var fieldData = fieldsList.filter(function (item) {
 
-    var controlsSubmitGroup = controlGroup.clone().appendTo($form);
+                        if (item.name == field.name)
+                            return item;
+                    });
 
-    // create submit button
-    $('<button />').addClass('btn offset4').text('Run')
-        .appendTo(controlsSubmitGroup)
-        .click(function () {
+                    var properties = fieldData[0].properties;
 
-            vmCallAction(action)
+                    var controlsControlGroup = controlGroup.clone().appendTo($form);
 
-                .done(function (result) {
-                    alert('Success: ' + result.value);
-                })
-                .fail(handleError);
+                    $('<label />').addClass('control-label').text(properties.translate)
+                        .appendTo(controlsControlGroup);
 
-            // prevent default action
-            return false;
-        });
-};
+                    switch (properties.control) {
 
-function vmCallAction(action) {
+                        case 'text':
 
-    // collect param values
-    var data = action.fields
-                    .toArray()
-                    .reduce(function (p, n) {
+                            field.input = $('<input />').attr('type', 'text');
 
-                        p[n.name] = n.input.val();
-                        return p;
+                            break;
 
-                    }, {});
+                        case 'combo':
 
-    // call service action
-    return $.ajax({
-        url: serviceUrl + action.name,
-        type: "POST",
-        data: JSON.stringify(data),
-        contentType: "application/json"
-    })
-};
+                            var control = $('<select />');
+
+                            //map data array to key-value array for building select
+                            data = properties.data.map(function (item) {
+
+                                return {
+                                    key: item[properties.keyField],
+                                    value: item[properties.valueField]
+                                };
+                            }).forEach(function (item) {
+
+                                var option = $('<option />').attr('value', item.key)
+                                                            .text(item.value)
+                                                            .appendTo(control);
+                            });
+
+                            field.input = control;
+
+                            break;
+
+                    }
+
+                    if (properties.required) {
+
+                        field.input.attr('required', 'required') // for IE
+                        field.input.prop('required', true)
+                            .focus(function (e) {
+
+                                if ($(this).hasClass('wrong'))
+                                    $(this).removeClass('wrong');
+
+                            })
+                    }
+
+                    field.input.appendTo(controlsControlGroup);
+
+
+                });
+            
+            
+            var controlsSubmitGroup = controlGroup.clone().appendTo($form);
+
+            // create submit button
+            $('<button />').addClass('btn offset4 runAction').text('Run')
+                .appendTo(controlsSubmitGroup)
+                .click(function () {
+
+
+                    if (!vmCheckRequiredFields()) {
+
+                        alert('You must fill all required fields!');
+                        return false;
+                    }
+                            
+                    vmCallAction(action)
+
+                        .done(function (result) {
+                            alert('Success: ' + result.value);
+                        })
+                        .fail(handleError);
+
+                    // prevent default action
+                    return false;
+                });
+        };
+
+        function vmCallAction(action) {
+                        
+            // collect param values
+            var data = action.fields
+                            .toArray()
+                            .reduce(function (p, n) {
+
+                                p[n.name] = n.input.val();
+                                return p;
+
+                            }, {});
+
+             //call service action
+            return $.ajax({
+                url: serviceUrl + action.name,
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json"
+            })
+        };
+
+        function vmCheckRequiredFields() {
+
+            var unFilledFields = $(document).find('input, select')
+                                    .filter("[required]")
+                                    .filter(function () { return this.value == ''; })
+
+            if (unFilledFields.length > 0){
+
+                vmShowUnfilledRequiredFields(unFilledFields);
+                return false;
+            } else return true;
+        }
+
+        function vmShowUnfilledRequiredFields(unFilledFields) {
+
+            unFilledFields.each(function (i, item) {
+
+                $(item).addClass('wrong');
+
+            })
+        }
+
+    }
+   
+})(jQuery);

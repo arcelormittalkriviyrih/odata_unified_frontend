@@ -505,7 +505,13 @@
             if (comboFilter)
                 url += '?$filter=' + comboFilter;
                       
-            $.get(url).then(function (data) {
+            $.ajax({
+
+                url: url,
+                xhrFields: {
+                    withCredentials: true
+                }
+            }).then(function (data) {
 
                         var items = data.value.map(function (item) {
 

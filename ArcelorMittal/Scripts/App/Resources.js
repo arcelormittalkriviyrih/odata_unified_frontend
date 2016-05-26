@@ -14,8 +14,29 @@
             NoRoles: 'There are no available roles'
         },
         market: {
-            Order: 'Order',
-            LabelTemplate: 'Label template'
+            OrderLabel: 'Order',
+            TemplateLabel: 'Label template',
+            Order: {
+
+                CreateDialogue: {
+
+                    STD: 'Standard',
+                    LEN: 'Length',
+                    QMIN: 'Rods quantity (minimal)',
+                    CONTR: 'Contract №',
+                    DIR: 'Direction',
+                    PROD: 'Production',
+                    CLASS: 'Class',
+                    STCLASS: 'Steel class',
+                    CHEM: 'Chem. Analysis',
+                    DIAM: 'Bunt Diameter',
+                    ADR: 'Provider Address',
+                    ORDER: 'Order',
+                    PROFILE: 'Profile',
+                    TEMPLATE: 'Label Template'
+                }
+            }
+
         },
         pa: {
             Equipment: 'Equipment',
@@ -42,8 +63,28 @@
             NoRoles: 'Нет доступных ролей'
         },
         market: {
-            Order: 'Заказы',
-            LabelTemplate: 'Шаблоны бирок'
+            OrderLabel: 'Заказы',
+            TemplateLabel: 'Шаблоны бирок',
+            Order: {
+
+                CreateDialogue: {
+
+                    STD: 'Стандарт',
+                    LEN: 'Длина',
+                    QMIN: 'Количество прутков (минимальное)',
+                    CONTR: 'Контракт №',
+                    DIR: 'Направление',
+                    PROD: 'Продукция',
+                    CLASS: 'Класс',
+                    STCLASS: 'Марка стали',
+                    CHEM: 'Хим. Анализ',
+                    DIAM: 'Диаметр бунта',
+                    ADR: 'Адрес поставщика',
+                    ORDER: 'Заказ',
+                    PROFILE: 'Профиль',
+                    TEMPLATE: 'Шаблон бирки'
+                }
+            }
         },
         pa: {
             Equipment: 'Оборудование',
@@ -71,8 +112,28 @@
             NoRoles: 'Не має доступных ролей'
         },
         market: {
-            Order: 'Замовлення',
-            LabelTemplate: 'Шаблони бірок'
+            OrderLabel: 'Замовлення',
+            TemplateLabel: 'Шаблони бірок',
+            Order: {
+
+                CreateDialogue: {
+
+                    STD: 'Стандарт',
+                    LEN: 'Довжина',
+                    QMIN: 'Кількість прутків (мінімальне)',
+                    CONTR: 'Контракт №',
+                    DIR: 'Напрямок',
+                    PROD: 'Продукція',
+                    CLASS: 'Клас',
+                    STCLASS: 'Марка сталі',
+                    CHEM: 'Хім. Аналіз',
+                    DIAM: 'Діаметр бунта',
+                    ADR: 'Адреса постачальника',
+                    ORDER: 'Замовлення',
+                    PROFILE: 'Профіль',
+                    TEMPLATE: 'Шаблон бірки'
+                }
+            }
         },
         pa: {
             Equipment: 'Обладнання',

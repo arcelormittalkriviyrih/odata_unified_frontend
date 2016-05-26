@@ -68,6 +68,7 @@
         var EquipmentClassID = data.id;
 
         $equipmentDisable.hide();
+        $equipmentPropertyDisable.show();
 
         $('div#equipment').jsGrid('loadOdata', {
 
@@ -233,6 +234,7 @@
         var MaterialClassID = data.id;
 
         $materialDefinitionDisable.hide();
+        $materialDefinitionPropertyDisable.show();
 
         $('div#material_definition').jsGrid('loadOdata', {
 
@@ -397,6 +399,7 @@
         var PersonnelClassID = data.id;
 
         $personDisable.hide();
+        $personPropertyDisable.show();
 
         $('div#person').jsGrid('loadOdata', {
 

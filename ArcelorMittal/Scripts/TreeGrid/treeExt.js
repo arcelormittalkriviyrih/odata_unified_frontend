@@ -51,7 +51,12 @@
                                         .appendTo(createNodeControlsRoot)
                                         .on('click', vmCancel);
 
-        $.get(serviceUrl + tableName).then(function (data) {
+        $.ajax({
+            url: serviceUrl + tableName,
+            xhrFields: {
+                withCredentials: true
+            }
+        }).then(function (data) {
 
             vmInit(data);
         });
