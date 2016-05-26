@@ -50,6 +50,9 @@
 
     $treeContainer = $('#hierarchy').empty();
 
+    $equipmentDisable = $('#equipmentDisable').show();
+    $equipmentPropertyDisable = $('#equipmentPropertyDisable').show();
+
     $treeContainer.odataTree({
         serviceUrl: serviceUrl,
         table: 'EquipmentClass',
@@ -64,7 +67,7 @@
 
         var EquipmentClassID = data.id;
 
-        $('div#equipment').removeClass('disabled-grid');
+        $equipmentDisable.hide();
 
         $('div#equipment').jsGrid('loadOdata', {
 
@@ -83,7 +86,7 @@
 
     });
 
-    $('div#equipment').addClass('disabled-grid').jsGrid({
+    $('div#equipment').jsGrid({
         height: "500px",
         width: "720px",
 
@@ -100,7 +103,7 @@
 
             vmActiveRow(args);
 
-            $('div#equipment_property').removeClass('disabled-grid');
+            $equipmentPropertyDisable.hide();
 
             $('div#equipment_property').jsGrid('loadOdata', {
                 defaultFilter: 'EquipmentID eq ({0})'.format(args.item.ID),
@@ -143,7 +146,7 @@
 
 
 
-    $('div#equipment_property').addClass('disabled-grid').jsGrid({
+    $('div#equipment_property').jsGrid({
         height: "500px",
         width: "720px",
 
@@ -210,6 +213,9 @@
     // throw main tab change
     $scope.$emit('PATabChange', 'Material');
 
+    $materialDefinitionDisable = $('#materialDefinitionDisable').show();
+    $materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
+
     $hierarchyMaterialClass = $('#hierarchy_material_class').empty();
 
     $hierarchyMaterialClass.odataTree({
@@ -226,7 +232,7 @@
 
         var MaterialClassID = data.id;
 
-        $('div#material_definition').removeClass('disabled-grid');
+        $materialDefinitionDisable.hide();
 
         $('div#material_definition').jsGrid('loadOdata', {
 
@@ -245,7 +251,7 @@
 
     });
 
-    $('div#material_definition').addClass('disabled-grid').jsGrid({
+    $('div#material_definition').jsGrid({
         height: "500px",
         width: "720px",
 
@@ -262,7 +268,7 @@
 
             vmActiveRow(args);
 
-            $('div#material_definition_property').removeClass('disabled-grid');
+            $materialDefinitionPropertyDisable.hide();
 
             $('div#material_definition_property').jsGrid('loadOdata', {
                 defaultFilter: 'MaterialDefinitionID eq ({0})'.format(args.item.ID),
@@ -303,7 +309,7 @@
         defaultFilter: 'ID eq -1'
     });
 
-    $('div#material_definition_property').addClass('disabled-grid').jsGrid({
+    $('div#material_definition_property').jsGrid({
         height: "500px",
         width: "720px",
 
@@ -371,6 +377,9 @@
     // throw main tab change
     $scope.$emit('PATabChange', 'Personnel');
 
+    $personDisable = $('#personDisable').show();
+    $personPropertyDisable = $('#personPropertyDisable').show();
+
     $personnelClass = $('#personnel_class').empty();
 
     $personnelClass.odataTree({
@@ -387,7 +396,7 @@
 
         var PersonnelClassID = data.id;
 
-        $('div#person').removeClass('disabled-grid');
+        $personDisable.hide();
 
         $('div#person').jsGrid('loadOdata', {
 
@@ -406,7 +415,7 @@
 
     });
 
-    $('div#person').addClass('disabled-grid').jsGrid({
+    $('div#person').jsGrid({
         height: "500px",
         width: "720px",
 
@@ -423,7 +432,7 @@
 
             vmActiveRow(args);
 
-            $('div#person_property').removeClass('disabled-grid');
+            $personPropertyDisable.hide();
 
             $('div#person_property').jsGrid('loadOdata', {
                 defaultFilter: 'PersonID eq ({0})'.format(args.item.ID),
@@ -469,7 +478,7 @@
         defaultFilter: 'ID eq -1'
     });
 
-    $('div#person_property').addClass('disabled-grid').jsGrid({
+    $('div#person_property').jsGrid({
         height: "500px",
         width: "720px",
 
@@ -536,6 +545,8 @@
     // throw main tab change
     $scope.$emit('PATabChange', 'Label');
 
+    $materialLotPropertyDisable = $('#materialLotPropertyDisable').show();
+
     $('div#material_lot').jsGrid({
         height: "500px",
         width: "1000px",
@@ -554,7 +565,7 @@
 
             vmActiveRow(args);
 
-            $('div#material_lot_property').removeClass('disabled-grid');
+            $materialLotPropertyDisable.hide();
 
             $('div#material_lot_property').jsGrid('loadOdata', {
                 defaultFilter: 'MaterialLotID eq ({0})'.format(args.item.ID),
@@ -600,7 +611,7 @@
         }
     }).jsGrid('loadOdata', {});
 
-    $('div#material_lot_property').addClass('disabled-grid').jsGrid({
+    $('div#material_lot_property').jsGrid({
         height: "500px",
         width: "1000px",
 
