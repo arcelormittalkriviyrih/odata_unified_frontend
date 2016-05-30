@@ -19,10 +19,10 @@
             })
             .get(0);
 
-            vmBuildForm(self, action, formType);
+            vmBuildForm(self, action);
         });
 
-        function vmBuildForm(container, action, formType) {
+        function vmBuildForm(container, action) {
 
             // clear form
             var $form = container.empty();

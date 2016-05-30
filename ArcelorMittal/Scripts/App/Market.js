@@ -40,124 +40,6 @@
     $scope.createForm = vmCreateForm;
     $scope.editForm = vmEditForm;
     $scope.deleteRow = vmDeleteRow;
-
-    var formFields = [{
-
-        name: 'STD',
-        properties: {
-            control: 'text',
-            required: 'true',
-            translate: $translate.instant('market.Order.CreateDialogue.STD')
-        }
-    }, {
-
-        name: 'LEN',
-        properties: {
-            control: 'text',
-            required: true,
-            translate: $translate.instant('market.Order.CreateDialogue.LEN')
-        }
-    }, {
-
-        name: 'QMIN',
-        properties: {
-            control: 'text',
-            required: false,
-            translate: $translate.instant('market.Order.CreateDialogue.QMIN')
-        }
-    }, {
-
-        name: 'CONTR',
-        properties: {
-            control: 'text',
-            required: true,
-            translate: $translate.instant('market.Order.CreateDialogue.CONTR')
-        }
-    }, {
-
-        name: 'DIR',
-        properties: {
-            control: 'text',
-            required: true,
-            translate: $translate.instant('market.Order.CreateDialogue.DIR')
-        }
-    }, {
-
-        name: 'PROD',
-        properties: {
-            control: 'text',
-            required: true,
-            translate: $translate.instant('market.Order.CreateDialogue.PROD')
-        }
-    }, {
-
-        name: 'CLASS',
-        properties: {
-            control: 'text',
-            required: true,
-            translate: $translate.instant('market.Order.CreateDialogue.CLASS')
-        }
-    }, {
-
-        name: 'STCLASS',
-        properties: {
-            control: 'text',
-            required: true,
-            translate: $translate.instant('market.Order.CreateDialogue.STCLASS')
-        }
-    }, {
-
-        name: 'CHEM',
-        properties: {
-            control: 'text',
-            required: true,
-            translate: $translate.instant('market.Order.CreateDialogue.CHEM')
-        }
-    }, {
-
-        name: 'DIAM',
-        properties: {
-            control: 'text',
-            required: false,
-            translate: $translate.instant('market.Order.CreateDialogue.DIAM')
-        }
-    }, {
-
-        name: 'ADR',
-        properties: {
-            control: 'text',
-            required: true,
-            translate: $translate.instant('market.Order.CreateDialogue.ADR')
-        }
-    }, {
-
-        name: 'ORDER',
-        properties: {
-            control: 'text',
-            required: true,
-            translate: $translate.instant('market.Order.CreateDialogue.ORDER')
-        },
-    }, {
-        name: 'TEMPLATE',
-        properties: {
-            control: 'combo',
-            required: true,
-            translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
-            data: templateData,
-            keyField: 'ID',
-            valueField: 'Name'
-        }
-    }, {
-        name: 'PROFILE',
-        properties: {
-            control: 'combo',
-            required: true,
-            translate: $translate.instant('market.Order.CreateDialogue.PROFILE'),
-            data: profileData,
-            keyField: 'ID',
-            valueField: 'Description'
-        }
-    }];
         
     $('#orders').jsGrid({
         height: "500px",
@@ -262,7 +144,123 @@
 
                     action: 'ins_CreateOrder',
 
-                    fields: formFields
+                    fields: [{
+
+                        name: 'STD',
+                        properties: {
+                            control: 'text',
+                            required: 'true',
+                            translate: $translate.instant('market.Order.CreateDialogue.STD')
+                        }
+                    }, {
+
+                        name: 'LEN',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.LEN')
+                        }
+                    }, {
+
+                        name: 'QMIN',
+                        properties: {
+                            control: 'text',
+                            required: false,
+                            translate: $translate.instant('market.Order.CreateDialogue.QMIN')
+                        }
+                    }, {
+
+                        name: 'CONTR',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.CONTR')
+                        }
+                    }, {
+
+                        name: 'DIR',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.DIR')
+                        }
+                    }, {
+
+                        name: 'PROD',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PROD')
+                        }
+                    }, {
+
+                        name: 'CLASS',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.CLASS')
+                        }
+                    }, {
+
+                        name: 'STCLASS',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.STCLASS')
+                        }
+                    }, {
+
+                        name: 'CHEM',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.CHEM')
+                        }
+                    }, {
+
+                        name: 'DIAM',
+                        properties: {
+                            control: 'text',
+                            required: false,
+                            translate: $translate.instant('market.Order.CreateDialogue.DIAM')
+                        }
+                    }, {
+
+                        name: 'ADR',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.ADR')
+                        }
+                    }, {
+
+                        name: 'ORDER',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.ORDER')
+                        },
+                    }, {
+                        name: 'TEMPLATE',
+                        properties: {
+                            control: 'combo',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
+                            data: templateData,
+                            keyField: 'ID',
+                            valueField: 'Name'
+                        }
+                    }, {
+                        name: 'PROFILE',
+                        properties: {
+                            control: 'combo',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PROFILE'),
+                            data: profileData,
+                            keyField: 'ID',
+                            valueField: 'Description'
+                        }
+                    }]
 
                 });
             })
@@ -286,14 +284,130 @@
 
                 $('#orderForm').oDataAction({
 
-                    action: 'ins_CreateOrder',
+                    action: 'upd_CreateOrder',
                     keyParam: {
                         name: 'ORDER',
                         value: id
                     },
 
                     rowData: rowData,
-                    fields: formFields
+                    fields: [{
+
+                        name: 'STD',
+                        properties: {
+                            control: 'text',
+                            required: 'true',
+                            translate: $translate.instant('market.Order.CreateDialogue.STD')
+                        }
+                    }, {
+
+                        name: 'LEN',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.LEN')
+                        }
+                    }, {
+
+                        name: 'QMIN',
+                        properties: {
+                            control: 'text',
+                            required: false,
+                            translate: $translate.instant('market.Order.CreateDialogue.QMIN')
+                        }
+                    }, {
+
+                        name: 'CONTR',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.CONTR')
+                        }
+                    }, {
+
+                        name: 'DIR',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.DIR')
+                        }
+                    }, {
+
+                        name: 'PROD',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PROD')
+                        }
+                    }, {
+
+                        name: 'CLASS',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.CLASS')
+                        }
+                    }, {
+
+                        name: 'STCLASS',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.STCLASS')
+                        }
+                    }, {
+
+                        name: 'CHEM',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.CHEM')
+                        }
+                    }, {
+
+                        name: 'DIAM',
+                        properties: {
+                            control: 'text',
+                            required: false,
+                            translate: $translate.instant('market.Order.CreateDialogue.DIAM')
+                        }
+                    }, {
+
+                        name: 'ADR',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.ADR')
+                        }
+                    }, {
+
+                        name: 'ORDER',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.ORDER')
+                        },
+                    }, {
+                        name: 'TEMPLATE',
+                        properties: {
+                            control: 'combo',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
+                            data: templateData,
+                            keyField: 'ID',
+                            valueField: 'Name'
+                        }
+                    }, {
+                        name: 'PROFILE',
+                        properties: {
+                            control: 'combo',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PROFILE'),
+                            data: profileData,
+                            keyField: 'ID',
+                            valueField: 'Description'
+                        }
+                    }]
                 });
             })
     }
