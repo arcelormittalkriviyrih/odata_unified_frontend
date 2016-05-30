@@ -38,6 +38,126 @@
     $scope.toggleModal = vmToggleModal;
 
     $scope.createForm = vmCreateForm;
+    $scope.editForm = vmEditForm;
+    $scope.deleteRow = vmDeleteRow;
+
+    var formFields = [{
+
+        name: 'STD',
+        properties: {
+            control: 'text',
+            required: 'true',
+            translate: $translate.instant('market.Order.CreateDialogue.STD')
+        }
+    }, {
+
+        name: 'LEN',
+        properties: {
+            control: 'text',
+            required: true,
+            translate: $translate.instant('market.Order.CreateDialogue.LEN')
+        }
+    }, {
+
+        name: 'QMIN',
+        properties: {
+            control: 'text',
+            required: false,
+            translate: $translate.instant('market.Order.CreateDialogue.QMIN')
+        }
+    }, {
+
+        name: 'CONTR',
+        properties: {
+            control: 'text',
+            required: true,
+            translate: $translate.instant('market.Order.CreateDialogue.CONTR')
+        }
+    }, {
+
+        name: 'DIR',
+        properties: {
+            control: 'text',
+            required: true,
+            translate: $translate.instant('market.Order.CreateDialogue.DIR')
+        }
+    }, {
+
+        name: 'PROD',
+        properties: {
+            control: 'text',
+            required: true,
+            translate: $translate.instant('market.Order.CreateDialogue.PROD')
+        }
+    }, {
+
+        name: 'CLASS',
+        properties: {
+            control: 'text',
+            required: true,
+            translate: $translate.instant('market.Order.CreateDialogue.CLASS')
+        }
+    }, {
+
+        name: 'STCLASS',
+        properties: {
+            control: 'text',
+            required: true,
+            translate: $translate.instant('market.Order.CreateDialogue.STCLASS')
+        }
+    }, {
+
+        name: 'CHEM',
+        properties: {
+            control: 'text',
+            required: true,
+            translate: $translate.instant('market.Order.CreateDialogue.CHEM')
+        }
+    }, {
+
+        name: 'DIAM',
+        properties: {
+            control: 'text',
+            required: false,
+            translate: $translate.instant('market.Order.CreateDialogue.DIAM')
+        }
+    }, {
+
+        name: 'ADR',
+        properties: {
+            control: 'text',
+            required: true,
+            translate: $translate.instant('market.Order.CreateDialogue.ADR')
+        }
+    }, {
+
+        name: 'ORDER',
+        properties: {
+            control: 'text',
+            required: true,
+            translate: $translate.instant('market.Order.CreateDialogue.ORDER')
+        },
+    }, {
+        name: 'TEMPLATE',
+        properties: {
+            control: 'combo',
+            required: true,
+            translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
+            data: templateData,
+            keyField: 'ID',
+            valueField: 'Name'
+        }
+    }, {
+        name: 'PROFILE',
+        properties: {
+            control: 'combo',
+            required: true,
+            translate: $translate.instant('market.Order.CreateDialogue.PROFILE'),
+            data: profileData,
+            keyField: 'ID',
+            valueField: 'Description'
+        }
+    }];
         
     $('#orders').jsGrid({
         height: "500px",
@@ -57,6 +177,11 @@
 
             var id = args.item.id;
 
+            $scope.selectedRow = id;
+            $scope.selectedOrder = args.item.ORDER;
+
+            $scope.$apply();
+
             vmActiveRow(args);
                 
             $("#orderDetails").removeClass('disabled-grid').jsGrid('initOdata', {
@@ -74,7 +199,8 @@
                     order: 1
                 }]
             }).jsGrid('loadOdata', {
-                defaultFilter: 'OperationsRequest eq {0}'.format(id)
+                defaultFilter: 'OperationsRequest eq {0}'.format(id),
+                clientSort: 'Description'
             })
         }
     }).jsGrid('initOdata', {
@@ -82,9 +208,9 @@
         table: 'v_Orders',
 
         fields: [{
-            id: 'STD',
-            name: 'STD',
-            title: 'STD',
+            id: 'ORDER',
+            name: 'ORDER',
+            title: 'Заказ',
             order: 1
         }, {
             id: 'CONTR',
@@ -97,15 +223,10 @@
             title: 'Направление',
             order: 3
         }, {
-            id: 'ORDER',
-            name: 'ORDER',
-            title: 'Заказ',
-            order: 4
-        }, {
             id: 'TMPL',
             name: 'TMPL',
             title: 'Шаблон бирки',
-            order: 5
+            order: 4
         }]
     }).jsGrid('loadOdata', {})
 
@@ -130,133 +251,18 @@
 
         vmToggleModal(true);
 
-        $q.all([indexService.getInfo('Files'), indexService.getInfo('MaterialDefinition')])
+        $q.all([indexService.getInfo('Files'),
+                indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')])
             .then(function (responce) {
 
                 var templateData = responce[0].data.value;
                 var profileData = responce[1].data.value;
 
-                $('#createOrderForm').oDataAction({
+                $('#orderForm').oDataAction({
 
                     action: 'ins_CreateOrder',
 
-                    fields: [{
-
-                        name: 'STD',
-                        properties: {
-                            control: 'text',
-                            required: 'true',
-                            translate: $translate.instant('market.Order.CreateDialogue.STD')
-                        }
-                    }, {
-
-                        name: 'LEN',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.LEN')
-                        }
-                    }, {
-
-                        name: 'QMIN',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.QMIN')
-                        }
-                    }, {
-
-                        name: 'CONTR',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.CONTR')
-                        }
-                    }, {
-
-                        name: 'DIR',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.DIR')
-                        }
-                    }, {
-
-                        name: 'PROD',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.PROD')
-                        }
-                    }, {
-
-                        name: 'CLASS',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.CLASS')
-                        }
-                    }, {
-
-                        name: 'STCLASS',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.STCLASS')
-                        }
-                    }, {
-
-                        name: 'CHEM',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.CHEM')
-                        }
-                    }, {
-
-                        name: 'DIAM',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.DIAM')
-                        }
-                    }, {
-
-                        name: 'ADR',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.ADR')
-                        }
-                    }, {
-
-                        name: 'ORDER',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.ORDER')
-                        },
-                    }, {
-                        name: 'TEMPLATE',
-                        properties: {
-                            control: 'combo',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
-                            data: templateData,
-                            keyField: 'ID',
-                            valueField: 'Name'
-                        }
-                    }, {
-                        name: 'PROFILE',
-                        properties: {
-                            control: 'combo',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.PROFILE'),
-                            data: profileData,
-                            keyField: 'ID',
-                            valueField: 'Description'
-                        }
-                    }]
+                    fields: formFields
 
                 });
             })
@@ -264,13 +270,77 @@
         
     }
 
+    function vmEditForm(id) {
+
+        vmToggleModal(true);
+
+        $q.all([
+                indexService.getInfo('v_OrderPropertiesAll?$filter=OperationsRequest eq ({0})'.format(id)),
+                indexService.getInfo('Files'),
+                indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')])
+            .then(function (responce) {
+
+                var rowData = responce[0].data.value;
+                var templateData = responce[1].data.value;
+                var profileData = responce[2].data.value;
+
+                $('#orderForm').oDataAction({
+
+                    action: 'ins_CreateOrder',
+                    keyParam: {
+                        name: 'ORDER',
+                        value: id
+                    },
+
+                    rowData: rowData,
+                    fields: formFields
+                });
+            })
+    }
+
+    function vmDeleteRow(order) {
+
+        if (confirm('Are you sure?')) {
+
+            $.ajax({
+                url: serviceUrl + 'del_CreateOrder',
+                type: 'POST',
+                data: JSON.stringify({ ORDER: order }),
+                contentType: "application/json"
+            }).done(function (result) {
+
+                alert('deleted!');
+
+                window.location.reload();
+            }).fail(handleError);
+        }
+         
+    }
+
     function vmToggleModal(expr) {
 
         $scope.isShowModal = expr;
     }
+
+    $(document).on('oDataForm.success', function () {
+
+        vmToggleModal(false);
+
+        $('#orders').jsGrid('loadOdata', {});
+
+        $scope.$apply();
+    });
 }])
 
 .controller('marketLabelTemplateCtrl', ['$scope', '$state', function ($scope, $state) {
+
+    //hack for IE. This fantastic browser makes form submit when 
+    //user makes canceling (form reset).
+    //submit form event handles required fields
+    //so this check would be start when user makes form reset 
+    //and user will seen useless messages about required fields.
+    //For resolving this problem I add special flag will be 'true' only in form reset mode
+    var _isReset = false;
 
     $scope.$emit('MarketTabChange', 'LabelTemplate');
 
@@ -285,28 +355,6 @@
             } else
                 $(this).removeClass('wrong');
         })
-
-        $(document).on("submit", function (e) {
-
-            $(this)
-                    .find("input, select")
-                    .filter("[required]")
-                    .filter(function () { return this.value == ''; })
-                    .each(function () {
-                        e.preventDefault();
-
-
-                        if ($(this).attr('type') == 'file') {
-
-                            if ($('input#fileName').val() == '')
-                                $(this).parent().addClass('wrong');
-
-                        } else
-                            $(this).addClass('wrong');
-
-                        alert($('label[for=' + $(this).attr('id') + ']').html() + " is required!");
-                    });
-        });
 
     }
 
@@ -413,6 +461,8 @@
 
     function vmAddRecord() {
 
+        _isReset = false; //hack for IE
+
         // prepare form for INSERT
         // set ID to -1
         // set File type to default value
@@ -439,11 +489,10 @@
                             .pop();
 
         // get "file name" control
-        // and if it's empty
         // update with name of file selected
         var $input = $form.find('[name="FileName"]');
-        if (!$input.val())
-            $input.val(filename)
+
+        $input.val(filename)
     }
 
     function vmResetForm() {
@@ -451,16 +500,48 @@
         //reset form entered data
         $form[0].reset();
 
+        _isReset = true; //hack for IE
+
         //and hide it
         $form.hide();
     }
 
-    //refresh page after submit
-    $form.on('submit', function () {
+    //check required fields before submit
+    //if all required fields are filled - refresh page after submit
+    $form.on('submit', function (e) {
+        
+        var unFilledFields = $(this)
+                    .find("input, select")
+                    .filter("[required]")
+                    .filter(function () { return this.value == ''; });
 
-        setTimeout(function () {
-            window.location.reload();
-    }, 1000);
+        if (unFilledFields.length > 0){
+
+            unFilledFields.each(function () {
+                e.preventDefault();
+
+
+                if ($(this).attr('type') == 'file') {
+
+                    if ($('input#fileName').val() == '')
+                        $(this).parent().addClass('wrong');
+
+                } else
+                    $(this).addClass('wrong');
+
+                if (!_isReset) //hack for IE
+                    alert($('label[for=' + $(this).attr('id') + ']').html() + " is required!");
+
+            });
+        } else {
+
+            setTimeout(function () {
+                window.location.reload();
+            }, 1000);
+        }
+                    
+
+        
     })
 
 }])

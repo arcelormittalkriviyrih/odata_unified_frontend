@@ -1,4 +1,13 @@
-﻿<button class="add btn btn-default" ng-click="createForm()">Create</button>
+﻿<button class="add btn btn-default" 
+        ng-click="createForm()">Create</button>
+
+<button class="add btn btn-default" 
+        ng-click="editForm(selectedRow)" 
+        ng-disabled="!selectedRow">Edit</button>
+
+<button class="add btn btn-default"
+        ng-click="deleteRow(selectedOrder)"
+        ng-disabled="!selectedOrder">Delete</button>
 
 <div id="orders">
 
@@ -16,7 +25,7 @@
         </button> 
 
         <div class="formWrapper">
-            <form id="createOrderForm"></form>
+            <form id="orderForm"></form>
         </div>
         
     </div>

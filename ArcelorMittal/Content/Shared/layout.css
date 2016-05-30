@@ -199,11 +199,24 @@ button.add{
 }
 
 .formWrapper{
-    height: 500px;
-    overflow-y: scroll;
+    min-height: 500px;
     padding: 25px;
-    width: 435px;
+    width: 460px;
     margin: 10px 10px 0 0;
+}
+
+/*form style*/
+.control-group{
+    display: inline-block;
+    width: 220px;
+}
+
+.control-group input{
+    width: 200px;
+}
+
+.control-group select{
+    width: 214px;
 }
 
 /*modified tree*/

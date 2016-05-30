@@ -346,9 +346,24 @@
                 }
             }).then(function (response) {
 
+                var data = response.value;
+
+                if (properties.clientSort) {
+
+                    data.sort(function (a, b) {
+
+                        if (a[properties.clientSort] < b[properties.clientSort])
+                            return -1;
+                        else if (a[properties.clientSort] > b[properties.clientSort])
+                            return 1;
+                        else
+                            return 0;
+                    })
+                }
+
                 return {
                     itemsCount: response['@odata.count'],
-                    data: response.value
+                    data: data
                 };
             });
         };

@@ -4,11 +4,11 @@
 
         var self = $(this),
             procedureName = options.action,
-            fieldsList = options.fields;
-            //specialFields = options.specialFields,
-            //requiredFields = options.requiredFields;
-            
+            fieldsList = options.fields,
+            keyParam = options.keyParam,
+            rowData = options.rowData;
 
+           
         vmGetMetadata()
         .done(function (metadata) {
 
@@ -19,10 +19,10 @@
             })
             .get(0);
 
-            vmBuildForm(self, action);
+            vmBuildForm(self, action, formType);
         });
 
-        function vmBuildForm(container, action) {
+        function vmBuildForm(container, action, formType) {
 
             // clear form
             var $form = container.empty();
@@ -52,12 +52,13 @@
                         case 'text':
 
                             field.input = $('<input />').attr('type', 'text');
-
+                           
                             break;
 
                         case 'combo':
 
                             var control = $('<select />');
+                            control.append('<option></option>')
 
                             //map data array to key-value array for building select
                             data = properties.data.map(function (item) {
@@ -67,6 +68,9 @@
                                     value: item[properties.valueField]
                                 };
                             }).forEach(function (item) {
+                                
+                                if (item.value == '')
+                                    item.value = 'no name';
 
                                 var option = $('<option />').attr('value', item.key)
                                                             .text(item.value)
@@ -90,34 +94,54 @@
 
                             })
                     }
+                    
+                    //set field as readonly if we build edit form and current field has id of edited row
+                    if (keyParam) {
 
+                        if (field.name == keyParam.name)
+                            field.input.attr('readonly', 'readonly');
+                    };
+
+                    //fill field if there is data for this field (in edit mode)
+                    if (rowData) {
+
+                        var fieldEditedData = rowData.filter(function (item) {
+
+                            if (item.Property == field.name)
+                                return item;
+                        });
+
+                        field.input.val(fieldEditedData[0].Value);
+                    };
+
+                    
+                                           
                     field.input.appendTo(controlsControlGroup);
-
-
                 });
             
             
-            var controlsSubmitGroup = controlGroup.clone().appendTo($form);
+            var controlsSubmitGroup = $('<div />').addClass('control-row').appendTo($form);
 
             // create submit button
             $('<button />').addClass('btn offset4 runAction').text('Run')
                 .appendTo(controlsSubmitGroup)
                 .click(function () {
 
-
                     if (!vmCheckRequiredFields()) {
 
                         alert('You must fill all required fields!');
                         return false;
                     }
-                            
+                    
                     vmCallAction(action)
 
                         .done(function (result) {
-                            alert('Success: ' + result.value);
+
+                            $(document).trigger('oDataForm.success')
                         })
                         .fail(handleError);
 
+                   
                     // prevent default action
                     return false;
                 });
@@ -138,7 +162,7 @@
              //call service action
             return $.ajax({
                 url: serviceUrl + action.name,
-                type: "POST",
+                type: 'POST',
                 data: JSON.stringify(data),
                 contentType: "application/json"
             })
