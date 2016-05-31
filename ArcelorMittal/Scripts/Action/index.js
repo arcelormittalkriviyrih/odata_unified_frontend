@@ -6,7 +6,8 @@
             procedureName = options.action,
             fieldsList = options.fields,
             keyParam = options.keyParam,
-            rowData = options.rowData;
+            rowData = options.rowData,
+            formType = options.type;
 
            
         vmGetMetadata()
@@ -137,7 +138,10 @@
 
                         .done(function (result) {
 
-                            $(document).trigger('oDataForm.success')
+                            $(document).trigger('oDataForm.success', {
+
+                                type: formType
+                            })
                         })
                         .fail(handleError);
 

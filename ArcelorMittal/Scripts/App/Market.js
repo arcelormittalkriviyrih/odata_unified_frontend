@@ -143,6 +143,7 @@
                 $('#orderForm').oDataAction({
 
                     action: 'ins_CreateOrder',
+                    type: 'insert',
 
                     fields: [{
 
@@ -285,6 +286,9 @@
                 $('#orderForm').oDataAction({
 
                     action: 'upd_CreateOrder',
+
+                    type: 'update',
+
                     keyParam: {
                         name: 'ORDER',
                         value: id
@@ -438,14 +442,26 @@
         $scope.isShowModal = expr;
     }
 
-    $(document).on('oDataForm.success', function () {
+    $(document).on('oDataForm.success', function (e, data) {
 
         vmToggleModal(false);
 
         $('#orders').jsGrid('loadOdata', {});
-        $("#orderDetails").jsGrid('loadOdata', {
-            defaultFilter: 'OperationsRequest eq (-1)',
-        });
+              
+        if (data.type == 'insert') {
+            
+            $("#orderDetails").jsGrid('loadOdata', {
+                defaultFilter: 'OperationsRequest eq (-1)',
+            });
+        }
+
+        else if (data.type == 'update') {
+
+            $("#orderDetails").jsGrid('loadOdata', {
+                defaultFilter: 'OperationsRequest eq ({0})'.format($scope.selectedRow),
+            });
+        }
+        
 
         $scope.$apply();
     });
