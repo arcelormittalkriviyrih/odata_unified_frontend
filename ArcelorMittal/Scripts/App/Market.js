@@ -18,19 +18,10 @@
 }])
 
 .controller('marketCtrl', ['$scope', 'indexService', '$state', 'roles', function ($scope, indexService, $state, roles) {
-
-    // throw main tab change
-    $scope.$emit('mainTabChange', 'Market');
-
-    $scope.$on('MarketTabChange', function (event, data) {
-        $scope.activeMarketTab = data;
-    });
     
 }])
 
-.controller('marketOrderCtrl', ['$scope', 'indexService', '$translate', '$q', function ($scope, indexService, $translate, $q) {
-
-    $scope.$emit('MarketTabChange', 'Order');
+.controller('marketOrderCtrl', ['$scope', 'indexService', '$translate', '$q', '$rootScope', function ($scope, indexService, $translate, $q, $rootScope) {
 
     $scope.orderDetails = [];
 
@@ -467,7 +458,7 @@
     });
 }])
 
-.controller('marketLabelTemplateCtrl', ['$scope', '$state', function ($scope, $state) {
+.controller('marketLabelTemplateCtrl', ['$scope', '$state', '$rootScope', function ($scope, $state, $rootScope) {
 
     //hack for IE. This fantastic browser makes form submit when 
     //user makes canceling (form reset).
@@ -476,9 +467,6 @@
     //and user will seen useless messages about required fields.
     //For resolving this problem I add special flag will be 'true' only in form reset mode
     var _isReset = false;
-
-    $scope.$emit('MarketTabChange', 'LabelTemplate');
-
 
     //handle required fields for IE 9 browser
     if ($("<input />").prop("required") === undefined) {

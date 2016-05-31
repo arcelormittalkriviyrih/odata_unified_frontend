@@ -13,8 +13,7 @@
 
         <ul id="navigation" class="nav">
 
-            <li ng-repeat="role in roles"
-                ng-class="{'active': activeTab == role.RoleName}">
+            <li ng-repeat="role in roles" ui-sref-active="active">
                 <a ui-sref="app.{{role.RoleName}}">{{ 'index.' + role.RoleName | translate }}</a>
             </li>
 

@@ -187,12 +187,6 @@
             $state.go('app.welcome');
     }
 
-    // watch for library tab changed
-    $scope.$on('mainTabChange', function (event, data) {
-
-        $scope.activeTab = data;
-    });
-
     // change language
     $scope.changeLanguage = function (key) {
 

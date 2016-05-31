@@ -30,23 +30,27 @@
             templateUrl: 'Static/pa/label.html',
             controller: 'PAlabelCtrl'
         })
+
+        .state('app.PA.Order', {
+
+            url: '/order',
+            templateUrl: 'Static/market/order.html',
+            controller: 'marketOrderCtrl'
+        })
+
+        .state('app.PA.LabelTemplate', {
+
+            url: '/labeltemplate',
+            templateUrl: 'Static/market/labeltemplate.html',
+            controller: 'marketLabelTemplateCtrl'
+        })
 }])
 
 .controller('PACtrl', ['$scope', 'indexService', '$state', 'roles', function ($scope, indexService, $state, roles) {
 
-    // throw main tab change
-    $scope.$emit('mainTabChange', 'PA');
-
-    $scope.$on('PATabChange', function (event, data) {
-        $scope.activeWorkshopSpecsTab = data;
-    });
-
 }])
 
 .controller('PAequipmentCtrl', ['$scope', function ($scope) {
-
-    // throw main tab change
-    $scope.$emit('PATabChange', 'Equipment');
 
     $treeContainer = $('#hierarchy').empty();
 
@@ -211,9 +215,6 @@
 
 .controller('PAmaterialCtrl', ['$scope', function ($scope) {
 
-    // throw main tab change
-    $scope.$emit('PATabChange', 'Material');
-
     $materialDefinitionDisable = $('#materialDefinitionDisable').show();
     $materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
 
@@ -375,9 +376,6 @@
 }])
 
 .controller('PApersonnelCtrl', ['$scope', function ($scope) {
-
-    // throw main tab change
-    $scope.$emit('PATabChange', 'Personnel');
 
     $personDisable = $('#personDisable').show();
     $personPropertyDisable = $('#personPropertyDisable').show();
@@ -544,9 +542,6 @@
 }])
 
 .controller('PAlabelCtrl', ['$scope', function ($scope) {
-
-    // throw main tab change
-    $scope.$emit('PATabChange', 'Label');
 
     $materialLotPropertyDisable = $('#materialLotPropertyDisable').show();
 

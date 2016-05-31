@@ -42,7 +42,9 @@
             Equipment: 'Equipment',
             Material: 'Material',
             Personnel: 'Personnel',
-            Label: 'Label'
+            Label: 'Label',
+            OrderLabel: 'Order',
+            TemplateLabel: 'Label template',
         },
         error: {
             Unauthorized: 'This role is unavailable for you!'
@@ -90,7 +92,9 @@
             Equipment: 'Оборудование',
             Material: 'Материал',
             Personnel: 'Персонал',
-            Label: 'Бирки'
+            Label: 'Бирки',
+            OrderLabel: 'Заказы',
+            TemplateLabel: 'Шаблоны бирок',
         },
         error: {
             Unauthorized: 'Эта роль Вам недоступна'
@@ -139,7 +143,9 @@
             Equipment: 'Обладнання',
             Material: 'Матеріал',
             Personnel: 'Персонал',
-            Label: 'Бірки'
+            Label: 'Бірки',
+            OrderLabel: 'Замовлення',
+            TemplateLabel: 'Шаблони бірок',
         },
         error: {
             Unauthorized: 'У доступі відмолвено'

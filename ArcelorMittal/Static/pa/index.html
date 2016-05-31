@@ -1,24 +1,29 @@
 ﻿<ul class="nav nav-tabs">
 
-    <li class="tab"
-        ng-class="{'active': activeWorkshopSpecsTab == 'Equipment'}">
+    <li class="tab" ui-sref-active="active">
         <a ui-sref=".Equipment" ui-sref-opts="{reload: true}">{{ 'pa.Equipment' | translate }}</a>
     </li>
 
-    <li class="tab"
-        ng-class="{'active': activeWorkshopSpecsTab == 'Material'}">
+    <li class="tab" ui-sref-active="active">
         <a ui-sref=".Material" ui-sref-opts="{reload: true}">{{ 'pa.Material' | translate }}</a>
     </li>
 
-    <li class="tab"
-        ng-class="{'active': activeWorkshopSpecsTab == 'Personnel'}">
+    <li class="tab" ui-sref-active="active">
         <a ui-sref=".Personnel" ui-sref-opts="{reload: true}">{{ 'pa.Personnel' | translate }}</a>
     </li>
 
-    <li class="tab"
-        ng-class="{'active': activeWorkshopSpecsTab == 'Label'}">
+    <li class="tab" ui-sref-active="active">
         <a ui-sref=".Label" ui-sref-opts="{reload: true}">{{ 'pa.Label' | translate }}</a>
+    </li>
+
+    <li class="tab" ui-sref-active="active">
+        <a ui-sref=".Order" ui-sref-opts="{reload: true}">{{ 'pa.OrderLabel' | translate }}</a>
+    </li>
+
+    <li class="tab" ui-sref-active="active">
+        <a ui-sref=".LabelTemplate" ui-sref-opts="{reload: true}">{{ 'pa.TemplateLabel' | translate }}</a>
     </li>
 </ul>
 
 <ui-view></ui-view>
+            
