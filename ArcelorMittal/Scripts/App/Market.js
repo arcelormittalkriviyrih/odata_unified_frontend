@@ -423,9 +423,11 @@
                 contentType: "application/json"
             }).done(function (result) {
 
-                alert('deleted!');
+                $('#orders').jsGrid('loadOdata', {});
+                $("#orderDetails").jsGrid('loadOdata', {
+                    defaultFilter: 'OperationsRequest eq (-1)',
+                });
 
-                window.location.reload();
             }).fail(handleError);
         }
          
@@ -441,6 +443,9 @@
         vmToggleModal(false);
 
         $('#orders').jsGrid('loadOdata', {});
+        $("#orderDetails").jsGrid('loadOdata', {
+            defaultFilter: 'OperationsRequest eq (-1)',
+        });
 
         $scope.$apply();
     });
