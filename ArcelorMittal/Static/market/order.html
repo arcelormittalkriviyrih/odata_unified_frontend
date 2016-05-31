@@ -9,6 +9,10 @@
         ng-click="deleteRow(selectedOrder)"
         ng-disabled="!selectedOrder">Delete</button>
 
+<button class="add btn btn-default"
+        ng-click="copyForm(selectedRow)"
+        ng-disabled="!selectedRow">Copy</button>
+
 <div id="orders">
 
 </div>

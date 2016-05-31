@@ -31,6 +31,7 @@
     $scope.createForm = vmCreateForm;
     $scope.editForm = vmEditForm;
     $scope.deleteRow = vmDeleteRow;
+    $scope.copyForm = vmCopyForm;
         
     $('#orders').jsGrid({
         height: "500px",
@@ -277,14 +278,11 @@
                 $('#orderForm').oDataAction({
 
                     action: 'upd_CreateOrder',
-
                     type: 'update',
-
                     keyParam: {
                         name: 'ORDER',
                         value: id
                     },
-
                     rowData: rowData,
                     fields: [{
 
@@ -407,6 +405,149 @@
             })
     }
 
+    function vmCopyForm(id) {
+
+        vmToggleModal(true);
+
+        $q.all([
+                indexService.getInfo('v_OrderPropertiesAll?$filter=OperationsRequest eq ({0})'.format(id)),
+                indexService.getInfo('Files'),
+                indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')])
+            .then(function (responce) {
+
+                var rowData = responce[0].data.value;
+                var templateData = responce[1].data.value;
+                var profileData = responce[2].data.value;
+
+                $('#orderForm').oDataAction({
+
+                    action: 'ins_CreateOrder',
+                    type: 'copy',
+                    copyParam: ['ORDER'],
+                    rowData: rowData,
+                    fields: [{
+
+                        name: 'STD',
+                        properties: {
+                            control: 'text',
+                            required: 'true',
+                            translate: $translate.instant('market.Order.CreateDialogue.STD')
+                        }
+                    }, {
+
+                        name: 'LEN',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.LEN')
+                        }
+                    }, {
+
+                        name: 'QMIN',
+                        properties: {
+                            control: 'text',
+                            required: false,
+                            translate: $translate.instant('market.Order.CreateDialogue.QMIN')
+                        }
+                    }, {
+
+                        name: 'CONTR',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.CONTR')
+                        }
+                    }, {
+
+                        name: 'DIR',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.DIR')
+                        }
+                    }, {
+
+                        name: 'PROD',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PROD')
+                        }
+                    }, {
+
+                        name: 'CLASS',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.CLASS')
+                        }
+                    }, {
+
+                        name: 'STCLASS',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.STCLASS')
+                        }
+                    }, {
+
+                        name: 'CHEM',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.CHEM')
+                        }
+                    }, {
+
+                        name: 'DIAM',
+                        properties: {
+                            control: 'text',
+                            required: false,
+                            translate: $translate.instant('market.Order.CreateDialogue.DIAM')
+                        }
+                    }, {
+
+                        name: 'ADR',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.ADR')
+                        }
+                    }, {
+
+                        name: 'ORDER',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.ORDER')
+                        },
+                    }, {
+                        name: 'TEMPLATE',
+                        properties: {
+                            control: 'combo',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
+                            data: templateData,
+                            keyField: 'ID',
+                            valueField: 'Name'
+                        }
+                    }, {
+                        name: 'PROFILE',
+                        properties: {
+                            control: 'combo',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PROFILE'),
+                            data: profileData,
+                            keyField: 'ID',
+                            valueField: 'Description'
+                        }
+                    }]
+                });
+            })
+
+
+    }
+
     function vmDeleteRow(order) {
 
         if (confirm('Are you sure?')) {
@@ -427,7 +568,7 @@
         }
          
     }
-
+   
     function vmToggleModal(expr) {
 
         $scope.isShowModal = expr;

@@ -7,7 +7,8 @@
             fieldsList = options.fields,
             keyParam = options.keyParam,
             rowData = options.rowData,
-            formType = options.type;
+            formType = options.type,
+            copyParam = options.copyParam;
 
            
         vmGetMetadata()
@@ -102,7 +103,7 @@
                         if (field.name == keyParam.name)
                             field.input.attr('readonly', 'readonly');
                     };
-
+                    
                     //fill field if there is data for this field (in edit mode)
                     if (rowData) {
 
@@ -112,7 +113,16 @@
                                 return item;
                         });
 
-                        field.input.val(fieldEditedData[0].Value);
+                        if (copyParam) {
+
+                            if (copyParam.indexOf(field.name) > -1)
+                                field.input.val('');
+                            else
+                                field.input.val(fieldEditedData[0].Value);
+                            
+                        } else
+                              field.input.val(fieldEditedData[0].Value);
+
                     };
 
                     
