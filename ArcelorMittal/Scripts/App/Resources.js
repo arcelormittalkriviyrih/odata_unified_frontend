@@ -20,18 +20,18 @@
 
                 CreateDialogue: {
 
-                    STD: 'Standard',
-                    LEN: 'Length',
-                    QMIN: 'Rods quantity (minimal)',
-                    CONTR: 'Contract №',
-                    DIR: 'Direction',
-                    PROD: 'Production',
+                    STANDARD: 'Standard',
+                    LENGTH: 'Length',
+                    MIN_ROD: 'Rods quantity (minimal)',
+                    CONTRACT_NO: 'Contract №',
+                    DIRECTION: 'Direction',
+                    PRODUCT: 'Product',
                     CLASS: 'Class',
-                    STCLASS: 'Steel class',
-                    CHEM: 'Chem. Analysis',
-                    DIAM: 'Bunt Diameter',
-                    ADR: 'Provider Address',
-                    ORDER: 'Order',
+                    STEEL_CLASS: 'Steel class',
+                    CHEM_ANALYSIS: 'Chem. Analysis',
+                    BUNT_DIA: 'Bunt Diameter',
+                    ADDRESS: 'Provider Address',
+                    COMM_ORDER: 'Order',
                     PROFILE: 'Profile',
                     TEMPLATE: 'Label Template'
                 }
@@ -71,18 +71,18 @@
 
                 CreateDialogue: {
 
-                    STD: 'Стандарт',
-                    LEN: 'Длина',
-                    QMIN: 'Количество прутков (минимальное)',
-                    CONTR: 'Контракт №',
-                    DIR: 'Направление',
-                    PROD: 'Продукция',
+                    STANDARD: 'Стандарт',
+                    LENGTH: 'Длина',
+                    MIN_ROD: 'Количество прутков (минимальное)',
+                    CONTRACT_NO: 'Контракт №',
+                    DIRECTION: 'Направление',
+                    PRODUCT: 'Продукция',
                     CLASS: 'Класс',
-                    STCLASS: 'Марка стали',
-                    CHEM: 'Хим. Анализ',
-                    DIAM: 'Диаметр бунта',
-                    ADR: 'Адрес поставщика',
-                    ORDER: 'Заказ',
+                    STEEL_CLASS: 'Марка стали',
+                    CHEM_ANALYSIS: 'Хим. Анализ',
+                    BUNT_DIA: 'Диаметр бунта',
+                    ADDRESS: 'Адрес поставщика',
+                    COMM_ORDER: 'Заказ',
                     PROFILE: 'Профиль',
                     TEMPLATE: 'Шаблон бирки'
                 }
@@ -122,18 +122,18 @@
 
                 CreateDialogue: {
 
-                    STD: 'Стандарт',
-                    LEN: 'Довжина',
-                    QMIN: 'Кількість прутків (мінімальне)',
-                    CONTR: 'Контракт №',
-                    DIR: 'Напрямок',
-                    PROD: 'Продукція',
+                    STANDARD: 'Стандарт',
+                    LENGTH: 'Довжина',
+                    MIN_ROD: 'Кількість прутків (мінімальне)',
+                    CONTRACT_NO: 'Контракт №',
+                    DIRECTION: 'Напрямок',
+                    PRODUCT: 'Продукція',
                     CLASS: 'Клас',
-                    STCLASS: 'Марка сталі',
-                    CHEM: 'Хім. Аналіз',
-                    DIAM: 'Діаметр бунта',
-                    ADR: 'Адреса постачальника',
-                    ORDER: 'Замовлення',
+                    STEEL_CLASS: 'Марка сталі',
+                    CHEM_ANALYSIS: 'Хім. Аналіз',
+                    BUNT_DIA: 'Діаметр бунта',
+                    ADDRESS: 'Адреса постачальника',
+                    COMM_ORDER: 'Замовлення',
                     PROFILE: 'Профіль',
                     TEMPLATE: 'Шаблон бірки'
                 }
