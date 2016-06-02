@@ -579,28 +579,11 @@
         vmToggleModal(false);
 
         
-              
-        if (data.type == 'insert' || data.type == 'copy') {
-            
-            $('#orders').jsGrid('loadOdata', {});
+        $('#orders').jsGrid('loadOdata', {});
 
-            $("#orderDetails").jsGrid('loadOdata', {
-                defaultFilter: 'OperationsRequest eq (-1)',
-            });
-        }
-
-        else if (data.type == 'update') {
-
-            $('#orders').jsGrid('loadOdata', {
-
-                defaultActiveRow: $scope.selectedRow
-            });
-
-            $("#orderDetails").jsGrid('loadOdata', {
-                defaultFilter: 'OperationsRequest eq ({0})'.format($scope.selectedRow),
-                clientSort: 'Description'
-            });
-        }        
+        $("#orderDetails").jsGrid('loadOdata', {
+            defaultFilter: 'OperationsRequest eq (-1)',
+        });
 
         $scope.$apply();
     });
