@@ -132,10 +132,17 @@
         table: 'Equipment',
 
         fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            order: 1
+        },{
             id: 'Description',
             name: 'Description',
             title: 'Имя',
-            order: 1
+            order: 2
         }],
 
         controlProperties: {
@@ -172,11 +179,18 @@
         table: 'EquipmentProperty',
 
         fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            order: 1
+        }, {
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
             title: 'Свойство',
             width: 200,
-            order: 1,
+            order: 2,
             type: 'combo',
             table: {
                 name: 'EquipmentClassProperty',
@@ -190,15 +204,15 @@
             id: 'Value',
             name: 'Value',
             title: 'Значение',
-            width: 200,
-            order: 2
+            width: 150,
+            order: 3
         },
         {
             id: 'Description',
             name: 'Description',
             title: 'Описание',
             width: 200,
-            order: 3
+            order: 4
         }],
         controlProperties: {
             type: 'control',
@@ -295,10 +309,17 @@
         table: 'MaterialDefinition',
 
         fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            order: 1
+        }, {
             id: 'Description',
             name: 'Description',
             title: 'Название',
-            order: 1
+            order: 2
         }],
 
         controlProperties: {
@@ -333,11 +354,18 @@
         table: 'MaterialDefinitionProperty',
 
         fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            order: 1
+        }, {
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
             title: 'Свойство',
             width: 200,
-            order: 1,
+            order: 2,
             type: 'combo',
             table: {
                 name: 'MaterialClassProperty',
@@ -351,15 +379,15 @@
             id: 'Value',
             name: 'Value',
             title: 'Значение',
-            width: 200,
-            order: 2
+            width: 150,
+            order: 3
         },
         {
             id: 'Description',
             name: 'Description',
             title: 'Описание',
             width: 200,
-            order: 3
+            order: 4
         }],
         controlProperties: {
             type: 'control',
@@ -457,15 +485,22 @@
         table: 'Person',
 
         fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            order: 1
+        }, {
             id: 'PersonName',
             name: 'PersonName',
             title: 'Имя',
-            order: 1
+            order: 2
         }, {
             id: 'Description',
             name: 'Description',
             title: 'Описание',
-            order: 2
+            order: 3
         }],
 
         controlProperties: {
@@ -500,11 +535,18 @@
         table: 'PersonProperty',
 
         fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            order: 1
+        }, {
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
             title: 'Свойство',
             width: 200,
-            order: 1,
+            order: 2,
             type: 'combo',
             table: {
                 name: 'PersonnelClassProperty',
@@ -518,15 +560,15 @@
             id: 'Value',
             name: 'Value',
             title: 'Значение',
-            width: 200,
-            order: 2
+            width: 150,
+            order: 3
         },
         {
             id: 'Description',
             name: 'Description',
             title: 'Описание',
             width: 200,
-            order: 3
+            order: 4
         }],
         controlProperties: {
             type: 'control',

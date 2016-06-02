@@ -162,7 +162,10 @@
                                         field.textField = filteredFields.textField;
                                         field.serviceUrl = properties.serviceUrl;
                                         field.filter = filteredFields.filter;
-                                                                                
+                                        
+                                        if (typeof (filteredFields.readonly != "undefined")) {
+                                            field.readOnly = filteredFields.readonly;
+                                        }
                                     }
                                                                                                              
                                     return field;
