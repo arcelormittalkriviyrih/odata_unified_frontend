@@ -23,13 +23,9 @@
 
 <div class="black-wrapper" ng-class="{'show': isShowModal}" ng-show="isShowModal">
     <div class="modal">
-        <button class="pull-right btn btn-circle"
-                ng-click="toggleModal(false)">
-            <i class="icon-remove"></i>            
-        </button> 
 
         <div class="formWrapper">
-            <form id="orderForm"></form>
+            <form id="orderForm" novalidate></form>
         </div>
         
     </div>

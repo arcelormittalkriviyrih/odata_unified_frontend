@@ -201,22 +201,32 @@ button.add{
 .formWrapper{
     min-height: 500px;
     padding: 25px;
-    width: 460px;
-    margin: 10px 10px 0 0;
+    /* width: 460px; */
+    margin: 10px 0 0 0;
 }
 
 /*form style*/
 .control-group{
     display: inline-block;
-    width: 220px;
+    width: 244px;
 }
 
 .control-group input{
-    width: 200px;
+    width: 220px;
 }
 
 .control-group select{
-    width: 214px;
+    width: 233px;
+}
+
+.control-row{
+    padding-right: 10px;
+    text-align: right;
+}
+
+.runAction{
+
+    margin-right: 5px;
 }
 
 /*modified tree*/

@@ -134,7 +134,7 @@
             var controlsSubmitGroup = $('<div />').addClass('control-row').appendTo($form);
 
             // create submit button
-            $('<button />').addClass('btn offset4 runAction').text('Run')
+            $('<button />').addClass('btn runAction').text('OK')
                 .appendTo(controlsSubmitGroup)
                 .click(function () {
 
@@ -159,6 +159,12 @@
                     // prevent default action
                     return false;
                 });
+
+            $('<button />').addClass('btn cancelAction').text('Cancel')
+                .appendTo(controlsSubmitGroup).click(function () {
+
+                    $(document).trigger('oDataForm.cancel');
+                })
         };
 
         function vmCallAction(action) {

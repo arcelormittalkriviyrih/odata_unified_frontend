@@ -142,7 +142,7 @@
                         name: 'STANDARD',
                         properties: {
                             control: 'text',
-                            required: 'true',
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.STANDARD')
                         }
                     }, {
@@ -182,7 +182,7 @@
                         name: 'PRODUCT',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.PRODUCT')
                         }
                     }, {
@@ -190,7 +190,7 @@
                         name: 'CLASS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.CLASS')
                         }
                     }, {
@@ -198,7 +198,7 @@
                         name: 'STEEL_CLASS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
                         }
                     }, {
@@ -206,7 +206,7 @@
                         name: 'CHEM_ANALYSIS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS')
                         }
                     }, {
@@ -222,7 +222,7 @@
                         name: 'ADDRESS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.ADDRESS')
                         }
                     }, {
@@ -289,7 +289,7 @@
                         name: 'STANDARD',
                         properties: {
                             control: 'text',
-                            required: 'true',
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.STANDARD')
                         }
                     }, {
@@ -329,7 +329,7 @@
                         name: 'PRODUCT',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.PRODUCT')
                         }
                     }, {
@@ -337,7 +337,7 @@
                         name: 'CLASS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.CLASS')
                         }
                     }, {
@@ -345,7 +345,7 @@
                         name: 'STEEL_CLASS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
                         }
                     }, {
@@ -353,7 +353,7 @@
                         name: 'CHEM_ANALYSIS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS')
                         }
                     }, {
@@ -369,7 +369,7 @@
                         name: 'ADDRESS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.ADDRESS')
                         }
                     }, {
@@ -430,7 +430,7 @@
                         name: 'STANDARD',
                         properties: {
                             control: 'text',
-                            required: 'true',
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.STANDARD')
                         }
                     }, {
@@ -470,7 +470,7 @@
                         name: 'PRODUCT',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.PRODUCT')
                         }
                     }, {
@@ -478,7 +478,7 @@
                         name: 'CLASS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.CLASS')
                         }
                     }, {
@@ -486,7 +486,7 @@
                         name: 'STEEL_CLASS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
                         }
                     }, {
@@ -494,7 +494,7 @@
                         name: 'CHEM_ANALYSIS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS')
                         }
                     }, {
@@ -510,7 +510,7 @@
                         name: 'ADDRESS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.ADDRESS')
                         }
                     }, {
@@ -587,6 +587,12 @@
 
         $scope.$apply();
     });
+
+    $(document).on('oDataForm.cancel', function (e) {
+
+        vmToggleModal(false);
+        $scope.$apply();
+    })
 }])
 
 .controller('marketLabelTemplateCtrl', ['$scope', '$state', '$rootScope', function ($scope, $state, $rootScope) {
