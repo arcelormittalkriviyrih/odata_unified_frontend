@@ -32,6 +32,7 @@
     $scope.editForm = vmEditForm;
     $scope.deleteRow = vmDeleteRow;
     $scope.copyForm = vmCopyForm;
+    $scope.downloadTechnicalList = 'http://192.168.100.174/odata_unified_svc/api/MediaData/GenerateTemplate';
         
     $('#orders').jsGrid({
         height: "500px",
