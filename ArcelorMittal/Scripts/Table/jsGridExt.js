@@ -446,6 +446,10 @@
 
             var isEmpty = isEmptyRow(item);
 
+
+            if (isReadOnly(self.fields, table))
+                delete item[table.key];
+
             if (!isEmpty && (item[table.key] != 0 || item[table.key] != '')) {
 
                 return $.ajax({
@@ -460,7 +464,7 @@
                 .fail(handleError);
             }
             else if (item[table.key] == 0 || item[table.key] == '') {
-
+                
                 alert('you cannot push empty ' + table.key + ' field!');
             }
             else {
@@ -516,6 +520,20 @@
             }
 
             return isEmpty;
+        }
+
+        function isReadOnly(fields, table) {
+
+            var fieldProperties = fields.filter(function (item) {
+
+                if (item.id == table.key)
+                    return item;
+
+            });
+
+            if (fieldProperties.length > 0 && fieldProperties[0].readOnly)
+                return true;
+            else return false;
         }
 
         function getDateFilterParams(timeProperties, filter, field, time) {
