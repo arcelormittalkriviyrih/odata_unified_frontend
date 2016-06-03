@@ -1,19 +1,17 @@
 ﻿<button class="add btn btn-default" 
-        ng-click="createForm()">Create</button>
+        ng-click="createForm()">{{ 'buttonCreate' | translate }}</button>
 
 <button class="add btn btn-default" 
         ng-click="editForm(selectedRow)" 
-        ng-disabled="!selectedRow">Edit</button>
+        ng-disabled="!selectedRow">{{ 'buttonEdit' | translate }}</button>
 
 <button class="add btn btn-default"
         ng-click="deleteRow(selectedOrder)"
-        ng-disabled="!selectedOrder">Delete</button>
+        ng-disabled="!selectedOrder">{{ 'buttonDelete' | translate }}</button>
 
 <button class="add btn btn-default"
         ng-click="copyForm(selectedRow)"
-        ng-disabled="!selectedRow">Copy</button>
-
-<a href="{{downloadTechnicalList}}" class="btn btn-default pull-right">Скачать тех. лист</a>
+        ng-disabled="!selectedRow">{{ 'buttonCopy' | translate }}</button>
 
 <div id="orders">
 

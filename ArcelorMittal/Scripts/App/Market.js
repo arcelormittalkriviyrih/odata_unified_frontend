@@ -31,8 +31,7 @@
     $scope.createForm = vmCreateForm;
     $scope.editForm = vmEditForm;
     $scope.deleteRow = vmDeleteRow;
-    $scope.copyForm = vmCopyForm;
-    $scope.downloadTechnicalList = 'http://192.168.100.174/odata_unified_svc/api/MediaData/GenerateTemplate';
+    $scope.copyForm = vmCopyForm;    
         
     $('#orders').jsGrid({
         height: "500px",
@@ -605,6 +604,7 @@
     //and user will seen useless messages about required fields.
     //For resolving this problem I add special flag will be 'true' only in form reset mode
     var _isReset = false;
+    $scope.downloadTechnicalList = domainURL + '/api/MediaData/GenerateTemplate';
 
     //handle required fields for IE 9 browser
     if ($("<input />").prop("required") === undefined) {

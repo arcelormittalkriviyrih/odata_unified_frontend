@@ -14,8 +14,10 @@
             NoRoles: 'There are no available roles'
         },
         market: {
-            OrderLabel: 'Order',
-            TemplateLabel: 'Label template',
+            OrderLabel: 'Orders',
+            TemplateLabel: 'Label Templates',
+            buttonAddTempate: 'Add Template',
+            buttonDownloadTechSheet: 'Download Tech. Sheet',
             Order: {
 
                 CreateDialogue: {
@@ -35,20 +37,24 @@
                     PROFILE: 'Profile',
                     TEMPLATE: 'Label Template'
                 }
-            }
+            }            
 
         },
         pa: {
             Equipment: 'Equipment',
             Material: 'Material',
             Personnel: 'Personnel',
-            Label: 'Label',
-            OrderLabel: 'Order',
-            TemplateLabel: 'Label template',
+            Label: 'Labels',
+            OrderLabel: 'Orders',
+            TemplateLabel: 'Label Templates',
         },
         error: {
             Unauthorized: 'This role is unavailable for you!'
-        }
+        },
+        buttonCreate: 'Create',
+        buttonEdit: 'Edit',
+        buttonDelete: 'Delete',
+        buttonCopy: 'Copy'
     },
 
     ru: {
@@ -66,7 +72,9 @@
         },
         market: {
             OrderLabel: 'Заказы',
-            TemplateLabel: 'Шаблоны бирок',
+            TemplateLabel: 'Шаблоны Бирок',
+            buttonAddTempate: 'Добавить Шаблон',
+            buttonDownloadTechSheet: 'Скачать Тех. Лист',
             Order: {
 
                 CreateDialogue: {
@@ -90,15 +98,19 @@
         },
         pa: {
             Equipment: 'Оборудование',
-            Material: 'Материал',
+            Material: 'Материалы',
             Personnel: 'Персонал',
             Label: 'Бирки',
             OrderLabel: 'Заказы',
-            TemplateLabel: 'Шаблоны бирок',
+            TemplateLabel: 'Шаблоны Бирок',
         },
         error: {
             Unauthorized: 'Эта роль Вам недоступна'
-        }
+        },
+        buttonCreate: 'Создать',
+        buttonEdit: 'Редактировать',
+        buttonDelete: 'Удалить',
+        buttonCopy: 'Копировать'
 
     },
 
@@ -117,7 +129,9 @@
         },
         market: {
             OrderLabel: 'Замовлення',
-            TemplateLabel: 'Шаблони бірок',
+            TemplateLabel: 'Шаблони Бирок',
+            buttonAddTempate: 'Додати Шаблон',
+            buttonDownloadTechSheet: 'Скачати Тех. Лист',
             Order: {
 
                 CreateDialogue: {
@@ -135,21 +149,25 @@
                     ADDRESS: 'Адреса постачальника',
                     COMM_ORDER: 'Замовлення',
                     PROFILE: 'Профіль',
-                    TEMPLATE: 'Шаблон бірки'
+                    TEMPLATE: 'Шаблон бирки'
                 }
             }
         },
         pa: {
             Equipment: 'Обладнання',
-            Material: 'Матеріал',
+            Material: 'Матеріали',
             Personnel: 'Персонал',
-            Label: 'Бірки',
+            Label: 'Бирки',
             OrderLabel: 'Замовлення',
-            TemplateLabel: 'Шаблони бірок',
+            TemplateLabel: 'Шаблони Бирок',
         },
         error: {
-            Unauthorized: 'У доступі відмолвено'
-        }
+            Unauthorized: 'У доступі відмовлено'
+        },
+        buttonCreate: 'Стовирити',
+        buttonEdit: 'Редагувати',
+        buttonDelete: 'Видалити',
+        buttonCopy: 'Копіювати'
 
     }
 }
