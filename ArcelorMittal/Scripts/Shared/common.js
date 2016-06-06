@@ -1,4 +1,5 @@
 ﻿var domainURL = '../../odata_unified_svc';
+//var domainURL = 'http://mssql2014srv/odata_unified_svc';
 var serviceUrl = domainURL+'/api/Dynamic/';
 var interval = 5000; //grid auto refresh interval (5 sec)
 var _intervalID; //initiate interval ID
@@ -9,7 +10,8 @@ jQuery.ajaxSetup({
         $(document).trigger('ajaxError', {
 
             status: xhr.status,
-            statusText: statusText
+            statusText: statusText,
+            responseText: xhr.responseText
         })
     }
 });

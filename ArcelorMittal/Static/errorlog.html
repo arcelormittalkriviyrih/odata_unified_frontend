@@ -1,12 +1,16 @@
 ﻿
-<div class="center">
-    <p><label>errorCode:</label> {{errorCode}}</p>
+<div class="container errorHandle">
+    <p>
+        <label>errorCode:</label>
+        <textarea class="errorCode" readonly maxlength="2000">
+            {{errorCode}}
+        </textarea>
+    </p>
 
     <p>
         <label>Description:</label>
         <textarea class="userErrorDescription"
-                  ng-model="errorDescription">
-        </textarea>
+                  ng-model="errorDescription" maxlength="2000"></textarea>
     </p>
 
 

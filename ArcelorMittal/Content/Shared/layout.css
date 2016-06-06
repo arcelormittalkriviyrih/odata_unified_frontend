@@ -259,27 +259,23 @@ div.gridWrapper{
 
 /*error handling*/
 
-div.center{
-    width: 500px;
-    margin: 100px auto;
-    padding: 0 95px 0 0;
-    box-sizing: border-box;
+.errorHandle{
+    margin-top:100px
 }
 
-div.center label{
+div.errorHandle label{
     display:inline-block;
-    max-width: 150px;
+    width: 150px;
     text-align: right;
     vertical-align:top;
 }
 
-textarea.userErrorDescription{
+.errorHandle textarea{
     display:inline-block;
     vertical-align: top;
-    width: 300px;
+    width: 760px;
     height: 200px;
     resize:none;
-
 }
 
 

@@ -10,7 +10,8 @@
 
                 error: rejection,
                 code: rejection.status,
-                back: null
+                back: null,
+                responseText: rejection.data
             }, { reload: true });
             return $q.reject(rejection);
         },
@@ -21,7 +22,8 @@
 
                 error: rejection,
                 code: rejection.status,
-                back: null
+                back: null,
+                responseText: rejection.data
             }, { reload: true });
             return $q.reject(rejection);
         }
@@ -152,9 +154,10 @@
                 controller: 'errorLogCtrl',
                 params: {
 
-                    type: null,
                     error: null,
-                    back: null
+                    back: null,
+                    code: null,
+                    responseText: null
                 }
             });
 
@@ -249,7 +252,8 @@
 
             error: params,
             code: params.status,
-            back: $state.current.name
+            back: $state.current.name,
+            responseText: params.responseText
         
         }, { reload: true });
     });
@@ -296,25 +300,31 @@
     // throw main tab change
     $scope.$emit('mainTabChange', 'error');
 
-    $scope.errorCode = '';
-    $scope.errorDescription = '';   
-    $scope.back = $state.params.back;
+    var params = $state.params,
+        error = params.error,
+        responseText = params.responseText;
 
+    $scope.back = params.back;
+    $scope.errorCode = error.status + ' ' + error.statusText + '\n' + responseText;
+  
     $scope.sendError = vmSendError;
     $scope.cancel = vmCancel;
-
-    var error = $state.params.error;
-    $scope.errorCode = error.status + error.statusText;
-
+           
     function vmSendError() {
 
         indexService.sendInfo('ErrorLog', {
 
             ERROR_DETAILS: $scope.errorCode,
-            ERROR_MESSAGE: $scope.errorDescription
+            ERROR_MESSAGE: $scope.errorDescription || ''
         }).then(function (responce) {
 
             alert('sended!');
+
+            if ($scope.back)
+                vmCancel();
+            else
+                $state.go('root');
+            
         })
     };
 
