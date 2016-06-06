@@ -132,14 +132,6 @@
                         else if (fields[i].name == keys.parent)
                             data[fields[i].name] = parentId;
 
-                        else {
-
-                            if (fields[i].type == 'Edm.Int32' || fields[i].type == 'Edm.Single')
-                                data[fields[i].name] = 0;
-                            else if (data[fields[i].name] == 'Edm.String')
-                                data[fields[i].name] = '';
-                        }
-
                     };
 
                     $.ajax({
