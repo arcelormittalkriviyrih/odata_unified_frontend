@@ -5,10 +5,9 @@
         var self = $(this),
             procedureName = options.action,
             fieldsList = options.fields,
-            keyParam = options.keyParam,
+            keyField = options.keyField,
             rowData = options.rowData,
-            formType = options.type,
-            copyParam = options.copyParam;
+            formType = options.type;
 
            
         vmGetMetadata()
@@ -98,9 +97,9 @@
                     }
                     
                     //set field as readonly if we build edit form and current field has id of edited row
-                    if (keyParam) {
+                    if (formType=='edit') {
 
-                        if (field.name == keyParam.name)
+                        if (field.name == keyField)
                             field.input.attr('readonly', 'readonly');
                     };
                     
@@ -113,9 +112,9 @@
                                 return item;
                         });
 
-                        if (copyParam) {
+                        if (formType == 'copy') {
 
-                            if (copyParam.indexOf(field.name) > -1)
+                            if (field.name == keyField)
                                 field.input.val('');
                             else
                                 field.input.val(fieldEditedData[0].Value);

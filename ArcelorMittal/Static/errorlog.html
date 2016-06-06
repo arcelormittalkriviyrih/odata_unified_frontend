@@ -1,0 +1,27 @@
+﻿
+<div class="center">
+    <p><label>errorCode:</label> {{errorCode}}</p>
+
+    <p>
+        <label>Description:</label>
+        <textarea class="userErrorDescription"
+                  ng-model="errorDescription">
+        </textarea>
+    </p>
+
+
+    <div class="control-row">
+        <button class="btn btn-default"
+                ng-click="sendError()">
+            Send
+        </button>
+
+        <button class="btn btn-default"
+                ng-if="back"
+                ng-click="cancel()">
+            Cancel
+        </button>
+    </div>
+
+</div>
+

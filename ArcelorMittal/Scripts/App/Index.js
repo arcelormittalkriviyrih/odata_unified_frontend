@@ -1,5 +1,38 @@
 ﻿var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ngSanitize'])
 
+.factory('globalAJAXErrorHandling', ['$q', '$injector', '$rootScope', function ($q, $injector, $rootScope) {
+
+    return {
+
+        'requestError': function (rejection) {
+
+            $injector.get('$state').go('errorLog', {
+
+                error: rejection,
+                code: rejection.status,
+                back: null
+            }, { reload: true });
+            return $q.reject(rejection);
+        },
+
+        'responseError': function (rejection) {
+
+            $injector.get('$state').go('errorLog', {
+
+                error: rejection,
+                code: rejection.status,
+                back: null
+            }, { reload: true });
+            return $q.reject(rejection);
+        }
+    }
+}])
+
+.config(['$httpProvider', function ($httpProvider) {
+
+    $httpProvider.interceptors.push('globalAJAXErrorHandling');
+}])
+
 .config(['$stateProvider', function ($stateProvider) {
 
     $stateProvider
@@ -110,6 +143,19 @@
                 url: '/error/:code?',
                 templateUrl: 'Static/error.html',
                 controller: 'errorCtrl'
+            })
+
+            .state('errorLog', {
+
+                url: '/errorlog/:code?',
+                templateUrl: 'Static/errorlog.html',
+                controller: 'errorLogCtrl',
+                params: {
+
+                    type: null,
+                    error: null,
+                    back: null
+                }
             });
 
     // check if user has required role
@@ -118,7 +164,7 @@
         // check if user roles contain required one
         return roles.filter(function (role) { return role.RoleName == roleName }).length > 0;            
     }
-
+    
 }])
 
 .config(function ($translateProvider) {
@@ -149,6 +195,7 @@
         else
             $state.go('app.error', { code: error.code });
     });
+    
 })
 
 .controller('rootCtrl', ['$scope', '$state', function ($scope, $state) {
@@ -196,6 +243,17 @@
         $state.go($state.current.name, $state.params, { reload: true});
     };
 
+    $(document).on('ajaxError', function (e, params) {
+
+        $state.go('errorLog', {
+
+            error: params,
+            code: params.status,
+            back: $state.current.name
+        
+        }, { reload: true });
+    });
+  
 }])
 
 .controller('welcomeCtrl', ['$scope', 'roles', function ($scope, roles) {
@@ -233,6 +291,40 @@
 
 }])
 
+.controller('errorLogCtrl', ['$scope', '$state', '$translate', 'indexService', function ($scope, $state, $translate, indexService) {
+
+    // throw main tab change
+    $scope.$emit('mainTabChange', 'error');
+
+    $scope.errorCode = '';
+    $scope.errorDescription = '';   
+    $scope.back = $state.params.back;
+
+    $scope.sendError = vmSendError;
+    $scope.cancel = vmCancel;
+
+    var error = $state.params.error;
+    $scope.errorCode = error.status + error.statusText;
+
+    function vmSendError() {
+
+        indexService.sendInfo('ErrorLog', {
+
+            ERROR_DETAILS: $scope.errorCode,
+            ERROR_MESSAGE: $scope.errorDescription
+        }).then(function (responce) {
+
+            alert('sended!');
+        })
+    };
+
+    function vmCancel() {
+
+        $state.go($scope.back);
+    };
+
+}])
+
 .service('indexService', ['$http', 'serviceUrl', 'withCredentials', function ($http, serviceUrl, withCredentials) {
 
     this.getInfo = function (url) {
@@ -247,5 +339,19 @@
 
         return request;
     };
+
+    this.sendInfo = function (url, data) {
+
+        var request = $http({
+
+            method: 'post',
+            url: serviceUrl + url,
+            data: data,
+            withCredentials: withCredentials
+
+        });
+
+        return request;
+    }
 
 }])

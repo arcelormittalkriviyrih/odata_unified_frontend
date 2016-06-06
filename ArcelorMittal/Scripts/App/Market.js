@@ -29,9 +29,6 @@
     $scope.toggleModal = vmToggleModal;
 
     $scope.createForm = vmCreateForm;
-    $scope.editForm = vmEditForm;
-    $scope.deleteRow = vmDeleteRow;
-    $scope.copyForm = vmCopyForm;    
         
     $('#orders').jsGrid({
         height: "500px",
@@ -121,168 +118,34 @@
     });
 
 
-    function vmCreateForm() {
+    function vmCreateForm(type, id, keyField) {
 
         vmToggleModal(true);
 
-        $q.all([indexService.getInfo('Files'),
-                indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')])
+        var oDataAPI = [indexService.getInfo('Files'),
+                indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')];
+
+        if (id) {
+
+            oDataAPI.push(indexService.getInfo('v_OrderPropertiesAll?$filter=OperationsRequest eq ({0})'.format(id)))
+        }
+
+        $q.all(oDataAPI)
             .then(function (responce) {
 
+                var rowData;
+                
                 var templateData = responce[0].data.value;
                 var profileData = responce[1].data.value;
 
+                if (id)
+                    rowData = responce[2].data.value;
+
                 $('#orderForm').oDataAction({
 
                     action: 'ins_Order',
-                    type: 'insert',
-
-                    fields: [{
-
-                        name: 'STANDARD',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.STANDARD')
-                        }
-                    }, {
-
-                        name: 'LENGTH',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.LENGTH')
-                        }
-                    }, {
-
-                        name: 'MIN_ROD',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD')
-                        }
-                    }, {
-
-                        name: 'CONTRACT_NO',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO')
-                        }
-                    }, {
-
-                        name: 'DIRECTION',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.DIRECTION')
-                        }
-                    }, {
-
-                        name: 'PRODUCT',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.PRODUCT')
-                        }
-                    }, {
-
-                        name: 'CLASS',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.CLASS')
-                        }
-                    }, {
-
-                        name: 'STEEL_CLASS',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
-                        }
-                    }, {
-
-                        name: 'CHEM_ANALYSIS',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS')
-                        }
-                    }, {
-
-                        name: 'BUNT_DIA',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA')
-                        }
-                    }, {
-
-                        name: 'ADDRESS',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.ADDRESS')
-                        }
-                    }, {
-
-                        name: 'COMM_ORDER',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER')
-                        },
-                    }, {
-                        name: 'TEMPLATE',
-                        properties: {
-                            control: 'combo',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
-                            data: templateData,
-                            keyField: 'ID',
-                            valueField: 'Name'
-                        }
-                    }, {
-                        name: 'PROFILE',
-                        properties: {
-                            control: 'combo',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.PROFILE'),
-                            data: profileData,
-                            keyField: 'ID',
-                            valueField: 'Description'
-                        }
-                    }]
-
-                });
-            })
-
-        
-    }
-
-    function vmEditForm(id) {
-
-        vmToggleModal(true);
-
-        $q.all([
-                indexService.getInfo('v_OrderPropertiesAll?$filter=OperationsRequest eq ({0})'.format(id)),
-                indexService.getInfo('Files'),
-                indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')])
-            .then(function (responce) {
-
-                var rowData = responce[0].data.value;
-                var templateData = responce[1].data.value;
-                var profileData = responce[2].data.value;
-
-                $('#orderForm').oDataAction({
-
-                    action: 'upd_Order',
-                    type: 'update',
-                    keyParam: {
-                        name: 'COMM_ORDER',
-                        value: id
-                    },
+                    type: type,
+                    keyField: keyField,
                     rowData: rowData,
                     fields: [{
 
@@ -403,149 +266,6 @@
                     }]
                 });
             })
-    }
-
-    function vmCopyForm(id) {
-
-        vmToggleModal(true);
-
-        $q.all([
-                indexService.getInfo('v_OrderPropertiesAll?$filter=OperationsRequest eq ({0})'.format(id)),
-                indexService.getInfo('Files'),
-                indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')])
-            .then(function (responce) {
-
-                var rowData = responce[0].data.value;
-                var templateData = responce[1].data.value;
-                var profileData = responce[2].data.value;
-
-                $('#orderForm').oDataAction({
-
-                    action: 'ins_Order',
-                    type: 'copy',
-                    copyParam: ['COMM_ORDER'],
-                    rowData: rowData,
-                    fields: [{
-
-                        name: 'STANDARD',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.STANDARD')
-                        }
-                    }, {
-
-                        name: 'LENGTH',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.LENGTH')
-                        }
-                    }, {
-
-                        name: 'MIN_ROD',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD')
-                        }
-                    }, {
-
-                        name: 'CONTRACT_NO',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO')
-                        }
-                    }, {
-
-                        name: 'DIRECTION',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.DIRECTION')
-                        }
-                    }, {
-
-                        name: 'PRODUCT',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.PRODUCT')
-                        }
-                    }, {
-
-                        name: 'CLASS',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.CLASS')
-                        }
-                    }, {
-
-                        name: 'STEEL_CLASS',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
-                        }
-                    }, {
-
-                        name: 'CHEM_ANALYSIS',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS')
-                        }
-                    }, {
-
-                        name: 'BUNT_DIA',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA')
-                        }
-                    }, {
-
-                        name: 'ADDRESS',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.ADDRESS')
-                        }
-                    }, {
-
-                        name: 'COMM_ORDER',
-                        properties: {
-                            control: 'text',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER')
-                        },
-                    }, {
-                        name: 'TEMPLATE',
-                        properties: {
-                            control: 'combo',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
-                            data: templateData,
-                            keyField: 'ID',
-                            valueField: 'Name'
-                        }
-                    }, {
-                        name: 'PROFILE',
-                        properties: {
-                            control: 'combo',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.PROFILE'),
-                            data: profileData,
-                            keyField: 'ID',
-                            valueField: 'Description'
-                        }
-                    }]
-                });
-            })
-
-
     }
 
     function vmDeleteRow(order) {

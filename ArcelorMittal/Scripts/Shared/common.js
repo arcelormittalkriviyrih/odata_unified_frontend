@@ -1,7 +1,18 @@
-﻿var domainURL = '../../odata_unified_svc'
+﻿var domainURL = '../../odata_unified_svc';
 var serviceUrl = domainURL+'/api/Dynamic/';
 var interval = 5000; //grid auto refresh interval (5 sec)
 var _intervalID; //initiate interval ID
+
+jQuery.ajaxSetup({
+    global: true,
+    error: function (xhr, status, statusText) {
+        $(document).trigger('ajaxError', {
+
+            status: xhr.status,
+            statusText: statusText
+        })
+    }
+});
 
 $(function () {
 

@@ -257,4 +257,29 @@ div.gridWrapper{
     position:relative;
 }
 
+/*error handling*/
+
+div.center{
+    width: 500px;
+    margin: 100px auto;
+    padding: 0 95px 0 0;
+    box-sizing: border-box;
+}
+
+div.center label{
+    display:inline-block;
+    max-width: 150px;
+    text-align: right;
+    vertical-align:top;
+}
+
+textarea.userErrorDescription{
+    display:inline-block;
+    vertical-align: top;
+    width: 300px;
+    height: 200px;
+    resize:none;
+
+}
+
 
