@@ -312,13 +312,19 @@
            
     function vmSendError() {
 
+        var date = getTimeToUpdate();
+
         indexService.sendInfo('ErrorLog', {
 
-            ERROR_DETAILS: $scope.errorCode,
+            ERROR_DATE: '{0}-{1}-{2}T{3}:{4}:{5}Z'.format(date.year,
+                                                          date.month,
+                                                          date.day,
+                                                          date.hour,
+                                                          date.minute,
+                                                          date.second),
+            ERROR_DETAILS: $scope.errorCode.substr(0, 2000),
             ERROR_MESSAGE: $scope.errorDescription || ''
         }).then(function (responce) {
-
-            alert('sended!');
 
             if ($scope.back)
                 vmCancel();

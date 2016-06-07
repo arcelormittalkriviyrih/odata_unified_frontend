@@ -181,7 +181,13 @@ function handleError(err) {
 
 function getTimeToUpdate(time) {
 
-    var date = new Date(time);
+    var date;
+
+    if (time)
+        date = new Date(time);
+    else
+        date = new Date();
+
     var year = date.getFullYear();
     var month = date.getMonth() + 1;
     var day = date.getDate();
