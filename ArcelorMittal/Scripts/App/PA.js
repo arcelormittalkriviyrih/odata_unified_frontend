@@ -50,7 +50,7 @@
 
 }])
 
-.controller('PAequipmentCtrl', ['$scope', function ($scope) {
+.controller('PAequipmentCtrl', ['$scope', '$translate', function ($scope, $translate) {
 
     $treeContainer = $('#hierarchy').empty();
 
@@ -141,7 +141,7 @@
         },{
             id: 'Description',
             name: 'Description',
-            title: 'Имя',
+            title: $translate.instant('grid.common.name'),
             order: 2
         }],
 
@@ -188,7 +188,7 @@
         }, {
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
-            title: 'Свойство',
+            title: $translate.instant('grid.common.property'),
             width: 200,
             order: 2,
             type: 'combo',
@@ -203,14 +203,14 @@
         {
             id: 'Value',
             name: 'Value',
-            title: 'Значение',
+            title: $translate.instant('grid.common.value'),
             width: 150,
             order: 3
         },
         {
             id: 'Description',
             name: 'Description',
-            title: 'Описание',
+            title: $translate.instant('grid.common.description'),
             width: 200,
             order: 4
         }],
@@ -227,7 +227,7 @@
 
 }])
 
-.controller('PAmaterialCtrl', ['$scope', function ($scope) {
+.controller('PAmaterialCtrl', ['$scope', '$translate', function ($scope, $translate) {
 
     $materialDefinitionDisable = $('#materialDefinitionDisable').show();
     $materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
@@ -318,7 +318,7 @@
         }, {
             id: 'Description',
             name: 'Description',
-            title: 'Название',
+            title: $translate.instant('pa.grid.material.description'),
             order: 2
         }],
 
@@ -363,7 +363,7 @@
         }, {
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
-            title: 'Свойство',
+            title: $translate.instant('grid.common.property'),
             width: 200,
             order: 2,
             type: 'combo',
@@ -378,14 +378,14 @@
         {
             id: 'Value',
             name: 'Value',
-            title: 'Значение',
+            title: $translate.instant('grid.common.value'),
             width: 150,
             order: 3
         },
         {
             id: 'Description',
             name: 'Description',
-            title: 'Описание',
+            title: $translate.instant('grid.common.description'),
             width: 200,
             order: 4
         }],
@@ -403,7 +403,7 @@
 
 }])
 
-.controller('PApersonnelCtrl', ['$scope', function ($scope) {
+.controller('PApersonnelCtrl', ['$scope', '$translate', function ($scope, $translate) {
 
     $personDisable = $('#personDisable').show();
     $personPropertyDisable = $('#personPropertyDisable').show();
@@ -494,12 +494,12 @@
         }, {
             id: 'PersonName',
             name: 'PersonName',
-            title: 'Имя',
+            title: $translate.instant('grid.common.name'),
             order: 2
         }, {
             id: 'Description',
             name: 'Description',
-            title: 'Описание',
+            title: $translate.instant('grid.common.description'),
             order: 3
         }],
 
@@ -544,7 +544,7 @@
         }, {
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
-            title: 'Свойство',
+            title: $translate.instant('grid.common.property'),
             width: 200,
             order: 2,
             type: 'combo',
@@ -559,14 +559,14 @@
         {
             id: 'Value',
             name: 'Value',
-            title: 'Значение',
+            title: $translate.instant('grid.common.value'),
             width: 150,
             order: 3
         },
         {
             id: 'Description',
             name: 'Description',
-            title: 'Описание',
+            title: $translate.instant('grid.common.description'),
             width: 200,
             order: 4
         }],
@@ -583,7 +583,7 @@
 
 }])
 
-.controller('PAlabelCtrl', ['$scope', function ($scope) {
+.controller('PAlabelCtrl', ['$scope', '$translate', function ($scope, $translate) {
 
     $materialLotPropertyDisable = $('#materialLotPropertyDisable').show();
 
@@ -621,24 +621,24 @@
         fields: [{
             id: 'FactoryNumber',
             name: 'FactoryNumber',
-            title: 'Номер',
+            title: $translate.instant('pa.grid.labels.number'),
             order: 1
         }, {
             id: 'Quantity',
             name: 'Quantity',
-            title: 'Количество',
+            title: $translate.instant('pa.grid.labels.quantity'),
             order: 2
         },
         {
             id: 'Status',
             name: 'Status',
-            title: 'Статус',
+            title: $translate.instant('pa.grid.labels.status'),
             order: 3
         },
         {
             id: 'Description',
             name: 'Description',
-            title: 'Описание',
+            title: $translate.instant('grid.common.description'),
             order: 4
         }],
 
@@ -674,19 +674,19 @@
         fields: [{
             id: 'PropertyType',
             name: 'PropertyType',
-            title: 'Свойство',
+            title: $translate.instant('grid.common.property'),
             order: 1
         },
         {
             id: 'Value',
             name: 'Value',
-            title: 'Значение',
+            title: $translate.instant('grid.common.value'),
             order: 2
         },
         {
             id: 'Description',
             name: 'Description',
-            title: 'Описание',
+            title: $translate.instant('grid.common.description'),
             order: 3
         }],
 

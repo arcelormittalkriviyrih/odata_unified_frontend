@@ -37,7 +37,22 @@
                     PROFILE: 'Profile',
                     TEMPLATE: 'Label Template'
                 }
-            }            
+            },
+            grid: {
+                orders: {
+                    order: 'Order',
+                    contract: 'Contract No',
+                    direction: 'Direction',
+                    labelTemplate: 'Label template',
+                    parameter: 'Parameter'
+                },
+                labelTemplate: {
+                    fileName: 'File Name',
+                    status: 'Status',
+                    fileType: 'File Type',
+                    file: 'File'
+                }
+            }
 
         },
         pa: {
@@ -47,6 +62,17 @@
             Label: 'Labels',
             OrderLabel: 'Orders',
             TemplateLabel: 'Label Templates',
+            grid: {
+
+                material: {
+                    description: 'Description'
+                },
+                labels: {
+                    number: 'Number',
+                    quantity: 'Quantity',
+                    status: 'Status'
+                },
+            }
         },
         error: {
             Unauthorized: 'This role is unavailable for you!'
@@ -54,7 +80,16 @@
         buttonCreate: 'Create',
         buttonEdit: 'Edit',
         buttonDelete: 'Delete',
-        buttonCopy: 'Copy'
+        buttonCopy: 'Copy',
+        grid: {
+            common: {
+
+                name: 'Name',
+                property: 'Property',
+                value: 'Value',
+                description: 'Description'
+            }                                
+        }
     },
 
     ru: {
@@ -94,6 +129,22 @@
                     PROFILE: 'Профиль',
                     TEMPLATE: 'Шаблон бирки'
                 }
+            },
+            grid: {
+
+                orders: {
+                    order: 'Заказ',
+                    contract: 'Контракт №',
+                    direction: 'Направление',
+                    labelTemplate: 'Шаблон бирки',
+                    parameter: 'Параметр'
+                },
+                labelTemplate: {
+                    fileName: 'Имя файла',
+                    status: 'Статус',
+                    fileType: 'Тип файла',
+                    file: 'Файл'
+                }
             }
         },
         pa: {
@@ -103,6 +154,16 @@
             Label: 'Бирки',
             OrderLabel: 'Заказы',
             TemplateLabel: 'Шаблоны Бирок',
+            grid: {
+                material: {
+                    description: 'Название'
+                },
+                labels: {
+                    number: 'Номер',
+                    quantity: 'Количество',
+                    status: 'Статус'
+                }
+            }
         },
         error: {
             Unauthorized: 'Эта роль Вам недоступна'
@@ -110,7 +171,19 @@
         buttonCreate: 'Создать',
         buttonEdit: 'Редактировать',
         buttonDelete: 'Удалить',
-        buttonCopy: 'Копировать'
+        buttonCopy: 'Копировать',
+        grid: {
+            common: {
+
+                name: 'Имя',
+                property: 'Свойство',
+                value: 'Значение',
+                description: 'Описание'
+            }
+            
+            
+
+        }
 
     },
 
@@ -151,6 +224,21 @@
                     PROFILE: 'Профіль',
                     TEMPLATE: 'Шаблон бирки'
                 }
+            },
+            grid: {
+                orders: {
+                    order: 'Замовлення',
+                    contract: 'Контракт №',
+                    direction: 'Напрям',
+                    labelTemplate: 'Шаблон бірки',
+                    parameter: 'Параметр'
+                },
+                labelTemplate: {
+                    fileName: 'Ім\'я файла',
+                    status: 'Статус',
+                    fileType: 'Тип файла',
+                    file: 'Файл'
+                }
             }
         },
         pa: {
@@ -160,14 +248,34 @@
             Label: 'Бирки',
             OrderLabel: 'Замовлення',
             TemplateLabel: 'Шаблони Бирок',
+            grid: {
+                material: {
+                    description: 'Назва'
+                },
+                labels: {
+                    number: 'Номер',
+                    quantity: 'Кількість',
+                    status: 'Статус'
+                }
+            }
         },
         error: {
             Unauthorized: 'У доступі відмовлено'
         },
-        buttonCreate: 'Стовирити',
+        buttonCreate: 'Створити',
         buttonEdit: 'Редагувати',
         buttonDelete: 'Видалити',
-        buttonCopy: 'Копіювати'
+        buttonCopy: 'Копіювати',
+        grid: {
+            common: {
+
+                name: 'Ім\'я',
+                property: 'Властивість',
+                value: 'Значення',
+                description: 'Опис'
+            }
+                        
+        }
 
     }
 }

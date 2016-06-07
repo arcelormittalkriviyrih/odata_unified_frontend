@@ -18,7 +18,7 @@
 }])
 
 .controller('marketCtrl', ['$scope', 'indexService', '$state', 'roles', function ($scope, indexService, $state, roles) {
-    
+
 }])
 
 .controller('marketOrderCtrl', ['$scope', 'indexService', '$translate', '$q', '$rootScope', function ($scope, indexService, $translate, $q, $rootScope) {
@@ -29,7 +29,7 @@
     $scope.toggleModal = vmToggleModal;
 
     $scope.createForm = vmCreateForm;
-        
+
     $('#orders').jsGrid({
         height: "500px",
         width: "950px",
@@ -54,19 +54,19 @@
             $scope.$apply();
 
             vmActiveRow(args);
-                
+
             $("#orderDetails").removeClass('disabled-grid').jsGrid('initOdata', {
                 serviceUrl: serviceUrl,
                 table: 'v_OrderProperties',
                 fields: [{
                     id: 'Value',
                     name: 'Value',
-                    title: 'Значение',
-                    order: 2                       
+                    title: $translate.instant('grid.common.value'),
+                    order: 2
                 }, {
                     id: 'Description',
                     name: 'Description',
-                    title: 'Параметр',
+                    title: $translate.instant('market.grid.orders.parameter'),
                     order: 1
                 }]
             }).jsGrid('loadOdata', {
@@ -81,22 +81,22 @@
         fields: [{
             id: 'COMM_ORDER',
             name: 'COMM_ORDER',
-            title: 'Заказ',
+            title: $translate.instant('market.grid.orders.order'),
             order: 1
         }, {
             id: 'CONTRACT_NO',
             name: 'CONTRACT_NO',
-            title: 'Контракт №',
+            title: $translate.instant('market.grid.orders.contract'),
             order: 2
         }, {
             id: 'DIRECTION',
             name: 'DIRECTION',
-            title: 'Направление',
+            title: $translate.instant('market.grid.orders.direction'),
             order: 3
         }, {
             id: 'TEMPLATE',
             name: 'TEMPLATE',
-            title: 'Шаблон бирки',
+            title: $translate.instant('market.grid.orders.labelTemplate'),
             order: 4
         }]
     }).jsGrid('loadOdata', {})
@@ -134,7 +134,7 @@
             .then(function (responce) {
 
                 var rowData;
-                
+
                 var templateData = responce[0].data.value;
                 var profileData = responce[1].data.value;
 
@@ -286,9 +286,9 @@
 
             }).fail(handleError);
         }
-         
+
     }
-   
+
     function vmToggleModal(expr) {
 
         $scope.isShowModal = expr;
@@ -298,7 +298,7 @@
 
         vmToggleModal(false);
 
-        
+
         $('#orders').jsGrid('loadOdata', {});
 
         $("#orderDetails").jsGrid('loadOdata', {
@@ -315,7 +315,7 @@
     })
 }])
 
-.controller('marketLabelTemplateCtrl', ['$scope', '$state', '$rootScope', function ($scope, $state, $rootScope) {
+.controller('marketLabelTemplateCtrl', ['$scope', '$state', '$rootScope', '$translate', function ($scope, $state, $rootScope, $translate) {
 
     //hack for IE. This fantastic browser makes form submit when 
     //user makes canceling (form reset).
@@ -379,27 +379,27 @@
         }, {
             id: 'FileName',
             name: 'FileName',
-            title: 'File Name',
+            title: $translate.instant('market.grid.labelTemplate.fileName'),
             order: 2
         }, {
             id: 'Name',
             name: 'Name',
-            title: 'Name',
+            title: $translate.instant('grid.common.name'),
             order: 3
         }, {
             id: 'Status',
             name: 'Status',
-            title: 'Status',
+            title: $translate.instant('market.grid.labelTemplate.status'),
             order: 4
         }, {
             id: 'FileType',
             name: 'FileType',
-            title: 'File Type',
+            title: $translate.instant('market.grid.labelTemplate.fileType'),
             order: 5
         }, {
             id: 'Data',
             name: 'Data',
-            title: 'Data',
+            title: $translate.instant('market.grid.labelTemplate.file'),
             order: 6
         }],
 
@@ -490,13 +490,13 @@
     //check required fields before submit
     //if all required fields are filled - refresh page after submit
     $form.on('submit', function (e) {
-        
+
         var unFilledFields = $(this)
                     .find("input, select")
                     .filter("[required]")
                     .filter(function () { return this.value == ''; });
 
-        if (unFilledFields.length > 0){
+        if (unFilledFields.length > 0) {
 
             unFilledFields.each(function () {
                 e.preventDefault();
@@ -520,9 +520,9 @@
                 window.location.reload();
             }, 1000);
         }
-                    
 
-        
+
+
     })
 
 }])
