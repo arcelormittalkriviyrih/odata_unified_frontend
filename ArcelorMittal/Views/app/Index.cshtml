@@ -4,59 +4,29 @@
 
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="X-UA-Compatible" content="IE=9;" />
+
     <title>ArcelorMittal</title>
 
     <base href="@Url.Content("~/")" />
 
-    <script src="~/scripts/vendor/angular.min.js"></script>
-    <script src="~/scripts/vendor/angular-ui-router.js"></script>
-    <script src="~/scripts/vendor/angular-translate.min.js"></script>
-    <script src="~/scripts/vendor/angular-sanitize.min.js"></script>
-
-    <script src="~/scripts/vendor/jquery-2.2.3.min.js"></script>
-    <script src="~/scripts/vendor/jquery-ui.min.js"></script>
-    <script src="~/scripts/vendor/jquery-ui-timepicker-addon.js"></script>
-    <script src="~/scripts/vendor/jsgrid.js"></script>
-    <script src="~/scripts/vendor/jsgrid.js"></script>
-
-    <script src="~/scripts/shared/common.js"></script>
-    <script src="~/scripts/shared/util.js"></script>
-
-    <script src="~/scripts/app/index.js"></script>
-    <script src="~/scripts/app/marker.js"></script>
-    <script src="~/scripts/app/market.js"></script>
-    <script src="~/scripts/app/pa.js"></script>
-    <script src="~/scripts/app/workshopspecs.js"></script>
-    <script src="~/scripts/app/resources.js"></script>
-
-    <!--tree grid scripts-->
-
-    <!--add tree scripts-->
-    <script src="~/Scripts/Vendor/jstree.js"></script>
-    <script src="~/Scripts/TreeGrid/treeExt.js"></script>
-
-    <!--add grid scripts-->
-    <script src="~/Scripts/Vendor/jsgrid.js"></script>
-    <script src="~/Scripts/Table/jsGridExt.js"></script>
-    <script src="~/Scripts/Table/jsGridNewFields.js"></script>
-
-    <!--add action scripts-->
-    <script src="~/Scripts/Action/index.js"></script>
-
-    <!--add tree styles-->
-    <link rel="stylesheet" href="~/Content/Tree/tree.css" />
-
-    <!--add grid styles-->
-    <link href="~/content/table/jsgrid.css" rel="stylesheet" />
-    <link href="~/content/table/jsgrid-theme.css" rel="stylesheet" />
-    <link href="~/content/shared/datetimepicker.css" rel="stylesheet" />
-
+    <!--vendor scripts bundle-->
+    @Scripts.Render("~/bundles/js/vendor")
     
-    <link rel="stylesheet" href="~/Content/shared/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="~/Content/shared/bootstrap/extend.css" />
-    <link rel="stylesheet" href="~/Content/shared/layout.css" />
+    <!--scripts bundle-->
+    @Scripts.Render("~/bundles/js/app")
 
-    <link rel="icon" href="~/Content/shared/favicon.ico" />
+    <!--tree styles-->
+    <link href="~/content/tree/tree.css" rel="stylesheet" />
+
+    <!--bootstrap-->
+    <link href="~/content/shared/bootstrap/css/bootstrap.css" rel="stylesheet"  />
+    <link href="~/content/shared/bootstrap/extend.css" rel="stylesheet"  />
+
+    <!--css bundle-->
+    @Styles.Render("~/bundles/css/app")
+
+    <link rel="icon" href="~/content/shared/favicon.ico" />
+
 </head>
 <body>
 

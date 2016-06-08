@@ -3,4 +3,4 @@
     // throw main tab change
     $scope.$emit('mainTabChange', 'WorkshopSpecs');
 
-}])
+}]);

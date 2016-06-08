@@ -1,6 +1,6 @@
 ﻿var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ngSanitize'])
 
-.factory('globalAJAXErrorHandling', ['$q', '$injector', '$rootScope', function ($q, $injector, $rootScope) {
+.factory('globalAJAXErrorHandling', ['$q', '$injector', function ($q, $injector) {
 
     return {
 
@@ -165,20 +165,20 @@
     function vmIsAuthorized(roleName, roles) {
 
         // check if user roles contain required one
-        return roles.filter(function (role) { return role.RoleName == roleName }).length > 0;            
+        return roles.filter(function (role) { return role.RoleName == roleName }).length > 0;
     }
-    
+
 }])
 
-.config(function ($translateProvider) {
-    
+.config(['$translateProvider', function ($translateProvider) {
+
     // include translations
     $translateProvider.translations('en', translations.en);
     $translateProvider.translations('ru', translations.ru);
     $translateProvider.translations('ua', translations.ua);
 
-    $translateProvider.useSanitizeValueStrategy('sanitizeParameters');    
-})
+    $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+}])
 
 .value('serviceUrl', serviceUrl)
 
@@ -186,7 +186,7 @@
 
 .value('scalesRefresh', scalesRefresh)
 
-.run(function ($rootScope, $state) {
+.run(['$rootScope', '$state', function ($rootScope, $state) {
 
     $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
 
@@ -200,10 +200,10 @@
         else
             $state.go('app.error', { code: error.code });
     });
-    
-})
 
-.controller('rootCtrl', ['$scope', '$state', function ($scope, $state) {
+}])
+
+.controller('rootCtrl', ['$state', function ($state) {
 
     // just open rool state
     // in case empty URL was provided
@@ -226,7 +226,7 @@
         // reload state
         // with locale specified
         $state.go($state.current.name, { locale: locale }, { reload: true });
-        
+
     } else {
 
         // set interface language
@@ -245,7 +245,7 @@
         // change locale
         // and reload current state
         $state.params.locale = key;
-        $state.go($state.current.name, $state.params, { reload: true});
+        $state.go($state.current.name, $state.params, { reload: true });
     };
 
     $(document).on('ajaxError', function (e, params) {
@@ -262,9 +262,9 @@
             }, { reload: true });
         };
 
-        
+
     });
-  
+
 }])
 
 .controller('welcomeCtrl', ['$scope', 'roles', function ($scope, roles) {
@@ -278,15 +278,14 @@
 
 }])
 
-.controller('errorCtrl', ['$scope', '$state', '$translate', function ($scope, $state, $translate) {
+.controller('errorCtrl', ['$scope', '$state', function ($scope, $state) {
 
     // throw main tab change
     $scope.$emit('mainTabChange', 'error');
 
     // show message
     // depending on error code
-    switch ($state.params.code)
-    {
+    switch ($state.params.code) {
         case 'no_roles':
             $scope.message = 'Service unavailable or failed to load user roles';
             break;
@@ -302,7 +301,7 @@
 
 }])
 
-.controller('errorLogCtrl', ['$scope', '$state', '$translate', 'indexService', function ($scope, $state, $translate, indexService) {
+.controller('errorLogCtrl', ['$scope', '$state', 'indexService', function ($scope, $state, indexService) {
 
     // throw main tab change
     $scope.$emit('mainTabChange', 'error');
@@ -314,10 +313,10 @@
     $scope.disable = false;
     $scope.back = params.back;
     $scope.errorCode = error.status + ' ' + error.statusText + '\n' + responseText;
-  
+
     $scope.sendError = vmSendError;
-    $scope.cancel = vmCancel;    
-           
+    $scope.cancel = vmCancel;
+
     function vmSendError() {
 
         $scope.disable = true;
@@ -340,7 +339,7 @@
                 vmCancel();
             else
                 $state.go('root');
-            
+
         })
     };
 
@@ -382,4 +381,4 @@
         return request;
     }
 
-}])
+}]);

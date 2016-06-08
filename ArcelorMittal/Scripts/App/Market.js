@@ -147,7 +147,7 @@
                     type: type,
                     keyField: keyField,
                     rowData: rowData,
-                    controlCaptions:{
+                    controlCaptions: {
 
                         OK: 'OK',
                         Cancel: $translate.instant('buttonCancel')
@@ -530,6 +530,4 @@
 
     })
 
-}])
-
-
+}]);

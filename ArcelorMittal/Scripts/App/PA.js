@@ -399,7 +399,7 @@
     }).jsGrid('loadOdata', {
         defaultFilter: 'ID eq -1'
     });
-    
+
 
 }])
 
@@ -699,6 +699,4 @@
         }
     });
 
-}])
-
-
+}]);

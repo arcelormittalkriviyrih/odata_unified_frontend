@@ -32,8 +32,5 @@ app.controller('markerCtrl', ['$scope', 'indexService', '$state', 'roles', '$q',
                        })
     }
 
-    
-}])
 
-
-
+}]);
