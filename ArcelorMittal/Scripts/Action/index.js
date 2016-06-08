@@ -7,7 +7,8 @@
             fieldsList = options.fields,
             keyField = options.keyField,
             rowData = options.rowData,
-            formType = options.type;
+            formType = options.type,
+            controlCaptions = options.controlCaptions;
 
            
         vmGetMetadata()
@@ -133,7 +134,7 @@
             var controlsSubmitGroup = $('<div />').addClass('control-row').appendTo($form);
 
             // create submit button
-            $('<button />').addClass('btn runAction').text('OK')
+            $('<button />').addClass('btn runAction').text(controlCaptions.OK)
                 .appendTo(controlsSubmitGroup)
                 .click(function () {
 
@@ -159,7 +160,7 @@
                     return false;
                 });
 
-            $('<button />').addClass('btn cancelAction').text('Cancel')
+            $('<button />').addClass('btn cancelAction').text(controlCaptions.Cancel)
                 .appendTo(controlsSubmitGroup).click(function () {
 
                     $(document).trigger('oDataForm.cancel');

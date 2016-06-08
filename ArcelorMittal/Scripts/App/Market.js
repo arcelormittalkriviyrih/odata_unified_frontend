@@ -147,6 +147,11 @@
                     type: type,
                     keyField: keyField,
                     rowData: rowData,
+                    controlCaptions:{
+
+                        OK: 'OK',
+                        Cancel: $translate.instant('buttonCancel')
+                    },
                     fields: [{
 
                         name: 'STANDARD',
