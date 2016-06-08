@@ -44,6 +44,7 @@
                     contract: 'Contract No',
                     direction: 'Direction',
                     labelTemplate: 'Label template',
+                    templateName: 'Template name',
                     parameter: 'Parameter'
                 },
                 labelTemplate: {
@@ -153,6 +154,7 @@
                     fileName: 'Имя файла',
                     status: 'Статус',
                     fileType: 'Тип файла',
+                    templateName: 'Имя шаблона',
                     file: 'Файл'
                 }
             }
@@ -257,6 +259,7 @@
                     fileName: 'Ім\'я файла',
                     status: 'Статус',
                     fileType: 'Тип файла',
+                    templateName: 'Ім\'я шаблона',
                     file: 'Файл'
                 }
             }

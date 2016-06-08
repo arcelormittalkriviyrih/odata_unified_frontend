@@ -385,17 +385,17 @@
             id: 'FileName',
             name: 'FileName',
             title: $translate.instant('market.grid.labelTemplate.fileName'),
-            order: 2
+            order: 4
         }, {
             id: 'Name',
             name: 'Name',
-            title: $translate.instant('grid.common.name'),
-            order: 3
+            title: $translate.instant('market.grid.labelTemplate.templateName'),
+            order: 2
         }, {
             id: 'Status',
             name: 'Status',
             title: $translate.instant('market.grid.labelTemplate.status'),
-            order: 4
+            order: 3
         }, {
             id: 'FileType',
             name: 'FileType',
