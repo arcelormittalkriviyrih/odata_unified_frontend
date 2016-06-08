@@ -3,8 +3,31 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script src="~/scripts/form/index.js"></script>
+ <!-- http://mssql2014srv/odata_unified_frontend/chart -->
 
-<div>
-    there will be charts
-</div>
+<script type="text/javascript" src="~/scripts/form/index.js"></script>
+<script type="text/javascript" src="~/Scripts/Chart/index.js"></script>
+
+<link rel="stylesheet" type="text/css" href="~/Content/Chart/jquery.jqplot.css" />
+<script class="include" type="text/javascript" src="~/Scripts/Vendor/jqplot/jquery.jqplot.js"></script>
+
+<script type="text/javascript" src="~/Scripts/Vendor/jquery-ui.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Chart/jqplot/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.json2.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.canvasTextRenderer.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.dateAxisRenderer.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.barRenderer.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.pieRenderer.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.categoryAxisRenderer.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.pointLabels.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.meterGaugeRenderer.js"></script>
+
+<div id="Line" style="width:1000px; height:400px;"></div>
+<div id="Gauge" style="width:1000px; height:400px;"></div>
+<div id="Axis" style="width:1000px; height:400px;"></div>
+<div id="Bar" style="width:1000px; height:400px;"></div>
+
+<script class="code" type="text/javascript">
+    $(document).ready(getPlotGauge(10000), getPlotLine(), getPlotAxis(), getPlotBar()); 
+</script>
