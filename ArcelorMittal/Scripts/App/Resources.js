@@ -77,10 +77,19 @@
         error: {
             Unauthorized: 'This role is unavailable for you!'
         },
+        errorLog:{
+            errorCode: 'Error code',
+            description: 'Description',
+            sending: 'Sending...'
+        },
         buttonCreate: 'Create',
         buttonEdit: 'Edit',
         buttonDelete: 'Delete',
         buttonCopy: 'Copy',
+        buttonSubmit: 'Submit',
+        buttonSend: 'Send',
+        buttonUpload: 'Select File',
+        buttonCancel: 'Cancel',
         grid: {
             common: {
 
@@ -168,10 +177,19 @@
         error: {
             Unauthorized: 'Эта роль Вам недоступна'
         },
+        errorLog: {
+            errorCode: 'Код ошибки',
+            description: 'Описание',
+            sending: 'Отправка...'
+        },
         buttonCreate: 'Создать',
         buttonEdit: 'Редактировать',
         buttonDelete: 'Удалить',
         buttonCopy: 'Копировать',
+        buttonSubmit: 'Отправить',
+        buttonSend: 'Отосласть',
+        buttonUpload: 'Выбрать файл',
+        buttonCancel: 'Отмена',
         grid: {
             common: {
 
@@ -262,10 +280,19 @@
         error: {
             Unauthorized: 'У доступі відмовлено'
         },
+        errorLog: {
+            errorCode: 'Код помилки',
+            description: 'Опис',
+            sending: 'Відправка...'
+        },
         buttonCreate: 'Створити',
         buttonEdit: 'Редагувати',
         buttonDelete: 'Видалити',
         buttonCopy: 'Копіювати',
+        buttonSubmit: 'Відправити',
+        buttonSend: 'Надіслати',
+        buttonUpload: 'Вибрати файл',
+        buttonCancel: 'Відміна',
         grid: {
             common: {
 

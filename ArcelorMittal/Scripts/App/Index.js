@@ -248,14 +248,19 @@
 
     $(document).on('ajaxError', function (e, params) {
 
-        $state.go('errorLog', {
+        if (params.status != 409) {
 
-            error: params,
-            code: params.status,
-            back: $state.current.name,
-            responseText: params.responseText
+            $state.go('errorLog', {
+
+                error: params,
+                code: params.status,
+                back: $state.current.name,
+                responseText: params.responseText
+
+            }, { reload: true });
+        };
+
         
-        }, { reload: true });
     });
   
 }])
@@ -304,13 +309,16 @@
         error = params.error,
         responseText = params.responseText;
 
+    $scope.disable = false;
     $scope.back = params.back;
     $scope.errorCode = error.status + ' ' + error.statusText + '\n' + responseText;
   
     $scope.sendError = vmSendError;
-    $scope.cancel = vmCancel;
+    $scope.cancel = vmCancel;    
            
     function vmSendError() {
+
+        $scope.disable = true;
 
         var date = getTimeToUpdate();
 
@@ -335,6 +343,8 @@
     };
 
     function vmCancel() {
+
+        $scope.disable = true;
 
         $state.go($scope.back);
     };

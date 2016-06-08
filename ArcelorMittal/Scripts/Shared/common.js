@@ -7,12 +7,13 @@ var _intervalID; //initiate interval ID
 jQuery.ajaxSetup({
     global: true,
     error: function (xhr, status, statusText) {
-        $(document).trigger('ajaxError', {
 
-            status: xhr.status,
-            statusText: statusText,
-            responseText: xhr.responseText
-        })
+            $(document).trigger('ajaxError', {
+
+                status: xhr.status,
+                statusText: statusText,
+                responseText: xhr.responseText
+            });      
     }
 });
 
