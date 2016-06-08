@@ -90,6 +90,7 @@
         buttonSend: 'Send',
         buttonUpload: 'Select File',
         buttonCancel: 'Cancel',
+        loadingMsg: 'Loading...',
         grid: {
             common: {
 
@@ -190,6 +191,7 @@
         buttonSend: 'Отосласть',
         buttonUpload: 'Выбрать файл',
         buttonCancel: 'Отмена',
+        loadingMsg: 'Загрузка...',
         grid: {
             common: {
 
@@ -293,6 +295,7 @@
         buttonSend: 'Надіслати',
         buttonUpload: 'Вибрати файл',
         buttonCancel: 'Відміна',
+        loadingMsg: 'Завантаження...',
         grid: {
             common: {
 

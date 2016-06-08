@@ -88,7 +88,7 @@
             .state('app.Marker', {
 
                 url: '/marker',
-                templateUrl: 'Static/marker.html',
+                templateUrl: 'Static/marker/index.html',
                 controller: 'markerCtrl',
                 onEnter: function ($state, roles) {
 
@@ -183,6 +183,8 @@
 .value('serviceUrl', serviceUrl)
 
 .value('withCredentials', true)
+
+.value('scalesRefresh', scalesRefresh)
 
 .run(function ($rootScope, $state) {
 

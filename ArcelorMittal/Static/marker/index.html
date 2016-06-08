@@ -1,0 +1,22 @@
+﻿<div class="container loading" ng-if="!scales">
+
+    <div class="loading-msg">
+        <h1>{{ 'loadingMsg' | translate }}</h1>
+    </div>
+
+</div>
+
+<div class="container" ng-if="scales">
+
+    <div class="scaleWrapper">
+        <div class="scaleContainer" ng-repeat="scale in scales">
+            <label>{{scale.Description}}</label>
+            <h3>{{scale.data.WEIGHT_CURRENT_VALUE}} кг</h3>
+            <h4 ng-if="scale.data.RodsQuanity">{{scale.data.RodsQuanity}} шт</h4>
+        </div>
+    </div>
+
+</div>
+
+
+

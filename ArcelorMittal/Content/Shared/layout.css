@@ -278,4 +278,23 @@ div.errorHandle label{
     resize:none;
 }
 
+/*market*/
+
+.scaleWrapper{
+    font-size:0;
+}
+
+.scaleContainer{
+    display: inline-block;
+    width: 25%;
+    text-align: center;
+    vertical-align: top;
+    position: relative;
+    outline: 1px solid;
+}
+
+.scaleContainer label{
+    position: absolute;
+}
+
 
