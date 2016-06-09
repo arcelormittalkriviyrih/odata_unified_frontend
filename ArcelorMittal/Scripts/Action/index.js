@@ -96,37 +96,41 @@
 
                             })
                     }
-                    
-                    //set field as readonly if we build edit form and current field has id of edited row
-                    if (formType=='edit') {
-
-                        if (field.name == keyField)
-                            field.input.attr('readonly', 'readonly');
-                    };
+                                       
                     
                     //fill field if there is data for this field (in edit mode)
                     if (rowData) {
 
+                        //get data for field
                         var fieldEditedData = rowData.filter(function (item) {
 
                             if (item.Property == field.name)
                                 return item;
                         });
 
+                        //fill field if there is available data
+                        //or leave this field as empty if no available data 
+                        if (fieldEditedData.length > 0)
+                            field.input.val(fieldEditedData[0].Value);
+                        else
+                            field.input.val('');
+
+                        //set keyfield as readonly if we build edit form
+                        if (formType == 'edit') {
+
+                            if (field.name == keyField)
+                                field.input.attr('readonly', 'readonly').val(fieldEditedData[0].Value);
+                        };
+
+                        //fill keyfield as empty if we build copy form
                         if (formType == 'copy') {
 
                             if (field.name == keyField)
                                 field.input.val('');
-                            else
-                                field.input.val(fieldEditedData[0].Value);
-                            
-                        } else
-                              field.input.val(fieldEditedData[0].Value);
-
+                        };
+                                                   
                     };
-
-                    
-                                           
+                                                               
                     field.input.appendTo(controlsControlGroup);
                 });
             
