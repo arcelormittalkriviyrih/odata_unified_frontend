@@ -582,8 +582,53 @@
 
             // create download link
             var link = serviceUrl + table + '(' + id + ')/$value';
-            return $('<a />').attr({ target: '_blank', download: filename, href: link })
-                            .text('Download');
+
+            // depending on MIME Type
+            switch (item.MIMEType)
+            {
+                case 'image/png':
+                case 'image/gif':
+                case 'image/jpeg':
+                case 'image/bmp':
+
+                    // create image element
+                    // attach its source to service resource link
+                    // handle click event
+                    // and paste image to clipboard
+                    return $('<img />').attr('src', link)
+                                    .click(function () {
+
+                                        if (document.body.createControlRange) {
+
+                                            // for IE specific
+                                            // add image to control range
+                                            // it will be copied later
+                                            document.body
+                                                .createControlRange()
+                                                .add(this);
+
+                                        } else {
+
+                                            // create range and add image to it
+                                            var range = document.createRange();
+                                            range.selectNode(this);
+
+                                            // clear selection ranges
+                                            // add range with image
+                                            window.getSelection().removeAllRanges();
+                                            window.getSelection().addRange(range);
+                                        };
+
+                                        // execute copy command
+                                        ctrlRange.execCommand('copy');
+                                    });
+
+                default:
+
+                    // create link for file download
+                    return $('<a />').attr({ target: '_blank', download: filename, href: link })
+                                .text('Download');
+            }
         },
 
         insertTemplate: function (value) {
