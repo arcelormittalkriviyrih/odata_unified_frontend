@@ -566,7 +566,7 @@
     binary.prototype = new jsGrid.Field({
 
         css: "binary-field",        // redefine general property 'css'
-        align: "left",              // redefine general property 'align'
+        align: "center",              // redefine general property 'align'
 
         sorter: function () {
             return 0;
