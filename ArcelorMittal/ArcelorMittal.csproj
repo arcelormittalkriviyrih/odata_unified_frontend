@@ -212,6 +212,7 @@
     <Content Include="Static\pa\label.html" />
     <Content Include="Static\pa\material.html" />
     <Content Include="Static\pa\personnel.html" />
+    <Content Include="Scripts\Chart\jsPlotLineExt.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
