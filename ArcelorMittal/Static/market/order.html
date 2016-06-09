@@ -1,8 +1,8 @@
 ﻿<button class="add btn btn-default" 
-        ng-click="createForm('create')">{{ 'buttonCreate' | translate }}</button>
+        ng-click="createForm('create', 'ins_Order')">{{ 'buttonCreate' | translate }}</button>
 
 <button class="add btn btn-default" 
-        ng-click="createForm('edit', selectedRow, 'COMM_ORDER')" 
+        ng-click="createForm('edit', 'upd_Order', selectedRow, 'COMM_ORDER')" 
         ng-disabled="!selectedRow">{{ 'buttonEdit' | translate }}</button>
 
 <button class="add btn btn-default"
@@ -10,7 +10,7 @@
         ng-disabled="!selectedOrder">{{ 'buttonDelete' | translate }}</button>
 
 <button class="add btn btn-default"
-        ng-click="createForm('copy', selectedRow, 'COMM_ORDER')"
+        ng-click="createForm('copy', 'ins_Order', selectedRow, 'COMM_ORDER')"
         ng-disabled="!selectedRow">{{ 'buttonCopy' | translate }}</button>
 
 <div id="orders">

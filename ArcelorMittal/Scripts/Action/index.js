@@ -179,6 +179,12 @@
 
                             }, {});
 
+            for (var prop in data) {
+
+                if (data[prop] == '')
+                    data[prop] = null;
+            }
+
              //call service action
             return $.ajax({
                 url: serviceUrl + action.name,

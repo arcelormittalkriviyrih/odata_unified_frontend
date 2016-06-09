@@ -118,7 +118,7 @@
     });
 
 
-    function vmCreateForm(type, id, keyField) {
+    function vmCreateForm(type, procedure, id, keyField) {
 
         vmToggleModal(true);
 
@@ -143,7 +143,7 @@
 
                 $('#orderForm').oDataAction({
 
-                    action: 'ins_Order',
+                    action: procedure,
                     type: type,
                     keyField: keyField,
                     rowData: rowData,
