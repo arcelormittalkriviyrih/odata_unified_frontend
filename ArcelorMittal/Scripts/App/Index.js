@@ -94,6 +94,13 @@
 
                     if (!vmIsAuthorized('Marker', roles))
                         $state.go('app.error', { code: 'unauthorized' });
+                },
+                onExit: function ($state, $injector) {
+
+                    var $interval = $injector.get('$interval');
+                    var $rootScope = $injector.get('$rootScope');
+
+                    $interval.cancel($rootScope.intervalScales);
                 }
             })
 
@@ -210,11 +217,11 @@
     $state.go('app');
 }])
 
-.controller('indexCtrl', ['$scope', '$state', '$translate', 'roles', 'user', function ($scope, $state, $translate, roles, user) {
+.controller('indexCtrl', ['$scope', '$rootScope', '$state', '$translate', 'roles', 'user', '$interval', function ($scope, $rootScope, $state, $translate, roles, user, $interval) {
 
     $scope.user = user;
     $scope.roles = roles;
-
+    
     // check if locale specified    
     if (!$state.params.locale) {
 

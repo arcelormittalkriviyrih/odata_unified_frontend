@@ -29,6 +29,7 @@
     $scope.toggleModal = vmToggleModal;
 
     $scope.createForm = vmCreateForm;
+    $scope.deleteRow = vmDeleteRow;
 
     $('#orders').jsGrid({
         height: "500px",

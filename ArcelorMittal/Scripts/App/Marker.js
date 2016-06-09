@@ -1,18 +1,32 @@
 ﻿angular.module('indexApp')
 
-app.controller('markerCtrl', ['$scope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', function ($scope, indexService, $state, roles, $q, $translate, scalesRefresh) {
-
+app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', '$interval', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, $interval) {
+    
     vmGetCurrentScales();
 
     function vmGetCurrentScales() {
 
-        $q.all([indexService.getInfo('v_AvailableScales'), indexService.getInfo('v_ScalesShortInfo')])
-                       .then(function (responses) {
+        indexService.getInfo('v_AvailableScales').then(function (response) {
 
-                           var scales = responses[0].data.value;
-                           var scalesInfo = responses[1].data.value;
+            $scope.scales = response.data.value;
+            vmGetCurrentScalesInfo();
+            
+            //create interval for autorefresh scales
+            //this interval must be clear on activity exit
+            //so I create rootScope variable and set interval there
+            //it will be called in $state onExit handler
+            $rootScope.intervalScales = $interval(vmGetCurrentScalesInfo, scalesRefresh);
+        })
+    }
 
-                           scales.forEach(function (scale) {
+    function vmGetCurrentScalesInfo() {
+
+        indexService.getInfo('v_ScalesShortInfo')
+                       .then(function (response) {
+
+                           var scalesInfo = response.data.value;
+
+                           $scope.scales.forEach(function (scale) {
 
                                var data = scalesInfo.filter(function (item) {
 
@@ -23,12 +37,6 @@ app.controller('markerCtrl', ['$scope', 'indexService', '$state', 'roles', '$q',
                                scale.data = data[0];
                            });
 
-                           $scope.scales = scales;
-
-                           setTimeout(function () {
-
-                               vmGetCurrentScales();
-                           }, scalesRefresh)
                        })
     }
 
