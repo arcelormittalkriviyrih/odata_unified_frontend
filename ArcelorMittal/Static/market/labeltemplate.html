@@ -1,6 +1,10 @@
 ﻿<button id="addFile" class="add btn btn-default">{{ 'market.buttonAddTempate' | translate }}</button>
 
-<a href="{{downloadTechnicalList}}" class="btn btn-default pull-right">{{ 'market.buttonDownloadTechSheet' | translate }}</a>
+<a href="{{downloadTechnicalList}}"
+   class="btn btn-default pull-right"
+   ng-if="showDownloadButton">
+    {{ 'market.buttonDownloadTechSheet' | translate }}
+</a>
 
 <div id="files"></div>
 
