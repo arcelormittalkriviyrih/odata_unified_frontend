@@ -51,6 +51,7 @@
                     fileName: 'File Name',
                     status: 'Status',
                     fileType: 'File Type',
+                    templateName: 'Name',
                     file: 'File'
                 }
             }
@@ -63,6 +64,7 @@
             Label: 'Labels',
             OrderLabel: 'Orders',
             TemplateLabel: 'Label Templates',
+            Logotypes: 'Logos',
             grid: {
 
                 material: {
@@ -154,7 +156,7 @@
                     fileName: 'Имя файла',
                     status: 'Статус',
                     fileType: 'Тип файла',
-                    templateName: 'Имя шаблона',
+                    templateName: 'Название',
                     file: 'Файл'
                 }
             }
@@ -166,6 +168,7 @@
             Label: 'Бирки',
             OrderLabel: 'Заказы',
             TemplateLabel: 'Шаблоны Бирок',
+            Logotypes: 'Логотипы',
             grid: {
                 material: {
                     description: 'Название'
@@ -259,7 +262,7 @@
                     fileName: 'Ім\'я файла',
                     status: 'Статус',
                     fileType: 'Тип файла',
-                    templateName: 'Ім\'я шаблона',
+                    templateName: 'Назва',
                     file: 'Файл'
                 }
             }
@@ -271,6 +274,7 @@
             Label: 'Бирки',
             OrderLabel: 'Замовлення',
             TemplateLabel: 'Шаблони Бирок',
+            Logotypes: 'Логотипи',
             grid: {
                 material: {
                     description: 'Назва'

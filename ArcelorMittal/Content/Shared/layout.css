@@ -34,7 +34,8 @@ ul#item_list.pre-scrollable{
 }
 
 select.input-small{
-    margin-left: 26px;
+    margin-left: 4px;
+    margin-top: 5px;
 }
 
 span.select-form-result{

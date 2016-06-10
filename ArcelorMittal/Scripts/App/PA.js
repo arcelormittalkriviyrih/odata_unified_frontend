@@ -42,8 +42,21 @@
 
             url: '/labeltemplate',
             templateUrl: 'Static/market/labeltemplate.html',
-            controller: 'marketLabelTemplateCtrl'
+            controller: 'marketLabelTemplateCtrl',
+            params: {
+                fileType: 'Excel label'
+            }
         })
+
+    .state('app.PA.Logotypes', {
+
+        url: '/logotypes',
+        templateUrl: 'Static/market/labeltemplate.html',
+        controller: 'marketLabelTemplateCtrl',
+        params: {
+            fileType: 'Image'
+        }
+    })
 }])
 
 .controller('PACtrl', ['$scope', 'indexService', '$state', 'roles', function ($scope, indexService, $state, roles) {

@@ -13,8 +13,21 @@
 
             url: '/labeltemplate',
             templateUrl: 'Static/market/labeltemplate.html',
-            controller: 'marketLabelTemplateCtrl'
+            controller: 'marketLabelTemplateCtrl',
+            params: {
+
+                fileType: 'Excel label'
+            }
         })
+    .state('app.Market.Logotypes', {
+
+        url: '/logotypes',
+        templateUrl: 'Static/market/labeltemplate.html',
+        controller: 'marketLabelTemplateCtrl',
+        params: {
+            fileType: 'Image'
+        }
+    })
 }])
 
 .controller('marketCtrl', ['$scope', 'indexService', '$state', 'roles', function ($scope, indexService, $state, roles) {
@@ -416,7 +429,10 @@
             modeSwitchButton: false
         }
     })
-    .jsGrid('loadOdata', {});
+    .jsGrid('loadOdata', {
+
+        defaultFilter: "FileType eq '{0}'".format($state.params.fileType)
+    });
 
     // get form element
     var $form = $('#fileForm');
@@ -457,7 +473,7 @@
             ID: -1,
             FileName: '',
             Name: '',
-            FileType: 'Excel label'
+            FileType: $state.params.fileType
         });
 
         $form.find('input[type=file]').prop('required', true);

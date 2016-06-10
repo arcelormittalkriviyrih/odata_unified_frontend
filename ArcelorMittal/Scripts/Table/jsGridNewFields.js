@@ -602,10 +602,10 @@
 
                                             // for IE specific
                                             // add image to control range
-                                            // it will be copied later
-                                            document.body
-                                                .createControlRange()
-                                                .add(this);
+                                            // execute copy command
+                                            var range = document.body.createControlRange();
+                                            range.add(this);
+                                            range.execCommand('copy');
 
                                         } else {
 
@@ -617,10 +617,10 @@
                                             // add range with image
                                             window.getSelection().removeAllRanges();
                                             window.getSelection().addRange(range);
-                                        };
 
-                                        // execute copy command
-                                        ctrlRange.execCommand('copy');
+                                            // execute copy command
+                                            document.execCommand('copy');
+                                        };
                                     });
 
                 default:
