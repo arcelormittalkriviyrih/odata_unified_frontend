@@ -102,6 +102,11 @@
                 value: 'Value',
                 description: 'Description'
             }                                
+        },
+        tree:{
+            nodeName: 'Node name',
+            parentID: 'parentID',
+            equipmentClass: 'Equipment class'
         }
     },
 
@@ -208,6 +213,11 @@
             
             
 
+        },
+        tree: {
+            nodeName: 'Имя узла',
+            parentID: 'ID родителя',
+            equipmentClass: 'Класc оборудования'
         }
 
     },
@@ -312,6 +322,11 @@
                 description: 'Опис'
             }
                         
+        },
+        tree: {
+            nodeName: 'Ім\'я вузла',
+            parentID: 'Батьківський ID',
+            equipmentClass: 'Клас обладнання'
         }
 
     }

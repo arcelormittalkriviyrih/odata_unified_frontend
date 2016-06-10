@@ -63,117 +63,93 @@
 
 }])
 
-.controller('PAequipmentCtrl', ['$scope', '$translate', function ($scope, $translate) {
+.controller('PAequipmentCtrl', ['$scope', '$translate', 'indexService', '$q', function ($scope, $translate, indexService, $q) {
 
     $treeContainer = $('#hierarchy').empty();
 
     $equipmentDisable = $('#equipmentDisable').show();
     $equipmentPropertyDisable = $('#equipmentPropertyDisable').show();
 
-    $treeContainer.odataTree({
-        serviceUrl: serviceUrl,
-        table: 'EquipmentClass',
-        keys: {
-            id: 'ID',
-            parent: 'ParentID',
-            text: 'Description'
-        }
-    });
+    $q.all([indexService.getInfo('Equipment'), indexService.getInfo('EquipmentClass')])
+        .then(function (responses) {
+
+            var equipment = responses[0].data.value;
+            var equipmentClass = responses[1].data.value;
+
+            equipment = equipment.sort(function (a, b) {
+
+                return vmSort('Description', a, b);
+            });
+            equipmentClass = equipmentClass.sort(function (a, b) {
+
+                return vmSort('Description', a, b);
+            });
+
+            $scope.equipment = equipment;
+
+            $treeContainer.odataTree({
+                serviceUrl: serviceUrl,
+                table: 'Equipment',
+                data: equipment,
+                keys: {
+                    id: 'ID',
+                    parent: 'Equipment1',
+                    text: 'Description'
+                },
+                translates: {
+                    nodeName: $translate.instant('tree.nodeName'),
+                    parentID: $translate.instant('tree.parentID')
+                },
+                parentID: {
+                    keyField: 'ID',
+                    valueField: 'Description',
+                },
+                additionalFields: [{
+                    id: 'EquipmentClassID', //this param MUST be called similar to table field where we get data from this field
+                    control: 'combo',
+                    data: equipmentClass,
+                    keyField: 'ID',
+                    valueField: 'Description',
+                    required: true,
+                    editReadOnly: true,
+                    translate: $translate.instant('tree.equipmentClass'),
+                }]
+            });
+        });
+
+    
 
     $treeContainer.on('tree-item-selected', function (e, data) {
 
-        var EquipmentClassID = data.id;
+        var EquipmentID = parseInt(data.id);
+        var equipment = $scope.equipment.filter(function (item) {
 
-        $equipmentDisable.hide();
-        $equipmentPropertyDisable.show();
+            return item.ID == EquipmentID;
+        });
+               
+        $equipmentPropertyDisable.hide();
 
-        $('div#equipment').jsGrid('loadOdata', {
+        $('div#equipment_property').jsGrid('loadOdata', {
+            defaultFilter: 'EquipmentID eq ({0})'.format(EquipmentID),
 
-            defaultFilter: 'EquipmentClassID eq ({0})'.format(EquipmentClassID),
+            //settings for filtering of oData combobox by EquipmentClassID parent field
+            comboFilter: [{
+                name: 'ClassPropertyID',
+                filter: 'EquipmentClassID eq ({0})'.format(equipment[0].EquipmentClassID)
+            }],
 
-            //set field 'EquipmentClassID' from tree which will be included in JSON for inserting
+            //set field 'EquipmentID' from parent grid which will be included in JSON for inserting
             insertedAdditionalFields: [{
-                name: 'EquipmentClassID',
-                value: EquipmentClassID
+                name: 'EquipmentID',
+                value: EquipmentID
             }]
         });
 
-        $('div#equipment_property').jsGrid('loadOdata', {
-            defaultFilter: 'EquipmentID eq -1'
-        });
-
     });
-
-    $('div#equipment').jsGrid({
-        height: "500px",
-        width: "720px",
-
-        sorting: false,
-        paging: true,
-        editing: true,
-        filtering: true,
-        autoload: true,
-        pageLoading: true,
-        inserting: true,
-        pageIndex: 1,
-        pageSize: 10,
-        rowClick: function (args) {
-
-            vmActiveRow(args);
-
-            $equipmentPropertyDisable.hide();
-
-            $('div#equipment_property').jsGrid('loadOdata', {
-                defaultFilter: 'EquipmentID eq ({0})'.format(args.item.ID),
-
-                //settings for filtering of oData combobox by EquipmentClassID parent field
-                comboFilter: [{
-                    name: 'ClassPropertyID',
-                    filter: 'EquipmentClassID eq ({0})'.format(args.item.EquipmentClassID)
-                }],
-
-                //set field 'EquipmentID' from parent grid which will be included in JSON for inserting
-                insertedAdditionalFields: [{
-                    name: 'EquipmentID',
-                    value: args.item.ID
-                }]
-            });
-        },
-
-    }).jsGrid('initOdata', {
-        serviceUrl: serviceUrl,
-        table: 'Equipment',
-
-        fields: [{
-            id: 'ID',
-            name: 'ID',
-            title: 'ID',
-            readonly: true,
-            type: 'number',
-            order: 1
-        },{
-            id: 'Description',
-            name: 'Description',
-            title: $translate.instant('grid.common.name'),
-            order: 2
-        }],
-
-        controlProperties: {
-            type: 'control',
-            editButton: true,
-            deleteButton: true,
-            clearFilterButton: true,
-            modeSwitchButton: true
-        }
-    }).jsGrid('loadOdata', {
-        defaultFilter: 'ID eq -1'
-    });
-
-
 
     $('div#equipment_property').jsGrid({
         height: "500px",
-        width: "720px",
+        width: "620px",
 
         sorting: false,
         paging: true,
@@ -202,7 +178,7 @@
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
             title: $translate.instant('grid.common.property'),
-            width: 200,
+            width: 175,
             order: 2,
             type: 'combo',
             table: {
@@ -217,14 +193,14 @@
             id: 'Value',
             name: 'Value',
             title: $translate.instant('grid.common.value'),
-            width: 150,
+            width: 100,
             order: 3
         },
         {
             id: 'Description',
             name: 'Description',
             title: $translate.instant('grid.common.description'),
-            width: 200,
+            width: 175,
             order: 4
         }],
         controlProperties: {
@@ -240,22 +216,43 @@
 
 }])
 
-.controller('PAmaterialCtrl', ['$scope', '$translate', function ($scope, $translate) {
+.controller('PAmaterialCtrl', ['$scope', '$translate', 'indexService', function ($scope, $translate, indexService) {
 
     $materialDefinitionDisable = $('#materialDefinitionDisable').show();
     $materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
 
     $hierarchyMaterialClass = $('#hierarchy_material_class').empty();
 
-    $hierarchyMaterialClass.odataTree({
-        serviceUrl: serviceUrl,
-        table: 'MaterialClass',
-        keys: {
-            id: 'ID',
-            parent: 'ParentID',
-            text: 'Description'
-        }
-    });
+    indexService.getInfo('MaterialClass').then(function (response) {
+
+        var material = response.data.value;
+        material = material.sort(function (a, b) {
+
+            return vmSort('Description', a, b);
+        });
+
+        $hierarchyMaterialClass.odataTree({
+
+            serviceUrl: serviceUrl,
+            table: 'MaterialClass',
+            data: material,
+            keys: {
+                id: 'ID',
+                parent: 'ParentID',
+                text: 'Description'
+            },
+            parentID: {
+                keyField: 'ID',
+                valueField: 'Description',
+            },
+            translates: {
+                nodeName: $translate.instant('tree.nodeName'),
+                parentID: $translate.instant('tree.parentID')
+            }
+        });
+    })
+
+    
 
     $hierarchyMaterialClass.on('tree-item-selected', function (e, data) {
 
@@ -416,22 +413,43 @@
 
 }])
 
-.controller('PApersonnelCtrl', ['$scope', '$translate', function ($scope, $translate) {
+.controller('PApersonnelCtrl', ['$scope', '$translate', 'indexService', function ($scope, $translate, indexService) {
 
     $personDisable = $('#personDisable').show();
     $personPropertyDisable = $('#personPropertyDisable').show();
 
     $personnelClass = $('#personnel_class').empty();
 
-    $personnelClass.odataTree({
-        serviceUrl: serviceUrl,
-        table: 'PersonnelClass',
-        keys: {
-            id: 'ID',
-            parent: 'ParentID',
-            text: 'Description'
-        }
-    });
+    indexService.getInfo('PersonnelClass').then(function (response) {
+
+        var personnel = response.data.value;
+        personnel = personnel.sort(function (a, b) {
+
+            return vmSort('Description', a, b);
+        });
+
+        $personnelClass.odataTree({
+
+            serviceUrl: serviceUrl,
+            table: 'PersonnelClass',
+            data: response.data.value,
+            keys : {
+                id: 'ID',
+                parent: 'ParentID',
+                text: 'Description'
+            },
+            parentID: {
+                keyField: 'ID',
+                valueField: 'Description',
+            },
+            translates: {
+                nodeName: $translate.instant('tree.nodeName'),
+                parentID: $translate.instant('tree.parentID')
+            }
+        });
+    })
+
+    
 
     $personnelClass.on('tree-item-selected', function (e, data) {
 

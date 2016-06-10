@@ -3,18 +3,25 @@
     jQuery.fn.odataTree = function (options) {
 
         var self = this,
+            _sel = null,
+            _data = options.data,
             serviceUrl = options.serviceUrl,
             tableName = options.table,
             keys = options.keys,
+            translates = options.translates,
+            parentID = options.parentID,
+            additionalFields = options.additionalFields,
             navigationBar = $('<div />').attr('id', 'navigationBar').appendTo(self),
             treeRoot = $('<div />').attr('id', 'treeRoot').appendTo(self),
             mainButtonsRoot = $('<div />').addClass('mainButtonsControls').appendTo(navigationBar),
-            createNodeControlsRoot = $('<div />').addClass('createNodeControls').appendTo(navigationBar).hide(),
+            blackWrapper = $('<div />').addClass('black-wrapper').appendTo('body').hide();
+            controlsRootModal = $('<div />').addClass('modal treeControls')
+                                        .appendTo(blackWrapper),
             createBtn = $('<button />').attr('id', 'createTreeItem')
                                         .addClass('btn')
                                         .append('<i class="icon-plus"></i>')
                                         .appendTo(mainButtonsRoot)
-                                        .on('click', vmCreate),
+                                        .on('click', vmShowModal),
             renameBtn = $('<button />').attr({
                                             'id': 'renameNode',
                                             'disabled': true
@@ -22,7 +29,7 @@
                                         .addClass('btn')
                                         .append('<i class="icon-pencil"></i>')
                                         .appendTo(mainButtonsRoot)
-                                        .on('click', vmEdit),
+                                        .on('click', vmShowModal),
             removeBtn = $('<button />').attr({
                                             'id': 'removeNode',
                                             'disabled': true
@@ -31,39 +38,45 @@
                                         .append('<i class="icon-remove"></i>')
                                         .appendTo(mainButtonsRoot)
                                         .on('click', vmRemove),
+
+            nodeNameLabel = $('<label />').text(translates.nodeName)
+                                        .appendTo(controlsRootModal)
+
             nodeNameInput = $('<input />').attr({
-                                                'id': 'createTreeItem',
-                                                'type': 'text'
-                                            })
-                                            .appendTo(createNodeControlsRoot)
-                                            .on('keyup', vmValidate),
+                                            'id': 'createTreeItem',
+                                            'type': 'text',
+                                            'required': 'required'
+                                        }).focus(vmClear)
+                                        .appendTo(controlsRootModal)
+
+            parentNodeLabel = $('<label />').text(translates.parentID)
+                                                    .appendTo(controlsRootModal)
+
+            parentNodeInput = $('<select />').attr({
+                                            'id': 'parentID'
+                                            }).focus(vmClear)
+                                              .appendTo(controlsRootModal)
+
+            additionalFieldsRoot = $('<div />').addClass('additionalFields')
+                                        .appendTo(controlsRootModal),
+
             acceptBtn = $('<button />').attr({
-                                            'id': 'accept',
-                                            'disabled': true
+                                            'id': 'accept'
                                         })
                                         .addClass('btn')
                                         .append('<i class="icon-ok"></i>')
-                                        .appendTo(createNodeControlsRoot)
-                                        .on('click', vmAccept),
+                                        .appendTo(controlsRootModal),
             cancelBtn = $('<button />').attr({ 'id': 'cancel' })
                                         .addClass('btn')
                                         .append('<i class="icon-remove"></i>')
-                                        .appendTo(createNodeControlsRoot)
+                                        .appendTo(controlsRootModal)
                                         .on('click', vmCancel);
-
-        $.ajax({
-            url: serviceUrl + tableName,
-            xhrFields: {
-                withCredentials: true
-            }
-        }).then(function (data) {
-
-            vmInit(data);
-        });
+            
+        vmInit(_data);
 
         function vmInit(data) {
 
-            var treeData = data.value.map(function (item, index, arr) {
+            var treeData = data.map(function (item, index, arr) {
 
                 return {
 
@@ -87,29 +100,106 @@
 
                 renameBtn.attr('disabled', false);
                 removeBtn.attr('disabled', false);
+                _sel = $.jstree.reference('#treeRoot').get_selected(true)[0] || '#';
             });
 
+            parentNodeInput.append('<option />');
+
+            data.forEach(function (field) {
+
+                var option = $('<option />')
+                                .val(field[parentID.keyField])
+                                .text(field[parentID.valueField])
+                                .appendTo(parentNodeInput);
+            });
+
+            if (additionalFields)
+                vmAddAdditionalFields();
+           
+        };
+               
+        function vmAddAdditionalFields() {
+
+            additionalFields.forEach(function (item) {
+
+                var label = $('<label />').text(item.translate).appendTo(additionalFieldsRoot);
+                var control;
+                switch (item.control) {
+
+                    case 'combo':
+                        
+                        control = $('<select />').attr(
+                                                    {
+                                                        'id': item.id,
+                                                        'required': item.required
+                                                    })
+                                                 .focus(vmClear)
+                                                 .append('<option />')
+                                            .appendTo(additionalFieldsRoot);
+                         
+                        item.data.forEach(function (field) {
+
+                            var option = $('<option />')
+                                            .val(field[item.keyField])
+                                            .text(field[item.valueField])
+                                            .appendTo(control);
+                        });
+
+                      
+                        break;
+                };
+            });
+        };
+
+        function vmShowModal(e) {
+
+            var buttonId = $(e.currentTarget).attr('id');
+
+            switch (buttonId) {
+                case 'createTreeItem':
+
+                    acceptBtn.on('click', vmCreate);
+                    nodeNameInput.val('');
+
+                    if (_sel)
+                        parentNodeInput.val(_sel.id);
+                                        
+                    vmHandleAdditionalFields(controlsRootModal, additionalFields, _sel, 'create');
+
+                    break;
+
+                case 'renameNode':
+
+                    acceptBtn.on('click', vmEdit);
+
+
+                    nodeNameInput.val(_sel.text);
+
+                    if (_sel && _sel.parent!= '#')
+                        parentNodeInput.val(_sel.parent);
+                    
+                    vmHandleAdditionalFields(controlsRootModal, additionalFields, _sel, 'edit');
+                    break;
+            };
+
+            blackWrapper.show();
         };
 
         function vmCreate() {
 
-            mainButtonsRoot.hide();
-            createNodeControlsRoot.show();
-        };
+            if (!vmCheckRequiredFields(controlsRootModal)) {
 
-        function vmAccept() {
-
-            mainButtonsRoot.show();
-            createNodeControlsRoot.hide();
-
-            var sel = $.jstree.reference('#treeRoot').get_selected(true)[0] || '#';
+                alert('You must fill all required fields!');
+                return false;
+            }
 
             var nodeText = nodeNameInput.val();
-            var parentId = sel ? parseInt(sel.id) : null;
+            var parentId = parentNodeInput.val() || null;
 
             var node = {
 
-                text: nodeText
+                text: nodeText,
+                parentId: parentId
             };
 
             vmGetMetadata()
@@ -123,21 +213,32 @@
 
                     var fields = table.fields.toArray();
 
-                    var data = {};
+                    var json = {};
 
                     for (var i = 0; i < fields.length; i++) {
 
                         if (fields[i].name == keys.text)
-                            data[fields[i].name] = nodeText;
+                            json[fields[i].name] = nodeText;
                         else if (fields[i].name == keys.parent)
-                            data[fields[i].name] = parentId;
+                            json[fields[i].name] = parentId;
 
                     };
 
+                    if (additionalFields) {
+
+                        additionalFields.forEach(function (field) {
+
+                            var id = field.id;
+                            var control = controlsRootModal.find('#' + id);
+
+                            json[id] = control.val();
+                        });
+                    };
+                    
                     $.ajax({
                         url: serviceUrl + tableName,
                         type: "POST",
-                        data: JSON.stringify(data),
+                        data: JSON.stringify(json),
                         contentType: "application/json;odata=verbose"
                     }).success(function (responce) {
 
@@ -149,50 +250,68 @@
                         sel = sel[0];
                         sel = ref.create_node(sel, node);
 
+                        vmCancel();
+
                     }).fail(handleError)
 
                 });
         };
-
+        
         function vmEdit() {
 
-            var ref = treeRoot.jstree(true),
-				sel = ref.get_selected();
+            if (!vmCheckRequiredFields(controlsRootModal)) {
 
-            if (!sel.length) { return false; }
-            sel = sel[0];
-            ref.edit(sel);
+                alert('You must fill all required fields!');
+                return false;
+            }
+            
+            $.get(serviceUrl + tableName + '(' + parseInt(_sel.id) + ')')
+                    .then(function (json) {
 
-            treeRoot.on('rename_node.jstree', function (e, data) {
+                        delete json['@odata.context'];
+                        json[keys.text] = nodeNameInput.val();
+                        json[keys.parent] = parentNodeInput.val();
+                        
+                        if (additionalFields) {
 
-                $.get(serviceUrl + tableName + '(' + data.node.id + ')')
-                      .then(function (json) {
+                            additionalFields.forEach(function (field) {
 
-                          delete json['@odata.context'];
-                          json[keys.text] = data.text;
+                                var id = field.id;
+                                var control = controlsRootModal.find('#' + id);
+                               
+                                json[id] = control.val();
+                            });
+                        };
 
-                          $.ajax({
-                              url: serviceUrl + tableName + '(' + data.node.id + ')',
-                              type: "PUT",
-                              data: JSON.stringify(json),
-                              contentType: "application/json;odata=verbose"
+                        if (json[keys.parent] == _sel.id) {
 
-                          }).fail(handleError);
-                      }).fail(handleError);
-            })
+                            alert('Parent cannot be the same with node name! Please, select another parent');
+                            parentNodeInput.val('');
+                            return false;
+                        }
+                        $.ajax({
+                            url: serviceUrl + tableName + '(' + _sel.id + ')',
+                            type: "PUT",
+                            data: JSON.stringify(json),
+                            contentType: "application/json;odata=verbose"
+
+                        }).then(function () {
+
+                            location.reload();
+                        }).fail(handleError);
+                    }).fail(handleError);
+                     
         };
 
         function vmRemove() {
 
-            var sel = $.jstree.reference('#treeRoot').get_selected(true)[0];
-
-            if (sel) {
+            if (_sel) {
 
                 if (confirm('Are You sure?')) {
 
                     $.ajax({
                         type: "DELETE",
-                        url: serviceUrl + tableName + '(' + sel.id + ')'
+                        url: serviceUrl + tableName + '(' + _sel.id + ')'
                     }).success(function () {
 
                         var ref = treeRoot.jstree(true),
@@ -208,18 +327,66 @@
 
         function vmCancel() {
 
-            mainButtonsRoot.show();
-            createNodeControlsRoot.hide();
+            controlsRootModal.find('input, select').each(function (i, item) {
+                vmClear(item);
+            });
+
+            blackWrapper.hide();
+            
         };
 
-        function vmValidate() {
+        function vmClear(e) {
 
-            var val = $(this).val();
+            var elem;
 
-            if (val.length > 0)
-                acceptBtn.attr('disabled', false)
+            if (e.currentTarget)
+                elem = $(e.currentTarget);
             else
-                acceptBtn.attr('disabled', true)
+                elem = $(e);
+
+            if (elem.hasClass('wrong'))
+                elem.removeClass('wrong');
+
+        }
+
+        function vmHandleAdditionalFields(controlsRootModal, additionalFields, sel, mode) {
+            if (additionalFields) {
+
+                additionalFields.forEach(function (field) {
+
+                    var id = field.id;
+                    var control = controlsRootModal.find('#' + id);
+
+                    if (sel) 
+                        vmGetActiveAdditionalFieldValue(sel, _data, control, field, mode);                   
+                });
+            };
+        };
+
+        function vmGetActiveAdditionalFieldValue(sel, data, control, field, mode) {
+
+            var id = sel.id;
+            var fieldData = data.filter(function (item) {
+                return item.ID == id;
+            });
+
+            var val = fieldData[0][field.id];
+
+            if (field.editReadOnly)
+                vmHAndleReadOnly(field, mode, control);
+                                         
+            control.val(val);
+        };
+
+        function vmHAndleReadOnly(field, mode, control) {
+            switch (mode) {
+                case 'create':
+                    control.removeAttr('readonly')
+                    break;
+                case 'edit':
+                    control.attr('readonly', 'readonly')
+                    break;
+            };
         };
 
     };
