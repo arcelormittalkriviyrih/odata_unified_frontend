@@ -5,14 +5,15 @@
 
  <!-- http://mssql2014srv/odata_unified_frontend/chart -->
 
-<script type="text/javascript" src="~/scripts/form/index.js"></script>
+<script type="text/javascript" src="~/scripts/Form/index.js"></script>
 <script type="text/javascript" src="~/Scripts/Chart/index.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jquery-ui-timepicker-addon.js"></script>
 
 <link rel="stylesheet" type="text/css" href="~/Content/Chart/jquery.jqplot.css" />
 <script class="include" type="text/javascript" src="~/Scripts/Vendor/jqplot/jquery.jqplot.js"></script>
 
 <script type="text/javascript" src="~/Scripts/Vendor/jquery-ui.min.js"></script>
-<script type="text/javascript" src="~/Scripts/Chart/jqplot/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jqplot/jquery.jqplot.min.js"></script>
 <script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.json2.js"></script>
 <script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.canvasTextRenderer.js"></script>
 <script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js"></script>
@@ -22,12 +23,18 @@
 <script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.categoryAxisRenderer.js"></script>
 <script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.pointLabels.js"></script>
 <script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.meterGaugeRenderer.js"></script>
+<script type="text/javascript" src="~/Scripts/Chart/jsPlotLineExt.js"></script>
 
-<div id="Line" style="width:1000px; height:400px;"></div>
-<div id="Gauge" style="width:1000px; height:400px;"></div>
-<div id="Axis" style="width:1000px; height:400px;"></div>
-<div id="Bar" style="width:1000px; height:400px;"></div>
+<div class="plotLineContainer">
+    <div id="plotLine"></div>
+</div>
 
-<script class="code" type="text/javascript">
-    $(document).ready(getPlotGauge(10000), getPlotLine(), getPlotAxis(), getPlotBar()); 
-</script>
+    <script class="code" type="text/javascript">
+        $plotLineContainer = $('#plotLine').empty();
+
+        $plotLineContainer.odataPlotLine({
+          serviceUrl: serviceUrl,
+          table: 'EquipmentClass'
+      });
+
+    </script>
