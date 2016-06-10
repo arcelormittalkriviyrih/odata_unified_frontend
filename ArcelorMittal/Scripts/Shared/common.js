@@ -239,3 +239,25 @@ function vmActiveRow(args) {
 
 }
 
+function vmCheckRequiredFields(form) {
+
+    var unFilledFields = form.find('input, select')
+                            .filter("[required]")
+                            .filter(function () { return this.value == ''; })
+
+    if (unFilledFields.length > 0) {
+
+        vmShowUnfilledRequiredFields(unFilledFields);
+        return false;
+    } else return true;
+}
+
+function vmShowUnfilledRequiredFields(unFilledFields) {
+
+    unFilledFields.each(function (i, item) {
+
+        $(item).addClass('wrong');
+
+    })
+}
+

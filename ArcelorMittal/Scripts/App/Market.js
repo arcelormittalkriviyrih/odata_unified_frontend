@@ -136,7 +136,7 @@
 
         vmToggleModal(true);
 
-        var oDataAPI = [indexService.getInfo('Files'),
+        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label'"),
                 indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')];
 
         if (id) {
@@ -344,6 +344,10 @@
     //For resolving this problem I add special flag will be 'true' only in form reset mode
     var _isReset = false;
     $scope.downloadTechnicalList = domainURL + '/api/MediaData/GenerateTemplate';
+    $scope.showDownloadButton = true;
+
+    if ($state.current.name.indexOf('Logotypes')>-1)
+        $scope.showDownloadButton = false;
 
     //handle required fields for IE 9 browser
     if ($("<input />").prop("required") === undefined) {

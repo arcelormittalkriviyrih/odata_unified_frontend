@@ -16,7 +16,7 @@
         market: {
             OrderLabel: 'Orders',
             TemplateLabel: 'Label Templates',
-            buttonAddTempate: 'Add Template',
+            buttonAddTempate: 'Add File',
             buttonDownloadTechSheet: 'Download Tech. Sheet',
             Order: {
 
@@ -121,7 +121,7 @@
         market: {
             OrderLabel: 'Заказы',
             TemplateLabel: 'Шаблоны Бирок',
-            buttonAddTempate: 'Добавить Шаблон',
+            buttonAddTempate: 'Добавить Файл',
             buttonDownloadTechSheet: 'Скачать Тех. Лист',
             Order: {
 
@@ -228,7 +228,7 @@
         market: {
             OrderLabel: 'Замовлення',
             TemplateLabel: 'Шаблони Бирок',
-            buttonAddTempate: 'Додати Шаблон',
+            buttonAddTempate: 'Додати Файл',
             buttonDownloadTechSheet: 'Скачати Тех. Лист',
             Order: {
 

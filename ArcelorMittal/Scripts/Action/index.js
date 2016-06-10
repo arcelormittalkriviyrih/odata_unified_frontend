@@ -142,7 +142,7 @@
                 .appendTo(controlsSubmitGroup)
                 .click(function () {
 
-                    if (!vmCheckRequiredFields()) {
+                    if (!vmCheckRequiredFields($form)) {
 
                         alert('You must fill all required fields!');
                         return false;
@@ -198,27 +198,7 @@
             })
         };
 
-        function vmCheckRequiredFields() {
-
-            var unFilledFields = $(document).find('input, select')
-                                    .filter("[required]")
-                                    .filter(function () { return this.value == ''; })
-
-            if (unFilledFields.length > 0){
-
-                vmShowUnfilledRequiredFields(unFilledFields);
-                return false;
-            } else return true;
-        }
-
-        function vmShowUnfilledRequiredFields(unFilledFields) {
-
-            unFilledFields.each(function (i, item) {
-
-                $(item).addClass('wrong');
-
-            })
-        }
+        
 
     }
    
