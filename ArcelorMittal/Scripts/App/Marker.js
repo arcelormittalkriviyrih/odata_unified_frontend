@@ -2,6 +2,7 @@
 
 app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', '$interval', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, $interval) {
     
+    $scope.filter = [];
     vmGetCurrentScales();
 
     function vmGetCurrentScales() {
@@ -9,6 +10,29 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
         indexService.getInfo('v_AvailableScales').then(function (response) {
 
             $scope.scales = response.data.value;
+
+            $scope.scales.sort(function (a, b) {
+
+                if (a.Description < b.Description)
+                    return -1;
+                else if (a.Description > b.Description)
+                    return 1;
+                else
+                    return 0;
+            })
+
+            if ($scope.scales.length > 0){
+
+                $scope.scales.forEach(function (scale) {
+
+                    $scope.filter.push('ID eq {0}'.format(scale.ID));
+                });
+
+                $scope.groups = vmGetChunks($scope.scales, 4);
+                $scope.filter = $scope.filter.join(' or ');
+            }
+            
+            
             vmGetCurrentScalesInfo();
             
             //create interval for autorefresh scales
@@ -21,7 +45,11 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
 
     function vmGetCurrentScalesInfo() {
 
-        indexService.getInfo('v_ScalesShortInfo')
+        var path = 'v_ScalesShortInfo';
+        if ($scope.filter.length > 0)
+            path += '?$filter={0}'.format($scope.filter);
+
+        indexService.getInfo(path)
                        .then(function (response) {
 
                            var scalesInfo = response.data.value;
@@ -38,6 +66,14 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                            });
 
                        })
+    }
+
+    function vmGetChunks(arr, chunkSize) {
+        var groups = [], i;
+        for (i = 0; i < arr.length; i += chunkSize) {
+            groups.push(arr.slice(i, i + chunkSize));
+        }
+        return groups;
     }
 
 

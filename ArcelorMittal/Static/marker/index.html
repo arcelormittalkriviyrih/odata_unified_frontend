@@ -9,10 +9,18 @@
 <div class="container" ng-if="scales">
 
     <div class="scaleWrapper">
-        <div class="scaleContainer" ng-repeat="scale in scales">
+        <!--<div class="scaleContainer" ng-repeat="scale in scales">
             <label>{{scale.Description}}</label>
             <h3>{{scale.data.WEIGHT_CURRENT_VALUE}} кг</h3>
             <h4 ng-if="scale.data.RodsQuanity">{{scale.data.RodsQuanity}} шт</h4>
+        </div>-->
+        <div class="scaleGroup" ng-repeat="group in groups">
+
+            <div class="scaleContainer" ng-repeat="scale in group">
+                <label>{{scale.Description}}</label>
+                <h3>{{scale.data.WEIGHT_CURRENT_VALUE}} кг</h3>
+                <h4 ng-if="scale.data.RodsQuanity">{{scale.data.RodsQuanity}} шт</h4>
+            </div>
         </div>
     </div>
 
