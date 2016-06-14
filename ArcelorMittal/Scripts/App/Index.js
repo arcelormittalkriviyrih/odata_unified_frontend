@@ -10,7 +10,7 @@
 
                 error: rejection,
                 code: rejection.status,
-                back: null,
+                back: $injector.get('$state').current.name,
                 responseText: rejection.data
             }, { reload: true });
             return $q.reject(rejection);
@@ -22,7 +22,7 @@
 
                 error: rejection,
                 code: rejection.status,
-                back: null,
+                back: $injector.get('$state').current.name,
                 responseText: rejection.data
             }, { reload: true });
             return $q.reject(rejection);

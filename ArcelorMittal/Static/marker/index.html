@@ -9,20 +9,70 @@
 <div class="container" ng-if="scales">
 
     <div class="scaleWrapper">
-        <!--<div class="scaleContainer" ng-repeat="scale in scales">
-            <label>{{scale.Description}}</label>
-            <h3>{{scale.data.WEIGHT_CURRENT_VALUE}} кг</h3>
-            <h4 ng-if="scale.data.RodsQuanity">{{scale.data.RodsQuanity}} шт</h4>
-        </div>-->
+
         <div class="scaleGroup" ng-repeat="group in groups">
 
-            <div class="scaleContainer" ng-repeat="scale in group">
+            <div class="scaleContainer" 
+                 ng-repeat="scale in group" 
+                 ng-class="{'active': scale.ID == currentScaleID}"
+                 ng-click="showScaleInfo(scale.ID)">
                 <label>{{scale.Description}}</label>
                 <h3>{{scale.data.WEIGHT_CURRENT_VALUE}} кг</h3>
                 <h4 ng-if="scale.data.RodsQuanity">{{scale.data.RodsQuanity}} шт</h4>
             </div>
         </div>
     </div>
+
+    
+
+    <div class="scaleDetailInfo" ng-show="currentScaleID">
+
+        <div class="scaleInfo">
+
+        </div>
+
+        <div class="scaleInfo">
+            <h4 class="scalesName">{{scalesDetailsInfo.ScalesName}}</h4>
+
+            <p>Вес: 
+            <span class="scalesValue" ng-show="scalesDetailsInfo.WEIGHT_CURRENT_VALUE">
+                {{scalesDetailsInfo.WEIGHT_CURRENT_VALUE}} кг.
+                </span>  
+            </p>         
+            <!--Alarm: {{scalesDetailsInfo.ALARM}}-->
+            <p>
+                Количество прутков: 
+                <span class="scalesValue" ng-show="scalesDetailsInfo.RodsQuanity">
+                    {{scalesDetailsInfo.RodsQuanity}} шт.</span>
+            </p>
+
+            <p>
+                Осталось прутков:
+                <span class="scalesValue" ng-show="scalesDetailsInfo.RodsLeft">
+                    {{scalesDetailsInfo.RodsLeft}} шт.
+                </span>
+            </p>
+
+            <div class="isStableScalesIndicator" ng-show="scalesDetailsInfo.WEIGHT_STAB_VALUE">
+            </div>
+
+            <div class="controls">
+                <button class="btn">
+                    Взять вес
+                </button>
+                <button class="btn">
+                    >0<
+                </button>
+            </div>
+            
+        </div>
+
+        <div class="scaleInfo">
+
+        </div>
+        
+    </div>
+
 
 </div>
 

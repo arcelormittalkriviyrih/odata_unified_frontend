@@ -3,6 +3,12 @@
 app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', '$interval', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, $interval) {
     
     $scope.filter = [];
+    $scope.scalesDetailsInfo = null;
+    $scope.currentScaleID = null;
+
+    $scope.showScaleInfo = vmShowScaleInfo;
+    
+
     vmGetCurrentScales();
 
     function vmGetCurrentScales() {
@@ -39,7 +45,13 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
             //this interval must be clear on activity exit
             //so I create rootScope variable and set interval there
             //it will be called in $state onExit handler
-            $rootScope.intervalScales = $interval(vmGetCurrentScalesInfo, scalesRefresh);
+            $rootScope.intervalScales = $interval(function () {
+
+                vmGetCurrentScalesInfo();
+
+                if ($scope.currentScaleID)
+                    vmShowScaleInfo($scope.currentScaleID);
+            }, scalesRefresh);
         })
     }
 
@@ -68,13 +80,21 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                        })
     }
 
-    function vmGetChunks(arr, chunkSize) {
-        var groups = [], i;
-        for (i = 0; i < arr.length; i += chunkSize) {
-            groups.push(arr.slice(i, i + chunkSize));
-        }
-        return groups;
+    function vmShowScaleInfo(id) {
+
+        $scope.currentScaleID = id;
+        $scope.scalesDetailsInfo = null;
+
+        var path = 'v_ScalesDetailInfo?$filter=ID eq {0}'.format(id);
+
+
+        indexService.getInfo(path)
+                       .then(function (response) {
+
+                           $scope.scalesDetailsInfo = response.data.value[0];
+                       });
     }
 
+   
 
 }]);

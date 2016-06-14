@@ -105,7 +105,7 @@
         },
         tree:{
             nodeName: 'Node name',
-            parentID: 'parentID',
+            parentID: 'Parent ID',
             equipmentClass: 'Equipment class'
         }
     },
