@@ -359,13 +359,13 @@ div.errorHandle label{
     height: 300px;
     vertical-align:top;
     box-sizing:border-box;
-    padding: 65px 10px 10px 10px;
     min-height: 100%;
 }
 
 .scaleInfo:nth-child(2){
     border-left:1px solid #d4d4d4;
     border-right:1px solid #d4d4d4;
+    padding: 65px 10px 10px 10px;
 }
 
 h4.scalesName{
@@ -409,6 +409,12 @@ h4.scalesName{
     text-align: center;
 }
 
+.section{
+    box-sizing:border-box;
+    padding: 10px;
+    border-bottom: 1px solid #d4d4d4;
+}
+ 
 
 
 

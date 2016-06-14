@@ -315,10 +315,14 @@
 
     var params = $state.params,
         error = params.error,
-        responseText = params.responseText;
+        responseText = params.responseText; 
 
     $scope.disable = false;
     $scope.back = params.back;
+
+    if (typeof responseText == 'object') 
+        responseText = responseText.error.innererror.message;
+    
     $scope.errorCode = error.status + ' ' + error.statusText + '\n' + responseText;
 
     $scope.sendError = vmSendError;

@@ -36,20 +36,20 @@
 
             <p>Вес: 
             <span class="scalesValue" ng-show="scalesDetailsInfo.WEIGHT_CURRENT_VALUE">
-                {{scalesDetailsInfo.WEIGHT_CURRENT_VALUE}} кг.
+                {{scalesDetailsInfo.WEIGHT_CURRENT_VALUE}} кг
                 </span>  
             </p>         
             <!--Alarm: {{scalesDetailsInfo.ALARM}}-->
             <p>
                 Количество прутков: 
                 <span class="scalesValue" ng-show="scalesDetailsInfo.RodsQuanity">
-                    {{scalesDetailsInfo.RodsQuanity}} шт.</span>
+                    {{scalesDetailsInfo.RodsQuanity}} шт</span>
             </p>
 
             <p>
                 Осталось прутков:
                 <span class="scalesValue" ng-show="scalesDetailsInfo.RodsLeft">
-                    {{scalesDetailsInfo.RodsLeft}} шт.
+                    {{scalesDetailsInfo.RodsLeft}} шт
                 </span>
             </p>
 
@@ -68,12 +68,42 @@
         </div>
 
         <div class="scaleInfo">
+            
+            <!--<label>Введите заказ:</label>
+            <input type="text" 
+                   ng-model="orderNumber" 
+                   ng-change="showPossibleResults(orderNumber)"
+                   />
 
+            <select multiple ng-show="orderNumber.length > 0">
+                <option ng-repeat="variant in variants" 
+                        value="variant"
+                        ng-click="selectPossibleResult(variant)"
+                        >{{variant}}</option>
+            </select>-->
+
+            <div class="section">
+                <label>Введите заказ:</label>
+                <input type="text"
+                       ng-model="orderNumber"
+                       my-enter="buildForm(orderNumber)" /> 
+            </div>
+                         
         </div>
         
     </div>
 
 
+</div>
+
+<div class="black-wrapper" ng-show="isShowModal">
+    <div class="modal">
+
+        <div class="formWrapper">
+            <form id="orderForm" novalidate></form>
+        </div>
+
+    </div>
 </div>
 
 
