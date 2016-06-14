@@ -3,7 +3,6 @@
     jQuery.fn.odataTree = function (options) {
 
         var self = this,
-            _sel = null,
             _data = options.data,
             serviceUrl = options.serviceUrl,
             tableName = options.table,
@@ -100,7 +99,7 @@
 
                 renameBtn.attr('disabled', false);
                 removeBtn.attr('disabled', false);
-                _sel = $.jstree.reference('#treeRoot').get_selected(true)[0] || '#';
+                //var _sel = $.jstree.reference('#treeRoot').get_selected(true)[0] || '#';
             });
 
             parentNodeInput.append('<option />');
@@ -154,6 +153,7 @@
         function vmShowModal(e) {
 
             var buttonId = $(e.currentTarget).attr('id');
+            var sel = $.jstree.reference('#treeRoot').get_selected(true)[0] || '#';
 
             switch (buttonId) {
                 case 'createTreeItem':
@@ -161,24 +161,22 @@
                     acceptBtn.on('click', vmCreate);
                     nodeNameInput.val('');
 
-                    if (_sel)
-                        parentNodeInput.val(_sel.id);
+                    if (sel)
+                        parentNodeInput.val(sel.id);
                                         
-                    vmHandleAdditionalFields(controlsRootModal, additionalFields, _sel, 'create');
+                    vmHandleAdditionalFields(controlsRootModal, additionalFields, sel, 'create');
 
                     break;
 
                 case 'renameNode':
 
                     acceptBtn.on('click', vmEdit);
+                    nodeNameInput.val(sel.text);
 
-
-                    nodeNameInput.val(_sel.text);
-
-                    if (_sel && _sel.parent!= '#')
-                        parentNodeInput.val(_sel.parent);
+                    if (sel && sel.parent!= '#')
+                        parentNodeInput.val(sel.parent);
                     
-                    vmHandleAdditionalFields(controlsRootModal, additionalFields, _sel, 'edit');
+                    vmHandleAdditionalFields(controlsRootModal, additionalFields, sel, 'edit');
                     break;
             };
 
@@ -190,6 +188,8 @@
             if (!vmCheckRequiredFields(controlsRootModal)) {
 
                 alert('You must fill all required fields!');
+
+                //acceptBtn.off('click');
                 return false;
             }
 
@@ -241,16 +241,17 @@
                         data: JSON.stringify(json),
                         contentType: "application/json;odata=verbose"
                     }).success(function (responce) {
+                        
+                        //node.id = responce[keys.id];
 
-                        node.id = responce[keys.id];
-
-                        var ref = treeRoot.jstree(true),
-                                    sel = ref.get_selected();
-                        if (!sel.length) { location.reload() }
-                        sel = sel[0];
-                        sel = ref.create_node(sel, node);
+                        //var ref = treeRoot.jstree(true),
+                        //            sel = ref.get_selected();
+                        //if (!sel.length) { location.reload() }
+                        //sel = sel[0];
+                        //sel = ref.create_node(sel, node);
 
                         vmCancel();
+                        location.reload();
 
                     }).fail(handleError)
 
@@ -259,13 +260,16 @@
         
         function vmEdit() {
 
+            var sel = $.jstree.reference('#treeRoot').get_selected(true)[0] || '#';
+
             if (!vmCheckRequiredFields(controlsRootModal)) {
 
                 alert('You must fill all required fields!');
+                //acceptBtn.off('click');
                 return false;
             }
             
-            $.get(serviceUrl + tableName + '(' + parseInt(_sel.id) + ')')
+            $.get(serviceUrl + tableName + '(' + parseInt(sel.id) + ')')
                     .then(function (json) {
 
                         delete json['@odata.context'];
@@ -283,14 +287,14 @@
                             });
                         };
 
-                        if (json[keys.parent] == _sel.id) {
+                        if (json[keys.parent] == sel.id) {
 
                             alert('Parent cannot be the same with node name! Please, select another parent');
                             parentNodeInput.val('');
                             return false;
                         }
                         $.ajax({
-                            url: serviceUrl + tableName + '(' + _sel.id + ')',
+                            url: serviceUrl + tableName + '(' + sel.id + ')',
                             type: "PUT",
                             data: JSON.stringify(json),
                             contentType: "application/json;odata=verbose"
@@ -305,13 +309,15 @@
 
         function vmRemove() {
 
-            if (_sel) {
+            var sel = $.jstree.reference('#treeRoot').get_selected(true)[0] || '#';
+
+            if (sel) {
 
                 if (confirm('Are You sure?')) {
 
                     $.ajax({
                         type: "DELETE",
-                        url: serviceUrl + tableName + '(' + _sel.id + ')'
+                        url: serviceUrl + tableName + '(' + sel.id + ')'
                     }).success(function () {
 
                         var ref = treeRoot.jstree(true),
@@ -330,6 +336,8 @@
             controlsRootModal.find('input, select').each(function (i, item) {
                 vmClear(item);
             });
+
+            acceptBtn.off('click');
 
             blackWrapper.hide();
             
@@ -357,7 +365,7 @@
                     var id = field.id;
                     var control = controlsRootModal.find('#' + id);
 
-                    if (sel) 
+                    if (sel && sel != '#') 
                         vmGetActiveAdditionalFieldValue(sel, _data, control, field, mode);                   
                 });
             };
@@ -381,10 +389,10 @@
         function vmHAndleReadOnly(field, mode, control) {
             switch (mode) {
                 case 'create':
-                    control.removeAttr('readonly')
+                    control.removeAttr('disabled')
                     break;
                 case 'edit':
-                    control.attr('readonly', 'readonly')
+                    control.attr('disabled', 'disabled')
                     break;
             };
         };
