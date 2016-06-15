@@ -8,7 +8,11 @@
 <script type="text/javascript" src="~/scripts/Form/index.js"></script>
 <script type="text/javascript" src="~/Scripts/Chart/index.js"></script>
 <script type="text/javascript" src="~/Scripts/Vendor/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jquery-ui-datepicker-uk.js"></script>
+<script type="text/javascript" src="~/Scripts/Vendor/jquery-ui-datepicker-ru.js"></script>
 
+<link rel="stylesheet" type="text/css" href="~/Content/Shared/datetimepicker.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/Shared/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="~/Content/Chart/jquery.jqplot.css" />
 <script class="include" type="text/javascript" src="~/Scripts/Vendor/jqplot/jquery.jqplot.js"></script>
 
@@ -29,12 +33,22 @@
     <div id="plotLine"></div>
 </div>
 
-    <script class="code" type="text/javascript">
+<script class="code" type="text/javascript">
+    $(document).ready(function () {
         $plotLineContainer = $('#plotLine').empty();
-
+        $(document).load
         $plotLineContainer.odataPlotLine({
-          serviceUrl: serviceUrl,
-          table: 'EquipmentClass'
-      });
+            serviceUrl: serviceUrl
+        });
+    });
 
-    </script>
+    //$plotLineContainer.odataPlotLine({
+    //    serviceUrl: serviceUrl,
+    //    translations: {
+    //        begin: $translate.instant('plot.begin'),
+    //        end: $translate.instant('plot.end'),
+    //        scales: $translate.instant('plot.end')
+    //    }
+    //});
+
+</script>

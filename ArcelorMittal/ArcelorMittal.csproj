@@ -121,11 +121,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Action\style.css" />
+    <Content Include="Content\Chart\jquery.jqplot.css" />
+    <Content Include="Content\Chart\jquery.jqplot.min.css" />
     <Content Include="Content\Shared\bootstrap\css\bootstrap.css" />
     <Content Include="Content\Shared\bootstrap\extend.css" />
     <Content Include="Content\Shared\bootstrap\img\glyphicons-halflings-white.png" />
     <Content Include="Content\Shared\bootstrap\img\glyphicons-halflings.png" />
     <Content Include="Content\Shared\favicon.ico" />
+    <Content Include="Content\Shared\jquery-ui.css" />
     <Content Include="Content\Shared\layout.css" />
     <Content Include="Content\Shared\datetimepicker.css" />
     <Content Include="Content\Table\jsgrid-theme.css" />
@@ -192,6 +195,8 @@
     <Content Include="Scripts\Vendor\jquery-2.2.3.min.js" />
     <Content Include="Scripts\Vendor\jquery-ui-timepicker-addon.js" />
     <Content Include="Scripts\Vendor\jquery-ui.min.js" />
+    <Content Include="Scripts\Vendor\jquery-ui-datepicker-ru.js" />
+    <Content Include="Scripts\Vendor\jquery-ui-datepicker-uk.js" />
     <Content Include="Scripts\Vendor\jsgrid.js" />
     <Content Include="Scripts\Vendor\jsgrid.min.js" />
     <Content Include="Scripts\TreeGrid\treeExt.js" />

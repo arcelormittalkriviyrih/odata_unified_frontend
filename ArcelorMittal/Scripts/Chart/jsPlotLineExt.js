@@ -1,71 +1,87 @@
-﻿(function ($) {
-    jQuery.fn.odataPlotLine = function (options) {
+﻿/* Written by Kozerenko Roman                                                                            */
+/* Звернути увагу на те, що при великій кількості точок (> 500-700) графік зливається в суцільну заливку */
+/* Час обробки даних суттєво збільшується, інформаційність графіка падає до нуля                         */
+/* Тому потрібно вводити обмеження на кількість записів або виводити дані за період в хвилинах\годинах   */
 
+(function ($) {
+    jQuery.fn.odataPlotLine = function (options) {
+            
         var self = this,
             serviceUrl = options.serviceUrl,
-            tableName = options.table,
-            keys = options.keys,
-            navigationBar = $('<div />').attr('id', 'navigationBar').appendTo(self),
+            navigationBar = $('<div />').attr({'id': 'navigationBar'})
+                                        .appendTo(self),
 
-            mainButtonsRoot = $('<div />').addClass('createNodeControls').appendTo(navigationBar),
+            mainButtonsRoot = $('<div />').addClass('createPlotLine')
+                                          .appendTo(navigationBar),
+
+            textBegin = $('<label />').text('Date begin')
+                                      .appendTo(mainButtonsRoot),
 
             dateBegin = $('<input />').attr({
                 'id': 'dateBegin',
                 'type': 'text'
-            }).datepicker().appendTo(mainButtonsRoot),
+            })
+                                      .datepicker({
+                                          'dateFormat': 'yy-mm-dd',
+                                          'firstDay': '1'
+                                      })
+                                      .appendTo(mainButtonsRoot),
+
+            textBegin = $('<label />').text('Date begin')
+                                      .appendTo(dateBegin),
+
+            textEnd = $('<label />').text('Date end')
+                                    .appendTo(mainButtonsRoot),
 
             dateEnd = $('<input />').attr({
                 'id': 'dateEnd',
                 'type': 'text'
-            }).datepicker().appendTo(mainButtonsRoot),
-
-            selScales = $('<select />').attr({
-                'id': 'selScales'
             })
-                                        .append('<option value="1">Ваги № 1</option>')
-                                        .append('<option value="2">Ваги № 2</option>')
-                                        .appendTo(mainButtonsRoot),
+                                      .datepicker({
+                                          'dateFormat': 'yy-mm-dd',
+                                          'firstDay': '1'
+                                      })
+                                      .appendTo(mainButtonsRoot),
+
+            textScales = $('<label />').text('Scales')
+                                      .appendTo(mainButtonsRoot),
+
+            selScales = $('<select />').attr({'id': 'selScales'})
+                                       .append('<option value="1">Scales 1</option>')
+                                       .append('<option value="2">Scales 2</option>')
+                                       .appendTo(mainButtonsRoot),
 
             refreshBtn = $('<button />').attr('id', 'refresh')
                                         .addClass('btn')
                                         .append('<i class="icon-refresh"></i>')
                                         .appendTo(mainButtonsRoot)
                                         .on('click', vmRefresh),
-            plot = $('<div />').attr({
-                'id': 'plot'
-            }).appendTo(mainButtonsRoot),
+            plot = $('<div />').attr({'id': 'plot' })
+                               .appendTo(mainButtonsRoot),
 
-        plotLine = $.jqplot('plot', [], {
-            title: 'Line Data Renderer',
-            dataRenderer: function () {
-                var ret = [[0]];
-                return ret;
-            }
-        });
+            plotLine = $.jqplot('plot', [], {
+                                             title: 'Line Data Renderer',
+                                             dataRenderer: function () {
+                                                                         var ret = [[0]];
+                                                                         return ret;
+                                                                        }
+                                            });
 
 
-        $.ajax({
-            url: serviceUrl + tableName,
-            xhrFields: {
-                withCredentials: true
-            }
-        }).then(function (data) {
-
-            vmInit(data);
-        });
+        vmInit(options);
 
         function vmInit(data) {
-            
-        };
-
-        function vmCreate() {
-            navigationBar.show();
-            mainButtonsRefresh.show();
+            dateBegin.datepicker('option', $.datepicker.regional['uk']);
+            dateEnd.datepicker('option', $.datepicker.regional['uk']);
+            dateBegin.datepicker('setDate', new Date());
+            dateEnd.datepicker('setDate', new Date());
         };
 
         function vmRefresh() {
-            var filter = '$top=20&$orderby=WEIGHT__FIX_TIMESTAMP&$filter=WEIGHT__FIX_TIMESTAMP%20ge%20' + dateBegin.val() +
-                '%20and%20WEIGHT__FIX_TIMESTAMP%20le%20' + dateEnd.val() +
+            var startDate = $.datepicker.formatDate('yy-mm-dd', dateBegin.datepicker('getDate'));
+            var finishDate = $.datepicker.formatDate('yy-mm-dd', dateEnd.datepicker('getDate')) + 'T23:59:59Z';
+            var filter = '$top=100&$orderby=WEIGHT__FIX_TIMESTAMP&$filter=WEIGHT__FIX_TIMESTAMP%20ge%20' + startDate +
+                '%20and%20WEIGHT__FIX_TIMESTAMP%20le%20' + finishDate +
                 '%20and%20WEIGHT__FIX_NUMERICID%20eq%20' + selScales.val();
             vmPlot('v_kep_logger_all_', filter);
         };
@@ -73,12 +89,12 @@
         function vmPlot(tableName, filter) {
             refreshBtn.attr('disabled', true);
             tableName = tableName || 'v_kep_logger_all_';
-            filter = filter || '$top=20&$orderby=WEIGHT__FIX_TIMESTAMP%20desc';
+            filter = filter || '$top=100&$orderby=WEIGHT__FIX_TIMESTAMP';
             var odataUrl = serviceUrl || 'http://mssql2014srv/odata_unified_svc/api/Dynamic/';
             var dataJson = {};
 
             $.ajax({
-                url: odataUrl + tableName + '?' + filter,   //'http://mssql2014srv/odata_unified_svc/api/Dynamic/v_kep_logger_all?$top=100',
+                url: odataUrl + tableName + '?' + filter,   //'http://mssql2014srv/odata_unified_svc/api/Dynamic/v_kep_logger_all_?$top=100',
                 xhrFields: {
                     withCredentials: true
                 },
@@ -86,7 +102,7 @@
                 data: {
                     format: 'json'
                 },
-                error: function (a, b, c) {
+                error: function () {
                     console.log('<p>vmPlotLine - An error has occurred</p>');
                     refreshBtn.attr('disabled', false);
                 },
