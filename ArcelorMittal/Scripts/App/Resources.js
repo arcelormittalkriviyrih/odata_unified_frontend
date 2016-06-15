@@ -35,7 +35,18 @@
                     ADDRESS: 'Provider Address',
                     COMM_ORDER: 'Order',
                     PROFILE: 'Profile',
-                    TEMPLATE: 'Label Template'
+                    TEMPLATE: 'Label Template',
+                    PROD_ORDER: 'Product order',
+                    SIZE: 'Size',
+                    TOLERANCE: 'Tolerance',
+                    MELT_NO: 'Melting',
+                    PART_NO: 'Party No',
+                    BUYER_ORDER_NO: 'Buyer order no',
+                    UTVK: 'UTVK',
+                    LEAVE_NO: 'Leave No',
+                    MATERIAL_NO: 'Material No',
+                    BRIGADE_NO: 'Brigade',
+                    PROD_DATE: 'Production date'
                 }
             },
             grid: {
@@ -134,7 +145,7 @@
 
                     STANDARD: 'Стандарт',
                     LENGTH: 'Длина',
-                    MIN_ROD: 'Количество прутков (минимальное)',
+                    MIN_ROD: 'Количество прутков',
                     CONTRACT_NO: 'Контракт №',
                     DIRECTION: 'Направление',
                     PRODUCT: 'Продукция',
@@ -143,9 +154,19 @@
                     CHEM_ANALYSIS: 'Хим. Анализ',
                     BUNT_DIA: 'Диаметр бунта',
                     ADDRESS: 'Адрес поставщика',
-                    COMM_ORDER: 'Заказ',
-                    PROFILE: 'Профиль',
-                    TEMPLATE: 'Шаблон бирки'
+                    COMM_ORDER: 'Коммерческий заказ',
+                    TEMPLATE: 'Шаблон бирки',
+                    PROD_ORDER: 'Производственный заказ',
+                    SIZE: 'Размер',
+                    TOLERANCE: 'Допуск',
+                    MELT_NO: 'Плавка',
+                    PART_NO: 'Партия',
+                    BUYER_ORDER_NO: '№ заказа у покупателя',
+                    UTVK: 'УТВК',
+                    LEAVE_NO: 'Смена',
+                    MATERIAL_NO: '№ материала',
+                    BRIGADE_NO: 'Бригада',
+                    PROD_DATE: 'Производственная дата'
                 }
             },
             grid: {
@@ -246,18 +267,28 @@
 
                     STANDARD: 'Стандарт',
                     LENGTH: 'Довжина',
-                    MIN_ROD: 'Кількість прутків (мінімальне)',
+                    MIN_ROD: 'Кількість прутків',
                     CONTRACT_NO: 'Контракт №',
-                    DIRECTION: 'Напрямок',
+                    DIRECTION: 'Напрамок',
                     PRODUCT: 'Продукція',
                     CLASS: 'Клас',
                     STEEL_CLASS: 'Марка сталі',
                     CHEM_ANALYSIS: 'Хім. Аналіз',
                     BUNT_DIA: 'Діаметр бунта',
                     ADDRESS: 'Адреса постачальника',
-                    COMM_ORDER: 'Замовлення',
-                    PROFILE: 'Профіль',
-                    TEMPLATE: 'Шаблон бирки'
+                    COMM_ORDER: 'Комерційне замовлення',
+                    TEMPLATE: 'Шаблон бірки',
+                    PROD_ORDER: 'Виробничие замовлення',
+                    SIZE: 'Розмір',
+                    TOLERANCE: 'Допуск',
+                    MELT_NO: 'Плавка',
+                    PART_NO: 'Партія',
+                    BUYER_ORDER_NO: '№ замовлення у покупця',
+                    UTVK: 'УТВК',
+                    LEAVE_NO: 'Зміна',
+                    MATERIAL_NO: '№ материала',
+                    BRIGADE_NO: 'Бригада',
+                    PROD_DATE: 'Виробнича дата'
                 }
             },
             grid: {

@@ -220,10 +220,10 @@ button.add{
 }
 
 .formWrapper{
-    min-height: 500px;
-    padding: 25px;
+    height: 500px;
     /* width: 460px; */
     margin: 10px 0 0 0;
+    overflow-y: scroll;
 }
 
 /*form style*/
@@ -308,6 +308,7 @@ div.errorHandle label{
 
 .scaleGroup{
     display:table-row;
+    height: 65px;
 }
 
 .scaleContainer{
@@ -316,13 +317,7 @@ div.errorHandle label{
     text-align: center;
     vertical-align: top;
     position: relative;
-    background-color: #fafafa;
-    background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
-    background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
-    background-repeat: repeat-x;
+    background: linear-gradient(to bottom, #ffffff, #f2f2f2) #fafafa;
     outline: 1px solid #d4d4d4;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
@@ -338,11 +333,12 @@ div.errorHandle label{
 .scaleContainer.active{
     color: #555555;
     text-decoration: none;
-    background-color: #e5e5e5;
+    background: #e5e5e5;
     -webkit-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
     -moz-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
     box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
-    background-image: none;
+    background-image: none!important;
+    filter: none;
 }
 
 
@@ -379,21 +375,21 @@ h4.scalesName{
     position:relative;
     width:0;
     height:0;
-    margin:auto;
-    border-left: 25px solid #000;
-    border-right: 25px solid #000;
-    border-bottom: 25px solid #000;
-    border-top: 25px solid transparent;
+    margin-left: 0;
+    border-left: 15px solid #000;
+    border-right: 15px solid #000;
+    border-bottom: 15px solid #000;
+    border-top: 15px solid transparent;
 }
 
 .isStableScalesIndicator:before {
     position: absolute;
     content: '';
-    width: 50px;
-    height: 25px;
+    width: 30px;
+    height: 15px;
     background: #eee;
     top: 0px;
-    left: -25px;
+    left: -15px;
 }
 
 .scalesValue{

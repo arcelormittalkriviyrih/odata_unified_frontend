@@ -136,8 +136,7 @@
 
         vmToggleModal(true);
 
-        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label'"),
-                indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')];
+        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label'")];
 
         if (id) {
 
@@ -150,10 +149,9 @@
                 var rowData;
 
                 var templateData = responce[0].data.value;
-                var profileData = responce[1].data.value;
 
                 if (id)
-                    rowData = responce[2].data.value;
+                    rowData = responce[1].data.value;
 
                 $('#orderForm').oDataAction({
 
@@ -248,19 +246,99 @@
                         }
                     }, {
 
-                        name: 'ADDRESS',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.ADDRESS')
-                        }
-                    }, {
-
                         name: 'COMM_ORDER',
                         properties: {
                             control: 'text',
                             required: true,
                             translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER')
+                        },
+                    }, {
+
+                        name: 'PROD_ORDER',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER')
+                        },
+                    }, {
+
+                        name: 'SIZE',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.SIZE')
+                        },
+                    }, {
+
+                        name: 'TOLERANCE',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE')
+                        },
+                    }, {
+
+                        name: 'MELT_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.MELT_NO')
+                        },
+                    }, {
+
+                        name: 'PART_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PART_NO')
+                        },
+                    }, {
+
+                        name: 'BUYER_ORDER_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO')
+                        },
+                    }, {
+
+                        name: 'BRIGADE_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO')
+                        },
+                    }, {
+
+                        name: 'PROD_DATE',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE')
+                        },
+                    }, {
+
+                        name: 'UTVK',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.UTVK')
+                        },
+                    }, {
+
+                        name: 'LEAVE_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO')
+                        },
+                    }, {
+
+                        name: 'MATERIAL_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO')
                         },
                     }, {
                         name: 'TEMPLATE',
@@ -272,20 +350,10 @@
                             keyField: 'ID',
                             valueField: 'Name'
                         }
-                    }, {
-                        name: 'PROFILE',
-                        properties: {
-                            control: 'combo',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.PROFILE'),
-                            data: profileData,
-                            keyField: 'ID',
-                            valueField: 'Description'
-                        }
                     }]
                 });
             })
-    }
+    };
 
     function vmDeleteRow(order) {
 

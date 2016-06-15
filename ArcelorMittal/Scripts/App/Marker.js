@@ -3,7 +3,7 @@
 app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', '$interval', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, $interval) {
 
     $scope.filter = [];
-    $scope.scalesDetailsInfo = null;
+    $scope.scalesDetailsInfo = {};
     $scope.currentScaleID = null;
     $scope.isShowModal = false;
     $scope.orderNumber = '';
@@ -44,7 +44,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
             }
 
 
-            vmGetCurrentScalesInfo();
+            vmGetCurrentScalesShortInfo();
 
             //create interval for autorefresh scales
             //this interval must be clear on activity exit
@@ -52,7 +52,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
             //it will be called in $state onExit handler
             $rootScope.intervalScales = $interval(function () {
 
-                vmGetCurrentScalesInfo();
+                vmGetCurrentScalesShortInfo();
 
                 if ($scope.currentScaleID)
                     vmShowScaleInfo($scope.currentScaleID);
@@ -60,7 +60,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
         })
     }
 
-    function vmGetCurrentScalesInfo() {
+    function vmGetCurrentScalesShortInfo() {
 
         var path = 'v_ScalesShortInfo';
         if ($scope.filter.length > 0)
@@ -86,12 +86,9 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
     }
 
     function vmShowScaleInfo(id) {
-
+        
         $scope.currentScaleID = id;
-        $scope.scalesDetailsInfo = null;
-
         var path = 'v_ScalesDetailInfo?$filter=ID eq {0}'.format(id);
-
 
         indexService.getInfo(path)
                        .then(function (response) {
@@ -133,7 +130,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             var order = response.data.value;
 
                             if (order.length > 0)
-                                vmCreateForm('edit', 'upd_Order', order[0].id, 'COMM_ORDER');
+                                vmCreateForm('edit', 'ins_WorkDefinition', order[0].id, 'COMM_ORDER');
                             else
                                 alert('there is no orders with this name!');
                         })
@@ -143,8 +140,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
 
         vmToggleModal(true);
 
-        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label'"),
-                indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')];
+        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label'")];
 
         if (id) {
 
@@ -157,10 +153,9 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                 var rowData;
 
                 var templateData = responce[0].data.value;
-                var profileData = responce[1].data.value;
 
                 if (id)
-                    rowData = responce[2].data.value;
+                    rowData = responce[1].data.value;
 
                 $('#orderForm').oDataAction({
 
@@ -181,7 +176,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.STANDARD')
                         }
-                    }, {
+                    },{
 
                         name: 'LENGTH',
                         properties: {
@@ -189,7 +184,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             required: true,
                             translate: $translate.instant('market.Order.CreateDialogue.LENGTH')
                         }
-                    }, {
+                    },{
 
                         name: 'MIN_ROD',
                         properties: {
@@ -197,7 +192,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD')
                         }
-                    }, {
+                     },{
 
                         name: 'CONTRACT_NO',
                         properties: {
@@ -205,7 +200,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             required: true,
                             translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO')
                         }
-                    }, {
+                     },{
 
                         name: 'DIRECTION',
                         properties: {
@@ -213,7 +208,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             required: true,
                             translate: $translate.instant('market.Order.CreateDialogue.DIRECTION')
                         }
-                    }, {
+                     },{
 
                         name: 'PRODUCT',
                         properties: {
@@ -221,7 +216,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.PRODUCT')
                         }
-                    }, {
+                     },{
 
                         name: 'CLASS',
                         properties: {
@@ -229,7 +224,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.CLASS')
                         }
-                    }, {
+                     },{
 
                         name: 'STEEL_CLASS',
                         properties: {
@@ -237,7 +232,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
                         }
-                    }, {
+                     },{
 
                         name: 'CHEM_ANALYSIS',
                         properties: {
@@ -245,7 +240,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS')
                         }
-                    }, {
+                     },{
 
                         name: 'BUNT_DIA',
                         properties: {
@@ -253,15 +248,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA')
                         }
-                    }, {
-
-                        name: 'ADDRESS',
-                        properties: {
-                            control: 'text',
-                            required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.ADDRESS')
-                        }
-                    }, {
+                     },{
 
                         name: 'COMM_ORDER',
                         properties: {
@@ -269,7 +256,95 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             required: true,
                             translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER')
                         },
-                    }, {
+                     },{
+
+                        name: 'PROD_ORDER',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER')
+                        },
+                     },{
+
+                        name: 'SIZE',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.SIZE')
+                        },
+                     },{
+
+                        name: 'TOLERANCE',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE')
+                        },
+                     },{
+
+                        name: 'MELT_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.MELT_NO')
+                        },
+                     },{
+
+                        name: 'PART_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PART_NO')
+                        },
+                     },{
+
+                        name: 'BUYER_ORDER_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO')
+                        },
+                    },{
+
+                        name: 'BRIGADE_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO')
+                        },
+                    },{
+
+                        name: 'PROD_DATE',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE')
+                        },
+                    },{
+
+                        name: 'UTVK',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.UTVK')
+                        },
+                    },{
+
+                        name: 'LEAVE_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO')
+                        },
+                    },{
+
+                        name: 'MATERIAL_NO',
+                        properties: {
+                            control: 'text',
+                            required: true,
+                            translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO')
+                        },
+                    },{
                         name: 'TEMPLATE',
                         properties: {
                             control: 'combo',
@@ -278,16 +353,6 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                             data: templateData,
                             keyField: 'ID',
                             valueField: 'Name'
-                        }
-                    }, {
-                        name: 'PROFILE',
-                        properties: {
-                            control: 'combo',
-                            required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.PROFILE'),
-                            data: profileData,
-                            keyField: 'ID',
-                            valueField: 'Description'
                         }
                     }]
                 });
