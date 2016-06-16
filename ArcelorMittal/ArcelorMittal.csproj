@@ -141,6 +141,8 @@
     <Content Include="Scripts\Action\index.js" />
     <Content Include="Scripts\App\Resources.js" />
     <Content Include="Scripts\Chart\index.js" />
+    <Content Include="Scripts\Chart\jsPlotBarExt.js" />
+    <Content Include="Scripts\Chart\jsPlotGaugeExt.js" />
     <Content Include="Scripts\Form\index.js" />
     <Content Include="Scripts\App\Index.js" />
     <Content Include="Scripts\App\Marker.js" />

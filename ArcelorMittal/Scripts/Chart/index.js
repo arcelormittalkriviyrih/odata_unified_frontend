@@ -78,7 +78,7 @@ function getPlotAxis(tableName, filter) {
 };
 
 function getPlotBar(tableName, filter) {
-    tableName = tableName || 'v_kep_logger_all';
+    tableName = tableName || 'v_kep_logger_all_';
     filter = filter || '$top=100&$orderby=WEIGHT__FIX_TIMESTAMP';
     var odataUrl = serviceUrl || 'http://mssql2014srv/odata_unified_svc/api/Dynamic/';
     var dataJson = {};

@@ -28,19 +28,38 @@
 <script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.pointLabels.js"></script>
 <script type="text/javascript" src="~/Scripts/Vendor/jqplot/plugins/jqplot.meterGaugeRenderer.js"></script>
 <script type="text/javascript" src="~/Scripts/Chart/jsPlotLineExt.js"></script>
+<script type="text/javascript" src="~/Scripts/Chart/jsPlotBarExt.js"></script>
+<script type="text/javascript" src="~/Scripts/Chart/jsPlotGaugeExt.js"></script>
 
 <div class="plotLineContainer">
     <div id="plotLine"></div>
 </div>
 
 <script class="code" type="text/javascript">
+
     $(document).ready(function () {
         $plotLineContainer = $('#plotLine').empty();
-        $(document).load
-        $plotLineContainer.odataPlotLine({
-            serviceUrl: serviceUrl
+        $plotLineContainer.odataPlotGauge({
+            serviceUrl: serviceUrl,
+            interval: 5000,
+            maxValue : 1500,
+            redValue : 1000
         });
     });
+
+    //$(document).ready(function () {
+    //    $plotBarContainer = $('#plotLine').empty();
+    //    $plotBarContainer.odataPlotBar({
+    //        serviceUrl: serviceUrl
+    //    });
+    //});
+
+    //$(document).ready(function () {
+    //    $plotLineContainer = $('#plotLine').empty();
+    //    $plotLineContainer.odataPlotLine({
+    //        serviceUrl: serviceUrl
+    //    });
+    //});
 
     //$plotLineContainer.odataPlotLine({
     //    serviceUrl: serviceUrl,

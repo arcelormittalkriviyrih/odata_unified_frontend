@@ -1,5 +1,5 @@
 ﻿/* Written by Kozerenko Roman                                                                            */
-/* Звернути увагу на те, що при великій кількості точок (> 500-700) графік зливається в суцільну заливку */
+/* Звернути увагу на те, що при великій кількості точок (> 1000) графік зливається в суцільну заливку    */
 /* Час обробки даних суттєво збільшується, інформаційність графіка падає до нуля                         */
 /* Тому потрібно вводити обмеження на кількість записів або виводити дані за період в хвилинах\годинах   */
 
@@ -8,6 +8,7 @@
             
         var self = this,
             serviceUrl = options.serviceUrl,
+            title = options.title,
             navigationBar = $('<div />').attr({'id': 'navigationBar'})
                                         .appendTo(self),
 
@@ -60,13 +61,12 @@
                                .appendTo(mainButtonsRoot),
 
             plotLine = $.jqplot('plot', [], {
-                                             title: 'Line Data Renderer',
-                                             dataRenderer: function () {
-                                                                         var ret = [[0]];
-                                                                         return ret;
-                                                                        }
-                                            });
-
+                title: title,
+                dataRenderer: function () {
+                    var ret = [[0]];
+                    return ret;
+                }
+            });
 
         vmInit(options);
 
@@ -94,7 +94,7 @@
             var dataJson = {};
 
             $.ajax({
-                url: odataUrl + tableName + '?' + filter,   //'http://mssql2014srv/odata_unified_svc/api/Dynamic/v_kep_logger_all_?$top=100',
+                url: odataUrl + tableName + '?' + filter, 
                 xhrFields: {
                     withCredentials: true
                 },
@@ -114,9 +114,9 @@
                 var ret = [[]];
                 for (var i = 0; i <= dataJson.value.length - 1; i++) {
                     ret[0].push([i, dataJson.value[i].WEIGHT__FIX_VALUE]);
-                    plotLine.data = ret;
-                    plotLine.replot(ret);
                 };
+                plotLine.data = ret;
+                plotLine.replot(ret);
                 refreshBtn.attr('disabled', false);
             });
         };
