@@ -262,7 +262,7 @@
             buttonAddTempate: 'Додати Файл',
             buttonDownloadTechSheet: 'Скачати Тех. Лист',
             Order: {
-
+                 
                 CreateDialogue: {
 
                     STANDARD: 'Стандарт',
@@ -278,7 +278,7 @@
                     ADDRESS: 'Адреса постачальника',
                     COMM_ORDER: 'Комерційне замовлення',
                     TEMPLATE: 'Шаблон бірки',
-                    PROD_ORDER: 'Виробничие замовлення',
+                    PROD_ORDER: 'Виробниче замовлення',
                     SIZE: 'Розмір',
                     TOLERANCE: 'Допуск',
                     MELT_NO: 'Плавка',

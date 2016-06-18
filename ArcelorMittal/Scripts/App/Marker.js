@@ -1,20 +1,36 @@
 ﻿angular.module('indexApp')
 
-app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', '$interval', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, $interval) {
+.config(['$stateProvider', function ($stateProvider) {
+
+    $stateProvider
+        .state('app.Marker.ScaleInfo', {
+
+            url: '/scaleinfo',
+            templateUrl: 'Static/marker/scaleinfo.html',
+            controller: 'markerScaleInfoCtrl'
+        })
+}])
+
+.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', '$interval', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, $interval) {
 
     $scope.filter = [];
     $scope.scalesDetailsInfo = {};
     $scope.currentScaleID = null;
     $scope.isShowModal = false;
     $scope.orderNumber = '';
-    $scope.variants = [];
+    $scope.state = null;
+    $scope.sampleLength = 1;
 
     $scope.showScaleInfo = vmShowScaleInfo;
-    //$scope.showPossibleResults = vmShowPossibleResults;
-    //$scope.selectPossibleResult = vmSelectPossibleResult;
     $scope.buildForm = vmBuildForm;
+    $scope.getProfiles = vmGetProfiles;
+    $scope.getProfilePropertiesList = vmGetProfilePropertiesList;
+    $scope.calculate = vmCalculate;
+    $scope.reset = vmReset;
+    
 
     vmGetCurrentScales();
+    vmGetProfiles();
 
     function vmGetCurrentScales() {
 
@@ -88,39 +104,56 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
     function vmShowScaleInfo(id) {
         
         $scope.currentScaleID = id;
-        var path = 'v_ScalesDetailInfo?$filter=ID eq {0}'.format(id);
 
-        indexService.getInfo(path)
+
+        //get scales detail info
+        indexService.getInfo('v_ScalesDetailInfo?$filter=ID eq {0}'.format(id))
                        .then(function (response) {
 
                            $scope.scalesDetailsInfo = response.data.value[0];
-                       });
+
+                           vmCalculateRods();
+                          
+                       });                     
     }
 
-    //function vmShowPossibleResults(orderNumber) {
+    function vmGetProfiles() {
 
-    //    $scope.orderNumber = orderNumber;
+        //get profiles (left form)
+        indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')
+                    .then(function (response) {
 
-    //    if (orderNumber.length > 0) {
-    //        indexService.getInfo("v_Orders?$filter=contains({0},'{1}')".format('COMM_ORDER', orderNumber))
-    //                .then(function (response) {
+                        $scope.profiles = response.data.value;
+                    });
+    }
 
-    //                    $scope.variants = response.data.value.map(function (item) {
+    function vmGetProfilePropertiesList(profileId) {
 
-    //                        return item.COMM_ORDER;
-    //                    });
-    //                })
-    //    }
+        indexService.getInfo('MaterialDefinitionProperty?$filter=MaterialDefinitionID eq ({0})'.format(profileId))
+                    .then(function (response) {
 
-    //    else
-    //        $scope.variants = [];
+                        var profileProperties = response.data.value;
 
-    //}
+                        if (profileProperties.length > 0) {
 
-    //function vmSelectPossibleResult(variant) {
+                            $scope.linearMassFromBase = vmGetProfileProperty(profileProperties, 1) || null;
+                            $scope.length = vmGetProfileProperty(profileProperties, 2) || null;
+                            $scope.tolerancePlus = vmGetProfileProperty(profileProperties, 3) || null;
+                            $scope.toleranceMinus = vmGetProfileProperty(profileProperties, 4) || null;
 
-    //    $scope.orderNumber = variant;
-    //}
+                        } else {
+
+                            $scope.linearMassFromBase = null;
+                            $scope.length = null;
+                            $scope.tolerancePlus = null;
+                            $scope.toleranceMinus = null;
+                        }
+
+                        vmCalculate();
+                    })
+
+        vmCalculate();
+    }
 
     function vmBuildForm(orderNumber) {
 
@@ -221,7 +254,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                         name: 'CLASS',
                         properties: {
                             control: 'text',
-                            required: false,
+                            required: true,
                             translate: $translate.instant('market.Order.CreateDialogue.CLASS')
                         }
                      },{
@@ -229,7 +262,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                         name: 'STEEL_CLASS',
                         properties: {
                             control: 'text',
-                            required: false,
+                            required: true,
                             translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
                         }
                      },{
@@ -277,7 +310,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                         name: 'TOLERANCE',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE')
                         },
                      },{
@@ -301,7 +334,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                         name: 'BUYER_ORDER_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO')
                         },
                     },{
@@ -333,7 +366,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                         name: 'LEAVE_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO')
                         },
                     },{
@@ -341,7 +374,7 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
                         name: 'MATERIAL_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO')
                         },
                     },{
@@ -364,10 +397,103 @@ app.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 
         $scope.isShowModal = expr;
     };
 
+    function vmGetProfileProperty(profileProperties, id) {
+
+        return profileProperties.filter(function (item) {
+
+            return item.ClassPropertyID == id;
+        }).map(function (item) {
+
+            return item.Value;
+        })[0];
+    };
+
+    function vmCalculate() {
+
+        /*calculations for left form*/
+
+        if ($scope.length && $scope.linearMassFromBase){
+            $scope.barWeight = $scope.length * $scope.linearMassFromBase;
+            $scope.barWeight = parseFloat($scope.barWeight).toFixed(3);
+        }
+            
+        else
+            $scope.barWeight = null;
+
+        if ($scope.barWeight && $scope.barQuantity){
+
+            $scope.minMass = $scope.barWeight * $scope.barQuantity;
+            $scope.minMass = parseFloat($scope.minMass).toFixed(3);
+        }          
+        else
+            $scope.minMass = null;
+
+        if (!$scope.sampleMass || $scope.sampleMass.length == 0)
+            $scope.linearMass = $scope.linearMassFromBase;
+
+        if ($scope.sampleMass && $scope.sampleLength && $scope.length) {
+
+            $scope.linearMassCalculated = $scope.sampleMass / $scope.sampleLength;
+
+            $scope.linearMass = $scope.linearMassCalculated;
+            $scope.barWeight = $scope.linearMassCalculated * $scope.length;
+            $scope.minMass = $scope.barWeight * $scope.barQuantity;
+        }                   
+
+        if ($scope.linearMassFromBase && $scope.linearMassCalculated) {
+
+            $scope.deviation = (($scope.linearMassCalculated / $scope.linearMassFromBase) * 100) - 100;
+            $scope.deviation = parseFloat($scope.deviation).toFixed(1);
+        }
+            
+        else
+            $scope.deviation = null;
+
+        if ($scope.deviation) {
+
+            if (($scope.tolerancePlus && $scope.deviation > $scope.tolerancePlus)
+
+                ||
+                ($scope.toleranceMinus && $scope.deviation < (-1) * $scope.toleranceMinus)
+                ) {
+
+                $scope.state = 'wrong';
+            } else
+                $scope.state = 'correct';
+
+        }
+
+        vmCalculateRods();
+                           
+    }
+
+    function vmCalculateRods() {
+
+        if ($scope.scalesDetailsInfo.WEIGHT_CURRENT_VALUE && $scope.barWeight) {
+
+            $scope.rodsQuantity = parseInt($scope.scalesDetailsInfo.WEIGHT_CURRENT_VALUE / $scope.barWeight);
+        }
+
+        if ($scope.barQuantity && $scope.rodsQuantity)
+            $scope.rodsLeft = $scope.rodsQuantity - $scope.barQuantity;
+    }
+
+    function vmReset() {
+
+        $scope.selectedProfile = null;
+        $scope.length = null;
+        $scope.barQuantity = null;
+        $scope.maxMass = null;
+        $scope.minMass = null;
+        $scope.sampleMass = null;
+        $scope.barWeight = null;
+        $scope.sampleLength = 1;
+        $scope.deviation = null;
+    }
+
     $(document).on('oDataForm.success', function (e, data) {
 
         vmToggleModal(false);
-
         $scope.$apply();
     });
 

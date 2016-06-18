@@ -257,7 +257,7 @@
                         name: 'PROD_ORDER',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER')
                         },
                     }, {
@@ -273,7 +273,7 @@
                         name: 'TOLERANCE',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE')
                         },
                     }, {
@@ -281,7 +281,7 @@
                         name: 'MELT_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.MELT_NO')
                         },
                     }, {
@@ -289,7 +289,7 @@
                         name: 'PART_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.PART_NO')
                         },
                     }, {
@@ -297,7 +297,7 @@
                         name: 'BUYER_ORDER_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO')
                         },
                     }, {
@@ -305,7 +305,7 @@
                         name: 'BRIGADE_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO')
                         },
                     }, {
@@ -313,7 +313,7 @@
                         name: 'PROD_DATE',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE')
                         },
                     }, {
@@ -321,7 +321,7 @@
                         name: 'UTVK',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.UTVK')
                         },
                     }, {
@@ -329,7 +329,7 @@
                         name: 'LEAVE_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO')
                         },
                     }, {
@@ -337,7 +337,7 @@
                         name: 'MATERIAL_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO')
                         },
                     }, {
@@ -352,8 +352,9 @@
                         }
                     }]
                 });
-            })
+            }) 
     };
+
 
     function vmDeleteRow(order) {
 

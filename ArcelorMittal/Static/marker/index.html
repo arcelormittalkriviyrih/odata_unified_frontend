@@ -12,10 +12,10 @@
 
         <div class="scaleGroup" ng-repeat="group in groups">
 
-            <div class="scaleContainer" 
-                 ng-repeat="scale in group" 
+            <div class="scaleContainer"
+                 ng-repeat="scale in group"
                  ng-class="{'active': scale.ID == currentScaleID}"
-                 ng-click="showScaleInfo(scale.ID)">
+                 ng-click="showScaleInfo(scale.ID); reset();">
                 <label>{{scale.Description}}</label>
                 <h3>{{scale.data.WEIGHT_CURRENT_VALUE}} кг</h3>
                 <h4 ng-if="scale.data.RodsQuanity">{{scale.data.RodsQuanity}} шт</h4>
@@ -23,78 +23,171 @@
         </div>
     </div>
 
-    
+</div>
 
-    <div class="scaleDetailInfo" ng-show="currentScaleID">
+<div class="scaleDetailInfo" ng-show="currentScaleID">
 
-        <div class="scaleInfo">
+    <div class="scaleInfo task">
+        <label>Задание</label>
+
+        <div style="text-align: right">
 
         </div>
 
-        <div class="scaleInfo">
-            <h4 class="scalesName">{{scalesDetailsInfo.ScalesName}}</h4>
+        <div class="controlsWrapper">
+            <div class="controlsGroup">
+                <table>
+                    <tr>
+                        <td>Профиль</td>
+                        <td>
+                            <select ng-model="selectedProfile"
+                                    ng-change="getProfilePropertiesList(selectedProfile)">
+                                <option></option>
+                                <option ng-repeat="profile in profiles"
+                                        value="{{profile.ID}}">
+                                    {{profile.Description}}
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
 
-            <p>Вес: 
-            <span class="scalesValue" ng-show="scalesDetailsInfo.WEIGHT_CURRENT_VALUE">
-                {{scalesDetailsInfo.WEIGHT_CURRENT_VALUE}} кг
-                </span>  
-            </p>         
-            <!--Alarm: {{scalesDetailsInfo.ALARM}}-->
-            <p>
-                Количество прутков: 
-                <span class="scalesValue" ng-show="scalesDetailsInfo.RodsQuanity">
-                    {{scalesDetailsInfo.RodsQuanity}} шт</span>
-            </p>
+                    <tr>
+                        <td>Размер(м.)</td>
+                        <td>
+                            <input type="text"
+                                   ng-model="length"
+                                   ng-change="calculate()" />
+                        </td>
+                    </tr>
 
-            <p>
-                Осталось прутков:
-                <span class="scalesValue" ng-show="scalesDetailsInfo.RodsLeft">
-                    {{scalesDetailsInfo.RodsLeft}} шт
-                </span>
-            </p>
-
-            <div class="isStableScalesIndicator" ng-show="scalesDetailsInfo.WEIGHT_STAB_VALUE">
+                    <tr>
+                        <td>Количество прутков(шт.)</td>
+                        <td>
+                            <input type="text"
+                                   ng-model="barQuantity"
+                                   ng-change="calculate()" />
+                        </td>
+                    </tr>
+                </table>
             </div>
-
-            <div class="controls">
-                <button class="btn">
-                    Взять вес
-                </button>
-                <button class="btn">
-                    >0<
-                </button>
+            <div class="controlsGroup" style="text-align:right">
             </div>
-            
         </div>
 
-        <div class="scaleInfo">
-            
-            <!--<label>Введите заказ:</label>
-            <input type="text" 
-                   ng-model="orderNumber" 
-                   ng-change="showPossibleResults(orderNumber)"
-                   />
+        <div class="controlsWrapper">
 
-            <select multiple ng-show="orderNumber.length > 0">
-                <option ng-repeat="variant in variants" 
-                        value="variant"
-                        ng-click="selectPossibleResult(variant)"
-                        >{{variant}}</option>
-            </select>-->
+            <div class="controlsGroup">
+                <table>
+                    <tr>
+                        <td>Масса максимум(кг.)</td>
+                        <td>
+                            <input type="text"
+                                   ng-model="maxMass"
+                                   ng-change="calculate()" />
+                        </td>
+                    </tr>
 
-            <div class="section">
-                <label>Введите заказ:</label>
-                <input type="text"
-                       ng-model="orderNumber"
-                       my-enter="buildForm(orderNumber)" /> 
+                    <tr>
+                        <td>Масса образца(кг.)</td>
+                        <td>
+                            <input type="text"
+                                   ng-model="sampleMass"
+                                   ng-change="calculate()" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Длина образца(м.)</td>
+                        <td>
+                            <input type="text"
+                                   ng-model="sampleLength"
+                                   ng-change="calculate()" />
+                        </td>
+                    </tr>
+                </table>
             </div>
-                         
+            <div class="controlsGroup">
+                <table>
+                    <tr>
+                        <td>Масса минимум(кг.)</td>
+                        <td>
+                            <input type="text"
+                                   ng-model="minMass"
+                                   ng-change="calculate()" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Вес прутка(кг.)</td>
+                        <td><input type="text" readonly ng-model="barWeight" /></td>
+                    </tr>
+
+                    <tr>
+                        <td>Отклонение(%)</td>
+                        <td>
+                            <input type="text" readonly
+                                   ng-model="deviation"
+                                   ng-class="{'wrong': state == 'wrong'}" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        
+
+        <div class="controls">
+            <button class="btn" ng-disabled="!state || state == 'wrong'">OK</button>
+        </div>
     </div>
 
+    <div class="scaleInfo">
+        <h4 class="scalesName">{{scalesDetailsInfo.ScalesName}}</h4>
+
+        <p>
+            Вес:
+            <span class="scalesValue" ng-show="scalesDetailsInfo.WEIGHT_CURRENT_VALUE">
+                {{scalesDetailsInfo.WEIGHT_CURRENT_VALUE}} кг
+            </span>
+        </p>
+
+        <p>
+            Количество прутков:
+            <span class="scalesValue" ng-show="scalesDetailsInfo.RodsQuanity || rodsQuantity">
+                {{scalesDetailsInfo.RodsQuanity || rodsQuantity }} шт
+            </span>
+        </p>
+
+        <p>
+            Осталось прутков:
+            <span class="scalesValue" ng-show="scalesDetailsInfo.RodsLeft || rodsLeft">
+                {{scalesDetailsInfo.RodsLeft || rodsLeft}} шт
+            </span>
+        </p>
+
+        <div class="isStableScalesIndicator" ng-show="scalesDetailsInfo.WEIGHT_STAB_VALUE">
+        </div>
+
+        <div class="controls">
+            <button class="btn">
+                Взять вес
+            </button>
+        </div>
+
+    </div>
+
+    <div class="scaleInfo">
+
+        <div class="section">
+            <label>Введите заказ:</label>
+            <input type="text"
+                   ng-model="orderNumber"
+                   my-enter="buildForm(orderNumber)" />
+        </div>
+
+    </div>
 
 </div>
+
+
 
 <div class="black-wrapper" ng-show="isShowModal">
     <div class="modal">
@@ -105,6 +198,7 @@
 
     </div>
 </div>
+
 
 
 

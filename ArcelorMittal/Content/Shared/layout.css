@@ -352,7 +352,7 @@ div.errorHandle label{
     position:relative;
     display:inline-block;
     width:33%;
-    height: 300px;
+    height: 400px;
     vertical-align:top;
     box-sizing:border-box;
     min-height: 100%;
@@ -400,7 +400,7 @@ h4.scalesName{
 
 .scaleInfo .controls{
     position: absolute;
-    bottom: 50px;
+    bottom: 25px;
     width: 94%;
     text-align: center;
 }
@@ -409,6 +409,46 @@ h4.scalesName{
     box-sizing:border-box;
     padding: 10px;
     border-bottom: 1px solid #d4d4d4;
+}
+
+/*task (left part in marker interface)*/
+
+.task .controlsWrapper{
+    font-size: 0;
+}
+
+.task .controlsGroup{
+    width: 50%; 
+    display: inline-block; 
+    vertical-align: top; 
+    font-size:12px;
+    box-sizing: border-box;
+}
+
+.task .controlsGroup:nth-child(2n+1){
+    padding: 10px 0 10px 10px;
+}
+
+.task .controlsGroup:nth-child(2n){
+    padding: 10px 10px 10px 0;
+}
+
+.task table td{
+    vertical-align: middle;
+    line-height: 12px;
+}
+
+.task table td:nth-child(2){
+    text-align:right;
+}
+
+.task table td input{
+    width: 50px;
+}
+
+.task table td select{
+    width: 64px;
+    font-size:12px;
 }
  
 
