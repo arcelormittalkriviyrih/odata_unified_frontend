@@ -214,7 +214,7 @@
                         name: 'LENGTH',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.LENGTH')
                         }
                     },{
@@ -230,7 +230,7 @@
                         name: 'CONTRACT_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO')
                         }
                      },{
@@ -238,7 +238,7 @@
                         name: 'DIRECTION',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.DIRECTION')
                         }
                      },{
@@ -254,7 +254,7 @@
                         name: 'CLASS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.CLASS')
                         }
                      },{
@@ -262,7 +262,7 @@
                         name: 'STEEL_CLASS',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
                         }
                      },{
@@ -286,7 +286,7 @@
                         name: 'COMM_ORDER',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER')
                         },
                      },{
@@ -302,7 +302,7 @@
                         name: 'SIZE',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.SIZE')
                         },
                      },{
@@ -318,15 +318,15 @@
                         name: 'MELT_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.MELT_NO')
                         },
                      },{
-
+ 
                         name: 'PART_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.PART_NO')
                         },
                      },{
@@ -342,7 +342,7 @@
                         name: 'BRIGADE_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO')
                         },
                     },{
@@ -350,7 +350,7 @@
                         name: 'PROD_DATE',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE')
                         },
                     },{
@@ -358,7 +358,7 @@
                         name: 'UTVK',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.UTVK')
                         },
                     },{
@@ -381,7 +381,7 @@
                         name: 'TEMPLATE',
                         properties: {
                             control: 'combo',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
                             data: templateData,
                             keyField: 'ID',
@@ -475,7 +475,7 @@
         }
 
         if ($scope.barQuantity && $scope.rodsQuantity)
-            $scope.rodsLeft = $scope.rodsQuantity - $scope.barQuantity;
+            $scope.rodsLeft = $scope.barQuantity - $scope.rodsQuantity;
     }
 
     function vmReset() {

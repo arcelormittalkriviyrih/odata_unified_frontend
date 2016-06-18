@@ -299,7 +299,7 @@ div.errorHandle label{
     resize:none;
 }
 
-/*market*/
+/*marker*/
 
 .scaleWrapper{
     display: table;
@@ -395,6 +395,12 @@ h4.scalesName{
 .scalesValue{
     float:right;
     font-size:25px;
+    font-weight: bold;
+}
+
+.rodsValue{
+    float:right;
+    font-size:18px;
     font-weight: bold;
 }
 

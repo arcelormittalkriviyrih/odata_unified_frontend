@@ -177,7 +177,7 @@
                         name: 'LENGTH',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.LENGTH')
                         }
                     }, {
@@ -193,7 +193,7 @@
                         name: 'CONTRACT_NO',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO')
                         }
                     }, {
@@ -201,7 +201,7 @@
                         name: 'DIRECTION',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.DIRECTION')
                         }
                     }, {
@@ -265,7 +265,7 @@
                         name: 'SIZE',
                         properties: {
                             control: 'text',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.SIZE')
                         },
                     }, {
@@ -344,7 +344,7 @@
                         name: 'TEMPLATE',
                         properties: {
                             control: 'combo',
-                            required: true,
+                            required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
                             data: templateData,
                             keyField: 'ID',
