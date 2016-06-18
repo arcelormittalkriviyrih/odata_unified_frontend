@@ -1,17 +1,28 @@
-﻿<div>
-    <div id="material_lot">
+﻿<div class="container loading" ng-show="$root.showLoadingState">
 
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
+    </div>
+
+</div>
+
+<div ng-show="!$root.showLoadingState">
+    <div>
+        <div id="material_lot">
+
+        </div>
+    </div>
+
+    <div>
+        <div class="gridWrapper">
+            <div class="disable" id="materialLotPropertyDisable">
+
+            </div>
+
+            <div id="material_lot_property">
+
+            </div>
+        </div>
     </div>
 </div>
 
-<div>
-    <div class="gridWrapper">
-        <div class="disable" id="materialLotPropertyDisable">
-
-        </div>
-
-        <div id="material_lot_property">
-
-        </div>
-    </div>   
-</div>

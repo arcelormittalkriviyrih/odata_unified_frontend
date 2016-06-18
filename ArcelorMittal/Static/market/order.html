@@ -1,32 +1,54 @@
-﻿<button class="add btn btn-default" 
-        ng-click="createForm('create', 'ins_Order')">{{ 'buttonCreate' | translate }}</button>
+﻿<div class="container loading" ng-show="$root.showLoadingState">
 
-<button class="add btn btn-default" 
-        ng-click="createForm('edit', 'upd_Order', selectedRow, 'COMM_ORDER')" 
-        ng-disabled="!selectedRow">{{ 'buttonEdit' | translate }}</button>
-
-<button class="add btn btn-default"
-        ng-click="deleteRow(selectedOrder)"
-        ng-disabled="!selectedOrder">{{ 'buttonDelete' | translate }}</button>
-
-<button class="add btn btn-default"
-        ng-click="createForm('copy', 'ins_Order', selectedRow, 'COMM_ORDER')"
-        ng-disabled="!selectedRow">{{ 'buttonCopy' | translate }}</button>
-
-<div id="orders">
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
+    </div>
 
 </div>
 
-<div id="orderDetails">
+<div ng-show="!$root.showLoadingState">
+    <button class="add btn btn-default"
+            ng-click="createForm('create', 'ins_Order')">
+        {{ 'buttonCreate' | translate }}
+    </button>
 
-</div>
+    <button class="add btn btn-default"
+            ng-click="createForm('edit', 'upd_Order', selectedRow, 'COMM_ORDER')"
+            ng-disabled="!selectedRow">
+        {{ 'buttonEdit' | translate }}
+    </button>
 
-<div class="black-wrapper" ng-class="{'show': isShowModal}" ng-show="isShowModal">
-    <div class="modal">
+    <button class="add btn btn-default"
+            ng-click="deleteRow(selectedOrder)"
+            ng-disabled="!selectedOrder">
+        {{ 'buttonDelete' | translate }}
+    </button>
 
-        <div class="formWrapper">
-            <form id="orderForm" novalidate></form>
+    <button class="add btn btn-default"
+            ng-click="createForm('copy', 'ins_Order', selectedRow, 'COMM_ORDER')"
+            ng-disabled="!selectedRow">
+        {{ 'buttonCopy' | translate }}
+    </button>
+
+    <div id="orders">
+
+    </div>
+
+    <div id="orderDetails">
+
+    </div>
+
+    <div class="black-wrapper" ng-class="{'show': isShowModal}" ng-show="isShowModal">
+        <div class="modal">
+
+            <div class="formWrapper">
+
+                <div class="loading..." ng-show="loadingModalData">
+                    loading...
+                </div>
+                <form id="orderForm" novalidate ng-show="!loadingModalData"></form>
+            </div>
+
         </div>
-        
     </div>
 </div>

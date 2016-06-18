@@ -44,6 +44,8 @@
     $scope.createForm = vmCreateForm;
     $scope.deleteRow = vmDeleteRow;
 
+    $scope.loadingModalData = false;
+
     $('#orders').jsGrid({
         height: "500px",
         width: "950px",
@@ -136,6 +138,8 @@
 
         vmToggleModal(true);
 
+        $scope.loadingModalData = true;
+
         var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label'")];
 
         if (id) {
@@ -145,6 +149,8 @@
 
         $q.all(oDataAPI)
             .then(function (responce) {
+
+                $scope.loadingModalData = false;
 
                 var rowData;
 
@@ -621,3 +627,4 @@
     })
 
 }]);
+

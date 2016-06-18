@@ -1,4 +1,12 @@
-﻿<div class="row span12">
+﻿<div class="container loading" ng-show="$root.showLoadingState">
+
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
+    </div>
+
+</div>
+
+<div class="row span12" ng-show="!$root.showLoadingState">
     <div class="treeContainer span2">
         <div id="personnel_class">
         </div>

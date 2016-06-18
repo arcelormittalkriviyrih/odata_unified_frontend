@@ -1,69 +1,81 @@
-﻿<button id="addFile" class="add btn btn-default">{{ 'market.buttonAddTempate' | translate }}</button>
+﻿<div class="container loading" ng-show="$root.showLoadingState">
 
-<a href="{{downloadTechnicalList}}"
-   class="btn btn-default pull-right"
-   ng-if="showDownloadButton">
-    {{ 'market.buttonDownloadTechSheet' | translate }}
-</a>
-
-<div id="files"></div>
-
-<form id="fileForm"
-      method="post"
-      enctype="multipart/form-data"
-      style="display: none"
-      action="test">
-    <div class="row span10">
-
-        <div class="span4">
-            <label for="name">{{ 'market.grid.labelTemplate.templateName' | translate }}</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="name" name="Name" required />
-            </div>
-        </div>
-
-        <div class="span4">
-            <label for="status">{{ 'market.grid.labelTemplate.status' | translate }}</label>
-            <div class="input-group">
-                <select name="Status" class="form-control" id="status" required>
-                    <option>Разработка</option>
-                    <option>Использование</option>
-                    <option>История</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="span4">
-            <label for="fileName">{{ 'market.grid.labelTemplate.fileName' | translate }}</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="fileName" name="FileName" readonly />
-            </div>
-        </div>
-
-        <div class="span4">
-            <label for="fileType">{{ 'market.grid.labelTemplate.fileType' | translate }}</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="fileType" name="FileType" readonly />
-            </div>
-        </div>
-
-        <div class="span4">
-            <label for="fileData">{{ 'market.grid.labelTemplate.file' | translate }}</label>
-            <div class="input-group">
-                <span class="btn btn-default btn-file">
-                    {{ 'buttonUpload' | translate }}
-                    <input type="file" class="form-control" id="fileData" name="Data" required />
-                </span>
-            </div>
-        </div>
-
-        <div class="span3">
-
-            <label>&nbsp;</label>
-            <button type="submit" class="btn btn-default">OK</button>
-            <button id="cancel" class="btn btn-default pull-right">{{ 'buttonCancel' | translate }}</button>
-        </div>
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
     </div>
 
-</form>
+</div>
+
+<div ng-show="!$root.showLoadingState">
+    <button id="addFile" class="add btn btn-default">{{ 'market.buttonAddTempate' | translate }}</button>
+
+    <a href="{{downloadTechnicalList}}"
+       class="btn btn-default pull-right"
+       ng-if="showDownloadButton">
+        {{ 'market.buttonDownloadTechSheet' | translate }}
+    </a>
+
+    <div id="files"></div>
+
+    <form id="fileForm"
+          method="post"
+          enctype="multipart/form-data"
+          style="display: none"
+          action="test">
+        <div class="row span10">
+
+            <div class="span4">
+                <label for="name">{{ 'market.grid.labelTemplate.templateName' | translate }}</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="name" name="Name" required />
+                </div>
+            </div>
+
+            <div class="span4">
+                <label for="status">{{ 'market.grid.labelTemplate.status' | translate }}</label>
+                <div class="input-group">
+                    <select name="Status" class="form-control" id="status" required>
+                        <option>Разработка</option>
+                        <option>Использование</option>
+                        <option>История</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="span4">
+                <label for="fileName">{{ 'market.grid.labelTemplate.fileName' | translate }}</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="fileName" name="FileName" readonly />
+                </div>
+            </div>
+
+            <div class="span4">
+                <label for="fileType">{{ 'market.grid.labelTemplate.fileType' | translate }}</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="fileType" name="FileType" readonly />
+                </div>
+            </div>
+
+            <div class="span4">
+                <label for="fileData">{{ 'market.grid.labelTemplate.file' | translate }}</label>
+                <div class="input-group">
+                    <span class="btn btn-default btn-file">
+                        {{ 'buttonUpload' | translate }}
+                        <input type="file" class="form-control" id="fileData" name="Data" required />
+                    </span>
+                </div>
+            </div>
+
+            <div class="span3">
+
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-default">OK</button>
+                <button id="cancel" class="btn btn-default pull-right">{{ 'buttonCancel' | translate }}</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
 

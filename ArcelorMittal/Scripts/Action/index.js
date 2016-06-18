@@ -152,6 +152,11 @@
 
                         .done(function (result) {
 
+                            self.find('input, select').each(function (i, item) {
+
+                                $(item).val(null);
+                            });
+
                             $(document).trigger('oDataForm.success', {
 
                                 type: formType
@@ -166,6 +171,11 @@
 
             $('<button />').addClass('btn cancelAction').text(controlCaptions.Cancel)
                 .appendTo(controlsSubmitGroup).click(function () {
+
+                    self.find('input, select').each(function (i, item) {
+
+                        $(item).val(null);
+                    });
 
                     $(document).trigger('oDataForm.cancel');
                 })
