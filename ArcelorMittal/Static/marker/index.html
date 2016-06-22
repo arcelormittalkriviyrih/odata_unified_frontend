@@ -1,4 +1,4 @@
-﻿<div class="container loading" ng-if="!scales">
+﻿<div class="container loading" ng-if="!sides">
 
     <div class="loading-msg">
         <h1>{{ 'loadingMsg' | translate }}</h1>
@@ -6,7 +6,27 @@
 
 </div>
 
-<div class="container" ng-if="scales">
+<div class="container" ng-if="sides && sides.length > 1">
+
+    <p>
+        Выберите сторону стана для работы:
+    </p>
+
+    <select ng-model="selectedSide" ng-change="currentScales(selectedSide)">
+        <option></option>
+        <option ng-repeat="side in sides" value="{{side.ID}}">{{side.Description}}</option>
+    </select>
+</div>
+
+<div class="container loading" ng-if="!scales && scaleLoading">
+
+    <div class="loading-msg">
+        <h1>{{ 'loadingMsg' | translate }}</h1>
+    </div>
+
+</div>
+
+<div class="container" ng-if="scales && !scaleLoading">
 
     <div class="scaleWrapper">
 
@@ -41,9 +61,9 @@
                         <td>Профиль</td>
                         <td>
                             <select ng-model="selectedProfile"
-                                    ng-change="getProfilePropertiesList(selectedProfile)">
+                                    ng-change="getProfilePropertiesList()">
                                 <option></option>
-                                <option ng-repeat="profile in profiles"
+                                <option ng-selected="selectedProfile==profile.ID" ng-repeat="profile in profiles"
                                         value="{{profile.ID}}">
                                     {{profile.Description}}
                                 </option>
@@ -70,6 +90,18 @@
                     </tr>
                 </table>
             </div>
+
+            <div class="controlsGroup" style="padding:10px;">
+
+                <div>
+                    <input type="checkbox" ng-model="sandwichMode" />
+                    Бутерброд
+                </div>
+                <div>
+                    <input type="checkbox" ng-model="approvingMode" />
+                    По подтверждению
+                </div>
+            </div>
             
         </div>
 
@@ -81,8 +113,7 @@
                         <td>Масса максимум(кг.)</td>
                         <td>
                             <input type="text"
-                                   ng-model="maxMass"
-                                   ng-change="calculate()" />
+                                   ng-model="maxMass" />
                         </td>
                     </tr>
 
@@ -111,8 +142,7 @@
                         <td>Масса минимум(кг.)</td>
                         <td>
                             <input type="text"
-                                   ng-model="minMass"
-                                   ng-change="calculate()" />
+                                   ng-model="minMass" />
                         </td>
                     </tr>
 
@@ -136,7 +166,7 @@
         <div class="controls">
             <button class="btn"
                     ng-disabled="deviationState == 'wrong' || !commOrder || !minMass || !maxMass"
-                    ng-click="workRequest()">OK</button>
+                    ng-click="workRequest()">{{OKLabel}}</button>
         </div>
     </div>
 
@@ -168,8 +198,17 @@
         </div>
 
         <div class="controls">
-            <button class="btn">
+            
+            <button class="btn" ng-click="doAction('ins_JobOrderOPCCommandTakeWeightByCommOrder')">
                 Взять вес
+            </button>
+
+            <button class="btn" ng-click="doAction('ins_JobOrderOPCCommandTakeTaraByCommOrder')">
+                Взять тару
+            </button>
+
+            <button class="btn" ng-click="doAction('ins_MaterialLotByCommOrder')">
+                Тестовая печать
             </button>
         </div>
 
@@ -178,16 +217,31 @@
     <div class="scaleInfo">
 
         <div class="section">
-            <label>Введите заказ:</label>
-            <input type="text"
-                   ng-model="orderNumber"
-                   my-enter="buildForm(orderNumber)" />           
+
+            <div class="sectionItem">
+                <label>Заказ:</label>
+                <input type="text" class="input-small"
+                       ng-model="orderNumber"
+                       my-enter="buildForm(orderNumber)" />  
+            </div>
+
+            <div class="sectionItem">
+                <label>№ бригады:</label>
+                <input type="text" class="input-small"
+                       readonly
+                       ng-model="brigadeNo" />  
+            </div>
+
+            <div class="sectionItem">
+                <label>Дата</label>
+                <input type="text" class="input-small"
+                       readonly
+                       ng-model="prodDate" />  
+            </div>
+                     
         </div>
 
-        <div class="controlsGroup" style="text-align:right; padding:10px;">
-            <input type="checkbox" data-ng-model="sandwichMode" />
-            Бутерброд
-        </div>
+        
 
     </div>
 

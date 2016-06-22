@@ -456,6 +456,17 @@ h4.scalesName{
     width: 64px;
     font-size:12px;
 }
+
+/* task (right part)*/
+
+.sectionItem{
+    display:inline-block;
+    width: 32%;
+}
+
+.sectionItem input{
+    width: 60px;
+}
  
 
 
