@@ -209,17 +209,15 @@
     });
 
     $rootScope.$on('$stateChangeStart', function (e, curr, prev) {
-        // Hide loading message
 
+        // Hide loading message
         $rootScope.showLoadingState = true;
-        //$root.loadingView = false;
     });
 
     $rootScope.$on('$stateChangeSuccess', function (e, curr, prev) {
-        // Hide loading message
 
+        // Hide loading message
         $rootScope.showLoadingState = false;
-        //$root.loadingView = false;
     });
 
 }])

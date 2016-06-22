@@ -464,7 +464,7 @@
             if (!this.editing)
                 return this.itemTemplate(value);
 
-            var $result = this.editControl = this.result;
+            var $result = this.editControl = this.result.clone();
 
             $result.val(value);
 

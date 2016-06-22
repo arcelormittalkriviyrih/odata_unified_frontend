@@ -15,7 +15,7 @@
             <div class="scaleContainer"
                  ng-repeat="scale in group"
                  ng-class="{'active': scale.ID == currentScaleID}"
-                 ng-click="showScaleInfo(scale.ID); reset();">
+                 ng-click="showScaleInfo(scale.ID); getLatestWorkRequests(scale.ID)">
                 <label>{{scale.Description}}</label>
                 <h3>{{scale.data.WEIGHT_CURRENT_VALUE}} кг</h3>
                 <h4 ng-if="scale.data.RodsQuanity">{{scale.data.RodsQuanity}} шт</h4>
@@ -70,8 +70,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="controlsGroup" style="text-align:right">
-            </div>
+            
         </div>
 
         <div class="controlsWrapper">
@@ -127,7 +126,7 @@
                         <td>
                             <input type="text" readonly
                                    ng-model="deviation"
-                                   ng-class="{'wrong': state == 'wrong'}" />
+                                   ng-class="{'wrong': deviationState == 'wrong'}" />
                         </td>
                     </tr>
                 </table>
@@ -135,7 +134,9 @@
         </div>
 
         <div class="controls">
-            <button class="btn" ng-disabled="!state || state == 'wrong'">OK</button>
+            <button class="btn"
+                    ng-disabled="deviationState == 'wrong' || !commOrder || !minMass || !maxMass"
+                    ng-click="workRequest()">OK</button>
         </div>
     </div>
 
@@ -180,7 +181,12 @@
             <label>Введите заказ:</label>
             <input type="text"
                    ng-model="orderNumber"
-                   my-enter="buildForm(orderNumber)" />
+                   my-enter="buildForm(orderNumber)" />           
+        </div>
+
+        <div class="controlsGroup" style="text-align:right; padding:10px;">
+            <input type="checkbox" data-ng-model="sandwichMode" />
+            Бутерброд
         </div>
 
     </div>

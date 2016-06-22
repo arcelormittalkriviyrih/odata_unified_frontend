@@ -18,16 +18,18 @@
     $scope.currentScaleID = null;
     $scope.isShowModal = false;
     $scope.orderNumber = '';
-    $scope.state = null;
+    $scope.deviationState = null;
     $scope.sampleLength = 1;
+    $scope.commOrder = null;
 
     $scope.showScaleInfo = vmShowScaleInfo;
+    $scope.getLatestWorkRequests = vmGetLatestWorkRequests;
     $scope.buildForm = vmBuildForm;
     $scope.getProfiles = vmGetProfiles;
     $scope.getProfilePropertiesList = vmGetProfilePropertiesList;
     $scope.calculate = vmCalculate;
     $scope.reset = vmReset;
-    
+    $scope.workRequest = vmWorkRequest;    
 
     vmGetCurrentScales();
     vmGetProfiles();
@@ -117,6 +119,60 @@
                        });                     
     }
 
+    function vmGetLatestWorkRequests(id) {
+
+        vmReset();
+
+        indexService.getInfo('v_LatestWorkRequests?$filter=EquipmentID eq {0}'.format(id))
+                    .then(function (response) {
+ 
+                        var data = response.data.value;
+
+                        if (data.length > 0) {
+
+                            data.forEach(function (item) {
+
+                                switch (item.PropertyType) {
+
+                                    case "COMM_ORDER":
+
+                                        $scope.orderNumber = item.Value;
+                                        break;
+
+                                    case "MAX_WEIGHT":
+                                        $scope.maxMass = item.Value;
+                                        break;
+
+                                    case "MIN_WEIGHT":
+                                        $scope.minMass = item.Value;
+                                        break;
+
+                                    case "SAMPLE_LENGTH":
+                                        $scope.sampleLength = item.Value;
+                                        break;
+
+                                    case "BRIGADE_NO":
+                                        $scope.brigadeNo = item.Value;
+                                        break;
+
+                                    case "PROD_DATE":
+                                        $scope.prodDate = item.Value;
+                                        break;
+                                };
+                            });
+                        } else {
+
+                            $scope.orderNumber = null;
+                            $scope.maxMass = null;
+                            $scope.minMass = null;
+                            $scope.sampleLength = null;
+                            $scope.brigadeNo = null;
+                            $scope.prodDate = null;
+                        };
+                        
+                    });
+    };
+
     function vmGetProfiles() {
 
         //get profiles (left form)
@@ -129,7 +185,9 @@
 
     function vmGetProfilePropertiesList(profileId) {
 
-        indexService.getInfo('MaterialDefinitionProperty?$filter=MaterialDefinitionID eq ({0})'.format(profileId))
+        if (profileId) {
+
+            indexService.getInfo('MaterialDefinitionProperty?$filter=MaterialDefinitionID eq ({0})'.format(profileId))
                     .then(function (response) {
 
                         var profileProperties = response.data.value;
@@ -147,18 +205,38 @@
                             $scope.length = null;
                             $scope.tolerancePlus = null;
                             $scope.toleranceMinus = null;
+                            $scope.minMass = null;
+                            $scope.barWeight = null;
+                            $scope.barQuantity = null;
                         }
 
                         vmCalculate();
                     })
+        }
 
-        vmCalculate();
+        else {
+
+            $scope.linearMassFromBase = null;
+            $scope.length = null;
+            $scope.tolerancePlus = null;
+            $scope.toleranceMinus = null;
+            $scope.minMass = null;
+            $scope.barWeight = null;
+            $scope.barQuantity = null;
+
+            vmCalculate();
+        }        
     }
 
     function vmBuildForm(orderNumber) {
 
+        $scope.commOrder = null;
+      
         indexService.getInfo("v_WorkDefinitionPropertiesAll?$filter=comm_order eq '{0}'".format(orderNumber))
                          .then(function (response) {
+
+                             $scope.commOrder = orderNumber;
+
                              var orderData = response.data.value;
                              var procedure;
 
@@ -170,8 +248,12 @@
                                      procedure = 'ins_WorkDefinition';
                                  
                                  vmCreateForm('edit', procedure, orderData, 'COMM_ORDER');
-                             }else
-                                  alert('there is no orders with this name!');
+                             } else {
+
+                                 $scope.commOrder = null;
+                                 alert('there is no orders with this name!');
+                            }
+                                  
                          })
 
     }
@@ -407,22 +489,20 @@
 
         /*calculations for left form*/
 
-        if ($scope.length && $scope.linearMassFromBase){
+        if ($scope.length && $scope.linearMassFromBase) {
             $scope.barWeight = $scope.length * $scope.linearMassFromBase;
             $scope.barWeight = parseFloat($scope.barWeight).toFixed(3);
         }
-            
+
         else
             $scope.barWeight = null;
 
-        if ($scope.barWeight && $scope.barQuantity){
+        if ($scope.barWeight && $scope.barQuantity) {
 
             $scope.minMass = $scope.barWeight * $scope.barQuantity;
             $scope.minMass = parseFloat($scope.minMass).toFixed(3);
-        }          
-        else
-            $scope.minMass = null;
-
+        }
+                            
         if (!$scope.sampleMass || $scope.sampleMass.length == 0)
             $scope.linearMass = $scope.linearMassFromBase;
 
@@ -433,34 +513,32 @@
             $scope.linearMass = $scope.linearMassCalculated;
             $scope.barWeight = $scope.linearMassCalculated * $scope.length;
             $scope.minMass = $scope.barWeight * $scope.barQuantity;
-        }                   
+        }
 
         if ($scope.linearMassFromBase && $scope.linearMassCalculated) {
 
             $scope.deviation = (($scope.linearMassCalculated / $scope.linearMassFromBase) * 100) - 100;
             $scope.deviation = parseFloat($scope.deviation).toFixed(1);
         }
-            
+
         else
             $scope.deviation = null;
 
         if ($scope.deviation) {
 
             if (($scope.tolerancePlus && $scope.deviation > $scope.tolerancePlus)
-
                 ||
-                ($scope.toleranceMinus && $scope.deviation < (-1) * $scope.toleranceMinus)
-                ) {
+                ($scope.toleranceMinus && $scope.deviation < (-1) * $scope.toleranceMinus)) {
 
-                $scope.state = 'wrong';
+                $scope.deviationState = 'wrong';
             } else
-                $scope.state = 'correct';
+                $scope.deviationState = 'correct';
 
         }
 
         vmCalculateRods();
-                           
-    }
+
+    };
 
     function vmCalculateRods() {
 
@@ -471,7 +549,7 @@
 
         if ($scope.barQuantity && $scope.rodsQuantity)
             $scope.rodsLeft = $scope.barQuantity - $scope.rodsQuantity;
-    }
+    };
 
     function vmReset() {
 
@@ -484,7 +562,33 @@
         $scope.barWeight = null;
         $scope.sampleLength = 1;
         $scope.deviation = null;
-    }
+    };
+
+    function vmWorkRequest() {
+
+        var data = {
+
+            EquipmentID: parseInt($scope.currentScaleID) || null,
+            ProfileID: parseInt($scope.selectedProfile) || null,
+            COMM_ORDER: $scope.commOrder.toString() || null,
+            LENGTH: $scope.length ? $scope.length.toString() : null,
+            BAR_WEIGHT: $scope.barWeight ? $scope.barWeight.toString() : null,
+            BAR_QUANTITY: $scope.barQuantity ? $scope.barQuantity.toString() : null,
+            MAX_WEIGHT: $scope.maxMass ? $scope.maxMass.toString() : null,
+            MIN_WEIGHT: $scope.minMass ? $scope.minMass.toString() : null,
+            SAMPLE_WEIGHT: $scope.sampleMass ? $scope.sampleMass.toString() : null,
+            SAMPLE_LENGTH: $scope.sampleLength ? $scope.sampleLength.toString() : null,
+            DEVIATION: $scope.deviation ? $scope.deviation.toString() : null
+
+        }
+
+        indexService.sendInfo('ins_WorkRequest', data)
+                    .then(function (response) {
+
+                        alert('sended!');
+                    });
+        
+    };
 
     $(document).on('oDataForm.success', function (e, data) {
 
@@ -496,6 +600,26 @@
 
         vmToggleModal(false);
         $scope.$apply();
+
+        indexService.getInfo('v_LatestWorkRequests?$filter=EquipmentID eq {0}'.format($scope.currentScaleID))
+                    .then(function (response) {
+
+                        var data = response.data.value;
+
+                        if (data.length > 0) {
+
+                            $scope.orderNumber = data.filter(function (item) {
+
+                                return item.PropertyType == 'COMM_ORDER';
+                            }).map(function (item) {
+
+                                return item.Value;
+                            })[0];
+
+                            
+
+                        };
+                    });
     });
 
 }])
