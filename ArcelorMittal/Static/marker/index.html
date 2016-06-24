@@ -6,7 +6,7 @@
 
 </div>
 
-<div class="container" ng-if="sides && sides.length > 1">
+<div class="container" ng-if="sides && sides.length > 1" ng-hide="sideIsSelected">
 
     <p>
         Выберите сторону стана для работы:
@@ -37,7 +37,7 @@
                  ng-class="{'active': scale.ID == currentScaleID}"
                  ng-click="showScaleInfo(scale.ID); getLatestWorkRequests(scale.ID)">
                 <label>{{scale.Description}}</label>
-                <h3>{{scale.data.WEIGHT_CURRENT_VALUE}} кг</h3>
+                <h3>{{scale.data.WEIGHT_CURRENT}} кг</h3>
                 <h4 ng-if="scale.data.RodsQuanity">{{scale.data.RodsQuanity}} шт</h4>
             </div>
         </div>
@@ -113,7 +113,9 @@
                         <td>Масса максимум(кг.)</td>
                         <td>
                             <input type="text"
-                                   ng-model="maxMass" />
+                                   ng-model="maxMass" 
+                                   ng-class="{'wrong': !maxMass}"
+                                   ng-change="enableControlOK()" />
                         </td>
                     </tr>
 
@@ -142,7 +144,9 @@
                         <td>Масса минимум(кг.)</td>
                         <td>
                             <input type="text"
-                                   ng-model="minMass" />
+                                   ng-model="minMass"
+                                   ng-class="{'wrong': !minMass}" 
+                                   ng-change="enableControlOK()" />
                         </td>
                     </tr>
 
@@ -165,7 +169,7 @@
 
         <div class="controls">
             <button class="btn"
-                    ng-disabled="deviationState == 'wrong' || !commOrder || !minMass || !maxMass"
+                    ng-disabled="disableButtonOKTask"
                     ng-click="workRequest()">{{OKLabel}}</button>
         </div>
     </div>
@@ -175,8 +179,8 @@
 
         <p>
             Вес:
-            <span class="scalesValue" ng-show="scalesDetailsInfo.WEIGHT_CURRENT_VALUE">
-                {{scalesDetailsInfo.WEIGHT_CURRENT_VALUE}} кг
+            <span class="scalesValue" ng-show="scalesDetailsInfo.WEIGHT_CURRENT">
+                {{scalesDetailsInfo.WEIGHT_CURRENT}} кг
             </span>
         </p>
 
@@ -194,16 +198,23 @@
             </span>
         </p>
 
-        <div class="isStableScalesIndicator" ng-show="scalesDetailsInfo.WEIGHT_STAB_VALUE">
+        <div class="isStableScalesIndicator" ng-show="scalesDetailsInfo.WEIGHT_STAB">
         </div>
+
+        <span class="weightZeroIndicator" ng-show="scalesDetailsInfo.WEIGHT_ZERO">>0<</span>
 
         <div class="controls">
             
-            <button class="btn" ng-click="doAction('ins_JobOrderOPCCommandTakeWeightByCommOrder')">
+            <button class="btn" 
+                    ng-disabled="!scalesDetailsInfo.AUTO_MANU || !scalesDetailsInfo.WEIGHT_STAB" 
+                    ng-click="doAction('ins_JobOrderOPCCommandTakeWeightByCommOrder')">
                 Взять вес
             </button>
 
-            <button class="btn" ng-click="doAction('ins_JobOrderOPCCommandTakeTaraByCommOrder')">
+            <button class="btn"
+                    ng-show="sandwichMode"
+                    ng-disabled="!scalesDetailsInfo.AUTO_MANU || !scalesDetailsInfo.WEIGHT_STAB"
+                     ng-click="doAction('ins_JobOrderOPCCommandTakeTaraByCommOrder')">
                 Взять тару
             </button>
 

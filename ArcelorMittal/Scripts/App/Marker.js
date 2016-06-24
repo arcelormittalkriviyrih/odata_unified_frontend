@@ -22,7 +22,10 @@
     $scope.deviationState = null;
     $scope.sampleLength = 1;
     $scope.commOrder = null;
+    $scope.sideIsSelected = false;
     $scope.OKLabel = 'OK';
+    $scope.disableButtonOKTask = false;
+    $scope.classOK = null;
 
     $scope.currentScales = vmGetCurrentScales;
     $scope.showScaleInfo = vmShowScaleInfo;
@@ -34,6 +37,7 @@
     $scope.reset = vmReset;
     $scope.workRequest = vmWorkRequest;
     $scope.doAction = vmDoAction;
+    $scope.enableControlOK = vmEnableControlOK;
 
     vmGetCurrentSides();    
     vmGetProfiles();
@@ -41,7 +45,7 @@
     function vmGetCurrentSides() {
 
         indexService.getInfo('v_AvailableSides').then(function (response) {
-
+            
             $scope.sides = response.data.value;
 
             if ($scope.sides.length == 1)
@@ -50,6 +54,8 @@
     }
 
     function vmGetCurrentScales(side) {
+
+        $scope.sideIsSelected = true;
 
         var url = 'v_AvailableScales';
 
@@ -225,7 +231,7 @@
 
                             });
                         };
-                        
+                                                
                     });
     };
 
@@ -545,6 +551,7 @@
     function vmCalculate() {
 
         /*calculations for left form*/
+        $scope.disableButtonOKTask = false;
 
         if ($scope.length && $scope.linearMassFromBase) {
             $scope.barWeight = $scope.length * $scope.linearMassFromBase;
@@ -599,9 +606,9 @@
 
     function vmCalculateRods() {
 
-        if ($scope.scalesDetailsInfo.WEIGHT_CURRENT_VALUE && $scope.barWeight) {
+        if ($scope.scalesDetailsInfo.WEIGHT_CURRENT && $scope.barWeight) {
 
-            $scope.rodsQuantity = parseInt($scope.scalesDetailsInfo.WEIGHT_CURRENT_VALUE / $scope.barWeight);
+            $scope.rodsQuantity = parseInt($scope.scalesDetailsInfo.WEIGHT_CURRENT / $scope.barWeight);
         }
 
         if ($scope.barQuantity && $scope.rodsQuantity)
@@ -623,31 +630,40 @@
 
     function vmWorkRequest() {
 
-        var data = {
+        if ($scope.deviationState != 'wrong' && $scope.commOrder && $scope.minMass && $scope.maxMass) {
 
-            EquipmentID: parseInt($scope.currentScaleID) || null,
-            ProfileID: parseInt($scope.selectedProfile) || null,
-            COMM_ORDER: $scope.commOrder.toString() || null,
-            LENGTH: $scope.length ? $scope.length.toString() : null,
-            BAR_WEIGHT: $scope.barWeight ? $scope.barWeight.toString() : null,
-            BAR_QUANTITY: $scope.barQuantity ? $scope.barQuantity.toString() : null,
-            MAX_WEIGHT: $scope.maxMass ? $scope.maxMass.toString() : null,
-            MIN_WEIGHT: $scope.minMass ? $scope.minMass.toString() : null,
-            SAMPLE_WEIGHT: $scope.sampleMass ? $scope.sampleMass.toString() : null,
-            SAMPLE_LENGTH: $scope.sampleLength ? $scope.sampleLength.toString() : null,
-            DEVIATION: $scope.deviation ? $scope.deviation.toString() : null,
-            SANDWICH_MODE: $scope.sandwichMode ? 'true' : 'false',
-            AUTO_MANU_VALUE: $scope.approvingMode ? 'true' : 'false'
-        }
+            $scope.minMassWrongClass = false;
+            $scope.maxMassWrongClass = false;
 
-        $scope.OKLabel = 'loading...';
+            var data = {
 
-        indexService.sendInfo('ins_WorkRequest', data)
-                    .then(function (response) {
+                EquipmentID: parseInt($scope.currentScaleID) || null,
+                ProfileID: parseInt($scope.selectedProfile) || null,
+                COMM_ORDER: $scope.commOrder.toString() || null,
+                LENGTH: $scope.length ? $scope.length.toString() : null,
+                BAR_WEIGHT: $scope.barWeight ? $scope.barWeight.toString() : null,
+                BAR_QUANTITY: $scope.barQuantity ? $scope.barQuantity.toString() : null,
+                MAX_WEIGHT: $scope.maxMass ? $scope.maxMass.toString() : null,
+                MIN_WEIGHT: $scope.minMass ? $scope.minMass.toString() : null,
+                SAMPLE_WEIGHT: $scope.sampleMass ? $scope.sampleMass.toString() : null,
+                SAMPLE_LENGTH: $scope.sampleLength ? $scope.sampleLength.toString() : null,
+                DEVIATION: $scope.deviation ? $scope.deviation.toString() : null,
+                SANDWICH_MODE: $scope.sandwichMode ? 'true' : 'false',
+                AUTO_MANU_VALUE: $scope.approvingMode ? 'true' : 'false'
+            }
 
-                        $scope.OKLabel = 'OK';
-                    });
-        
+            $scope.OKLabel = 'loading...';
+
+            indexService.sendInfo('ins_WorkRequest', data)
+                        .then(function (response) {
+
+                            $scope.OKLabel = 'OK';
+                            $scope.disableButtonOKTask = true;
+                        });
+        } else
+            alert('You must fill all required fields!');
+
+                     
     };
 
     function vmDoAction(url) {
@@ -656,8 +672,16 @@
 
             COMM_ORDER: $scope.commOrder.toString() || null,
             EquipmentID: parseInt($scope.currentScaleID) || null
+        }).then(function (response) {
+
+            response;
         })
     };
+   
+    function vmEnableControlOK() {
+
+        $scope.disableButtonOKTask = false;
+    }
 
     $(document).on('oDataForm.success', function (e, data) {
 
@@ -684,9 +708,7 @@
 
                                 return item.Value;
                             })[0];
-
                             
-
                         };
                     });
     });
