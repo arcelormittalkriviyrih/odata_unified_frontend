@@ -92,8 +92,8 @@
             Unauthorized: 'This role is unavailable for you!'
         },
         errorLog:{
-            errorCode: 'Error code',
-            description: 'Description',
+            errorCode: 'Error message',
+            description: 'Enter extra info',
             sending: 'Sending...'
         },
         buttonCreate: 'Create',
@@ -210,8 +210,8 @@
             Unauthorized: 'Эта роль Вам недоступна'
         },
         errorLog: {
-            errorCode: 'Код ошибки',
-            description: 'Описание',
+            errorCode: 'Текст ошибки',
+            description: 'Введите под. информацию',
             sending: 'Отправка...'
         },
         buttonCreate: 'Создать',
@@ -219,7 +219,7 @@
         buttonDelete: 'Удалить',
         buttonCopy: 'Копировать',
         buttonSubmit: 'Отправить',
-        buttonSend: 'Отосласть',
+        buttonSend: 'Отправить',
         buttonUpload: 'Выбрать файл',
         buttonCancel: 'Отмена',
         loadingMsg: 'Загрузка...',
@@ -331,8 +331,8 @@
             Unauthorized: 'У доступі відмовлено'
         },
         errorLog: {
-            errorCode: 'Код помилки',
-            description: 'Опис',
+            errorCode: 'Текст помилки',
+            description: 'Введіть дод. інформацію',
             sending: 'Відправка...'
         },
         buttonCreate: 'Створити',

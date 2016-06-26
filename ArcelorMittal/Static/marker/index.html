@@ -94,11 +94,15 @@
             <div class="controlsGroup" style="padding:10px;">
 
                 <div>
-                    <input type="checkbox" ng-model="sandwichMode" />
+                    <input type="checkbox" 
+                           ng-model="sandwichMode" 
+                           ng-change="enableControlOK();" />
                     Бутерброд
                 </div>
                 <div>
-                    <input type="checkbox" ng-model="approvingMode" />
+                    <input type="checkbox" 
+                           ng-model="approvingMode" 
+                           ng-change="enableControlOK()" />
                     По подтверждению
                 </div>
             </div>
@@ -177,6 +181,14 @@
     <div class="scaleInfo">
         <h4 class="scalesName">{{scalesDetailsInfo.ScalesName}}</h4>
 
+        <span class="autoManuMsg" ng-show="!scalesDetailsInfo.AUTO_MANU">Автоматический режим</span>
+
+        <p>
+            <span ng-show="scalesDetailsInfo.POCKET_LOC">Весы заблокированы</span>
+            <span ng-show="!scalesDetailsInfo.PACK_SANDWICH">Первая пачка</span>
+            <span ng-show="scalesDetailsInfo.PACK_SANDWICH">Вторая пачка</span>
+        </p>
+
         <p>
             Вес:
             <span class="scalesValue" ng-show="scalesDetailsInfo.WEIGHT_CURRENT">
@@ -206,14 +218,17 @@
         <div class="controls">
             
             <button class="btn" 
-                    ng-disabled="!scalesDetailsInfo.AUTO_MANU || !scalesDetailsInfo.WEIGHT_STAB" 
+                    ng-disabled="!(
+                    (!sandwichModeAccepted && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB) 
+                    || 
+                    (sandwichModeAccepted && scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB))" 
                     ng-click="doAction('ins_JobOrderOPCCommandTakeWeightByCommOrder')">
                 Взять вес
             </button>
 
             <button class="btn"
-                    ng-show="sandwichMode"
-                    ng-disabled="!scalesDetailsInfo.AUTO_MANU || !scalesDetailsInfo.WEIGHT_STAB"
+                    ng-show="sandwichModeAccepted"
+                    ng-disabled="!(!scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB)"
                      ng-click="doAction('ins_JobOrderOPCCommandTakeTaraByCommOrder')">
                 Взять тару
             </button>
@@ -232,6 +247,7 @@
             <div class="sectionItem">
                 <label>Заказ:</label>
                 <input type="text" class="input-small"
+                       ng-change="checkIsAcceptedOrder()"
                        ng-model="orderNumber"
                        my-enter="buildForm(orderNumber)" />  
             </div>

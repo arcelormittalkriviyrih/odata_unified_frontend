@@ -461,11 +461,25 @@ h4.scalesName{
 
 .sectionItem{
     display:inline-block;
-    width: 32%;
+    width: 28%;
 }
 
 .sectionItem input{
     width: 60px;
+}
+
+.autoManuMsg{
+    position: absolute;
+    top: 16px;
+    right: 10px;
+}
+
+.sectionItem:nth-child(1){
+    width: 40%;
+}
+
+.sectionItem:nth-child(1) input{
+    width: 90px;
 }
  
 

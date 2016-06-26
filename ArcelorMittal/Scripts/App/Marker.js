@@ -26,6 +26,9 @@
     $scope.OKLabel = 'OK';
     $scope.disableButtonOKTask = false;
     $scope.classOK = null;
+    $scope.sandwichModeAccepted = false;
+    //$scope.brigadeNoAfterOrderApprove = null;
+    //$scope.prodDateAfterOrderApprove = null;
 
     $scope.currentScales = vmGetCurrentScales;
     $scope.showScaleInfo = vmShowScaleInfo;
@@ -38,6 +41,7 @@
     $scope.workRequest = vmWorkRequest;
     $scope.doAction = vmDoAction;
     $scope.enableControlOK = vmEnableControlOK;
+    $scope.checkIsAcceptedOrder = vmCheckIsAcceptedOrder;
 
     vmGetCurrentSides();    
     vmGetProfiles();
@@ -180,17 +184,21 @@
 
                         if (data.length > 0) {
 
+                            $scope.disableButtonOKTask = true;
+
                             $scope.workRequestID = data[0].WorkRequestID;
                             $scope.selectedProfile = data[0].ProfileID;
 
-
-
+                            if ($scope.selectedProfile)
+                                vmGetProfilePropertiesList();
+                            
                             data.forEach(function (item) {
 
 
                                 if (item.PropertyType == "COMM_ORDER") {
                                     $scope.orderNumber = item.Value;
                                     $scope.commOrder = item.Value;
+                                    $scope.isAcceptedOrder = true;
                                 }
 
                                 else if (item.PropertyType == "MAX_WEIGHT")
@@ -211,9 +219,9 @@
                                 else if (item.PropertyType == "DEVIATION")
                                     $scope.deviation = item.Value;
 
-                                else if (item.PropertyType == "BRIGADE_NO")
+                                else if (item.PropertyType == "BRIGADE_NO") 
                                     $scope.brigadeNo = item.Value;
-
+                                
                                 else if (item.PropertyType == "PROD_DATE")
                                     $scope.prodDate = item.Value;
 
@@ -223,11 +231,14 @@
                                 else if (item.PropertyType == "BAR_QUANTITY")
                                     $scope.barQuantity = item.Value;
 
-                                else if (item.PropertyType == "SANDWICH_MODE")
-                                    $scope.sandwichMode = Boolean(item.Value);
+                                else if (item.PropertyType == "SANDWICH_MODE"){
+                                    $scope.sandwichMode = item.Value == 'true' ? true : false;
+                                    $scope.sandwichModeAccepted = $scope.sandwichMode;
+                                }
+                                    
 
                                 else if (item.PropertyType == "AUTO_MANU_VALUE")
-                                    $scope.approvingMode = Boolean(item.Value);
+                                    $scope.approvingMode = item.Value == 'true' ? true : false;
 
                             });
                         };
@@ -314,6 +325,9 @@
                              } else {
 
                                  $scope.commOrder = null;
+
+                                 vmShowLastCommOrderValue();
+
                                  alert('there is no orders with this name!');
                             }
                                   
@@ -630,7 +644,12 @@
 
     function vmWorkRequest() {
 
-        if ($scope.deviationState != 'wrong' && $scope.commOrder && $scope.minMass && $scope.maxMass) {
+        if ($scope.deviationState != 'wrong'
+            && $scope.commOrder
+            && $scope.minMass
+            && $scope.maxMass
+            && (parseFloat($scope.maxMass) >= parseFloat($scope.minMass))
+            && $scope.isAcceptedOrder) {
 
             $scope.minMassWrongClass = false;
             $scope.maxMassWrongClass = false;
@@ -651,7 +670,7 @@
                 SANDWICH_MODE: $scope.sandwichMode ? 'true' : 'false',
                 AUTO_MANU_VALUE: $scope.approvingMode ? 'true' : 'false'
             }
-
+           
             $scope.OKLabel = 'loading...';
 
             indexService.sendInfo('ins_WorkRequest', data)
@@ -659,9 +678,24 @@
 
                             $scope.OKLabel = 'OK';
                             $scope.disableButtonOKTask = true;
+                            $scope.sandwichModeAccepted = $scope.sandwichMode;
                         });
-        } else
-            alert('You must fill all required fields!');
+        } else {
+            
+            if (!($scope.maxMass && $scope.minMass) && !$scope.isAcceptedOrder) {
+                alert('You must fill all required fields! \n You must accept your order number!');
+            }
+            else if (!($scope.maxMass && $scope.minMass) && $scope.isAcceptedOrder) {
+                alert('You must fill all required fields!');
+            }
+
+            else if ($scope.maxMass && $scope.minMass && !$scope.isAcceptedOrder) {
+                alert('You must accept your order number!');
+            }
+            else if (parseFloat($scope.maxMass) < parseFloat($scope.minMass))
+                alert('Max weight cannot be less then min weight!');
+        }
+            
 
                      
     };
@@ -683,16 +717,7 @@
         $scope.disableButtonOKTask = false;
     }
 
-    $(document).on('oDataForm.success', function (e, data) {
-
-        vmToggleModal(false);
-        $scope.$apply();
-    });
-
-    $(document).on('oDataForm.cancel', function (e) {
-
-        vmToggleModal(false);
-        $scope.$apply();
+    function vmShowLastCommOrderValue() {
 
         indexService.getInfo('v_LatestWorkRequests?$filter=EquipmentID eq {0}'.format($scope.currentScaleID))
                     .then(function (response) {
@@ -708,9 +733,34 @@
 
                                 return item.Value;
                             })[0];
-                            
+
                         };
                     });
+    }
+
+    function vmCheckIsAcceptedOrder() {
+
+        $scope.isAcceptedOrder = false;
+    }
+
+    $(document).on('oDataForm.success', function (e, data) {
+
+        $scope.disableButtonOKTask = false;
+        $scope.isAcceptedOrder = true;
+        vmToggleModal(false);
+        
+        $scope.brigadeNo = data.fields.BRIGADE_NO;
+        $scope.prodDate = data.fields.PROD_DATE;
+
+        $scope.$apply();
+    });
+
+    $(document).on('oDataForm.cancel', function (e) {
+
+        vmToggleModal(false);        
+        vmShowLastCommOrderValue();
+        
+        $scope.$apply();
     });
 
 }])

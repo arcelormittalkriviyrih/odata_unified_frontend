@@ -8,7 +8,8 @@
             keyField = options.keyField,
             rowData = options.rowData,
             formType = options.type,
-            controlCaptions = options.controlCaptions;
+            controlCaptions = options.controlCaptions,
+            _fields = null;
 
            
         vmGetMetadata()
@@ -159,7 +160,8 @@
 
                             $(document).trigger('oDataForm.success', {
 
-                                type: formType
+                                type: formType,
+                                fields: _fields
                             })
                         })
                         .fail(handleError);
@@ -192,6 +194,8 @@
                                 return p;
 
                             }, {});
+
+            _fields = data;
 
             for (var prop in data) {
 
