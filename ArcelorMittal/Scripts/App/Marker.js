@@ -13,6 +13,7 @@
 
 .controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', '$interval', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, $interval) {
 
+    //properties
     $scope.filter = [];
     $scope.scalesDetailsInfo = {};
     $scope.currentScaleID = null;
@@ -27,9 +28,8 @@
     $scope.disableButtonOKTask = false;
     $scope.classOK = null;
     $scope.sandwichModeAccepted = false;
-    //$scope.brigadeNoAfterOrderApprove = null;
-    //$scope.prodDateAfterOrderApprove = null;
 
+    //methods
     $scope.currentScales = vmGetCurrentScales;
     $scope.showScaleInfo = vmShowScaleInfo;
     $scope.getLatestWorkRequests = vmGetLatestWorkRequests;
@@ -40,10 +40,19 @@
     $scope.reset = vmReset;
     $scope.workRequest = vmWorkRequest;
     $scope.doAction = vmDoAction;
+
+    //method for enabling OK button on 'Task' tab 
+    //when we change value of any control (for examle, checkbox)
     $scope.enableControlOK = vmEnableControlOK;
+
+    //method for checking is accepted current order for active scales
+    //(Check whether the OK button on modal window with order form is pressed)
     $scope.checkIsAcceptedOrder = vmCheckIsAcceptedOrder;
 
-    vmGetCurrentSides();    
+    //first we get list of available sides
+    vmGetCurrentSides();
+
+    //and get full list of available steel profiles
     vmGetProfiles();
 
     function vmGetCurrentSides() {
@@ -52,6 +61,8 @@
             
             $scope.sides = response.data.value;
 
+            //if there is only one available side
+            //show all available scales without selecting side
             if ($scope.sides.length == 1)
                 vmGetCurrentScales();
         });
@@ -59,6 +70,7 @@
 
     function vmGetCurrentScales(side) {
 
+        //this flag is needed for disabling side list after selecting side
         $scope.sideIsSelected = true;
 
         var url = 'v_AvailableScales';
@@ -66,15 +78,21 @@
         if (side)
             url += '?$filter=sideID eq {0}'.format(side);
 
+        //set scaleLoading flag as true for showing 'loading' message while scales list loaded
         $scope.scaleLoading = true;
+
+        //set id of current scale as null while scales list loaded 
+        //(currentScaleID flag is needed for showing scale detail info and task bar)
         $scope.currentScaleID = null;
 
         indexService.getInfo(url).then(function (response) {
 
+            //hide 'loading' message when scales list loaded
             $scope.scaleLoading = false;
 
             $scope.scales = response.data.value;
 
+            //sort scales by name
             $scope.scales.sort(function (a, b) {
 
                 if (a.Description < b.Description)
@@ -85,6 +103,7 @@
                     return 0;
             })
 
+            //there we build filter for request which get us short info for every scale
             if ($scope.scales.length > 0) {
 
                 $scope.filter = [];
@@ -100,6 +119,7 @@
 
             vmGetCurrentScalesShortInfo();
 
+            //remove old interval
             if ($rootScope.intervalScales)
                 $interval.cancel($rootScope.intervalScales);
 
@@ -145,7 +165,6 @@
     function vmShowScaleInfo(id) {
         
         $scope.currentScaleID = id;
-
 
         //get scales detail info
         indexService.getInfo('v_ScalesDetailInfo?$filter=ID eq {0}'.format(id))
@@ -202,10 +221,10 @@
                                 }
 
                                 else if (item.PropertyType == "MAX_WEIGHT")
-                                    $scope.maxMass = item.Value;
+                                    $scope.maxMass = parseInt(item.Value);
 
                                 else if (item.PropertyType == "MIN_WEIGHT")
-                                    $scope.minMass = item.Value;
+                                    $scope.minMass = parseInt(item.Value);
 
                                 else if (item.PropertyType == "BAR_WEIGHT")
                                     $scope.barWeight = item.Value;
@@ -578,7 +597,7 @@
         if ($scope.barWeight && $scope.barQuantity) {
 
             $scope.minMass = $scope.barWeight * $scope.barQuantity;
-            $scope.minMass = parseFloat($scope.minMass).toFixed(3);
+            $scope.minMass = parseInt($scope.minMass).toFixed(3);
         }
                                    
         if (!$scope.sampleMass || $scope.sampleMass.length == 0)
@@ -590,7 +609,7 @@
 
             $scope.linearMass = $scope.linearMassCalculated;
             $scope.barWeight = $scope.linearMassCalculated * $scope.length; 
-            $scope.minMass = $scope.barWeight * $scope.barQuantity;
+            $scope.minMass = parseInt($scope.barWeight * $scope.barQuantity);
         }
 
         if ($scope.linearMassFromBase && $scope.linearMassCalculated) {
@@ -648,7 +667,7 @@
             && $scope.commOrder
             && $scope.minMass
             && $scope.maxMass
-            && (parseFloat($scope.maxMass) >= parseFloat($scope.minMass))
+            && (parseInt($scope.maxMass) >= parseInt($scope.minMass))
             && $scope.isAcceptedOrder) {
 
             $scope.minMassWrongClass = false;
@@ -662,8 +681,8 @@
                 LENGTH: $scope.length ? $scope.length.toString() : null,
                 BAR_WEIGHT: $scope.barWeight ? $scope.barWeight.toString() : null,
                 BAR_QUANTITY: $scope.barQuantity ? $scope.barQuantity.toString() : null,
-                MAX_WEIGHT: $scope.maxMass ? $scope.maxMass.toString() : null,
-                MIN_WEIGHT: $scope.minMass ? $scope.minMass.toString() : null,
+                MAX_WEIGHT: $scope.maxMass ? parseInt($scope.maxMass).toString() : null,
+                MIN_WEIGHT: $scope.minMass ? parseInt($scope.minMass).toString() : null,
                 SAMPLE_WEIGHT: $scope.sampleMass ? $scope.sampleMass.toString() : null,
                 SAMPLE_LENGTH: $scope.sampleLength ? $scope.sampleLength.toString() : null,
                 DEVIATION: $scope.deviation ? $scope.deviation.toString() : null,
