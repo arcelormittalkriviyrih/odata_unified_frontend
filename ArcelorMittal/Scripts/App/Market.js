@@ -350,7 +350,7 @@
                         name: 'TEMPLATE',
                         properties: {
                             control: 'combo',
-                            required: false,
+                            required: true,
                             translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
                             data: templateData,
                             keyField: 'ID',
@@ -388,10 +388,9 @@
         $scope.isShowModal = expr;
     }
 
-    $(document).on('oDataForm.success', function (e, data) {
+    $('#orderForm').on('oDataForm.success', function (e, data) {
 
         vmToggleModal(false);
-
 
         $('#orders').jsGrid('loadOdata', {});
 
@@ -402,7 +401,7 @@
         $scope.$apply();
     });
 
-    $(document).on('oDataForm.cancel', function (e) {
+    $('#orderForm').on('oDataForm.cancel', function (e) {
 
         vmToggleModal(false);
         $scope.$apply();

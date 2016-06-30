@@ -35,10 +35,15 @@
             <div class="scaleContainer"
                  ng-repeat="scale in group"
                  ng-class="{'active': scale.ID == currentScaleID}"
-                 ng-click="showScaleInfo(scale.ID); getLatestWorkRequests(scale.ID)">
+                 ng-click="showScaleInfo(scale.ID); getLatestWorkRequest(scale.ID)">
                 <label>{{scale.Description}}</label>
-                <h3>{{scale.data.WEIGHT_CURRENT}} кг</h3>
-                <h4 ng-if="scale.data.RodsQuanity">{{scale.data.RodsQuanity}} шт</h4>
+                <h3>{{scale.weightCurrent}} кг</h3>
+                <h4 ng-show="scale.ID != currentScaleID">
+                    {{scale.rodsQuantity}} шт
+                </h4>
+                <h4 ng-show="scale.ID == currentScaleID">
+                   {{rodsQuantity}} шт
+                </h4>
             </div>
         </div>
     </div>
@@ -48,7 +53,7 @@
 <div class="scaleDetailInfo" ng-show="currentScaleID">
 
     <div class="scaleInfo task">
-        <label>Задание</label>
+        <label class="labelTask">Задание</label>
 
         <div style="text-align: right">
 
@@ -61,7 +66,8 @@
                         <td>Профиль</td>
                         <td>
                             <select ng-model="selectedProfile"
-                                    ng-change="getProfilePropertiesList()">
+                                    ng-class="{'wrong': !selectedProfile}"
+                                    ng-change="getProfilePropertiesList();">
                                 <option></option>
                                 <option ng-selected="selectedProfile==profile.ID" ng-repeat="profile in profiles"
                                         value="{{profile.ID}}">
@@ -105,6 +111,21 @@
                            ng-change="enableControlOK()" />
                     По подтверждению
                 </div>
+
+                <div style="margin-top: 45px">
+                    <table>
+                        <tr>
+                            <td>Рекомендуемая масса минимум (кг)</td>
+                            <td>
+                                <input type="text"
+                                       style="width: 37px;"
+                                       readonly
+                                       ng-model="minMassRec"
+                                        />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             
         </div>
@@ -114,12 +135,14 @@
             <div class="controlsGroup">
                 <table>
                     <tr>
-                        <td>Масса максимум(кг.)</td>
+                        <td>Масса минимум(кг.)</td>
                         <td>
-                            <input type="number"
-                                   ng-model="maxMass" 
-                                   ng-class="{'wrong': !maxMass}"
-                                   ng-change="enableControlOK()" />
+
+                            <input type="text"
+                                   ng-model="minMass"
+                                   ng-class="{'wrong': !minMass}"
+                                   my-number-check
+                                   ng-change="enableControlOK();" />
                         </td>
                     </tr>
 
@@ -145,13 +168,15 @@
             <div class="controlsGroup">
                 <table>
                     <tr>
-                        <td>Масса минимум(кг.)</td>
+                        <td>Масса максимум(кг.)</td>
                         <td>
-                            <input type="number"
-                                   ng-model="minMass"
-                                   ng-class="{'wrong': !minMass}" 
-                                   ng-change="enableControlOK()" />
-                        </td>
+
+                            <input type="text"
+                                   ng-model="maxMass"
+                                   ng-class="{'wrong': !maxMass}"
+                                   my-number-check
+                                   ng-change="enableControlOK();" />
+                        </td>                       
                     </tr>
 
                     <tr>
@@ -185,28 +210,28 @@
 
         <p>
             <span ng-show="scalesDetailsInfo.POCKET_LOC">Весы заблокированы</span>
-            <span ng-show="!scalesDetailsInfo.PACK_SANDWICH">Первая пачка</span>
-            <span ng-show="scalesDetailsInfo.PACK_SANDWICH">Вторая пачка</span>
+            <span ng-show="sandwichMode && !scalesDetailsInfo.PACK_SANDWICH">Первая пачка</span>
+            <span ng-show="sandwichMode && scalesDetailsInfo.PACK_SANDWICH">Вторая пачка</span>
         </p>
 
         <p>
             Вес:
-            <span class="scalesValue" ng-show="scalesDetailsInfo.WEIGHT_CURRENT">
-                {{scalesDetailsInfo.WEIGHT_CURRENT}} кг
+            <span class="scalesValue">
+                {{scalesDetailsInfo.WEIGHT_CURRENT || 0}} кг
             </span>
         </p>
 
         <p>
             Количество прутков:
-            <span class="rodsValue" ng-show="scalesDetailsInfo.RodsQuanity || rodsQuantity">
-                {{scalesDetailsInfo.RodsQuanity || rodsQuantity }} шт
+            <span class="rodsValue">
+                {{rodsQuantity || 0}} шт
             </span>
         </p>
 
         <p>
             Осталось прутков:
-            <span class="rodsValue" ng-show="scalesDetailsInfo.RodsLeft || rodsLeft">
-                {{scalesDetailsInfo.RodsLeft || rodsLeft}} шт
+            <span class="rodsValue">
+                {{rodsLeft || barQuantity}} шт
             </span>
         </p>
 
@@ -248,8 +273,8 @@
                 <label>Заказ:</label>
                 <input type="text" class="input-small"
                        ng-change="checkIsAcceptedOrder()"
-                       ng-model="orderNumber"
-                       my-enter="buildForm(orderNumber)" />  
+                       ng-model="commOrder"
+                       my-enter="buildForm()" />  
             </div>
 
             <div class="sectionItem">
@@ -268,8 +293,8 @@
                      
         </div>
 
+        <button class="btn" ng-click="showBuildFormMarker()">Перемаркировка</button>
         
-
     </div>
 
 </div>
@@ -283,6 +308,19 @@
             <form id="orderForm" novalidate></form>
         </div>
 
+    </div>
+</div>
+
+<div class="black-wrapper" ng-show="toggleModalMarker">
+    <div class="modal">
+        <button ng-click="closeModal()" class="btn btn-circle pull-right"><i class="icon-remove"></i></button>
+
+        <label>Введите номер бирки</label>
+        <input type="text" ng-model="labelNumber" ng-readonly="readOnly" my-enter="buildFormRemarker()" />
+
+        <div class="formWrapper">
+            <form id="remarkerForm" novalidate></form>
+        </div>
     </div>
 </div>
 

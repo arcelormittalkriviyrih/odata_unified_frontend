@@ -89,6 +89,8 @@ input#fileUpload{
 .modal{
     box-sizing:border-box;
     padding: 10px;
+    width: 780px;
+    margin-left: -390px;
 }
 
 .btn-circle{
@@ -242,7 +244,7 @@ button.add{
 
 .control-row{
     padding-right: 10px;
-    text-align: right;
+    text-align: center;
 }
 
 .runAction{
@@ -481,6 +483,11 @@ h4.scalesName{
 
 .sectionItem:nth-child(1) input{
     width: 110px;
+}
+
+.labelTask{
+    margin-top: 10px;
+    margin-left: 7px;
 }
 
 

@@ -19,27 +19,31 @@
     $scope.currentScaleID = null;
     $scope.scaleLoading = false;
     $scope.isShowModal = false;
-    $scope.orderNumber = '';
     $scope.deviationState = null;
     $scope.sampleLength = 1;
     $scope.commOrder = null;
     $scope.sideIsSelected = false;
-    $scope.OKLabel = 'OK';
+    $scope.OKLabel = $translate.instant('marker.acceptOrderTask');
     $scope.disableButtonOKTask = false;
     $scope.classOK = null;
     $scope.sandwichModeAccepted = false;
+    $scope.toggleModalMarker = false;
+    $scope.readOnly = false;
 
     //methods
     $scope.currentScales = vmGetCurrentScales;
     $scope.showScaleInfo = vmShowScaleInfo;
-    $scope.getLatestWorkRequests = vmGetLatestWorkRequests;
+    $scope.getLatestWorkRequest = vmGetLatestWorkRequest;
     $scope.buildForm = vmBuildForm;
     $scope.getProfiles = vmGetProfiles;
     $scope.getProfilePropertiesList = vmGetProfilePropertiesList;
     $scope.calculate = vmCalculate;
     $scope.reset = vmReset;
     $scope.workRequest = vmWorkRequest;
+    $scope.showBuildFormMarker = vmShowBuildFormMarker;
     $scope.doAction = vmDoAction;
+    $scope.buildFormRemarker = vmBuildFormRemarker;
+    $scope.closeModal = vmCloseModal;
 
     //method for enabling OK button on 'Task' tab 
     //when we change value of any control (for examle, checkbox)
@@ -48,12 +52,228 @@
     //method for checking is accepted current order for active scales
     //(Check whether the OK button on modal window with order form is pressed)
     $scope.checkIsAcceptedOrder = vmCheckIsAcceptedOrder;
+    
+    vmInit();
 
-    //first we get list of available sides
-    vmGetCurrentSides();
+    function vmInit() {
 
-    //and get full list of available steel profiles
-    vmGetProfiles();
+        //first we get list of available sides
+        vmGetCurrentSides();
+
+        //and get full list of available steel profiles
+        vmGetProfiles();
+
+        //init form fields list
+        indexService.getInfo("Files?$filter=FileType eq 'Excel label'")
+                            .then(function (response) {
+
+                                var templateData = response.data.value;
+
+                                $scope.fields = [{
+
+                                    name: 'FactoryNumber',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('marker.CreateDialogue.FactoryNumber')
+                                    }
+                                }, {
+
+                                    name: 'STANDARD',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.STANDARD')
+                                    }
+                                }, {
+
+                                    name: 'LENGTH',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.LENGTH')
+                                    }
+                                }, {
+
+                                    name: 'MIN_ROD',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD')
+                                    }
+                                }, {
+
+                                    name: 'CONTRACT_NO',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO')
+                                    }
+                                }, {
+
+                                    name: 'DIRECTION',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.DIRECTION')
+                                    }
+                                }, {
+
+                                    name: 'PRODUCT',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.PRODUCT')
+                                    }
+                                }, {
+
+                                    name: 'CLASS',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.CLASS')
+                                    }
+                                }, {
+
+                                    name: 'STEEL_CLASS',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
+                                    }
+                                }, {
+
+                                    name: 'CHEM_ANALYSIS',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS')
+                                    }
+                                }, {
+
+                                    name: 'BUNT_DIA',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA')
+                                    }
+                                }, {
+
+                                    name: 'COMM_ORDER',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER')
+                                    },
+                                }, {
+
+                                    name: 'PROD_ORDER',
+                                    properties: {
+                                        control: 'text',
+                                        required: true,
+                                        translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER')
+                                    },
+                                }, {
+
+                                    name: 'SIZE',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.SIZE')
+                                    },
+                                }, {
+
+                                    name: 'TOLERANCE',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE')
+                                    },
+                                }, {
+
+                                    name: 'MELT_NO',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.MELT_NO')
+                                    },
+                                }, {
+
+                                    name: 'PART_NO',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.PART_NO')
+                                    },
+                                }, {
+
+                                    name: 'BUYER_ORDER_NO',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO')
+                                    },
+                                }, {
+
+                                    name: 'BRIGADE_NO',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO')
+                                    },
+                                }, {
+
+                                    name: 'PROD_DATE',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE')
+                                    },
+                                }, {
+
+                                    name: 'UTVK',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.UTVK')
+                                    },
+                                }, {
+
+                                    name: 'LEAVE_NO',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO')
+                                    },
+                                }, {
+
+                                    name: 'MATERIAL_NO',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO')
+                                    },
+                                }, {
+
+                                    name: 'CHANGE_NO',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('marker.CreateDialogue.CHANGE_NO')
+                                    },
+                                }, {
+                                    name: 'TEMPLATE',
+                                    properties: {
+                                        control: 'combo',
+                                        required: true,
+                                        translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
+                                        data: templateData,
+                                        keyField: 'ID',
+                                        valueField: 'Name'
+                                    }
+                                }]
+                            });
+    };
 
     function vmGetCurrentSides() {
 
@@ -107,15 +327,17 @@
             if ($scope.scales.length > 0) {
 
                 $scope.filter = [];
+                $scope.workRequestFilter = [];
 
                 $scope.scales.forEach(function (scale) {
                     $scope.filter.push('ID eq {0}'.format(scale.ID));
+                    $scope.workRequestFilter.push('EquipmentID eq {0}'.format(scale.ID));
                 });
 
                 $scope.groups = vmGetChunks($scope.scales, 4);
                 $scope.filter = $scope.filter.join(' or ');
+                $scope.workRequestFilter = $scope.workRequestFilter.join(' or ');
             }
-
 
             vmGetCurrentScalesShortInfo();
 
@@ -137,137 +359,150 @@
         })
     }
 
+    //get detail info for every scale
+    //in top part we show only weight and rods quantity
+    //this method creates array with scale objects
     function vmGetCurrentScalesShortInfo() {
 
-        var path = 'v_ScalesShortInfo';
+        var pathScalesDetail = 'v_ScalesDetailInfo';
         if ($scope.filter.length > 0)
-            path += '?$filter={0}'.format($scope.filter);
+            pathScalesDetail += '?$filter={0}'.format($scope.filter);
 
-        indexService.getInfo(path)
-                       .then(function (response) {
+        var pathLatestWorkRequest = 'v_LatestWorkRequests';
+        if ($scope.workRequestFilter.length > 0)
+            pathLatestWorkRequest += '?$filter={0}'.format($scope.workRequestFilter);
 
-                           var scalesInfo = response.data.value;
+
+        $q.all([indexService.getInfo(pathScalesDetail), indexService.getInfo(pathLatestWorkRequest)])
+        
+                       .then(function (responses) {
+
+                           $scope.scalesInfo = responses[0].data.value;
+                           $scope.latestRequestsList = responses[1].data.value;
+                          
+                           var barWeight = $scope.latestRequestsList.filter(function (item) {
+
+                               return item.PropertyType == 'BAR_WEIGHT';
+                           });
 
                            $scope.scales.forEach(function (scale) {
 
-                               var data = scalesInfo.filter(function (item) {
+                               var data = $scope.scalesInfo.filter(function (item) {
 
                                    if (item.ID == scale.ID)
                                        return item;
                                })
 
-                               scale.data = data[0];
+                               scale.weightCurrent = data[0].WEIGHT_CURRENT;
+
+                               var barWeightCurrentScales = barWeight.filter(function (item) {
+
+                                   return item.EquipmentID == scale.ID;
+                               })[0].Value;
+
+                               scale.rodsQuantity = parseInt(scale.weightCurrent / barWeightCurrentScales);
                            });
 
                        })
-    }
+    };
 
+    //this method shows detail info for selected scale
+    //we get array with scale objects and just filter him by ID of current scale
+    //also we calculate rods quantity and rods left number
     function vmShowScaleInfo(id) {
         
         $scope.currentScaleID = id;
 
-        //get scales detail info
-        indexService.getInfo('v_ScalesDetailInfo?$filter=ID eq {0}'.format(id))
-                       .then(function (response) {
+        $scope.scalesDetailsInfo = $scope.scalesInfo.filter(function (item) {
 
-                           $scope.scalesDetailsInfo = response.data.value[0];
+            if (item.ID == id)
+                return item;
+        })[0];
 
-                           vmCalculateRods();
-                          
-                       });                     
+        vmCalculateRods();                
     }
 
-    function vmGetLatestWorkRequests(id) {
+    //this method is called when we show scale detail info
+    //this method get last work request data
+    function vmGetLatestWorkRequest(id) {
 
+        //clear fields
         vmReset();
 
-        indexService.getInfo('v_LatestWorkRequests?$filter=EquipmentID eq {0}'.format(id))
-                    .then(function (response) {
+        //get last work request for current scales
  
-                        var data = response.data.value;
+        var data = $scope.latestRequestsList.filter(function (item) {
 
-                        $scope.orderNumber = null;
-                        $scope.commOrder = null;
-                        $scope.maxMass = null;
-                        $scope.minMass = null;
-                        $scope.barWeight = null;
-                        $scope.sampleLength = 1;
-                        $scope.sampleMass = null;
-                        $scope.deviation = null;
-                        $scope.brigadeNo = null;
-                        $scope.prodDate = null;
-                        $scope.length = null;
-                        $scope.barQuantity = null;
-                        $scope.sandwichMode = null;
-                        $scope.approvingMode = null;
+            return item.EquipmentID == id;
+        });
 
-                        if (data.length > 0) {
+        if (data.length > 0) {
 
-                            $scope.disableButtonOKTask = true;
+            $scope.disableButtonOKTask = true;
 
-                            $scope.workRequestID = data[0].WorkRequestID;
-                            $scope.selectedProfile = data[0].ProfileID;
+            $scope.workRequestID = data[0].WorkRequestID;
+            $scope.selectedProfile = data[0].ProfileID;
 
-                            if ($scope.selectedProfile)
-                                vmGetProfilePropertiesList();
+            if ($scope.selectedProfile)
+                vmGetProfilePropertiesList('disable');
                             
-                            data.forEach(function (item) {
+            //find value of last work request for each field
+            data.forEach(function (item) {
 
 
-                                if (item.PropertyType == "COMM_ORDER") {
-                                    $scope.orderNumber = item.Value;
-                                    $scope.commOrder = item.Value;
-                                    $scope.isAcceptedOrder = true;
-                                }
+                if (item.PropertyType == "COMM_ORDER") {
 
-                                else if (item.PropertyType == "MAX_WEIGHT")
-                                    $scope.maxMass = parseInt(item.Value);
+                    $scope.commOrder = item.Value;
+                    $scope.isAcceptedOrder = true;
+                }
 
-                                else if (item.PropertyType == "MIN_WEIGHT")
-                                    $scope.minMass = parseInt(item.Value);
+                else if (item.PropertyType == "MAX_WEIGHT")
+                    $scope.maxMass = parseInt(item.Value);
 
-                                else if (item.PropertyType == "BAR_WEIGHT")
-                                    $scope.barWeight = item.Value;
+                else if (item.PropertyType == "MIN_WEIGHT")
+                    $scope.minMass = parseInt(item.Value);
 
-                                else if (item.PropertyType == "SAMPLE_LENGTH")
-                                    $scope.sampleLength = item.Value;
+                else if (item.PropertyType == "BAR_WEIGHT")
+                    $scope.barWeight = item.Value;
 
-                                else if (item.PropertyType == "SAMPLE_WEIGHT")
-                                    $scope.sampleMass = item.Value;
+                else if (item.PropertyType == "SAMPLE_LENGTH")
+                    $scope.sampleLength = item.Value;
 
-                                else if (item.PropertyType == "DEVIATION")
-                                    $scope.deviation = item.Value;
+                else if (item.PropertyType == "SAMPLE_WEIGHT")
+                    $scope.sampleMass = item.Value;
 
-                                else if (item.PropertyType == "BRIGADE_NO") 
-                                    $scope.brigadeNo = item.Value;
+                else if (item.PropertyType == "DEVIATION")
+                    $scope.deviation = item.Value;
+
+                else if (item.PropertyType == "BRIGADE_NO") 
+                    $scope.brigadeNo = item.Value;
                                 
-                                else if (item.PropertyType == "PROD_DATE")
-                                    $scope.prodDate = item.Value;
+                else if (item.PropertyType == "PROD_DATE")
+                    $scope.prodDate = item.Value;
 
-                                else if (item.PropertyType == "LENGTH")
-                                    $scope.length = item.Value;
+                else if (item.PropertyType == "LENGTH")
+                    $scope.length = item.Value;
 
-                                else if (item.PropertyType == "BAR_QUANTITY")
-                                    $scope.barQuantity = item.Value;
+                else if (item.PropertyType == "BAR_QUANTITY")
+                    $scope.barQuantity = item.Value;
 
-                                else if (item.PropertyType == "SANDWICH_MODE"){
-                                    $scope.sandwichMode = item.Value == 'true' ? true : false;
-                                    $scope.sandwichModeAccepted = $scope.sandwichMode;
-                                }
+                else if (item.PropertyType == "SANDWICH_MODE"){
+                    $scope.sandwichMode = item.Value == 'true' ? true : false;
+                    $scope.sandwichModeAccepted = $scope.sandwichMode;
+                }
                                     
 
-                                else if (item.PropertyType == "AUTO_MANU_VALUE")
-                                    $scope.approvingMode = item.Value == 'true' ? true : false;
+                else if (item.PropertyType == "AUTO_MANU_VALUE")
+                    $scope.approvingMode = item.Value == 'true' ? true : false;
 
-                            });
-                        };
+            });
+        };
                                                 
-                    });
     };
 
     function vmGetProfiles() {
 
-        //get profiles (left form)
+        //get profiles list(left form)
         indexService.getInfo('MaterialDefinition?$filter=MaterialClassID eq (1)')
                     .then(function (response) {
 
@@ -275,7 +510,9 @@
                     });
     }
 
-    function vmGetProfilePropertiesList() {
+    //get profiles properties list
+    //'disable' param indicates is must button 'accept' to be disabled
+    function vmGetProfilePropertiesList(disable) {
 
         if ($scope.selectedProfile) {
 
@@ -305,8 +542,12 @@
 
                         }
 
-                        vmCalculate();
+                        if (disable)
+                            vmCalculate(disable);
+                        else
+                            vmCalculate();
                     })
+
         }
 
         else {
@@ -317,18 +558,17 @@
             $scope.toleranceMinus = null;
             $scope.barWeight = null;
 
-            vmCalculate();
+            if (disable)
+                vmCalculate(disable);
+            else
+                vmCalculate();
         }        
     }
 
-    function vmBuildForm(orderNumber) {
-
-        $scope.commOrder = null;
+    function vmBuildForm() {
       
-        indexService.getInfo("v_WorkDefinitionPropertiesAll?$filter=comm_order eq '{0}'".format(orderNumber))
+        indexService.getInfo("v_WorkDefinitionPropertiesAll?$filter=comm_order eq '{0}'".format($scope.commOrder))
                          .then(function (response) {
-
-                             $scope.commOrder = orderNumber;
 
                              var orderData = response.data.value;
                              var procedure;
@@ -340,10 +580,8 @@
                                  else
                                      procedure = 'ins_WorkDefinition';
                                  
-                                 vmCreateForm('edit', procedure, orderData, 'COMM_ORDER');
+                                 vmCreateForm($('#orderForm'), 'edit', procedure, orderData, 'COMM_ORDER');
                              } else {
-
-                                 $scope.commOrder = null;
 
                                  vmShowLastCommOrderValue();
 
@@ -354,215 +592,64 @@
 
     }
 
-    function vmCreateForm(type, procedure, orderData, keyField) {
+    function vmShowBuildFormMarker() {
+
+        $scope.toggleModalMarker = true;
+    };
+
+    function vmBuildFormRemarker() {
+
+        $scope.readOnly = true;
+
+        indexService.getInfo("v_MaterialLotProperty?$filter=FactoryNumber eq '{0}'".format($scope.labelNumber))
+                    .then(function (response) {
+                       
+                        var data = response.data.value;
+
+                        data.push({
+
+                            Property: "FactoryNumber",
+                            Value: $scope.labelNumber
+                        });
+
+                        if (data.length > 0)
+                            vmCreateForm($('#remarkerForm'),
+                                        'edit',
+                                        'ins_MaterialLotByFactoryNumber',
+                                        data,
+                                        'FactoryNumber', [{
+                                            
+                                            name: 'EquipmentID',
+                                            value: $scope.currentScaleID
+                                        }], ['EquipmentID']);
+                        else {
+                            alert('нет бирок с таким номером!');
+                            $scope.readOnly = false;
+                            }
+                            
+                    });
+    };
+
+    function vmCreateForm(container, type, procedure, orderData, keyField, additionalFields, escapedFields) {
 
         vmToggleModal(true);
+        
+        container.oDataAction({
 
-        indexService.getInfo("Files?$filter=FileType eq 'Excel label'")
-                    .then(function (response) {
+            action: procedure,
+            type: type,
+            keyField: keyField,
+            rowData: orderData,
+            controlCaptions: {
 
-                        var templateData = response.data.value;
-
-                        $('#orderForm').oDataAction({
-
-                            action: procedure,
-                            type: type,
-                            keyField: keyField,
-                            rowData: orderData,
-                            controlCaptions: {
-
-                                OK: 'OK',
-                                Cancel: $translate.instant('buttonCancel')
-                            },
-                            fields: [{
-
-                                name: 'STANDARD',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.STANDARD')
-                                }
-                            },{
-
-                                name: 'LENGTH',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.LENGTH')
-                                }
-                            },{
-
-                                name: 'MIN_ROD',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD')
-                                }
-                             },{
-
-                                name: 'CONTRACT_NO',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO')
-                                }
-                             },{
-
-                                name: 'DIRECTION',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.DIRECTION')
-                                }
-                             },{
-
-                                name: 'PRODUCT',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.PRODUCT')
-                                }
-                             },{
-
-                                name: 'CLASS',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.CLASS')
-                                }
-                             },{
-
-                                name: 'STEEL_CLASS',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
-                                }
-                             },{
-
-                                name: 'CHEM_ANALYSIS',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS')
-                                }
-                             },{
-
-                                name: 'BUNT_DIA',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA')
-                                }
-                             },{
-
-                                name: 'COMM_ORDER',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER')
-                                },
-                             },{
-
-                                name: 'PROD_ORDER',
-                                properties: {
-                                    control: 'text',
-                                    required: true,
-                                    translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER')
-                                },
-                             },{
-
-                                name: 'SIZE',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.SIZE')
-                                },
-                             },{
-
-                                name: 'TOLERANCE',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE')
-                                },
-                             },{
-
-                                name: 'MELT_NO',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.MELT_NO')
-                                },
-                             },{
- 
-                                name: 'PART_NO',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.PART_NO')
-                                },
-                             },{
-
-                                name: 'BUYER_ORDER_NO',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO')
-                                },
-                            },{
-
-                                name: 'BRIGADE_NO',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO')
-                                },
-                            },{
-
-                                name: 'PROD_DATE',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE')
-                                },
-                            },{
-
-                                name: 'UTVK',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.UTVK')
-                                },
-                            },{
-
-                                name: 'LEAVE_NO',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO')
-                                },
-                            },{
-
-                                name: 'MATERIAL_NO',
-                                properties: {
-                                    control: 'text',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO')
-                                },
-                            },{
-                                name: 'TEMPLATE',
-                                properties: {
-                                    control: 'combo',
-                                    required: false,
-                                    translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
-                                    data: templateData,
-                                    keyField: 'ID',
-                                    valueField: 'Name'
-                                }
-                            }]
-                        });
-                    })
+                OK: 'OK',
+                Cancel: $translate.instant('buttonCancel')
+            },
+            fields: $scope.fields,
+            additionalFields: additionalFields,
+            escapedFields: escapedFields
+        });
+                    
     };
 
     function vmToggleModal(expr) {
@@ -581,10 +668,13 @@
         })[0];
     };
 
-    function vmCalculate() {
+    function vmCalculate(disable) {
 
         /*calculations for left form*/
-        $scope.disableButtonOKTask = false;
+        if (disable)
+            $scope.disableButtonOKTask = true;
+        else
+            $scope.disableButtonOKTask = false;
 
         if ($scope.length && $scope.linearMassFromBase) {
             $scope.barWeight = $scope.length * $scope.linearMassFromBase;
@@ -596,8 +686,10 @@
 
         if ($scope.barWeight && $scope.barQuantity) {
 
-            $scope.minMass = $scope.barWeight * $scope.barQuantity;
+            $scope.minMass = $scope.barWeight * $scope.barQuantity;            
             $scope.minMass = parseInt($scope.minMass).toFixed(3);
+            $scope.maxMass = $scope.minMass + 200;
+            $scope.minMassRec = parseInt($scope.minMass);
         }
                                    
         if (!$scope.sampleMass || $scope.sampleMass.length == 0)
@@ -610,6 +702,7 @@
             $scope.linearMass = $scope.linearMassCalculated;
             $scope.barWeight = $scope.linearMassCalculated * $scope.length; 
             $scope.minMass = parseInt($scope.barWeight * $scope.barQuantity);
+            $scope.maxMass = $scope.minMass + 200;
         }
 
         if ($scope.linearMassFromBase && $scope.linearMassCalculated) {
@@ -646,19 +739,25 @@
 
         if ($scope.barQuantity && $scope.rodsQuantity)
             $scope.rodsLeft = $scope.barQuantity - $scope.rodsQuantity;
+
     };
 
     function vmReset() {
 
         $scope.selectedProfile = null;
-        $scope.length = null;
-        $scope.barQuantity = null;
+        $scope.commOrder = null;
         $scope.maxMass = null;
         $scope.minMass = null;
-        $scope.sampleMass = null;
         $scope.barWeight = null;
         $scope.sampleLength = 1;
+        $scope.sampleMass = null;
         $scope.deviation = null;
+        $scope.brigadeNo = null;
+        $scope.prodDate = null;
+        $scope.length = null;
+        $scope.barQuantity = null;
+        $scope.sandwichMode = null;
+        $scope.approvingMode = null;
     };
 
     function vmWorkRequest() {
@@ -667,6 +766,7 @@
             && $scope.commOrder
             && $scope.minMass
             && $scope.maxMass
+            && $scope.selectedProfile
             && (parseInt($scope.maxMass) >= parseInt($scope.minMass))
             && $scope.isAcceptedOrder) {
 
@@ -695,20 +795,20 @@
             indexService.sendInfo('ins_WorkRequest', data)
                         .then(function (response) {
 
-                            $scope.OKLabel = 'OK';
+                            $scope.OKLabel = $translate.instant('marker.acceptOrderTask');;
                             $scope.disableButtonOKTask = true;
                             $scope.sandwichModeAccepted = $scope.sandwichMode;
                         });
         } else {
             
-            if (!($scope.maxMass && $scope.minMass) && !$scope.isAcceptedOrder) {
+            if (!($scope.maxMass && $scope.minMass && $scope.selectedProfile) && !$scope.isAcceptedOrder) {
                 alert('You must fill all required fields! \n You must accept your order number!');
             }
-            else if (!($scope.maxMass && $scope.minMass) && $scope.isAcceptedOrder) {
+            else if (!($scope.maxMass && $scope.minMass && $scope.selectedProfile) && $scope.isAcceptedOrder) {
                 alert('You must fill all required fields!');
             }
 
-            else if ($scope.maxMass && $scope.minMass && !$scope.isAcceptedOrder) {
+            else if ($scope.maxMass && $scope.minMass && $scope.selectedProfile && !$scope.isAcceptedOrder) {
                 alert('You must accept your order number!');
             }
             else if (parseFloat($scope.maxMass) < parseFloat($scope.minMass))
@@ -745,7 +845,7 @@
 
                         if (data.length > 0) {
 
-                            $scope.orderNumber = data.filter(function (item) {
+                            $scope.commOrder = data.filter(function (item) {
 
                                 return item.PropertyType == 'COMM_ORDER';
                             }).map(function (item) {
@@ -757,12 +857,25 @@
                     });
     }
 
+    //this method is calling where we enter some value in comm_order field and
+    //handles special flag. This flag is corresponding us current order is not accepted by 'OK' button
+    //in modal form
     function vmCheckIsAcceptedOrder() {
 
         $scope.isAcceptedOrder = false;
     }
 
-    $(document).on('oDataForm.success', function (e, data) {
+    function vmCloseModal() {
+        
+        $scope.labelNumber = null;
+        $('#remarkerForm').empty();
+        vmToggleModal(false);
+        $scope.toggleModalMarker = false;
+        $scope.readOnly = false;
+    };
+
+    //there are events triggered on success and cancel button click in order modal form
+    $('#orderForm').on('oDataForm.success', function (e, data) {
 
         $scope.disableButtonOKTask = false;
         $scope.isAcceptedOrder = true;
@@ -774,11 +887,25 @@
         $scope.$apply();
     });
 
-    $(document).on('oDataForm.cancel', function (e) {
+    $('#orderForm').on('oDataForm.cancel', function (e) {
 
         vmToggleModal(false);        
         vmShowLastCommOrderValue();
         
+        $scope.$apply();
+    });
+
+    $('#remarkerForm').on('oDataForm.success', function (e) {
+
+        vmCloseModal();
+
+        $scope.$apply();
+    })
+
+    $('#remarkerForm').on('oDataForm.cancel', function (e) {
+
+        vmCloseModal();
+
         $scope.$apply();
     });
 
@@ -794,6 +921,20 @@
 
                 event.preventDefault();
             }
+        });
+    };
+})
+
+.directive('myNumberCheck', function () {
+    return function (scope, element, attrs) {
+
+        element.bind("keydown keypress", function (event) {
+           
+            if (!((event.which >= 48 && event.which <= 57) || (event.which >= 96 && event.which <= 105))
+                && event.which != 8 && event.which != 46 && event.which != 13) {
+                  
+                return false;
+            };
         });
     };
 });

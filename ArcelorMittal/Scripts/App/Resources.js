@@ -88,6 +88,14 @@
                 },
             }
         },
+        marker: {
+
+            CreateDialogue: {
+                CHANGE_NO: 'Change',
+                FactoryNumber: 'Factory number'
+            },
+            acceptOrderTask: 'Accept order/task'
+        },
         error: {
             Unauthorized: 'This role is unavailable for you!'
         },
@@ -205,6 +213,14 @@
                     status: 'Статус'
                 }
             }
+        },
+        marker: {
+
+            CreateDialogue: {
+                CHANGE_NO: 'Смена',
+                FactoryNumber: 'Номер бирки'
+            },
+            acceptOrderTask: 'Подтвердить заказ/задание'
         },
         error: {
             Unauthorized: 'Эта роль Вам недоступна'
@@ -326,6 +342,13 @@
                     status: 'Статус'
                 }
             }
+        },
+        marker: {
+            CreateDialogue: {
+                FactoryNumber: 'Номер бірки',
+                CHANGE_NO: 'Зміна'
+            },
+            acceptOrderTask: 'підтвердити замовленні/завдання'
         },
         error: {
             Unauthorized: 'У доступі відмовлено'
