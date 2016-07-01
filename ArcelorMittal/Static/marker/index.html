@@ -111,14 +111,19 @@
                            ng-change="enableControlOK()" />
                     По подтверждению
                 </div>
+                <div>
+                    <input type="checkbox"
+                           ng-model="nemera"
+                           ng-change="enableControlOK()" />
+                    Немера
+                </div>
 
-                <div style="margin-top: 45px">
+                <div class="minMassRecContainer">
                     <table>
                         <tr>
-                            <td>Рекомендуемая масса минимум (кг)</td>
+                            <td>Рек. масса минимум (кг)</td>
                             <td>
                                 <input type="text"
-                                       style="width: 37px;"
                                        readonly
                                        ng-model="minMassRec"
                                         />
@@ -142,7 +147,7 @@
                                    ng-model="minMass"
                                    ng-class="{'wrong': !minMass}"
                                    my-number-check
-                                   ng-change="enableControlOK();" />
+                                   ng-change="enableControlOK(); calculateMaxMass()" />
                         </td>
                     </tr>
 
@@ -318,7 +323,7 @@
         <label>Введите номер бирки</label>
         <input type="text" ng-model="labelNumber" ng-readonly="readOnly" my-enter="buildFormRemarker()" />
 
-        <div class="formWrapper">
+        <div class="formWrapper" ng-show="isShowReMarkForm">
             <form id="remarkerForm" novalidate></form>
         </div>
     </div>

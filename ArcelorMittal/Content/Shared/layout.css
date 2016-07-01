@@ -432,6 +432,7 @@ h4.scalesName{
     vertical-align: top; 
     font-size:12px;
     box-sizing: border-box;
+    position: relative;
 }
 
 .task .controlsGroup:nth-child(2n+1){
@@ -488,6 +489,11 @@ h4.scalesName{
 .labelTask{
     margin-top: 10px;
     margin-left: 7px;
+}
+
+.minMassRecContainer{
+    position: absolute;
+    top: 93px;
 }
 
 

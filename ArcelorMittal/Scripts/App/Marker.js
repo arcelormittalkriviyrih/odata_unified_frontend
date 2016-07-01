@@ -29,6 +29,7 @@
     $scope.sandwichModeAccepted = false;
     $scope.toggleModalMarker = false;
     $scope.readOnly = false;
+    $scope.isShowReMarkForm = false;
 
     //methods
     $scope.currentScales = vmGetCurrentScales;
@@ -44,6 +45,7 @@
     $scope.doAction = vmDoAction;
     $scope.buildFormRemarker = vmBuildFormRemarker;
     $scope.closeModal = vmCloseModal;
+    $scope.calculateMaxMass = vmCalculateMaxMass;
 
     //method for enabling OK button on 'Task' tab 
     //when we change value of any control (for examle, checkbox)
@@ -69,7 +71,8 @@
 
                                 var templateData = response.data.value;
 
-                                $scope.fields = [{
+                                $scope.fields = [
+                                {
 
                                     name: 'FactoryNumber',
                                     properties: {
@@ -528,8 +531,11 @@
                             $scope.tolerancePlus = vmGetProfileProperty(profileProperties, 3) || null;
                             $scope.toleranceMinus = vmGetProfileProperty(profileProperties, 4) || null;
 
-                            if (!$scope.length)
-                                $scope.minMass = '';
+                            if (!$scope.length) {
+                                $scope.minMass = null;
+                                $scope.maxMass = null;                                
+                            }
+                                
 
                         } else {
 
@@ -538,8 +544,9 @@
                             $scope.tolerancePlus = null;
                             $scope.toleranceMinus = null;
                             $scope.barWeight = null;
-                            $scope.minMass = '';
-
+                            $scope.minMass = null;
+                            $scope.maxMass = null;
+                            $scope.minMassRec = null;
                         }
 
                         if (disable)
@@ -605,26 +612,29 @@
                     .then(function (response) {
                        
                         var data = response.data.value;
+                      
+                        if (data.length > 0) {
 
-                        data.push({
+                            $scope.isShowReMarkForm = true;
 
-                            Property: "FactoryNumber",
-                            Value: $scope.labelNumber
-                        });
-
-                        if (data.length > 0)
                             vmCreateForm($('#remarkerForm'),
-                                        'edit',
-                                        'ins_MaterialLotByFactoryNumber',
-                                        data,
-                                        'FactoryNumber', [{
-                                            
-                                            name: 'EquipmentID',
-                                            value: $scope.currentScaleID
-                                        }], ['EquipmentID']);
-                        else {
-                            alert('нет бирок с таким номером!');
+                            'edit',
+                            'ins_MaterialLotByFactoryNumber',
+                            data,
+                            null, [{
+
+                                name: 'EquipmentID',
+                                value: $scope.currentScaleID
+                            }, {
+
+                                name: 'FactoryNumber',
+                                value: $scope.labelNumber
+                            }], ['EquipmentID', 'FactoryNumber']);
+                        }                            
+                        else {                           
                             $scope.readOnly = false;
+                            $scope.isShowReMarkForm = false;
+                            alert('нет бирок с таким номером!');
                             }
                             
                     });
@@ -688,8 +698,9 @@
 
             $scope.minMass = $scope.barWeight * $scope.barQuantity;            
             $scope.minMass = parseInt($scope.minMass).toFixed(3);
-            $scope.maxMass = $scope.minMass + 200;
-            $scope.minMassRec = parseInt($scope.minMass);
+            $scope.minMassRec = parseInt($scope.barWeight * $scope.barQuantity);
+
+            vmCalculateMaxMass();
         }
                                    
         if (!$scope.sampleMass || $scope.sampleMass.length == 0)
@@ -702,13 +713,17 @@
             $scope.linearMass = $scope.linearMassCalculated;
             $scope.barWeight = $scope.linearMassCalculated * $scope.length; 
             $scope.minMass = parseInt($scope.barWeight * $scope.barQuantity);
-            $scope.maxMass = $scope.minMass + 200;
+            $scope.minMassRec = parseInt($scope.barWeight * $scope.barQuantity);
+
+            vmCalculateMaxMass();
         }
 
         if ($scope.linearMassFromBase && $scope.linearMassCalculated) {
 
             $scope.deviation = (($scope.linearMassCalculated / $scope.linearMassFromBase) * 100) - 100;
             $scope.deviation = parseFloat($scope.deviation).toFixed(1);
+
+            vmCalculateMaxMass();
         }
 
         else
@@ -728,6 +743,11 @@
 
         vmCalculateRods();
 
+    };
+
+    function vmCalculateMaxMass() {
+
+        $scope.maxMass = parseInt($scope.minMass) + 200;
     };
 
     function vmCalculateRods() {
@@ -801,18 +821,22 @@
                         });
         } else {
             
-            if (!($scope.maxMass && $scope.minMass && $scope.selectedProfile) && !$scope.isAcceptedOrder) {
-                alert('You must fill all required fields! \n You must accept your order number!');
-            }
-            else if (!($scope.maxMass && $scope.minMass && $scope.selectedProfile) && $scope.isAcceptedOrder) {
-                alert('You must fill all required fields!');
-            }
+            var errors = [];
 
-            else if ($scope.maxMass && $scope.minMass && $scope.selectedProfile && !$scope.isAcceptedOrder) {
-                alert('You must accept your order number!');
-            }
-            else if (parseFloat($scope.maxMass) < parseFloat($scope.minMass))
-                alert('Max weight cannot be less then min weight!');
+            if (!($scope.maxMass && $scope.minMass && $scope.selectedProfile))
+                errors.push('You must fill all required fields!');
+            
+            if (!$scope.isAcceptedOrder)
+                errors.push('You must accept your order number!');
+
+            if (parseFloat($scope.maxMass) < parseFloat($scope.minMass))
+                errors.push('Max weight cannot be less then min weight!');
+
+            if ($scope.deviationState == 'wrong')
+                errors.push('Your deviation is wrong! Please, recalculate it!');
+
+            errors = errors.join(' \n ');
+            alert(errors);
         }
             
 
@@ -872,6 +896,7 @@
         vmToggleModal(false);
         $scope.toggleModalMarker = false;
         $scope.readOnly = false;
+        $scope.isShowReMarkForm = false;
     };
 
     //there are events triggered on success and cancel button click in order modal form
