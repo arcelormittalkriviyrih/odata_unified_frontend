@@ -54,6 +54,11 @@ $(function () {
             clearInterval(_intervalID);
     });
 
+    //set focus for element with autofocus attribute in IE 9
+    $(document).delegate('.specialLabelMode', 'click', function () {
+
+        $('.labelNumber').focus();
+    });
 });
 
 function vmGetMetadata() {

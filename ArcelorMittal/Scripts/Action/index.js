@@ -11,6 +11,7 @@
             controlCaptions = options.controlCaptions,
             additionalFields = options.additionalFields,
             escapedFields = options.escapedFields,
+            additionalActionFields = options.additionalActionFields,
             _fields = null;
 
            
@@ -46,7 +47,39 @@
                         return item;
                 });
             };
-                
+
+            //there is totally shit must be rewrited
+            //must be correctly data from outer sources
+            if (additionalActionFields) {
+
+                additionalActionFields.forEach(function (item) {
+
+                    actionFields.push(item);
+                });
+            };
+
+            actionFields.forEach(function (field) {
+
+                var fieldData = fieldsList.filter(function (item) {
+
+                    if (item.name == field.name)
+                        return item;
+                })[0];
+
+                field.order = fieldData.properties.order;
+            });
+
+            actionFields = actionFields.sort(function (a, b) {
+
+                if (a.order < b.order)
+                    return -1;
+                else if (a.order > b.order)
+                    return 1;
+                else
+                    return 0;
+            })
+            //end of totally shit
+                               
             actionFields.forEach(function (field) {
 
                 var fieldData = fieldsList.filter(function (item) {

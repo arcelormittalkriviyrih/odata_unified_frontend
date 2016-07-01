@@ -9,7 +9,7 @@
 <div class="container" ng-if="sides && sides.length > 1" ng-hide="sideIsSelected">
 
     <p>
-        Выберите сторону стана для работы:
+        {{ 'marker.changeSide' | translate }}
     </p>
 
     <select ng-model="selectedSide" ng-change="currentScales(selectedSide)">
@@ -37,12 +37,12 @@
                  ng-class="{'active': scale.ID == currentScaleID}"
                  ng-click="showScaleInfo(scale.ID); getLatestWorkRequest(scale.ID)">
                 <label>{{scale.Description}}</label>
-                <h3>{{scale.weightCurrent}} кг</h3>
+                <h3>{{scale.weightCurrent}} {{ 'marker.kg' | translate }}</h3>
                 <h4 ng-show="scale.ID != currentScaleID">
-                    {{scale.rodsQuantity}} шт
+                    {{scale.rodsQuantity}} {{ 'marker.pcs' | translate }}
                 </h4>
                 <h4 ng-show="scale.ID == currentScaleID">
-                   {{rodsQuantity}} шт
+                    {{rodsQuantity}} {{ 'marker.pcs' | translate }}
                 </h4>
             </div>
         </div>
@@ -53,7 +53,7 @@
 <div class="scaleDetailInfo" ng-show="currentScaleID">
 
     <div class="scaleInfo task">
-        <label class="labelTask">Задание</label>
+        <label class="labelTask">{{ 'marker.task' | translate }}</label>
 
         <div style="text-align: right">
 
@@ -63,7 +63,7 @@
             <div class="controlsGroup">
                 <table>
                     <tr>
-                        <td>Профиль</td>
+                        <td>{{ 'marker.profile' | translate }}</td>
                         <td>
                             <select ng-model="selectedProfile"
                                     ng-class="{'wrong': !selectedProfile}"
@@ -78,7 +78,7 @@
                     </tr>
 
                     <tr>
-                        <td>Размер(м.)</td>
+                        <td>{{ 'marker.size' | translate }}</td>
                         <td>
                             <input type="text"
                                    ng-model="length"
@@ -87,7 +87,7 @@
                     </tr>
 
                     <tr>
-                        <td>Количество прутков(шт.)</td>
+                        <td>{{ 'marker.rodsQuantityPcs' | translate }}</td>
                         <td>
                             <input type="text"
                                    ng-model="barQuantity"
@@ -100,39 +100,38 @@
             <div class="controlsGroup" style="padding:10px;">
 
                 <div>
-                    <input type="checkbox" 
-                           ng-model="sandwichMode" 
+                    <input type="checkbox"
+                           ng-model="sandwichMode"
                            ng-change="enableControlOK();" />
-                    Бутерброд
+                    {{ 'marker.sandwich' | translate }}
                 </div>
                 <div>
-                    <input type="checkbox" 
-                           ng-model="approvingMode" 
+                    <input type="checkbox"
+                           ng-model="approvingMode"
                            ng-change="enableControlOK()" />
-                    По подтверждению
+                    {{ 'marker.byAccept' | translate }}
                 </div>
                 <div>
                     <input type="checkbox"
                            ng-model="nemera"
                            ng-change="enableControlOK()" />
-                    Немера
+                     {{ 'marker.nemera' | translate }}
                 </div>
 
                 <div class="minMassRecContainer">
                     <table>
                         <tr>
-                            <td>Рек. масса минимум (кг)</td>
+                            <td>{{ 'marker.minMassRec' | translate }}</td>
                             <td>
                                 <input type="text"
                                        readonly
-                                       ng-model="minMassRec"
-                                        />
+                                       ng-model="minMassRec" />
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
-            
+
         </div>
 
         <div class="controlsWrapper">
@@ -140,7 +139,7 @@
             <div class="controlsGroup">
                 <table>
                     <tr>
-                        <td>Масса минимум(кг.)</td>
+                        <td>{{ 'marker.minMass' | translate }}</td>
                         <td>
 
                             <input type="text"
@@ -152,7 +151,7 @@
                     </tr>
 
                     <tr>
-                        <td>Масса образца(кг.)</td>
+                        <td>{{ 'marker.sampleMass' | translate }}</td>
                         <td>
                             <input type="text"
                                    ng-model="sampleMass"
@@ -161,7 +160,7 @@
                     </tr>
 
                     <tr>
-                        <td>Длина образца(м.)</td>
+                        <td>{{ 'marker.sampleLength' | translate }}</td>
                         <td>
                             <input type="text"
                                    ng-model="sampleLength"
@@ -173,7 +172,7 @@
             <div class="controlsGroup">
                 <table>
                     <tr>
-                        <td>Масса максимум(кг.)</td>
+                        <td>{{ 'marker.maxMass' | translate }}</td>
                         <td>
 
                             <input type="text"
@@ -181,16 +180,16 @@
                                    ng-class="{'wrong': !maxMass}"
                                    my-number-check
                                    ng-change="enableControlOK();" />
-                        </td>                       
+                        </td>
                     </tr>
 
                     <tr>
-                        <td>Вес прутка(кг.)</td>
+                        <td>{{ 'marker.rodsWeight' | translate }}</td>
                         <td><input type="text" readonly ng-model="barWeight" /></td>
                     </tr>
 
                     <tr>
-                        <td>Отклонение(%)</td>
+                        <td>{{ 'marker.deviation' | translate }}</td>
                         <td>
                             <input type="text" readonly
                                    ng-model="deviation"
@@ -204,39 +203,49 @@
         <div class="controls">
             <button class="btn"
                     ng-disabled="disableButtonOKTask"
-                    ng-click="workRequest()">{{OKLabel}}</button>
+                    ng-click="workRequest()">
+                {{OKLabel}}
+            </button>
         </div>
     </div>
 
     <div class="scaleInfo">
         <h4 class="scalesName">{{scalesDetailsInfo.ScalesName}}</h4>
 
-        <span class="autoManuMsg" ng-show="!scalesDetailsInfo.AUTO_MANU">Автоматический режим</span>
+        <span class="autoManuMsg" ng-show="!scalesDetailsInfo.AUTO_MANU">        
+            {{ 'marker.autoMode' | translate }}
+        </span>
 
         <p>
-            <span ng-show="scalesDetailsInfo.POCKET_LOC">Весы заблокированы</span>
-            <span ng-show="sandwichMode && !scalesDetailsInfo.PACK_SANDWICH">Первая пачка</span>
-            <span ng-show="sandwichMode && scalesDetailsInfo.PACK_SANDWICH">Вторая пачка</span>
+            <span ng-show="scalesDetailsInfo.POCKET_LOC">
+                {{ 'marker.scalesBlocked' | translate }}
+            </span>
+            <span ng-show="sandwichMode && !scalesDetailsInfo.PACK_SANDWICH">
+                {{ 'marker.firstPack' | translate }}
+            </span>
+            <span ng-show="sandwichMode && scalesDetailsInfo.PACK_SANDWICH">
+                {{ 'marker.secondPack' | translate }}
+            </span>
         </p>
 
         <p>
-            Вес:
+            {{ 'marker.weight' | translate }}:
             <span class="scalesValue">
-                {{scalesDetailsInfo.WEIGHT_CURRENT || 0}} кг
+                {{scalesDetailsInfo.WEIGHT_CURRENT || 0}} {{ 'marker.kg' | translate }}
             </span>
         </p>
 
         <p>
-            Количество прутков:
+            {{ 'marker.rodsQuantity' | translate }}:
             <span class="rodsValue">
-                {{rodsQuantity || 0}} шт
+                {{rodsQuantity || 0}} {{ 'marker.pcs' | translate }}
             </span>
         </p>
 
         <p>
-            Осталось прутков:
+            {{ 'marker.rodsLeft' | translate }}:
             <span class="rodsValue">
-                {{rodsLeft || barQuantity}} шт
+                {{rodsLeft || barQuantity}} {{ 'marker.pcs' | translate }}
             </span>
         </p>
 
@@ -246,25 +255,25 @@
         <span class="weightZeroIndicator" ng-show="scalesDetailsInfo.WEIGHT_ZERO">>0<</span>
 
         <div class="controls">
-            
-            <button class="btn" 
+
+            <button class="btn"
                     ng-disabled="!(
-                    (!sandwichModeAccepted && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB) 
-                    || 
-                    (sandwichModeAccepted && scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB))" 
-                    ng-click="doAction('ins_JobOrderOPCCommandTakeWeightByCommOrder')">
-                Взять вес
+                    (!sandwichModeAccepted && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB)
+                    ||
+                    (sandwichModeAccepted && scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB))"
+                    ng-click="doAction('ins_JobOrderOPCCommandTakeWeightByCommOrder','takeWeightLabel', 'marker.takeWeightButton')">
+                {{takeWeightLabel}}
             </button>
 
             <button class="btn"
                     ng-show="sandwichModeAccepted"
                     ng-disabled="!(!scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB)"
-                     ng-click="doAction('ins_JobOrderOPCCommandTakeTaraByCommOrder')">
-                Взять тару
+                    ng-click="doAction('ins_JobOrderOPCCommandTakeTaraByCommOrder','takeTaraLabel', 'marker.takeTaraButton')">
+                {{takeTaraLabel}}
             </button>
 
-            <button class="btn" ng-click="doAction('ins_MaterialLotByCommOrder')">
-                Тестовая печать
+            <button class="btn" ng-click="doAction('ins_MaterialLotByCommOrder', 'testPrintLabel', 'marker.testPrintButton')">
+                {{testPrintLabel}}
             </button>
         </div>
 
@@ -275,36 +284,48 @@
         <div class="section">
 
             <div class="sectionItem">
-                <label>Заказ:</label>
+                <label>{{ 'marker.order' | translate }}:</label>
                 <input type="text" class="input-small"
                        ng-change="checkIsAcceptedOrder()"
                        ng-model="commOrder"
-                       my-enter="buildForm()" />  
+                       my-enter="buildForm()" />
             </div>
 
             <div class="sectionItem">
-                <label>№ бригады:</label>
+                <label>{{ 'marker.brigadeNo' | translate }}:</label>
                 <input type="text" class="input-small"
                        readonly
-                       ng-model="brigadeNo" />  
+                       ng-model="brigadeNo" />
             </div>
 
             <div class="sectionItem">
-                <label>Дата</label>
+                <label>{{ 'marker.date' | translate }}</label>
                 <input type="text" class="input-small"
                        readonly
-                       ng-model="prodDate" />  
+                       ng-model="prodDate" />
             </div>
-                     
+
         </div>
 
-        <button class="btn" ng-click="showBuildFormMarker()">Перемаркировка</button>
-        
+        <button class="btn specialLabelMode" ng-click="showBuildFormWindow('toggleModalMarker')">
+            {{ 'marker.remarkingButton' | translate }}
+        </button>
+
+        <button class="btn specialLabelMode" ng-click="showBuildFormWindow('toggleModalSort')">
+            {{ 'marker.sortingButton' | translate }}
+        </button>
+
+        <button class="btn specialLabelMode" ng-click="showBuildFormWindow('toggleModalDefect')">
+            {{ 'marker.defectButton' | translate }}
+        </button>
+
+        <button class="btn specialLabelMode" ng-click="showBuildFormWindow('toggleModalSplit')">
+            {{ 'marker.splitButton' | translate }}
+        </button>
+
     </div>
 
 </div>
-
-
 
 <div class="black-wrapper" ng-show="isShowModal">
     <div class="modal">
@@ -317,14 +338,107 @@
 </div>
 
 <div class="black-wrapper" ng-show="toggleModalMarker">
-    <div class="modal">
-        <button ng-click="closeModal()" class="btn btn-circle pull-right"><i class="icon-remove"></i></button>
+    <div class="modal additional">
+        <button ng-click="closeModal('toggleModalMarker'); 
+                actionsOnExit('remarkerForm', 'isShowReMarkForm');"
+                class="btn btn-circle pull-right">
+            <i class="icon-remove"></i>
+        </button>
 
-        <label>Введите номер бирки</label>
-        <input type="text" ng-model="labelNumber" ng-readonly="readOnly" my-enter="buildFormRemarker()" />
+        <h4>{{ 'marker.modalCaptions.reMarkingMode' | translate }}</h4>
+
+        <div class="enterLabelWrapper">
+            <label>{{ 'marker.modalCaptions.enterLabelNumber' | translate }}</label>
+            <input type="text" class="labelNumber"
+                   ng-model="labelNumber"
+                   ng-readonly="readOnly" my-enter="buildFormSpecialMode('remarkerForm', 'isShowReMarkForm')" />
+        </div>
+
 
         <div class="formWrapper" ng-show="isShowReMarkForm">
             <form id="remarkerForm" novalidate></form>
+        </div>
+    </div>
+</div>
+
+<div class="black-wrapper" ng-show="toggleModalSort">
+    <div class="modal additional">
+        <button ng-click="closeModal('toggleModalSort');
+                actionsOnExit('sortingForm', 'isShowSortingForm');"
+                class="btn btn-circle pull-right">
+            <i class="icon-remove"></i>
+        </button>
+
+        <h4>{{ 'marker.modalCaptions.reSortingMode' | translate }}</h4>
+
+        <div class="enterLabelWrapper">
+            <label>{{ 'marker.modalCaptions.enterLabelNumber' | translate }}</label>
+            <input type="text" class="labelNumber"
+                   ng-model="labelNumber"
+                   ng-readonly="readOnly" my-enter="buildFormSpecialMode('sortingForm', 'isShowSortingForm')" />
+        </div>
+
+
+        <div class="formWrapper" ng-show="isShowSortingForm">
+            <form id="sortingForm" novalidate></form>
+        </div>
+    </div>
+</div>
+
+<div class="black-wrapper" ng-show="toggleModalDefect">
+    <div class="modal additional">
+        <button ng-click="closeModal('toggleModalDefect');
+                actionsOnExit('defectForm', 'isShowDefectForm');"
+                class="btn btn-circle pull-right">
+            <i class="icon-remove"></i>
+        </button>
+
+        <h4>{{ 'marker.modalCaptions.DefectMode' | translate }}</h4>
+
+        <div class="enterLabelWrapper">
+            <label>{{ 'marker.modalCaptions.enterLabelNumber' | translate }}</label>
+            <input type="text" class="labelNumber"
+                   ng-model="labelNumber"
+                   ng-readonly="readOnly" my-enter="buildFormSpecialMode('defectForm', 'isShowDefectForm')" />
+        </div>
+
+
+        <div class="formWrapper" ng-show="isShowDefectForm">
+            <form id="defectForm" novalidate></form>
+        </div>
+    </div>
+</div>
+
+<div class="black-wrapper" ng-show="toggleModalSplit">
+    <div class="modal additional">
+        <button ng-click="closeModal('toggleModalSplit');
+                actionsOnExit('splitForm', 'isShowSplitForm');"
+                class="btn btn-circle pull-right">
+            <i class="icon-remove"></i>
+        </button>
+
+        <h4>{{ 'marker.modalCaptions.SplitMode' | translate }}</h4>
+
+        <div class="enterLabelWrapper">
+            <label>{{ 'marker.modalCaptions.enterLabelNumber' | translate }}</label>
+            <input type="text" class="labelNumber"
+                   ng-model="labelNumber"
+                   ng-readonly="readOnly" my-enter="buildFormSpecialMode('splitForm', 'isShowSplitForm')" />
+        </div>
+
+        <div class="enterLabelWrapper">
+            <label>{{ 'marker.modalCaptions.changePackNumber' | translate }}</label>
+            <select class="input-small">
+                <option></option>
+                <option>1</option>
+                <option selected="selected">2</option>
+                <option>3</option>
+            </select>
+        </div>
+
+
+        <div class="formWrapper" ng-show="isShowSplitForm">
+            <form id="splitForm" novalidate></form>
         </div>
     </div>
 </div>

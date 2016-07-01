@@ -24,12 +24,17 @@
     $scope.commOrder = null;
     $scope.sideIsSelected = false;
     $scope.OKLabel = $translate.instant('marker.acceptOrderTask');
+    $scope.takeWeightLabel = $translate.instant('marker.takeWeightButton');
+    $scope.takeTaraLabel = $translate.instant('marker.takeTaraButton');
+    $scope.testPrintLabel = $translate.instant('marker.testPrintButton');
     $scope.disableButtonOKTask = false;
     $scope.classOK = null;
     $scope.sandwichModeAccepted = false;
     $scope.toggleModalMarker = false;
+    $scope.toggleModalSort = false;
     $scope.readOnly = false;
     $scope.isShowReMarkForm = false;
+    $scope.isShowSortingForm = false;
 
     //methods
     $scope.currentScales = vmGetCurrentScales;
@@ -41,11 +46,12 @@
     $scope.calculate = vmCalculate;
     $scope.reset = vmReset;
     $scope.workRequest = vmWorkRequest;
-    $scope.showBuildFormMarker = vmShowBuildFormMarker;
+    $scope.showBuildFormWindow = vmShowBuildFormWindow;
     $scope.doAction = vmDoAction;
-    $scope.buildFormRemarker = vmBuildFormRemarker;
+    $scope.buildFormSpecialMode = vmBuildFormSpecialMode;
     $scope.closeModal = vmCloseModal;
     $scope.calculateMaxMass = vmCalculateMaxMass;
+    $scope.actionsOnExit = vmActionsOnExit;
 
     //method for enabling OK button on 'Task' tab 
     //when we change value of any control (for examle, checkbox)
@@ -54,7 +60,7 @@
     //method for checking is accepted current order for active scales
     //(Check whether the OK button on modal window with order form is pressed)
     $scope.checkIsAcceptedOrder = vmCheckIsAcceptedOrder;
-    
+
     vmInit();
 
     function vmInit() {
@@ -86,7 +92,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.STANDARD')
+                                        translate: $translate.instant('market.Order.CreateDialogue.STANDARD'),
+                                        order: 22
                                     }
                                 }, {
 
@@ -94,7 +101,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.LENGTH')
+                                        translate: $translate.instant('market.Order.CreateDialogue.LENGTH'),
+                                        order: 6
                                     }
                                 }, {
 
@@ -102,7 +110,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD')
+                                        translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD'),
+                                        order: 13
                                     }
                                 }, {
 
@@ -110,7 +119,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO')
+                                        translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO'),
+                                        order: 3
                                     }
                                 }, {
 
@@ -118,7 +128,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.DIRECTION')
+                                        translate: $translate.instant('market.Order.CreateDialogue.DIRECTION'),
+                                        order: 4
                                     }
                                 }, {
 
@@ -126,7 +137,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.PRODUCT')
+                                        translate: $translate.instant('market.Order.CreateDialogue.PRODUCT'),
+                                        order: 21
                                     }
                                 }, {
 
@@ -134,7 +146,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.CLASS')
+                                        translate: $translate.instant('market.Order.CreateDialogue.CLASS'),
+                                        order: 8
                                     }
                                 }, {
 
@@ -142,7 +155,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
+                                        translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS'),
+                                        order: 9
                                     }
                                 }, {
 
@@ -150,7 +164,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS')
+                                        translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS'),
+                                        order: 23
                                     }
                                 }, {
 
@@ -158,7 +173,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA')
+                                        translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA'),
+                                        order: 20
                                     }
                                 }, {
 
@@ -166,7 +182,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER')
+                                        translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER'),
+                                        order: 1
                                     },
                                 }, {
 
@@ -174,7 +191,8 @@
                                     properties: {
                                         control: 'text',
                                         required: true,
-                                        translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER')
+                                        translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER'),
+                                        order: 2
                                     },
                                 }, {
 
@@ -182,7 +200,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.SIZE')
+                                        translate: $translate.instant('market.Order.CreateDialogue.SIZE'),
+                                        order: 5
                                     },
                                 }, {
 
@@ -190,7 +209,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE')
+                                        translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE'),
+                                        order: 7
                                     },
                                 }, {
 
@@ -198,7 +218,9 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.MELT_NO')
+                                        translate: $translate.instant('market.Order.CreateDialogue.MELT_NO'),
+                                        order: 10
+
                                     },
                                 }, {
 
@@ -206,7 +228,17 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.PART_NO')
+                                        translate: $translate.instant('market.Order.CreateDialogue.PART_NO'),
+                                        order: 11
+                                    },
+                                }, {
+
+                                    name: 'Weight',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('marker.CreateDialogue.mass'),
+                                        order: 12
                                     },
                                 }, {
 
@@ -214,7 +246,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO')
+                                        translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO'),
+                                        order: 14
                                     },
                                 }, {
 
@@ -222,7 +255,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO')
+                                        translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO'),
+                                        order: 15
                                     },
                                 }, {
 
@@ -230,7 +264,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE')
+                                        translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE'),
+                                        order: 16
                                     },
                                 }, {
 
@@ -238,7 +273,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.UTVK')
+                                        translate: $translate.instant('market.Order.CreateDialogue.UTVK'),
+                                        order: 17
                                     },
                                 }, {
 
@@ -246,7 +282,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO')
+                                        translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO'),
+                                        
                                     },
                                 }, {
 
@@ -254,7 +291,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO')
+                                        translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO'),
+                                        order: 19
                                     },
                                 }, {
 
@@ -262,7 +300,8 @@
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('marker.CreateDialogue.CHANGE_NO')
+                                        translate: $translate.instant('marker.CreateDialogue.CHANGE_NO'),
+                                        order: 18
                                     },
                                 }, {
                                     name: 'TEMPLATE',
@@ -272,7 +311,8 @@
                                         translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
                                         data: templateData,
                                         keyField: 'ID',
-                                        valueField: 'Name'
+                                        valueField: 'Name',
+                                        order: 24
                                     }
                                 }]
                             });
@@ -281,7 +321,7 @@
     function vmGetCurrentSides() {
 
         indexService.getInfo('v_AvailableSides').then(function (response) {
-            
+
             $scope.sides = response.data.value;
 
             //if there is only one available side
@@ -377,12 +417,12 @@
 
 
         $q.all([indexService.getInfo(pathScalesDetail), indexService.getInfo(pathLatestWorkRequest)])
-        
+
                        .then(function (responses) {
 
                            $scope.scalesInfo = responses[0].data.value;
                            $scope.latestRequestsList = responses[1].data.value;
-                          
+
                            var barWeight = $scope.latestRequestsList.filter(function (item) {
 
                                return item.PropertyType == 'BAR_WEIGHT';
@@ -413,7 +453,7 @@
     //we get array with scale objects and just filter him by ID of current scale
     //also we calculate rods quantity and rods left number
     function vmShowScaleInfo(id) {
-        
+
         $scope.currentScaleID = id;
 
         $scope.scalesDetailsInfo = $scope.scalesInfo.filter(function (item) {
@@ -422,7 +462,7 @@
                 return item;
         })[0];
 
-        vmCalculateRods();                
+        vmCalculateRods();
     }
 
     //this method is called when we show scale detail info
@@ -433,7 +473,7 @@
         vmReset();
 
         //get last work request for current scales
- 
+
         var data = $scope.latestRequestsList.filter(function (item) {
 
             return item.EquipmentID == id;
@@ -448,7 +488,7 @@
 
             if ($scope.selectedProfile)
                 vmGetProfilePropertiesList('disable');
-                            
+
             //find value of last work request for each field
             data.forEach(function (item) {
 
@@ -477,9 +517,9 @@
                 else if (item.PropertyType == "DEVIATION")
                     $scope.deviation = item.Value;
 
-                else if (item.PropertyType == "BRIGADE_NO") 
+                else if (item.PropertyType == "BRIGADE_NO")
                     $scope.brigadeNo = item.Value;
-                                
+
                 else if (item.PropertyType == "PROD_DATE")
                     $scope.prodDate = item.Value;
 
@@ -489,18 +529,21 @@
                 else if (item.PropertyType == "BAR_QUANTITY")
                     $scope.barQuantity = item.Value;
 
-                else if (item.PropertyType == "SANDWICH_MODE"){
+                else if (item.PropertyType == "SANDWICH_MODE") {
                     $scope.sandwichMode = item.Value == 'true' ? true : false;
                     $scope.sandwichModeAccepted = $scope.sandwichMode;
                 }
-                                    
+
 
                 else if (item.PropertyType == "AUTO_MANU_VALUE")
                     $scope.approvingMode = item.Value == 'true' ? true : false;
 
+                else if (item.PropertyType == "NEMERA")
+                    $scope.nemera = item.Value == 'true' ? true : false;
+
             });
         };
-                                                
+
     };
 
     function vmGetProfiles() {
@@ -533,9 +576,9 @@
 
                             if (!$scope.length) {
                                 $scope.minMass = null;
-                                $scope.maxMass = null;                                
+                                $scope.maxMass = null;
                             }
-                                
+
 
                         } else {
 
@@ -569,11 +612,11 @@
                 vmCalculate(disable);
             else
                 vmCalculate();
-        }        
+        }
     }
 
     function vmBuildForm() {
-      
+
         indexService.getInfo("v_WorkDefinitionPropertiesAll?$filter=comm_order eq '{0}'".format($scope.commOrder))
                          .then(function (response) {
 
@@ -586,42 +629,57 @@
                                      procedure = 'upd_WorkDefinition';
                                  else
                                      procedure = 'ins_WorkDefinition';
-                                 
-                                 vmCreateForm($('#orderForm'), 'edit', procedure, orderData, 'COMM_ORDER');
+
+                                 vmCreateForm($('#orderForm'),
+                                              'edit',
+                                              procedure,
+                                              orderData,
+                                              'COMM_ORDER',
+                                               null,
+                                               null,
+                                               {
+                                                   OK: 'OK',
+                                                   Cancel: $translate.instant('buttonCancel')
+                                               });
                              } else {
 
                                  vmShowLastCommOrderValue();
 
-                                 alert('there is no orders with this name!');
-                            }
-                                  
+                                 alert($translate.instant('marker.errorMessages.noOrder'));
+                             }
+
                          })
 
     }
 
-    function vmShowBuildFormMarker() {
+    function vmShowBuildFormWindow(flag) {
 
-        $scope.toggleModalMarker = true;
+        $scope[flag] = true;
     };
 
-    function vmBuildFormRemarker() {
+    function vmBuildFormSpecialMode(container, showFlag) {
 
         $scope.readOnly = true;
 
         indexService.getInfo("v_MaterialLotProperty?$filter=FactoryNumber eq '{0}'".format($scope.labelNumber))
                     .then(function (response) {
-                       
+
                         var data = response.data.value;
-                      
+
                         if (data.length > 0) {
 
-                            $scope.isShowReMarkForm = true;
+                            $scope[showFlag] = true;
+                            data.push({
 
-                            vmCreateForm($('#remarkerForm'),
+                                Property: 'Weight',
+                                Value: data[0].Quantity
+                            });
+
+                            vmCreateForm($('#' + container),
                             'edit',
                             'ins_MaterialLotByFactoryNumber',
                             data,
-                            null, [{
+                            'Weight', [{
 
                                 name: 'EquipmentID',
                                 value: $scope.currentScaleID
@@ -629,21 +687,31 @@
 
                                 name: 'FactoryNumber',
                                 value: $scope.labelNumber
-                            }], ['EquipmentID', 'FactoryNumber']);
-                        }                            
-                        else {                           
+                            }],
+                            ['EquipmentID', 'FactoryNumber'],
+                            {
+                                OK: 'OK',
+                                Cancel: container == 'remarkerForm' ? $translate.instant('marker.buttonExit') : $translate.instant('buttonCancel')
+                            }, [{
+                                mandatory: false,
+                                maxlength: undefined,
+                                name: "Weight",
+                                type: "Edm.String"
+                            }]);
+                        }
+                        else {
                             $scope.readOnly = false;
-                            $scope.isShowReMarkForm = false;
-                            alert('нет бирок с таким номером!');
-                            }
-                            
+                            $scope[showFlag] = false;
+                            alert($translate.instant('marker.errorMessages.noLabel'));
+                        }
+
                     });
     };
 
-    function vmCreateForm(container, type, procedure, orderData, keyField, additionalFields, escapedFields) {
+    function vmCreateForm(container, type, procedure, orderData, keyField, additionalFields, escapedFields, captions, additionalActionFields) {
 
         vmToggleModal(true);
-        
+
         container.oDataAction({
 
             action: procedure,
@@ -652,14 +720,15 @@
             rowData: orderData,
             controlCaptions: {
 
-                OK: 'OK',
-                Cancel: $translate.instant('buttonCancel')
+                OK: captions.OK,
+                Cancel: captions.Cancel
             },
             fields: $scope.fields,
             additionalFields: additionalFields,
-            escapedFields: escapedFields
+            escapedFields: escapedFields,
+            additionalActionFields: additionalActionFields
         });
-                    
+
     };
 
     function vmToggleModal(expr) {
@@ -696,13 +765,13 @@
 
         if ($scope.barWeight && $scope.barQuantity) {
 
-            $scope.minMass = $scope.barWeight * $scope.barQuantity;            
+            $scope.minMass = $scope.barWeight * $scope.barQuantity;
             $scope.minMass = parseInt($scope.minMass).toFixed(3);
             $scope.minMassRec = parseInt($scope.barWeight * $scope.barQuantity);
 
             vmCalculateMaxMass();
         }
-                                   
+
         if (!$scope.sampleMass || $scope.sampleMass.length == 0)
             $scope.linearMass = $scope.linearMassFromBase;
 
@@ -711,7 +780,7 @@
             $scope.linearMassCalculated = $scope.sampleMass / $scope.sampleLength;
 
             $scope.linearMass = $scope.linearMassCalculated;
-            $scope.barWeight = $scope.linearMassCalculated * $scope.length; 
+            $scope.barWeight = $scope.linearMassCalculated * $scope.length;
             $scope.minMass = parseInt($scope.barWeight * $scope.barQuantity);
             $scope.minMassRec = parseInt($scope.barWeight * $scope.barQuantity);
 
@@ -778,6 +847,7 @@
         $scope.barQuantity = null;
         $scope.sandwichMode = null;
         $scope.approvingMode = null;
+        $scope.nemera = null;
     };
 
     function vmWorkRequest() {
@@ -807,43 +877,46 @@
                 SAMPLE_LENGTH: $scope.sampleLength ? $scope.sampleLength.toString() : null,
                 DEVIATION: $scope.deviation ? $scope.deviation.toString() : null,
                 SANDWICH_MODE: $scope.sandwichMode ? 'true' : 'false',
-                AUTO_MANU_VALUE: $scope.approvingMode ? 'true' : 'false'
+                AUTO_MANU_VALUE: $scope.approvingMode ? 'true' : 'false',
+                NEMERA: $scope.nemera ? 'true' : 'false'
             }
-           
-            $scope.OKLabel = 'loading...';
+
+            $scope.OKLabel = $translate.instant('loadingMsg');
 
             indexService.sendInfo('ins_WorkRequest', data)
                         .then(function (response) {
 
-                            $scope.OKLabel = $translate.instant('marker.acceptOrderTask');;
+                            $scope.OKLabel = $translate.instant('marker.acceptOrderTask');
                             $scope.disableButtonOKTask = true;
                             $scope.sandwichModeAccepted = $scope.sandwichMode;
                         });
         } else {
-            
+
             var errors = [];
 
             if (!($scope.maxMass && $scope.minMass && $scope.selectedProfile))
-                errors.push('You must fill all required fields!');
-            
-            if (!$scope.isAcceptedOrder)
-                errors.push('You must accept your order number!');
+                errors.push($translate.instant('marker.errorMessages.fillRequired'));
 
-            if (parseFloat($scope.maxMass) < parseFloat($scope.minMass))
-                errors.push('Max weight cannot be less then min weight!');
+            if (!$scope.isAcceptedOrder)
+                errors.push($translate.instant('marker.errorMessages.acceptOrder'));
+
+            if (parseInt($scope.maxMass) < parseInt($scope.minMass))
+                errors.push($translate.instant('marker.errorMessages.minMaxWeight'));
 
             if ($scope.deviationState == 'wrong')
-                errors.push('Your deviation is wrong! Please, recalculate it!');
+                errors.push($translate.instant('marker.errorMessages.wrongDeviation'));
 
             errors = errors.join(' \n ');
             alert(errors);
         }
-            
 
-                     
+
+
     };
 
-    function vmDoAction(url) {
+    function vmDoAction(url, label, text) {
+
+        $scope[label] = $translate.instant('loadingMsg');
 
         indexService.sendInfo(url, {
 
@@ -851,10 +924,10 @@
             EquipmentID: parseInt($scope.currentScaleID) || null
         }).then(function (response) {
 
-            response;
+            $scope[label] = $translate.instant(text)
         })
     };
-   
+
     function vmEnableControlOK() {
 
         $scope.disableButtonOKTask = false;
@@ -889,14 +962,19 @@
         $scope.isAcceptedOrder = false;
     }
 
-    function vmCloseModal() {
+    function vmCloseModal(flag) {
         
-        $scope.labelNumber = null;
-        $('#remarkerForm').empty();
+        $scope[flag] = false;
         vmToggleModal(false);
-        $scope.toggleModalMarker = false;
+    };
+
+    function vmActionsOnExit(container, formWrapperFlag) {
+
+        $scope.labelNumber = null;
+        $('#' + container).empty();
+        vmToggleModal(false);
         $scope.readOnly = false;
-        $scope.isShowReMarkForm = false;
+        $scope[formWrapperFlag] = false;
     };
 
     //there are events triggered on success and cancel button click in order modal form
@@ -905,7 +983,7 @@
         $scope.disableButtonOKTask = false;
         $scope.isAcceptedOrder = true;
         vmToggleModal(false);
-        
+
         $scope.brigadeNo = data.fields.BRIGADE_NO;
         $scope.prodDate = data.fields.PROD_DATE;
 
@@ -914,22 +992,71 @@
 
     $('#orderForm').on('oDataForm.cancel', function (e) {
 
-        vmToggleModal(false);        
+        vmToggleModal(false);
         vmShowLastCommOrderValue();
-        
+
         $scope.$apply();
     });
 
     $('#remarkerForm').on('oDataForm.success', function (e) {
 
-        vmCloseModal();
+        vmActionsOnExit('remarkerForm', 'isShowReMarkForm');
 
         $scope.$apply();
     })
 
     $('#remarkerForm').on('oDataForm.cancel', function (e) {
 
-        vmCloseModal();
+        vmCloseModal('toggleModalMarker');
+        vmActionsOnExit('remarkerForm', 'isShowReMarkForm');
+
+        $scope.$apply();
+    });
+
+    $('#sortingForm').on('oDataForm.success', function (e) {
+
+        vmCloseModal('toggleModalSort');
+        vmActionsOnExit('sortingForm', 'isShowSortingForm');
+
+        $scope.$apply();
+    })
+
+    $('#sortingForm').on('oDataForm.cancel', function (e) {
+
+        vmCloseModal('toggleModalSort');
+        vmActionsOnExit('sortingForm', 'isShowSortingForm');
+
+        $scope.$apply();
+    });
+
+    $('#defectForm').on('oDataForm.success', function (e) {
+
+        vmCloseModal('toggleModalDefect');
+        vmActionsOnExit('defectForm', 'isShowDefectForm');
+
+        $scope.$apply();
+    })
+
+    $('#defectForm').on('oDataForm.cancel', function (e) {
+
+        vmCloseModal('toggleModalDefect');
+        vmActionsOnExit('defectForm', 'isShowDefectForm');
+
+        $scope.$apply();
+    });
+
+    $('#splitForm').on('oDataForm.success', function (e) {
+
+        vmCloseModal('toggleModalSplit');
+        vmActionsOnExit('splitForm', 'isShowSplitForm');
+
+        $scope.$apply();
+    })
+
+    $('#splitForm').on('oDataForm.cancel', function (e) {
+
+        vmCloseModal('toggleModalSplit');
+        vmActionsOnExit('splitForm', 'isShowSplitForm');
 
         $scope.$apply();
     });
@@ -954,12 +1081,14 @@
     return function (scope, element, attrs) {
 
         element.bind("keydown keypress", function (event) {
-           
+
             if (!((event.which >= 48 && event.which <= 57) || (event.which >= 96 && event.which <= 105))
                 && event.which != 8 && event.which != 46 && event.which != 13) {
-                  
+
                 return false;
             };
         });
     };
 });
+
+

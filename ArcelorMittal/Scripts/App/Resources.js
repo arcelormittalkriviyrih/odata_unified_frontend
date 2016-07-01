@@ -88,13 +88,69 @@
                 },
             }
         },
-        marker: {
+        marker: {            
+            changeSide: 'Change side for work:',
+            kg: 'kg',
+            pcs: 'pcs',
+            task: 'Task',
+            profile: 'Profile',
+            size: 'Size(m.)',
+            rodsQuantityPcs: 'Rods quantity (pcs)',
+            sandwich: 'Sandwich',
+            byAccept: 'By accept',
+            nemera: 'Nemera',
+            minMassRec: 'Minimal weight rec. (kg)',
+            maxMass: 'Maximal weight(kg)',
+            minMass: 'Minimal weight (kg)',
+            sampleMass: 'Sample weight (kg)',
+            rodsWeight: 'Rod weight(kg)',
+            sampleLength: 'Sample length (m)',
+            deviation: 'Deviation (%)',
+            autoMode: 'Automatically mode',
+            weight: 'Weight',
+            rodsQuantity: 'Rods quantity',
+            rodsLeft: 'Rods left',
+            scalesBlocked: 'Scales blocked',
+            firstPack: 'First pack',
+            secondPack: 'Second pack',
+
+            order: 'Order',
+            brigadeNo: 'Brigade No',
+            date: 'Date',
 
             CreateDialogue: {
                 CHANGE_NO: 'Change',
-                FactoryNumber: 'Factory number'
+                FactoryNumber: 'Factory number',
+                mass: 'Mass'
             },
-            acceptOrderTask: 'Accept order/task'
+            acceptOrderTask: 'Accept order/task',
+            takeWeightButton: 'Take weight',
+            takeTaraButton: 'Take tara',
+            testPrintButton: 'Test print',
+            buttonExit: 'Exit',
+            remarkingButton: 'Remarking',
+            sortingButton: 'Resorting',
+            defectButton: 'Rejection',
+            splitButton: 'Pack split',
+            errorMessages: {
+
+                noOrders: 'There is no orders with this name!',
+                noLabel: 'There is no label with this number!',
+                fillRequired: 'You must fill all required fields!',
+                acceptOrder: 'You must accept your order number!',
+                minMaxWeight: 'Max weight cannot be less then min weight!',
+                wrongDeviation: 'Deviation is wrong! Please, recalculate it!'
+            },
+            modalCaptions: {
+
+                reMarkingMode: 'Remarking mode',
+                reSortingMode: 'Resorting mode',
+                DefectMode: 'Rejection mode',
+                SplitMode: 'Split mode',
+                enterLabelNumber: 'Enter label number',
+                changePackNumber: 'Select pucks number'
+            }
+            
         },
         error: {
             Unauthorized: 'This role is unavailable for you!'
@@ -214,13 +270,68 @@
                 }
             }
         },
-        marker: {
+        marker: {            
+            changeSide: 'Выберите сторону стана для работы:',
+            kg: 'кг',
+            pcs: 'шт',
+            task: 'Задание',
+            profile: 'Профиль',
+            size: 'Размер(м.)',
+            rodsQuantityPcs: 'Количество прутков(шт.)',
+            sandwich: 'Бутерброд',
+            byAccept: 'По подтверждению',
+            nemera: 'Немера',
+            minMassRec: 'Рек. масса минимум (кг)',
+            maxMass: 'Масса минимум(кг.)',
+            minMass: 'Масса максимум(кг.)',
+            sampleMass: 'Масса образца(кг.)',
+            rodsWeight: 'Вес прутка(кг.)',
+            sampleLength: 'Длина образца(м.)',
+            deviation: 'Отклонение(%)',
+            autoMode: 'Автоматический режим',
+            weight: 'Вес',
+            rodsQuantity: 'Количество прутков',
+            rodsLeft: 'Осталось прутков',
+            scalesBlocked: 'Весы заблокированы',
+            firstPack: 'Первая пачка',
+            secondPack: 'Вторая пачка',
+
+            order: 'Заказ',
+            brigadeNo: '№ бригады',
+            date: 'Дата',
 
             CreateDialogue: {
                 CHANGE_NO: 'Смена',
-                FactoryNumber: 'Номер бирки'
+                FactoryNumber: 'Номер бирки',
+                mass: 'Масса'
             },
-            acceptOrderTask: 'Подтвердить заказ/задание'
+            acceptOrderTask: 'Подтвердить заказ/задание',
+            takeWeightButton: 'Взять вес',
+            takeTaraButton: 'Взять тару',
+            testPrintButton: 'Тестовая печать',
+            buttonExit: 'Выход',
+            remarkingButton: 'Перемаркировка',
+            sortingButton: 'Пересортировка',
+            defectButton: 'Отбраковка',
+            splitButton: 'Разделение пачки',
+            errorMessages: {
+
+                noOrders: 'Нет заказа с таким номером!',
+                noLabel: 'Нет бирки с таким номером!',
+                fillRequired: 'Вы должны заполнить все обязательные поля!',
+                acceptOrder: 'Вы должны подтвердить ваш номер заказа!',
+                minMaxWeight: 'Максимальный вес не может быть меньше минимального!',
+                wrongDeviation: 'Отклонение неверно! Пожалуйста, пересчитайте!'
+            },
+            modalCaptions: {
+
+                reMarkingMode: 'Режим перемаркировки',
+                reSortingMode: 'Режим пересортировки',
+                DefectMode: 'Режим отбраковки',
+                SplitMode: 'Режим разделения пачки',
+                enterLabelNumber: 'Введите номер бирки',
+                changePackNumber: 'Выберите число пачек'
+            }
         },
         error: {
             Unauthorized: 'Эта роль Вам недоступна'
@@ -344,11 +455,67 @@
             }
         },
         marker: {
+            changeSide: 'Виберіть сторону стана для роботи:',
+            kg: 'кг',
+            pcs: 'шт',
+            task: 'Завдання',
+            profile: 'Профіль',
+            size: 'Розмір(м.)',
+            rodsQuantityPcs: 'Кількість прутків(шт.)',
+            sandwich: 'Бутерброд',
+            byAccept: 'За підтвержденням',
+            nemera: 'Немера',
+            minMassRec: 'Рек. маса мінімум (кг)',
+            maxMass: 'Маса мінімум(кг.)',
+            minMass: 'Маса максимум(кг.)',
+            sampleMass: 'Вага зразка(кг.)',
+            rodsWeight: 'Вага прутка(кг.)',
+            sampleLength: 'Довжина зразка(м.)',
+            deviation: 'Відхилення(%)',
+            autoMode: 'Автоматичний режим',
+            weight: 'Вага',
+            rodsQuantity: 'Кількість прутків',
+            rodsLeft: 'Залишилось прутків',
+            scalesBlocked: 'Ваги заблоковані',
+            firstPack: 'Перша пачка',
+            secondPack: 'Друга пачка',
+
+            order: 'Замовлення',
+            brigadeNo: '№ бригади',
+            date: 'Дата',
+
             CreateDialogue: {
                 FactoryNumber: 'Номер бірки',
-                CHANGE_NO: 'Зміна'
+                CHANGE_NO: 'Зміна',
+                mass: 'Маса'
             },
-            acceptOrderTask: 'підтвердити замовленні/завдання'
+            acceptOrderTask: 'підтвердити замовлення/завдання',
+            takeWeightButton: 'Взяти вагу',
+            takeTaraButton: 'Взяти тару',
+            testPrintButton: 'Тестовий друк',
+            buttonExit: 'Вихід',
+            remarkingButton: 'Перемаркування',
+            sortingButton: 'Пересортування',
+            defectButton: 'Відбракування',
+            splitButton: 'Розділення пачки',
+            errorMessages: {
+
+                noOrder: 'Немає замовлення з таким номером!',
+                noLabel: 'Немає бирки з таким номером!',
+                fillRequired: 'Ви маєте заповнити всі обов\'язкові поля!',
+                acceptOrder: 'Ви маєте підтвердити ваш номер замовлення!',
+                minMaxWeight: 'Максимальна вага не може бути менше мінімальної!',
+                wrongDeviation: 'Відхилення невірне! Будь ласка, перерахуйте!'
+            },
+            modalCaptions: {
+
+                reMarkingMode: 'Режим перемаркування',
+                reSortingMode: 'Режим пересортування',
+                DefectMode: 'Режим відбракування',
+                SplitMode: 'Режим разділення пачки',
+                enterLabelNumber: 'Введіть номер бирки',
+                changePackNumber: 'Виберіть число пачок'
+            }
         },
         error: {
             Unauthorized: 'У доступі відмовлено'

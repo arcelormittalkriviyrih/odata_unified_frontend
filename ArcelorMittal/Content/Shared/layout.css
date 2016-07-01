@@ -496,6 +496,35 @@ h4.scalesName{
     top: 93px;
 }
 
+.modal.additional{
+    padding: 0;
+    overflow: hidden;
+}
+
+.modal.additional h4{
+    background: #eeeeee;
+    padding: 15px 15px 15px 10px;
+    margin-top: 0;
+}
+
+.modal.additional .btn.btn-circle{
+    margin: 10px 10px 0 0;
+}
+
+.enterLabelWrapper{
+    padding-left: 10px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.modal.additional .formWrapper{
+    margin: 10px 0 0 20px;
+}
+
+.enterLabelWrapper select.input-small{
+    margin:0;
+}
+
 
 
 
