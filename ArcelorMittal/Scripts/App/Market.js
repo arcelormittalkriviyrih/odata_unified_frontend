@@ -318,7 +318,7 @@
 
                         name: 'PROD_DATE',
                         properties: {
-                            control: 'text',
+                            control: 'date',
                             required: false,
                             translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE')
                         },

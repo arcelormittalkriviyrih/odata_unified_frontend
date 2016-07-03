@@ -282,8 +282,8 @@
             byAccept: 'По подтверждению',
             nemera: 'Немера',
             minMassRec: 'Рек. масса минимум (кг)',
-            maxMass: 'Масса минимум(кг.)',
-            minMass: 'Масса максимум(кг.)',
+            maxMass: 'Масса максимум(кг.)',
+            minMass: 'Масса минимум(кг.)',
             sampleMass: 'Масса образца(кг.)',
             rodsWeight: 'Вес прутка(кг.)',
             sampleLength: 'Длина образца(м.)',
@@ -311,7 +311,7 @@
             testPrintButton: 'Тестовая печать',
             buttonExit: 'Выход',
             remarkingButton: 'Перемаркировка',
-            sortingButton: 'Пересортировка',
+            sortingButton: 'Сортировка',
             defectButton: 'Отбраковка',
             splitButton: 'Разделение пачки',
             errorMessages: {
@@ -326,7 +326,7 @@
             modalCaptions: {
 
                 reMarkingMode: 'Режим перемаркировки',
-                reSortingMode: 'Режим пересортировки',
+                reSortingMode: 'Режим сортировки',
                 DefectMode: 'Режим отбраковки',
                 SplitMode: 'Режим разделения пачки',
                 enterLabelNumber: 'Введите номер бирки',
@@ -466,8 +466,8 @@
             byAccept: 'За підтвержденням',
             nemera: 'Немера',
             minMassRec: 'Рек. маса мінімум (кг)',
-            maxMass: 'Маса мінімум(кг.)',
-            minMass: 'Маса максимум(кг.)',
+            maxMass: 'Маса максимум(кг.)',
+            minMass: 'Маса мінімум(кг.)',
             sampleMass: 'Вага зразка(кг.)',
             rodsWeight: 'Вага прутка(кг.)',
             sampleLength: 'Довжина зразка(м.)',
@@ -495,7 +495,7 @@
             testPrintButton: 'Тестовий друк',
             buttonExit: 'Вихід',
             remarkingButton: 'Перемаркування',
-            sortingButton: 'Пересортування',
+            sortingButton: 'Сортування',
             defectButton: 'Відбракування',
             splitButton: 'Розділення пачки',
             errorMessages: {
@@ -510,7 +510,7 @@
             modalCaptions: {
 
                 reMarkingMode: 'Режим перемаркування',
-                reSortingMode: 'Режим пересортування',
+                reSortingMode: 'Режим сортування',
                 DefectMode: 'Режим відбракування',
                 SplitMode: 'Режим разділення пачки',
                 enterLabelNumber: 'Введіть номер бирки',

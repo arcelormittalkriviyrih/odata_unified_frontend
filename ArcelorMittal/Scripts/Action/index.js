@@ -103,6 +103,12 @@
                            
                         break;
 
+                    case 'date':
+
+                        field.input = $("<input type='text'>").datepicker({ defaultDate: '', dateFormat: 'dd.mm.yy' });
+
+                        break;
+
                     case 'combo':
 
                         var control = $('<select />');

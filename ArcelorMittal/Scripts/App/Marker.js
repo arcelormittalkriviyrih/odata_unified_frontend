@@ -35,6 +35,10 @@
     $scope.readOnly = false;
     $scope.isShowReMarkForm = false;
     $scope.isShowSortingForm = false;
+    //$scope.reMarkerMode = false;
+    //$scope.sortingMode = false;
+    //$scope.defectMode = false;
+    //$scope.splitMode = false;
 
     //methods
     $scope.currentScales = vmGetCurrentScales;
@@ -262,7 +266,7 @@
 
                                     name: 'PROD_DATE',
                                     properties: {
-                                        control: 'text',
+                                        control: 'date',
                                         required: false,
                                         translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE'),
                                         order: 16
@@ -443,7 +447,8 @@
                                    return item.EquipmentID == scale.ID;
                                })[0].Value;
 
-                               scale.rodsQuantity = parseInt(scale.weightCurrent / barWeightCurrentScales);
+                                scale.rodsQuantity = parseInt(scale.weightCurrent / barWeightCurrentScales);
+
                            });
 
                        })
@@ -533,7 +538,6 @@
                     $scope.sandwichMode = item.Value == 'true' ? true : false;
                     $scope.sandwichModeAccepted = $scope.sandwichMode;
                 }
-
 
                 else if (item.PropertyType == "AUTO_MANU_VALUE")
                     $scope.approvingMode = item.Value == 'true' ? true : false;
@@ -652,9 +656,10 @@
 
     }
 
-    function vmShowBuildFormWindow(flag) {
-
+    function vmShowBuildFormWindow(flag, mode) {
+        
         $scope[flag] = true;
+        //$scope[mode] = false;
     };
 
     function vmBuildFormSpecialMode(container, showFlag) {
@@ -766,7 +771,7 @@
         if ($scope.barWeight && $scope.barQuantity) {
 
             $scope.minMass = $scope.barWeight * $scope.barQuantity;
-            $scope.minMass = parseInt($scope.minMass).toFixed(3);
+            $scope.minMass = parseInt($scope.minMass);
             $scope.minMassRec = parseInt($scope.barWeight * $scope.barQuantity);
 
             vmCalculateMaxMass();
@@ -821,7 +826,7 @@
 
     function vmCalculateRods() {
 
-        if ($scope.scalesDetailsInfo.WEIGHT_CURRENT && $scope.barWeight) {
+        if ($scope.scalesDetailsInfo.WEIGHT_CURRENT >=0 && $scope.barWeight) {
 
             $scope.rodsQuantity = parseInt($scope.scalesDetailsInfo.WEIGHT_CURRENT / $scope.barWeight);
         }
@@ -1001,6 +1006,7 @@
     $('#remarkerForm').on('oDataForm.success', function (e) {
 
         vmActionsOnExit('remarkerForm', 'isShowReMarkForm');
+        //$scope.reMarkerMode = true;
 
         $scope.$apply();
     })
@@ -1017,6 +1023,7 @@
 
         vmCloseModal('toggleModalSort');
         vmActionsOnExit('sortingForm', 'isShowSortingForm');
+        //$scope.sortingMode = true;
 
         $scope.$apply();
     })
@@ -1033,6 +1040,7 @@
 
         vmCloseModal('toggleModalDefect');
         vmActionsOnExit('defectForm', 'isShowDefectForm');
+        //$scope.defectMode = true;
 
         $scope.$apply();
     })
@@ -1049,6 +1057,7 @@
 
         vmCloseModal('toggleModalSplit');
         vmActionsOnExit('splitForm', 'isShowSplitForm');
+        //$scope.splitMode = true;
 
         $scope.$apply();
     })

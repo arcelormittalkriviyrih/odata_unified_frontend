@@ -53,7 +53,7 @@
 <div class="scaleDetailInfo" ng-show="currentScaleID">
 
     <div class="scaleInfo task">
-        <label class="labelTask">{{ 'marker.task' | translate }}</label>
+        <h4 class="labelTask">{{ 'marker.task' | translate }}</h4>
 
         <div style="text-align: right">
 
@@ -61,43 +61,41 @@
 
         <div class="controlsWrapper">
             <div class="controlsGroup">
-                <table>
-                    <tr>
-                        <td>{{ 'marker.profile' | translate }}</td>
-                        <td>
-                            <select ng-model="selectedProfile"
-                                    ng-class="{'wrong': !selectedProfile}"
-                                    ng-change="getProfilePropertiesList();">
-                                <option></option>
-                                <option ng-selected="selectedProfile==profile.ID" ng-repeat="profile in profiles"
-                                        value="{{profile.ID}}">
-                                    {{profile.Description}}
-                                </option>
-                            </select>
-                        </td>
-                    </tr>
 
-                    <tr>
-                        <td>{{ 'marker.size' | translate }}</td>
-                        <td>
-                            <input type="text"
-                                   ng-model="length"
-                                   ng-change="calculate()" />
-                        </td>
-                    </tr>
+                <div class="controlsRow">
+                    <div class="captionTask">
+                        {{ 'marker.profile' | translate }}
+                    </div>
+                    <div class="controlTask">
+                        <select ng-model="selectedProfile"
+                                ng-class="{'wrong': !selectedProfile}"
+                                ng-change="getProfilePropertiesList();">
+                            <option></option>
+                            <option ng-selected="selectedProfile==profile.ID" ng-repeat="profile in profiles"
+                                    value="{{profile.ID}}">
+                                {{profile.Description}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
 
-                    <tr>
-                        <td>{{ 'marker.rodsQuantityPcs' | translate }}</td>
-                        <td>
-                            <input type="text"
-                                   ng-model="barQuantity"
-                                   ng-change="calculate()" />
-                        </td>
-                    </tr>
-                </table>
+                <div class="controlsRow">
+                    <div class="captionTask">{{ 'marker.size' | translate }}</div>
+                    <div class="controlTask">
+                        <input type="text"
+                               ng-model="length"
+                               ng-change="calculate()" />
+                    </div>
+                </div>
+
+                
+                        
+
+                        
+
             </div>
 
-            <div class="controlsGroup" style="padding:10px;">
+            <div class="controlsGroup" style="padding:0 0 0 10px;">
 
                 <div>
                     <input type="checkbox"
@@ -116,87 +114,112 @@
                            ng-model="nemera"
                            ng-change="enableControlOK()" />
                      {{ 'marker.nemera' | translate }}
-                </div>
-
-                <div class="minMassRecContainer">
-                    <table>
-                        <tr>
-                            <td>{{ 'marker.minMassRec' | translate }}</td>
-                            <td>
-                                <input type="text"
-                                       readonly
-                                       ng-model="minMassRec" />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                </div>                
             </div>
 
         </div>
 
         <div class="controlsWrapper">
+            <div class="controlsGroup">
+                <div class="controlsRow">
+                    <div class="captionTask">{{ 'marker.rodsQuantityPcs' | translate }}</div>
+                    <div class="controlTask">
+                        <input type="text"
+                               ng-model="barQuantity"
+                               ng-change="calculate()" />
+                    </div>
+                </div>
+            </div>
 
             <div class="controlsGroup">
-                <table>
-                    <tr>
-                        <td>{{ 'marker.minMass' | translate }}</td>
-                        <td>
+                <div class="controlsRow">
+                    <div class="captionTask">
+                        {{ 'marker.minMassRec' | translate }}
+                    </div>
+                    <div class="controlTask">
+                        <input type="text"
+                               readonly
+                               ng-model="minMassRec" />
+                    </div>
 
-                            <input type="text"
-                                   ng-model="minMass"
-                                   ng-class="{'wrong': !minMass}"
-                                   my-number-check
-                                   ng-change="enableControlOK(); calculateMaxMass()" />
-                        </td>
-                    </tr>
+                </div>
+            </div>
+        </div>
 
-                    <tr>
-                        <td>{{ 'marker.sampleMass' | translate }}</td>
-                        <td>
-                            <input type="text"
-                                   ng-model="sampleMass"
-                                   ng-change="calculate()" />
-                        </td>
-                    </tr>
+        <div class="controlsWrapper">
 
-                    <tr>
-                        <td>{{ 'marker.sampleLength' | translate }}</td>
-                        <td>
-                            <input type="text"
-                                   ng-model="sampleLength"
-                                   ng-change="calculate()" />
-                        </td>
-                    </tr>
-                </table>
+            <div class="controlsGroup">
+                <div class="controlsRow">
+                    <div class="captionTask">
+                        {{ 'marker.minMass' | translate }}
+                    </div>
+                    <div class="controlTask">
+                        <input type="text"
+                               ng-model="minMass"
+                               ng-class="{'wrong': !minMass}"
+                               my-number-check
+                               ng-change="enableControlOK(); calculateMaxMass()" />
+                    </div>
+                </div>
+
+                <div class="controlsRow">
+                    <div class="captionTask">
+                        {{ 'marker.sampleMass' | translate }}
+                    </div>
+                    <div class="controlTask">
+                        <input type="text"
+                               ng-model="sampleMass"
+                               ng-change="calculate()" />
+                    </div>
+                </div>
+
+                <div class="controlsRow">
+                    <div class="captionTask">
+                        {{ 'marker.sampleLength' | translate }}
+                    </div>
+                    <div class="controlTask">
+                        <input type="text"
+                               ng-model="sampleLength"
+                               ng-change="calculate()" />
+                    </div>
+                </div>
+
             </div>
             <div class="controlsGroup">
-                <table>
-                    <tr>
-                        <td>{{ 'marker.maxMass' | translate }}</td>
-                        <td>
 
-                            <input type="text"
-                                   ng-model="maxMass"
-                                   ng-class="{'wrong': !maxMass}"
-                                   my-number-check
-                                   ng-change="enableControlOK();" />
-                        </td>
-                    </tr>
+                <div class="controlsRow">
+                    <div class="captionTask">
+                        {{ 'marker.maxMass' | translate }}
+                    </div>
+                    <div class="controlTask">
+                        <input type="text"
+                               ng-model="maxMass"
+                               ng-class="{'wrong': !maxMass}"
+                               my-number-check
+                               ng-change="enableControlOK();" />
+                    </div>
+                </div>
 
-                    <tr>
-                        <td>{{ 'marker.rodsWeight' | translate }}</td>
-                        <td><input type="text" readonly ng-model="barWeight" /></td>
-                    </tr>
+                <div class="controlsRow">
+                    <div class="captionTask">
+                        {{ 'marker.rodsWeight' | translate }}
+                    </div>
+                    <div class="controlTask">
+                        <input type="text" readonly ng-model="barWeight" />
+                    </div>
+                </div>
 
-                    <tr>
-                        <td>{{ 'marker.deviation' | translate }}</td>
-                        <td>
-                            <input type="text" readonly
-                                   ng-model="deviation"
-                                   ng-class="{'wrong': deviationState == 'wrong'}" />
-                        </td>
-                    </tr>
-                </table>
+                <div class="controlsRow">
+                    <div class="captionTask">
+                        {{ 'marker.deviation' | translate }}
+                    </div>
+                    <div class="controlTask">
+                        <input type="text" readonly
+                               ng-model="deviation"
+                               ng-class="{'wrong': deviationState == 'wrong'}" />
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -307,19 +330,27 @@
 
         </div>
 
-        <button class="btn specialLabelMode" ng-click="showBuildFormWindow('toggleModalMarker')">
+        <button class="btn specialLabelMode" 
+                ng-click="showBuildFormWindow('toggleModalMarker', 'reMarkerMode')"
+                ng-class="{'active': reMarkerMode}">
             {{ 'marker.remarkingButton' | translate }}
         </button>
 
-        <button class="btn specialLabelMode" ng-click="showBuildFormWindow('toggleModalSort')">
+        <button class="btn specialLabelMode" 
+                ng-click="showBuildFormWindow('toggleModalSort', 'sortingMode')"
+                ng-class="{'active': sortingMode}">
             {{ 'marker.sortingButton' | translate }}
         </button>
 
-        <button class="btn specialLabelMode" ng-click="showBuildFormWindow('toggleModalDefect')">
+        <button class="btn specialLabelMode" 
+                ng-click="showBuildFormWindow('toggleModalDefect', 'defectMode')"
+                ng-class="{'active': defectMode}">
             {{ 'marker.defectButton' | translate }}
         </button>
 
-        <button class="btn specialLabelMode" ng-click="showBuildFormWindow('toggleModalSplit')">
+        <button class="btn specialLabelMode" 
+                ng-click="showBuildFormWindow('toggleModalSplit', 'splitMode')"
+                ng-class="{'active': splitMode}">
             {{ 'marker.splitButton' | translate }}
         </button>
 
