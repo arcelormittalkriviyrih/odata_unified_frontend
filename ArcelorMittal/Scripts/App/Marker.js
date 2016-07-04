@@ -440,14 +440,24 @@
                                        return item;
                                })
 
-                               scale.weightCurrent = data[0].WEIGHT_CURRENT;
+                               if (data.length > 0)
+                                   scale.weightCurrent = data[0].WEIGHT_CURRENT;
+                               else
+                                   scale.weightCurrent = 0;
 
                                var barWeightCurrentScales = barWeight.filter(function (item) {
 
                                    return item.EquipmentID == scale.ID;
-                               })[0].Value;
+                               });
 
-                                scale.rodsQuantity = parseInt(scale.weightCurrent / barWeightCurrentScales);
+                               if (barWeightCurrentScales.length > 0) {
+                                   barWeightCurrentScales = barWeightCurrentScales[0].Value;
+                                   scale.rodsQuantity = parseInt(scale.weightCurrent / barWeightCurrentScales);
+                               }else
+                                   scale.rodsQuantity = 0;
+                                   
+
+                                
 
                            });
 
@@ -826,13 +836,18 @@
 
     function vmCalculateRods() {
 
-        if ($scope.scalesDetailsInfo.WEIGHT_CURRENT >=0 && $scope.barWeight) {
+        if ($scope.scalesDetailsInfo && $scope.scalesDetailsInfo.WEIGHT_CURRENT >= 0 && $scope.barWeight) {
 
             $scope.rodsQuantity = parseInt($scope.scalesDetailsInfo.WEIGHT_CURRENT / $scope.barWeight);
+        } else {
+
+            $scope.rodsQuantity = 0;
         }
 
         if ($scope.barQuantity && $scope.rodsQuantity)
             $scope.rodsLeft = $scope.barQuantity - $scope.rodsQuantity;
+        else
+            $scope.rodsLeft = 0;
 
     };
 
@@ -1099,5 +1114,6 @@
         });
     };
 });
+
 
 

@@ -260,15 +260,15 @@
 
         <p>
             {{ 'marker.rodsQuantity' | translate }}:
-            <span class="rodsValue">
-                {{rodsQuantity || 0}} {{ 'marker.pcs' | translate }}
+            <span class="rodsValue" ng-show="rodsQuantity && rodsQuantity > 0">
+                {{rodsQuantity}} {{ 'marker.pcs' | translate }}
             </span>
         </p>
 
         <p>
             {{ 'marker.rodsLeft' | translate }}:
-            <span class="rodsValue">
-                {{rodsLeft || barQuantity}} {{ 'marker.pcs' | translate }}
+            <span class="rodsValue" ng-show="rodsLeft">
+                {{rodsLeft}} {{ 'marker.pcs' | translate }}
             </span>
         </p>
 
