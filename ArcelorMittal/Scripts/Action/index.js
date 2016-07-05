@@ -66,7 +66,8 @@
                         return item;
                 })[0];
 
-                field.order = fieldData.properties.order;
+                if (fieldData)
+                    field.order = fieldData.properties.order;
             });
 
             actionFields = actionFields.sort(function (a, b) {

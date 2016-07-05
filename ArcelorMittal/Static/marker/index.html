@@ -26,7 +26,11 @@
 
 </div>
 
+
+
 <div class="container" ng-if="scales && !scaleLoading">
+
+    <p>{{currentSide}}</p>
 
     <div class="scaleWrapper">
 
@@ -37,11 +41,13 @@
                  ng-class="{'active': scale.ID == currentScaleID}"
                  ng-click="showScaleInfo(scale.ID); getLatestWorkRequest(scale.ID)">
                 <label>{{scale.Description}}</label>
-                <h3>{{scale.weightCurrent}} {{ 'marker.kg' | translate }}</h3>
-                <h4 ng-show="scale.ID != currentScaleID">
+                <h3 ng-show="scale.weightCurrent">
+                    {{scale.weightCurrent}} {{ 'marker.kg' | translate }}
+                </h3>
+                <h4 ng-show="scale.ID != currentScaleID && scale.rodsQuantity > 0">
                     {{scale.rodsQuantity}} {{ 'marker.pcs' | translate }}
                 </h4>
-                <h4 ng-show="scale.ID == currentScaleID">
+                <h4 ng-show="scale.ID == currentScaleID && rodsQuantity > 0">
                     {{rodsQuantity}} {{ 'marker.pcs' | translate }}
                 </h4>
             </div>
@@ -69,7 +75,7 @@
                     <div class="controlTask">
                         <select ng-model="selectedProfile"
                                 ng-class="{'wrong': !selectedProfile}"
-                                ng-change="getProfilePropertiesList();">
+                                ng-change="getProfilePropertiesList('changeSelectMode');">
                             <option></option>
                             <option ng-selected="selectedProfile==profile.ID" ng-repeat="profile in profiles"
                                     value="{{profile.ID}}">
@@ -88,10 +94,10 @@
                     </div>
                 </div>
 
-                
-                        
 
-                        
+
+
+
 
             </div>
 
@@ -113,8 +119,8 @@
                     <input type="checkbox"
                            ng-model="nemera"
                            ng-change="enableControlOK()" />
-                     {{ 'marker.nemera' | translate }}
-                </div>                
+                    {{ 'marker.nemera' | translate }}
+                </div>
             </div>
 
         </div>
@@ -233,9 +239,10 @@
     </div>
 
     <div class="scaleInfo">
+
         <h4 class="scalesName">{{scalesDetailsInfo.ScalesName}}</h4>
 
-        <span class="autoManuMsg" ng-show="!scalesDetailsInfo.AUTO_MANU">        
+        <span class="autoManuMsg" ng-show="scalesDetailsInfo && !scalesDetailsInfo.AUTO_MANU">
             {{ 'marker.autoMode' | translate }}
         </span>
 
@@ -243,7 +250,7 @@
             <span ng-show="scalesDetailsInfo.POCKET_LOC">
                 {{ 'marker.scalesBlocked' | translate }}
             </span>
-            <span ng-show="sandwichMode && !scalesDetailsInfo.PACK_SANDWICH">
+            <span ng-show="sandwichMode && scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH">
                 {{ 'marker.firstPack' | translate }}
             </span>
             <span ng-show="sandwichMode && scalesDetailsInfo.PACK_SANDWICH">
@@ -253,8 +260,8 @@
 
         <p>
             {{ 'marker.weight' | translate }}:
-            <span class="scalesValue">
-                {{scalesDetailsInfo.WEIGHT_CURRENT || 0}} {{ 'marker.kg' | translate }}
+            <span class="scalesValue" ng-show="scalesDetailsInfo.WEIGHT_CURRENT">
+                {{scalesDetailsInfo.WEIGHT_CURRENT}} {{ 'marker.kg' | translate }}
             </span>
         </p>
 
@@ -290,7 +297,7 @@
 
             <button class="btn"
                     ng-show="sandwichModeAccepted"
-                    ng-disabled="!(!scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB)"
+                    ng-disabled="!((scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH) && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB)"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeTaraByCommOrder','takeTaraLabel', 'marker.takeTaraButton')">
                 {{takeTaraLabel}}
             </button>
@@ -330,28 +337,33 @@
 
         </div>
 
-        <button class="btn specialLabelMode" 
+        <button class="btn specialLabelMode"
                 ng-click="showBuildFormWindow('toggleModalMarker', 'reMarkerMode')"
                 ng-class="{'active': reMarkerMode}">
             {{ 'marker.remarkingButton' | translate }}
         </button>
 
-        <button class="btn specialLabelMode" 
+        <button class="btn specialLabelMode"
                 ng-click="showBuildFormWindow('toggleModalSort', 'sortingMode')"
                 ng-class="{'active': sortingMode}">
             {{ 'marker.sortingButton' | translate }}
         </button>
 
-        <button class="btn specialLabelMode" 
+        <button class="btn specialLabelMode"
                 ng-click="showBuildFormWindow('toggleModalDefect', 'defectMode')"
                 ng-class="{'active': defectMode}">
             {{ 'marker.defectButton' | translate }}
         </button>
 
-        <button class="btn specialLabelMode" 
+        <button class="btn specialLabelMode"
                 ng-click="showBuildFormWindow('toggleModalSplit', 'splitMode')"
                 ng-class="{'active': splitMode}">
             {{ 'marker.splitButton' | translate }}
+        </button>
+
+        <button class="btn specialLabelMode"
+                ng-click="showBuildFormWindow('toggleModalHandMode', 'handMode')">
+            Ручной ввод
         </button>
 
     </div>
@@ -360,6 +372,10 @@
 
 <div class="black-wrapper" ng-show="isShowModal">
     <div class="modal">
+
+        <!--<p>
+            WorkDefinitionID: {{WorkDefinitionID}}
+        </p>-->
 
         <div class="formWrapper">
             <form id="orderForm" novalidate></form>
@@ -370,7 +386,7 @@
 
 <div class="black-wrapper" ng-show="toggleModalMarker">
     <div class="modal additional">
-        <button ng-click="closeModal('toggleModalMarker'); 
+        <button ng-click="closeModal('toggleModalMarker');
                 actionsOnExit('remarkerForm', 'isShowReMarkForm');"
                 class="btn btn-circle pull-right">
             <i class="icon-remove"></i>
@@ -473,6 +489,35 @@
         </div>
     </div>
 </div>
+
+<div class="black-wrapper" ng-show="toggleModalHandMode">
+    <div class="modal additional">
+        <button ng-click="toggleModalHandMode = false"
+                class="btn btn-circle pull-right">
+            <i class="icon-remove"></i>
+        </button>
+
+        <h4>{{ 'marker.modalCaptions.HandMode' | translate }}</h4>
+
+        <div class="enterLabelWrapper">
+            <label>{{ 'marker.modalCaptions.enterName' | translate }}</label>
+            <input type="text"
+                   ng-model="handModeUserName"
+                    />
+
+            <label>{{ 'marker.modalCaptions.enterPassword' | translate }}</label>
+            <input type="text"
+                   ng-model="handModeUserPassword" />
+
+            <button class="btn" ng-click="getHandModeCredentials()">
+                {{ 'marker.modalCaptions.getHandModeCredentials' | translate }}
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
 
 
 

@@ -11,7 +11,7 @@
         })
 }])
 
-.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', '$interval', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, $interval) {
+.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', '$interval', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, $interval, $http) {
 
     //properties
     $scope.filter = [];
@@ -56,6 +56,7 @@
     $scope.closeModal = vmCloseModal;
     $scope.calculateMaxMass = vmCalculateMaxMass;
     $scope.actionsOnExit = vmActionsOnExit;
+    $scope.getHandModeCredentials = vmGetHandModeCredentials;
 
     //method for enabling OK button on 'Task' tab 
     //when we change value of any control (for examle, checkbox)
@@ -339,6 +340,12 @@
 
         //this flag is needed for disabling side list after selecting side
         $scope.sideIsSelected = true;
+        $scope.currentSide = $scope.sides.filter(function (item) {
+
+            return item.ID == side;
+        })[0].Description;
+
+        
 
         var url = 'v_AvailableScales';
 
@@ -442,8 +449,6 @@
 
                                if (data.length > 0)
                                    scale.weightCurrent = data[0].WEIGHT_CURRENT;
-                               else
-                                   scale.weightCurrent = 0;
 
                                var barWeightCurrentScales = barWeight.filter(function (item) {
 
@@ -502,7 +507,7 @@
             $scope.selectedProfile = data[0].ProfileID;
 
             if ($scope.selectedProfile)
-                vmGetProfilePropertiesList('disable');
+                vmGetProfilePropertiesList('latestWorkRequestMode');
 
             //find value of last work request for each field
             data.forEach(function (item) {
@@ -572,7 +577,7 @@
 
     //get profiles properties list
     //'disable' param indicates is must button 'accept' to be disabled
-    function vmGetProfilePropertiesList(disable) {
+    function vmGetProfilePropertiesList(mode) {
 
         if ($scope.selectedProfile) {
 
@@ -601,15 +606,17 @@
                             $scope.tolerancePlus = null;
                             $scope.toleranceMinus = null;
                             $scope.barWeight = null;
-                            $scope.minMass = null;
-                            $scope.maxMass = null;
-                            $scope.minMassRec = null;
+
+
+                            if (mode == 'changeSelectMode') {
+                                $scope.minMass = null;
+                                $scope.maxMass = null;
+                                $scope.minMassRec = null;
+                            };
+                            
                         }
 
-                        if (disable)
-                            vmCalculate(disable);
-                        else
-                            vmCalculate();
+                        vmCalculate(mode);
                     })
 
         }
@@ -622,22 +629,25 @@
             $scope.toleranceMinus = null;
             $scope.barWeight = null;
 
-            if (disable)
-                vmCalculate(disable);
-            else
-                vmCalculate();
+            vmCalculate(mode);
+            
         }
     }
 
     function vmBuildForm() {
 
-        indexService.getInfo("v_WorkDefinitionPropertiesAll?$filter=comm_order eq '{0}'".format($scope.commOrder))
+        indexService.getInfo("v_WorkDefinitionPropertiesAll?$filter=comm_order eq '{0}' and (EquipmentID eq {1} or EquipmentID eq null)".format($scope.commOrder, $scope.currentScaleID))
                          .then(function (response) {
 
                              var orderData = response.data.value;
+
+                             
+
                              var procedure;
 
                              if (orderData.length > 0) {
+
+                                 $scope.WorkDefinitionID = orderData[0].WorkDefinitionID;
 
                                  if (orderData[0].WorkDefinitionID)
                                      procedure = 'upd_WorkDefinition';
@@ -649,8 +659,12 @@
                                               procedure,
                                               orderData,
                                               'COMM_ORDER',
-                                               null,
-                                               null,
+                                               [{
+
+                                                   name: 'EquipmentID',
+                                                   value: $scope.currentScaleID
+                                               }],
+                                               ['EquipmentID'],
                                                {
                                                    OK: 'OK',
                                                    Cancel: $translate.instant('buttonCancel')
@@ -659,7 +673,7 @@
 
                                  vmShowLastCommOrderValue();
 
-                                 alert($translate.instant('marker.errorMessages.noOrder'));
+                                 alert($translate.instant('marker.errorMessages.noOrders'));
                              }
 
                          })
@@ -667,7 +681,7 @@
     }
 
     function vmShowBuildFormWindow(flag, mode) {
-        
+
         $scope[flag] = true;
         //$scope[mode] = false;
     };
@@ -762,10 +776,10 @@
         })[0];
     };
 
-    function vmCalculate(disable) {
+    function vmCalculate(mode) {
 
         /*calculations for left form*/
-        if (disable)
+        if (mode == 'latestWorkRequestMode')
             $scope.disableButtonOKTask = true;
         else
             $scope.disableButtonOKTask = false;
@@ -995,6 +1009,24 @@
         vmToggleModal(false);
         $scope.readOnly = false;
         $scope[formWrapperFlag] = false;
+    };
+
+    function vmGetHandModeCredentials() {
+
+        $scope.handModeUserName;
+        $scope.handModeUserPassword;
+
+        $http({
+            method: 'GET',
+            url: serviceUrl + 'v_System_User',
+            headers: {
+                'Content-Type' : 'application/json', 
+                'Authorization': 'NTLM TlRMTVNTUAADAAAAGAAYAIAAAABaAVoBmAAAAAwADABYAAAAEAAQAGQAAAAMAAwAdAAAAAAAAADyAQAABYKIogoAWikAAAAPiJqYFE3EV5AZ8aCdYRLsDGEAcwBrAC0AYQBkAG8AYwBoAGUAawBtAGUAegBaAEUATgBPAFMAUwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEde2qN7N6jb8ychv4qFI1AQEAAAAAAAA+L6Ow+dXRAaRt65dLvnpVAAAAAAIADABBAFMASwAtAEEARAABABgATQBTAFMAUQBMADIAMAAxADQAUwBSAFYABAAYAGEAcwBrAC0AYQBkAC4AdgBpAG0AYQBzAAMAMgBNAFMAUwBRAEwAMgAwADEANABTAFIAVgAuAGEAcwBrAC0AYQBkAC4AdgBpAG0AYQBzAAUAGABhAHMAawAtAGEAZAAuAHYAaQBtAGEAcwAHAAgAPi+jsPnV0QEGAAQAAgAAAAgAMAAwAAAAAAAAAAAAAAAAMAAAXF/xV8oq70bAQmBaNPTRsSKKet0jawtuvD8CqeHZxosKABAAAAAAAAAAAAAAAAAAAAAAAAkAKABIAFQAVABQAC8AMQA5ADIALgAxADYAOAAuADEAMAAwAC4AMQA3ADQAAAAAAAAAAAAAAAAA='
+            }
+        }).then(function (response) {
+
+            response;
+        });
     };
 
     //there are events triggered on success and cancel button click in order modal form
