@@ -75,7 +75,7 @@
                     <div class="controlTask">
                         <select ng-model="selectedProfile"
                                 ng-class="{'wrong': !selectedProfile}"
-                                ng-change="getProfilePropertiesList('changeSelectMode');">
+                                ng-change="getProfilePropertiesList();">
                             <option></option>
                             <option ng-selected="selectedProfile==profile.ID" ng-repeat="profile in profiles"
                                     value="{{profile.ID}}">
@@ -291,18 +291,18 @@
                     (!sandwichModeAccepted && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB)
                     ||
                     (sandwichModeAccepted && scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB))"
-                    ng-click="doAction('ins_JobOrderOPCCommandTakeWeightByCommOrder','takeWeightLabel', 'marker.takeWeightButton')">
+                    ng-click="doAction('ins_JobOrderOPCCommandTakeWeight','takeWeightLabel', 'marker.takeWeightButton')">
                 {{takeWeightLabel}}
             </button>
 
             <button class="btn"
                     ng-show="sandwichModeAccepted"
                     ng-disabled="!((scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH) && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB)"
-                    ng-click="doAction('ins_JobOrderOPCCommandTakeTaraByCommOrder','takeTaraLabel', 'marker.takeTaraButton')">
+                    ng-click="doAction('ins_JobOrderOPCCommandTakeTara','takeTaraLabel', 'marker.takeTaraButton')">
                 {{takeTaraLabel}}
             </button>
 
-            <button class="btn" ng-click="doAction('ins_MaterialLotByCommOrder', 'testPrintLabel', 'marker.testPrintButton')">
+            <button class="btn" ng-click="doAction('ins_MaterialLotByEquipment', 'testPrintLabel', 'marker.testPrintButton')">
                 {{testPrintLabel}}
             </button>
         </div>

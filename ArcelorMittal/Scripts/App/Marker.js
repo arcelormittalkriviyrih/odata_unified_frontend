@@ -506,9 +506,6 @@
             $scope.workRequestID = data[0].WorkRequestID;
             $scope.selectedProfile = data[0].ProfileID;
 
-            if ($scope.selectedProfile)
-                vmGetProfilePropertiesList('latestWorkRequestMode');
-
             //find value of last work request for each field
             data.forEach(function (item) {
 
@@ -577,7 +574,7 @@
 
     //get profiles properties list
     //'disable' param indicates is must button 'accept' to be disabled
-    function vmGetProfilePropertiesList(mode) {
+    function vmGetProfilePropertiesList() {
 
         if ($scope.selectedProfile) {
 
@@ -599,24 +596,20 @@
                             }
 
 
-                        } else {
-
+                        } else {                            
+                            
+                            $scope.minMass = null;
+                            $scope.maxMass = null;
+                            $scope.minMassRec = null;
+                            $scope.barWeight = null;
                             $scope.linearMassFromBase = null;
                             $scope.length = null;
                             $scope.tolerancePlus = null;
                             $scope.toleranceMinus = null;
-                            $scope.barWeight = null;
-
-
-                            if (mode == 'changeSelectMode') {
-                                $scope.minMass = null;
-                                $scope.maxMass = null;
-                                $scope.minMassRec = null;
-                            };
                             
                         }
 
-                        vmCalculate(mode);
+                        vmCalculate();
                     })
 
         }
@@ -629,7 +622,7 @@
             $scope.toleranceMinus = null;
             $scope.barWeight = null;
 
-            vmCalculate(mode);
+            vmCalculate();
             
         }
     }
@@ -776,13 +769,10 @@
         })[0];
     };
 
-    function vmCalculate(mode) {
+    function vmCalculate() {
 
         /*calculations for left form*/
-        if (mode == 'latestWorkRequestMode')
-            $scope.disableButtonOKTask = true;
-        else
-            $scope.disableButtonOKTask = false;
+        $scope.disableButtonOKTask = false;
 
         if ($scope.length && $scope.linearMassFromBase) {
             $scope.barWeight = $scope.length * $scope.linearMassFromBase;
@@ -949,17 +939,23 @@
     };
 
     function vmDoAction(url, label, text) {
+        
+        if (label == 'testPrintLabel' && !$scope.isAcceptedOrder) {
 
-        $scope[label] = $translate.instant('loadingMsg');
+            alert($translate.instant('marker.errorMessages.acceptOrder'))
+        } else {
 
-        indexService.sendInfo(url, {
+            $scope[label] = $translate.instant('loadingMsg');
 
-            COMM_ORDER: $scope.commOrder.toString() || null,
-            EquipmentID: parseInt($scope.currentScaleID) || null
-        }).then(function (response) {
+            indexService.sendInfo(url, {
 
-            $scope[label] = $translate.instant(text)
-        })
+                EquipmentID: parseInt($scope.currentScaleID) || null
+            }).then(function (response) {
+
+                $scope[label] = $translate.instant(text)
+            })
+        };
+        
     };
 
     function vmEnableControlOK() {
@@ -1032,7 +1028,7 @@
     //there are events triggered on success and cancel button click in order modal form
     $('#orderForm').on('oDataForm.success', function (e, data) {
 
-        $scope.disableButtonOKTask = false;
+        $scope.disableButtonOKTask = true;
         $scope.isAcceptedOrder = true;
         vmToggleModal(false);
 
