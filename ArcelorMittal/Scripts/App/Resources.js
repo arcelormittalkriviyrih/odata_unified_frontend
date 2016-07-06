@@ -169,6 +169,7 @@
         buttonUpload: 'Select File',
         buttonCancel: 'Cancel',
         loadingMsg: 'Loading...',
+        calculatingMsg: 'Calculating...',
         grid: {
             common: {
 
@@ -350,6 +351,7 @@
         buttonUpload: 'Выбрать файл',
         buttonCancel: 'Отмена',
         loadingMsg: 'Загрузка...',
+        calculatingMsg: 'Подсчет...',
         grid: {
             common: {
 
@@ -534,6 +536,7 @@
         buttonUpload: 'Вибрати файл',
         buttonCancel: 'Відміна',
         loadingMsg: 'Завантаження...',
+        calculatingMsg: 'Підрахунок...',
         grid: {
             common: {
 

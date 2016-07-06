@@ -17,6 +17,8 @@ form#form + #ui-datepicker-div{
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 10px;
+    position:absolute;
+    left: -9999px;
 }
 
 .ui-icon.ui-icon-circle-triangle-e{

@@ -85,7 +85,7 @@
                                 $scope.fields = [
                                 {
 
-                                    name: 'FactoryNumber',
+                                    name: 'FACTORY_NUMBER',
                                     properties: {
                                         control: 'text',
                                         required: false,
@@ -386,6 +386,8 @@
                 $scope.scales.forEach(function (scale) {
                     $scope.filter.push('ID eq {0}'.format(scale.ID));
                     $scope.workRequestFilter.push('EquipmentID eq {0}'.format(scale.ID));
+
+                    scale.isInfoLoaded = false;
                 });
 
                 $scope.groups = vmGetChunks($scope.scales, 4);
@@ -422,51 +424,30 @@
         if ($scope.filter.length > 0)
             pathScalesDetail += '?$filter={0}'.format($scope.filter);
 
-        var pathLatestWorkRequest = 'v_LatestWorkRequests';
-        if ($scope.workRequestFilter.length > 0)
-            pathLatestWorkRequest += '?$filter={0}'.format($scope.workRequestFilter);
+        indexService.getInfo(pathScalesDetail)
 
+                       .then(function (response) {
 
-        $q.all([indexService.getInfo(pathScalesDetail), indexService.getInfo(pathLatestWorkRequest)])
-
-                       .then(function (responses) {
-
-                           $scope.scalesInfo = responses[0].data.value;
-                           $scope.latestRequestsList = responses[1].data.value;
-
-                           var barWeight = $scope.latestRequestsList.filter(function (item) {
-
-                               return item.PropertyType == 'BAR_WEIGHT';
-                           });
+                           $scope.scalesInfo = response.data.value;
 
                            $scope.scales.forEach(function (scale) {
+
+                               scale.isInfoLoaded = true;
 
                                var data = $scope.scalesInfo.filter(function (item) {
 
                                    if (item.ID == scale.ID)
                                        return item;
-                               })
-
-                               if (data.length > 0)
-                                   scale.weightCurrent = data[0].WEIGHT_CURRENT;
-
-                               var barWeightCurrentScales = barWeight.filter(function (item) {
-
-                                   return item.EquipmentID == scale.ID;
                                });
 
-                               if (barWeightCurrentScales.length > 0) {
-                                   barWeightCurrentScales = barWeightCurrentScales[0].Value;
-                                   scale.rodsQuantity = parseInt(scale.weightCurrent / barWeightCurrentScales);
-                               }else
-                                   scale.rodsQuantity = 0;
-                                   
+                               if (data.length > 0) {
 
-                                
-
+                                   scale.weightCurrent = data[0].WEIGHT_CURRENT;
+                                   scale.rodsQuantity = data[0].RodsQuanity;
+                               }
                            });
 
-                       })
+                       });
     };
 
     //this method shows detail info for selected scale
@@ -474,91 +455,103 @@
     //also we calculate rods quantity and rods left number
     function vmShowScaleInfo(id) {
 
-        $scope.currentScaleID = id;
+        if ($scope.groups[0][0].isInfoLoaded) {
 
-        $scope.scalesDetailsInfo = $scope.scalesInfo.filter(function (item) {
+            $scope.currentScaleID = id;            
 
-            if (item.ID == id)
-                return item;
-        })[0];
+            $scope.scalesDetailsInfo = $scope.scalesInfo.filter(function (item) {
 
-        vmCalculateRods();
+                if (item.ID == id)
+                    return item;
+            })[0];
+            
+            vmCalculateRods();
+            
+        }        
     }
 
     //this method is called when we show scale detail info
     //this method get last work request data
     function vmGetLatestWorkRequest(id) {
 
-        //clear fields
-        vmReset();
-
         //get last work request for current scales
 
-        var data = $scope.latestRequestsList.filter(function (item) {
+        if ($scope.groups[0][0].isInfoLoaded) {
 
-            return item.EquipmentID == id;
-        });
+            $scope.isRodsCalculated = false;
 
-        if (data.length > 0) {
+            //clear fields
+            vmReset();
 
-            $scope.disableButtonOKTask = true;
+            indexService.getInfo('v_LatestWorkRequests?$filter=EquipmentID eq {0}'.format(id)).then(function (response) {
 
-            $scope.workRequestID = data[0].WorkRequestID;
-            $scope.selectedProfile = data[0].ProfileID;
+                var data = response.data.value;
 
-            //find value of last work request for each field
-            data.forEach(function (item) {
+                if (data.length > 0) {
+
+                    $scope.disableButtonOKTask = true;
+
+                    $scope.workRequestID = data[0].WorkRequestID;
+                    $scope.selectedProfile = data[0].ProfileID;
+
+                    //find value of last work request for each field
+                    data.forEach(function (item) {
 
 
-                if (item.PropertyType == "COMM_ORDER") {
+                        if (item.PropertyType == "COMM_ORDER") {
 
-                    $scope.commOrder = item.Value;
-                    $scope.isAcceptedOrder = true;
-                }
+                            $scope.commOrder = item.Value;
+                            $scope.isAcceptedOrder = true;
+                        }
 
-                else if (item.PropertyType == "MAX_WEIGHT")
-                    $scope.maxMass = parseInt(item.Value);
+                        else if (item.PropertyType == "MAX_WEIGHT")
+                            $scope.maxMass = parseInt(item.Value);
 
-                else if (item.PropertyType == "MIN_WEIGHT")
-                    $scope.minMass = parseInt(item.Value);
+                        else if (item.PropertyType == "MIN_WEIGHT")
+                            $scope.minMass = parseInt(item.Value);
 
-                else if (item.PropertyType == "BAR_WEIGHT")
-                    $scope.barWeight = item.Value;
+                        else if (item.PropertyType == "BAR_WEIGHT")
+                            $scope.barWeight = item.Value;
 
-                else if (item.PropertyType == "SAMPLE_LENGTH")
-                    $scope.sampleLength = item.Value;
+                        else if (item.PropertyType == "SAMPLE_LENGTH")
+                            $scope.sampleLength = item.Value;
 
-                else if (item.PropertyType == "SAMPLE_WEIGHT")
-                    $scope.sampleMass = item.Value;
+                        else if (item.PropertyType == "SAMPLE_WEIGHT")
+                            $scope.sampleMass = item.Value;
 
-                else if (item.PropertyType == "DEVIATION")
-                    $scope.deviation = item.Value;
+                        else if (item.PropertyType == "DEVIATION")
+                            $scope.deviation = item.Value;
 
-                else if (item.PropertyType == "BRIGADE_NO")
-                    $scope.brigadeNo = item.Value;
+                        else if (item.PropertyType == "BRIGADE_NO")
+                            $scope.brigadeNo = item.Value;
 
-                else if (item.PropertyType == "PROD_DATE")
-                    $scope.prodDate = item.Value;
+                        else if (item.PropertyType == "PROD_DATE")
+                            $scope.prodDate = item.Value;
 
-                else if (item.PropertyType == "LENGTH")
-                    $scope.length = item.Value;
+                        else if (item.PropertyType == "LENGTH")
+                            $scope.length = item.Value;
 
-                else if (item.PropertyType == "BAR_QUANTITY")
-                    $scope.barQuantity = item.Value;
+                        else if (item.PropertyType == "BAR_QUANTITY")
+                            $scope.barQuantity = item.Value;
 
-                else if (item.PropertyType == "SANDWICH_MODE") {
-                    $scope.sandwichMode = item.Value == 'true' ? true : false;
-                    $scope.sandwichModeAccepted = $scope.sandwichMode;
-                }
+                        else if (item.PropertyType == "SANDWICH_MODE") {
+                            $scope.sandwichMode = item.Value == 'true' ? true : false;
+                            $scope.sandwichModeAccepted = $scope.sandwichMode;
+                        }
 
-                else if (item.PropertyType == "AUTO_MANU_VALUE")
-                    $scope.approvingMode = item.Value == 'true' ? true : false;
+                        else if (item.PropertyType == "AUTO_MANU_VALUE")
+                            $scope.approvingMode = item.Value == 'true' ? true : false;
 
-                else if (item.PropertyType == "NEMERA")
-                    $scope.nemera = item.Value == 'true' ? true : false;
+                        else if (item.PropertyType == "NEMERA")
+                            $scope.nemera = item.Value == 'true' ? true : false;
 
+                    });
+                };
             });
-        };
+
+            
+
+        }
 
     };
 
@@ -629,13 +622,14 @@
 
     function vmBuildForm() {
 
+        $scope.definitionPropertiesLoading = true;
+
         indexService.getInfo("v_WorkDefinitionPropertiesAll?$filter=comm_order eq '{0}' and (EquipmentID eq {1} or EquipmentID eq null)".format($scope.commOrder, $scope.currentScaleID))
                          .then(function (response) {
 
+                             $scope.definitionPropertiesLoading = false;
                              var orderData = response.data.value;
-
-                             
-
+                           
                              var procedure;
 
                              if (orderData.length > 0) {
@@ -645,7 +639,7 @@
                                  if (orderData[0].WorkDefinitionID)
                                      procedure = 'upd_WorkDefinition';
                                  else
-                                     procedure = 'ins_WorkDefinition';
+                                     procedure = 'ins_WorkDefinitionStandard';
 
                                  vmCreateForm($('#orderForm'),
                                               'edit',
@@ -681,7 +675,17 @@
 
     function vmBuildFormSpecialMode(container, showFlag) {
 
+        var procedureName;
         $scope.readOnly = true;
+
+        if (container == 'sortingForm') {
+
+            procedureName = 'set_SortMode';
+        }
+        else {
+        
+            procedureName = 'ins_MaterialLotByFactoryNumber';
+        };
 
         indexService.getInfo("v_MaterialLotProperty?$filter=FactoryNumber eq '{0}'".format($scope.labelNumber))
                     .then(function (response) {
@@ -699,7 +703,7 @@
 
                             vmCreateForm($('#' + container),
                             'edit',
-                            'ins_MaterialLotByFactoryNumber',
+                            procedureName,
                             data,
                             'Weight', [{
 
@@ -707,10 +711,10 @@
                                 value: $scope.currentScaleID
                             }, {
 
-                                name: 'FactoryNumber',
+                                name: 'FACTORY_NUMBER',
                                 value: $scope.labelNumber
                             }],
-                            ['EquipmentID', 'FactoryNumber'],
+                            ['EquipmentID', 'FACTORY_NUMBER'],
                             {
                                 OK: 'OK',
                                 Cancel: container == 'remarkerForm' ? $translate.instant('marker.buttonExit') : $translate.instant('buttonCancel')
@@ -853,6 +857,8 @@
         else
             $scope.rodsLeft = 0;
 
+        $scope.isRodsCalculated = true;
+
     };
 
     function vmReset() {
@@ -907,7 +913,7 @@
 
             $scope.OKLabel = $translate.instant('loadingMsg');
 
-            indexService.sendInfo('ins_WorkRequest', data)
+            indexService.sendInfo('ins_WorkRequestStandart', data)
                         .then(function (response) {
 
                             $scope.OKLabel = $translate.instant('marker.acceptOrderTask');
@@ -1012,17 +1018,39 @@
         $scope.handModeUserName;
         $scope.handModeUserPassword;
 
-        $http({
-            method: 'GET',
+        document.execCommand("ClearAuthenticationCache", "false");
+
+        $.ajax({
+            type: 'GET',
             url: serviceUrl + 'v_System_User',
-            headers: {
-                'Content-Type' : 'application/json', 
-                'Authorization': 'NTLM TlRMTVNTUAADAAAAGAAYAIAAAABaAVoBmAAAAAwADABYAAAAEAAQAGQAAAAMAAwAdAAAAAAAAADyAQAABYKIogoAWikAAAAPiJqYFE3EV5AZ8aCdYRLsDGEAcwBrAC0AYQBkAG8AYwBoAGUAawBtAGUAegBaAEUATgBPAFMAUwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEde2qN7N6jb8ychv4qFI1AQEAAAAAAAA+L6Ow+dXRAaRt65dLvnpVAAAAAAIADABBAFMASwAtAEEARAABABgATQBTAFMAUQBMADIAMAAxADQAUwBSAFYABAAYAGEAcwBrAC0AYQBkAC4AdgBpAG0AYQBzAAMAMgBNAFMAUwBRAEwAMgAwADEANABTAFIAVgAuAGEAcwBrAC0AYQBkAC4AdgBpAG0AYQBzAAUAGABhAHMAawAtAGEAZAAuAHYAaQBtAGEAcwAHAAgAPi+jsPnV0QEGAAQAAgAAAAgAMAAwAAAAAAAAAAAAAAAAMAAAXF/xV8oq70bAQmBaNPTRsSKKet0jawtuvD8CqeHZxosKABAAAAAAAAAAAAAAAAAAAAAAAAkAKABIAFQAVABQAC8AMQA5ADIALgAxADYAOAAuADEAMAAwAC4AMQA3ADQAAAAAAAAAAAAAAAAA='
+            data: {},
+            crossDomain: true,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'NTLM ' + window.btoa(unescape(encodeURIComponent($scope.handModeUserName + ':' + $scope.handModeUserPassword))))
             }
-        }).then(function (response) {
+        }).done(function (response) {
+
+            response;
+        }).fail(function (response) {
 
             response;
         });
+
+        //$http({
+        //    method: 'GET',
+        //    url: serviceUrl + 'v_System_User',
+        //    headers: {
+        //        'Content-Type' : 'application/json', 
+        //        'Authorization': 'NTLM TlRMTVNTUAADAAAAGAAYAIAAAABaAVoBmAAAAAwADABYAAAAEAAQAGQAAAAMAAwAdAAAAAAAAADyAQAABYKIogoAWikAAAAPiJqYFE3EV5AZ8aCdYRLsDGEAcwBrAC0AYQBkAG8AYwBoAGUAawBtAGUAegBaAEUATgBPAFMAUwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEde2qN7N6jb8ychv4qFI1AQEAAAAAAAA+L6Ow+dXRAaRt65dLvnpVAAAAAAIADABBAFMASwAtAEEARAABABgATQBTAFMAUQBMADIAMAAxADQAUwBSAFYABAAYAGEAcwBrAC0AYQBkAC4AdgBpAG0AYQBzAAMAMgBNAFMAUwBRAEwAMgAwADEANABTAFIAVgAuAGEAcwBrAC0AYQBkAC4AdgBpAG0AYQBzAAUAGABhAHMAawAtAGEAZAAuAHYAaQBtAGEAcwAHAAgAPi+jsPnV0QEGAAQAAgAAAAgAMAAwAAAAAAAAAAAAAAAAMAAAXF/xV8oq70bAQmBaNPTRsSKKet0jawtuvD8CqeHZxosKABAAAAAAAAAAAAAAAAAAAAAAAAkAKABIAFQAVABQAC8AMQA5ADIALgAxADYAOAAuADEAMAAwAC4AMQA3ADQAAAAAAAAAAAAAAAAA='
+        //    }
+        //}).then(function (response) {
+
+        //    response;
+        //});
+
+        //'Basic ' + window.btoa(unescape(encodeURIComponent(YOUR_USERNAME + ':' + YOUR_PASSWORD)));
+
+        
     };
 
     //there are events triggered on success and cancel button click in order modal form

@@ -38,18 +38,30 @@
 
             <div class="scaleContainer"
                  ng-repeat="scale in group"
-                 ng-class="{'active': scale.ID == currentScaleID}"
+                 ng-class="{'active': scale.ID == currentScaleID && scale.isInfoLoaded}"
                  ng-click="showScaleInfo(scale.ID); getLatestWorkRequest(scale.ID)">
-                <label>{{scale.Description}}</label>
-                <h3 ng-show="scale.weightCurrent">
-                    {{scale.weightCurrent}} {{ 'marker.kg' | translate }}
-                </h3>
-                <h4 ng-show="scale.ID != currentScaleID && scale.rodsQuantity > 0">
-                    {{scale.rodsQuantity}} {{ 'marker.pcs' | translate }}
-                </h4>
-                <h4 ng-show="scale.ID == currentScaleID && rodsQuantity > 0">
-                    {{rodsQuantity}} {{ 'marker.pcs' | translate }}
-                </h4>
+
+                <div ng-show="!scale.isInfoLoaded" style="line-height: 6;">
+                    {{ 'loadingMsg' | translate }}
+                </div>
+
+                <div ng-show="scale.isInfoLoaded">
+                    <label>{{scale.Description}}</label>
+                    <h3 ng-show="scale.weightCurrent >=0">
+                        {{scale.weightCurrent}} {{ 'marker.kg' | translate }}
+                    </h3>
+                    <h4 ng-show="scale.ID != currentScaleID && scale.rodsQuanity > 0">
+                        {{scale.RodsQuanity}} {{ 'marker.pcs' | translate }}
+                    </h4>
+
+                    <p ng-show="!isRodsCalculated && scale.ID == currentScaleID && rodsQuantity >= 0">
+                        {{ 'calculatingMsg' | translate }}
+                    </p>
+                    <h4 ng-show="isRodsCalculated && scale.ID == currentScaleID && rodsQuantity > 0">
+                        {{rodsQuantity}} {{ 'marker.pcs' | translate }}
+                    </h4>
+                </div>
+
             </div>
         </div>
     </div>
@@ -60,10 +72,6 @@
 
     <div class="scaleInfo task">
         <h4 class="labelTask">{{ 'marker.task' | translate }}</h4>
-
-        <div style="text-align: right">
-
-        </div>
 
         <div class="controlsWrapper">
             <div class="controlsGroup">
@@ -260,21 +268,31 @@
 
         <p>
             {{ 'marker.weight' | translate }}:
-            <span class="scalesValue" ng-show="scalesDetailsInfo.WEIGHT_CURRENT">
+            <span class="scalesValue" ng-show="scalesDetailsInfo.WEIGHT_CURRENT >=0">
                 {{scalesDetailsInfo.WEIGHT_CURRENT}} {{ 'marker.kg' | translate }}
             </span>
         </p>
 
         <p>
             {{ 'marker.rodsQuantity' | translate }}:
-            <span class="rodsValue" ng-show="rodsQuantity && rodsQuantity > 0">
+
+            <span ng-show="!isRodsCalculated" class="pull-right">
+                {{ 'calculatingMsg' | translate }}
+            </span>
+
+            <span class="rodsValue" ng-show="isRodsCalculated && rodsQuantity && rodsQuantity > 0">
                 {{rodsQuantity}} {{ 'marker.pcs' | translate }}
             </span>
         </p>
 
         <p>
             {{ 'marker.rodsLeft' | translate }}:
-            <span class="rodsValue" ng-show="rodsLeft">
+
+            <span ng-show="!isRodsCalculated" class="pull-right">
+                {{ 'calculatingMsg' | translate }}
+            </span>
+
+            <span class="rodsValue" ng-show="isRodsCalculated && rodsLeft">
                 {{rodsLeft}} {{ 'marker.pcs' | translate }}
             </span>
         </p>
@@ -502,8 +520,7 @@
         <div class="enterLabelWrapper">
             <label>{{ 'marker.modalCaptions.enterName' | translate }}</label>
             <input type="text"
-                   ng-model="handModeUserName"
-                    />
+                   ng-model="handModeUserName" />
 
             <label>{{ 'marker.modalCaptions.enterPassword' | translate }}</label>
             <input type="text"
@@ -515,6 +532,16 @@
         </div>
 
     </div>
+</div>
+
+<div style="position:fixed; top:0; left:0; width: 100%; height: 100%; z-index:10;" 
+     class="container loading" 
+      ng-show="definitionPropertiesLoading">
+
+    <div class="loading-msg">
+        <h3>{{ 'loadingMsg' | translate }}</h3>
+    </div>
+
 </div>
 
 
