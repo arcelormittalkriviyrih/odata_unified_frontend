@@ -97,7 +97,7 @@
             size: 'Size(m.)',
             rodsQuantityPcs: 'Rods quantity (pcs)',
             sandwich: 'Sandwich',
-            byAccept: 'By accept',
+            byAccept: 'Auto mode',
             nemera: 'Nemera',
             minMassRec: 'Minimal weight rec. (kg)',
             maxMass: 'Maximal weight(kg)',
@@ -130,8 +130,8 @@
             buttonExit: 'Exit',
             remarkingButton: 'Remarking',
             sortingButton: 'Resorting',
-            defectButton: 'Rejection',
-            splitButton: 'Pack split',
+            rejectButton: 'Rejection',
+            separateButton: 'Pack separate',
             errorMessages: {
 
                 noOrders: 'There is no orders with this name!',
@@ -145,8 +145,8 @@
 
                 reMarkingMode: 'Remarking mode',
                 reSortingMode: 'Resorting mode',
-                DefectMode: 'Rejection mode',
-                SplitMode: 'Split mode',
+                RejectMode: 'Rejection mode',
+                SeparateMode: 'Separate mode',
                 enterLabelNumber: 'Enter label number',
                 changePackNumber: 'Select pucks number'
             }
@@ -280,7 +280,7 @@
             size: 'Размер(м.)',
             rodsQuantityPcs: 'Количество прутков(шт.)',
             sandwich: 'Бутерброд',
-            byAccept: 'По подтверждению',
+            byAccept: 'Автоматический',
             nemera: 'Немера',
             minMassRec: 'Рек. масса минимум (кг)',
             maxMass: 'Масса максимум(кг.)',
@@ -313,8 +313,8 @@
             buttonExit: 'Выход',
             remarkingButton: 'Перемаркировка',
             sortingButton: 'Сортировка',
-            defectButton: 'Отбраковка',
-            splitButton: 'Разделение пачки',
+            rejectButton: 'Отбраковка',
+            separateButton: 'Разделение пачки',
             errorMessages: {
 
                 noOrders: 'Нет заказа с таким номером!',
@@ -328,8 +328,8 @@
 
                 reMarkingMode: 'Режим перемаркировки',
                 reSortingMode: 'Режим сортировки',
-                DefectMode: 'Режим отбраковки',
-                SplitMode: 'Режим разделения пачки',
+                RejectMode: 'Режим отбраковки',
+                SeparateMode: 'Режим разделения пачки',
                 enterLabelNumber: 'Введите номер бирки',
                 changePackNumber: 'Выберите число пачек'
             }
@@ -465,7 +465,7 @@
             size: 'Розмір(м.)',
             rodsQuantityPcs: 'Кількість прутків(шт.)',
             sandwich: 'Бутерброд',
-            byAccept: 'За підтвержденням',
+            byAccept: 'Автоматичний',
             nemera: 'Немера',
             minMassRec: 'Рек. маса мінімум (кг)',
             maxMass: 'Маса максимум(кг.)',
@@ -498,8 +498,8 @@
             buttonExit: 'Вихід',
             remarkingButton: 'Перемаркування',
             sortingButton: 'Сортування',
-            defectButton: 'Відбракування',
-            splitButton: 'Розділення пачки',
+            rejectButton: 'Відбракування',
+            separateButton: 'Розділення пачки',
             errorMessages: {
 
                 noOrders: 'Немає замовлення з таким номером!',
@@ -513,8 +513,8 @@
 
                 reMarkingMode: 'Режим перемаркування',
                 reSortingMode: 'Режим сортування',
-                DefectMode: 'Режим відбракування',
-                SplitMode: 'Режим разділення пачки',
+                RejectMode: 'Режим відбракування',
+                SeparateMode: 'Режим разділення пачки',
                 enterLabelNumber: 'Введіть номер бирки',
                 changePackNumber: 'Виберіть число пачок'
             }

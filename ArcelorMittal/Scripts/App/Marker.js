@@ -35,10 +35,14 @@
     $scope.readOnly = false;
     $scope.isShowReMarkForm = false;
     $scope.isShowSortingForm = false;
-    //$scope.reMarkerMode = false;
-    //$scope.sortingMode = false;
-    //$scope.defectMode = false;
-    //$scope.splitMode = false;
+    $scope.sortingMode = false;
+    $scope.rejectMode = false;
+    $scope.separateMode = false;
+    $scope.standard = true;
+
+    $scope.packs = [1,2,3]
+    $scope.packsLeft = $scope.packs[1];
+    $scope.packsLeftCount = null; //count of packs left from procedure
 
     //methods
     $scope.currentScales = vmGetCurrentScales;
@@ -308,7 +312,17 @@
                                         translate: $translate.instant('marker.CreateDialogue.CHANGE_NO'),
                                         order: 18
                                     },
-                                }, {
+                                },
+                                {
+                                    name: 'PACKS_LEFT',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.PAKCS_LEFT'),
+                                        order: 24
+                                    }
+                                },
+                                {
                                     name: 'TEMPLATE',
                                     properties: {
                                         control: 'combo',
@@ -443,7 +457,7 @@
                                if (data.length > 0) {
 
                                    scale.weightCurrent = data[0].WEIGHT_CURRENT;
-                                   scale.rodsQuantity = data[0].RodsQuanity;
+                                   scale.rodsQuantity = data[0].RodsQuantity;
                                }
                            });
 
@@ -494,6 +508,32 @@
                     $scope.workRequestID = data[0].WorkRequestID;
                     $scope.selectedProfile = data[0].ProfileID;
 
+                    switch (data[0].WorkType) {
+
+                        case 'Standard':
+                                $scope.standard = true;
+                                $scope.sortingMode = false;
+                                $scope.rejectMode = false;
+                                $scope.separateMode = false;
+                            break;
+
+                        case 'Sort':
+                                $scope.standard = false;
+                                $scope.sortingMode = true;
+                            break;
+
+                        case 'Reject':
+                                $scope.standard = false;
+                                $scope.rejectMode = true;
+                            break;
+
+                        case 'Separate':
+                                $scope.standard = false;
+                                $scope.separateMode = true;
+                            break;
+                    };
+                    
+
                     //find value of last work request for each field
                     data.forEach(function (item) {
 
@@ -540,10 +580,13 @@
                         }
 
                         else if (item.PropertyType == "AUTO_MANU_VALUE")
-                            $scope.approvingMode = item.Value == 'true' ? true : false;
+                            $scope.autoMode = item.Value == 'true' ? true : false;
 
                         else if (item.PropertyType == "NEMERA")
                             $scope.nemera = item.Value == 'true' ? true : false;
+
+                        else if (item.PropertyType == "PACKS_LEFT")
+                            $scope.packsLeftCount = item.Value;
 
                     });
                 };
@@ -669,23 +712,73 @@
 
     function vmShowBuildFormWindow(flag, mode) {
 
-        $scope[flag] = true;
-        //$scope[mode] = false;
+        if (!$scope[mode])
+            $scope[flag] = true;
+        else {
+
+            indexService.sendInfo('set_StandardMode', {
+
+                EquipmentID: parseInt($scope.currentScaleID) || null
+            }).then(function (response) {
+
+                $scope.standard = true;
+                $scope[mode] = false;
+
+                vmGetLatestWorkRequest($scope.currentScaleID);
+            });
+        };
+                         
     };
 
     function vmBuildFormSpecialMode(container, showFlag) {
 
+        var additionalFields = [{
+
+            name: 'EquipmentID',
+            value: $scope.currentScaleID
+        }, {
+
+            name: 'FACTORY_NUMBER',
+            value: $scope.labelNumber
+        }];
+
+        var escapedFields = ['EquipmentID', 'FACTORY_NUMBER'];
+
+        var additionalActionFields = [{
+            mandatory: false,
+            maxlength: undefined,
+            name: "Weight",
+            type: "Edm.String"
+        }];
+
         var procedureName;
         $scope.readOnly = true;
 
-        if (container == 'sortingForm') {
-
+        if (container == 'sortingForm') 
             procedureName = 'set_SortMode';
-        }
+        
+        else if (container == 'rejectForm') 
+            procedureName = 'set_RejectMode';        
+
+        else if (container == 'separateForm'){
+
+            procedureName = 'set_SeparateMode';
+            escapedFields.push('PACKS_LEFT');
+            additionalFields.push({
+
+                name: 'PACKS_LEFT',
+                value: $scope.packsLeft.toString()
+            });
+
+            additionalActionFields = null;
+        } 
+                        
         else {
         
-            procedureName = 'ins_MaterialLotByFactoryNumber';
+            procedureName = 'ins_MaterialLotByFactoryNumber';            
         };
+
+        vmGetLatestWorkRequest($scope.currentScaleID);
 
         indexService.getInfo("v_MaterialLotProperty?$filter=FactoryNumber eq '{0}'".format($scope.labelNumber))
                     .then(function (response) {
@@ -705,25 +798,14 @@
                             'edit',
                             procedureName,
                             data,
-                            'Weight', [{
-
-                                name: 'EquipmentID',
-                                value: $scope.currentScaleID
-                            }, {
-
-                                name: 'FACTORY_NUMBER',
-                                value: $scope.labelNumber
-                            }],
-                            ['EquipmentID', 'FACTORY_NUMBER'],
+                            'Weight',
+                            additionalFields,
+                            escapedFields,
                             {
                                 OK: 'OK',
                                 Cancel: container == 'remarkerForm' ? $translate.instant('marker.buttonExit') : $translate.instant('buttonCancel')
-                            }, [{
-                                mandatory: false,
-                                maxlength: undefined,
-                                name: "Weight",
-                                type: "Edm.String"
-                            }]);
+                            },
+                            additionalActionFields);
                         }
                         else {
                             $scope.readOnly = false;
@@ -876,8 +958,9 @@
         $scope.length = null;
         $scope.barQuantity = null;
         $scope.sandwichMode = null;
-        $scope.approvingMode = null;
+        $scope.autoMode = null;
         $scope.nemera = null;
+        $scope.packsLeftCount = null;
     };
 
     function vmWorkRequest() {
@@ -907,7 +990,7 @@
                 SAMPLE_LENGTH: $scope.sampleLength ? $scope.sampleLength.toString() : null,
                 DEVIATION: $scope.deviation ? $scope.deviation.toString() : null,
                 SANDWICH_MODE: $scope.sandwichMode ? 'true' : 'false',
-                AUTO_MANU_VALUE: $scope.approvingMode ? 'true' : 'false',
+                AUTO_MANU_VALUE: $scope.autoMode ? 'true' : 'false',
                 NEMERA: $scope.nemera ? 'true' : 'false'
             }
 
@@ -959,10 +1042,57 @@
             }).then(function (response) {
 
                 $scope[label] = $translate.instant(text)
-            })
+            });
+
+            if (!$scope.standard && label == 'takeWeightLabel') {
+
+                if ($scope.separateMode) {
+
+                    if (parseInt($scope.packsLeftCount) > 1) {
+
+                        indexServise('set_DecreasePacksLeft', {
+
+                            EquipmentID: parseInt($scope.currentScaleID)
+                        }).then(function (response) {
+
+                            vmGetLatestWorkRequest($scope.currentScaleID);
+                        });
+                    } else
+                        vmSetStandardMode();
+                    
+
+                } else
+                    vmSetStandardMode();
+
+                
+            }
+
+
         };
         
     };
+
+    function vmSetStandardMode() {
+
+        indexService.sendInfo('set_StandardMode', {
+
+            EquipmentID: parseInt($scope.currentScaleID) || null
+        }).then(function (response) {
+
+            $scope.standard = true;
+
+            if ($scope.sortingMode)
+                $scope.sortingMode = false;
+
+            if ($scope.rejectMode)
+                $scope.rejectMode = false;
+
+            if ($scope.separateMode)
+                $scope.separateMode = false;
+
+            vmGetLatestWorkRequest($scope.currentScaleID);
+        });
+    }
 
     function vmEnableControlOK() {
 
@@ -1005,6 +1135,8 @@
     };
 
     function vmActionsOnExit(container, formWrapperFlag) {
+
+        vmGetLatestWorkRequest($scope.currentScaleID);
 
         $scope.labelNumber = null;
         $('#' + container).empty();
@@ -1077,7 +1209,6 @@
     $('#remarkerForm').on('oDataForm.success', function (e) {
 
         vmActionsOnExit('remarkerForm', 'isShowReMarkForm');
-        //$scope.reMarkerMode = true;
 
         $scope.$apply();
     })
@@ -1094,7 +1225,9 @@
 
         vmCloseModal('toggleModalSort');
         vmActionsOnExit('sortingForm', 'isShowSortingForm');
-        //$scope.sortingMode = true;
+
+        $scope.standard = false;
+        $scope.sortingMode = true;
 
         $scope.$apply();
     })
@@ -1107,36 +1240,40 @@
         $scope.$apply();
     });
 
-    $('#defectForm').on('oDataForm.success', function (e) {
+    $('#rejectForm').on('oDataForm.success', function (e) {
 
-        vmCloseModal('toggleModalDefect');
-        vmActionsOnExit('defectForm', 'isShowDefectForm');
-        //$scope.defectMode = true;
+        vmCloseModal('toggleModalReject');
+        vmActionsOnExit('rejectForm', 'isShowRejectForm');
+
+        $scope.standard = false;
+        $scope.rejectMode = true;
 
         $scope.$apply();
     })
 
-    $('#defectForm').on('oDataForm.cancel', function (e) {
+    $('#rejectForm').on('oDataForm.cancel', function (e) {
 
-        vmCloseModal('toggleModalDefect');
-        vmActionsOnExit('defectForm', 'isShowDefectForm');
+        vmCloseModal('toggleModalReject');
+        vmActionsOnExit('rejectForm', 'isShowRejectForm');
 
         $scope.$apply();
     });
 
-    $('#splitForm').on('oDataForm.success', function (e) {
+    $('#separateForm').on('oDataForm.success', function (e) {
 
-        vmCloseModal('toggleModalSplit');
-        vmActionsOnExit('splitForm', 'isShowSplitForm');
-        //$scope.splitMode = true;
+        vmCloseModal('toggleModalSeparate');
+        vmActionsOnExit('separateForm', 'isShowSeparateForm');
+
+        $scope.standard = false;
+        $scope.separateMode = true;
 
         $scope.$apply();
     })
 
-    $('#splitForm').on('oDataForm.cancel', function (e) {
+    $('#separateForm').on('oDataForm.cancel', function (e) {
 
-        vmCloseModal('toggleModalSplit');
-        vmActionsOnExit('splitForm', 'isShowSplitForm');
+        vmCloseModal('toggleModalSeparate');
+        vmActionsOnExit('separateForm', 'isShowSeparateForm');
 
         $scope.$apply();
     });

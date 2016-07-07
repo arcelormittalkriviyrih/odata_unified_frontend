@@ -50,8 +50,8 @@
                     <h3 ng-show="scale.weightCurrent >=0">
                         {{scale.weightCurrent}} {{ 'marker.kg' | translate }}
                     </h3>
-                    <h4 ng-show="scale.ID != currentScaleID && scale.rodsQuanity > 0">
-                        {{scale.RodsQuanity}} {{ 'marker.pcs' | translate }}
+                    <h4 ng-show="scale.ID != currentScaleID && scale.rodsQuantity > 0">
+                        {{scale.rodsQuantity}} {{ 'marker.pcs' | translate }}
                     </h4>
 
                     <p ng-show="!isRodsCalculated && scale.ID == currentScaleID && rodsQuantity >= 0">
@@ -82,7 +82,8 @@
                     </div>
                     <div class="controlTask">
                         <select ng-model="selectedProfile"
-                                ng-class="{'wrong': !selectedProfile}"
+                                ng-class="{'wrong': !selectedProfile && standard}"
+                                ng-disabled="!standard"
                                 ng-change="getProfilePropertiesList();">
                             <option></option>
                             <option ng-selected="selectedProfile==profile.ID" ng-repeat="profile in profiles"
@@ -98,6 +99,7 @@
                     <div class="controlTask">
                         <input type="text"
                                ng-model="length"
+                               ng-disabled="!standard"
                                ng-change="calculate()" />
                     </div>
                 </div>
@@ -114,18 +116,21 @@
                 <div>
                     <input type="checkbox"
                            ng-model="sandwichMode"
+                           ng-disabled="!standard"
                            ng-change="enableControlOK();" />
                     {{ 'marker.sandwich' | translate }}
                 </div>
                 <div>
                     <input type="checkbox"
-                           ng-model="approvingMode"
+                           ng-model="autoMode"
+                           ng-disabled="!standard"
                            ng-change="enableControlOK()" />
                     {{ 'marker.byAccept' | translate }}
                 </div>
                 <div>
                     <input type="checkbox"
                            ng-model="nemera"
+                           ng-disabled="!standard"
                            ng-change="enableControlOK()" />
                     {{ 'marker.nemera' | translate }}
                 </div>
@@ -140,6 +145,7 @@
                     <div class="controlTask">
                         <input type="text"
                                ng-model="barQuantity"
+                               ng-disabled="!standard"
                                ng-change="calculate()" />
                     </div>
                 </div>
@@ -170,7 +176,8 @@
                     <div class="controlTask">
                         <input type="text"
                                ng-model="minMass"
-                               ng-class="{'wrong': !minMass}"
+                               ng-disabled="!standard"
+                               ng-class="{'wrong': !minMass && standard}"
                                my-number-check
                                ng-change="enableControlOK(); calculateMaxMass()" />
                     </div>
@@ -183,6 +190,7 @@
                     <div class="controlTask">
                         <input type="text"
                                ng-model="sampleMass"
+                               ng-disabled="!standard"
                                ng-change="calculate()" />
                     </div>
                 </div>
@@ -194,6 +202,7 @@
                     <div class="controlTask">
                         <input type="text"
                                ng-model="sampleLength"
+                               ng-disabled="!standard"
                                ng-change="calculate()" />
                     </div>
                 </div>
@@ -208,7 +217,8 @@
                     <div class="controlTask">
                         <input type="text"
                                ng-model="maxMass"
-                               ng-class="{'wrong': !maxMass}"
+                               ng-class="{'wrong': !maxMass && standard}"
+                               ng-disabled="!standard"
                                my-number-check
                                ng-change="enableControlOK();" />
                     </div>
@@ -250,7 +260,7 @@
 
         <h4 class="scalesName">{{scalesDetailsInfo.ScalesName}}</h4>
 
-        <span class="autoManuMsg" ng-show="scalesDetailsInfo && !scalesDetailsInfo.AUTO_MANU">
+        <span class="autoManuMsg" ng-show="scalesDetailsInfo && scalesDetailsInfo.AUTO_MANU">
             {{ 'marker.autoMode' | translate }}
         </span>
 
@@ -306,16 +316,16 @@
 
             <button class="btn"
                     ng-disabled="!(
-                    (!sandwichModeAccepted && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB)
+                    (!sandwichModeAccepted && (!scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB)
                     ||
-                    (sandwichModeAccepted && scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB))"
+                    (sandwichModeAccepted && scalesDetailsInfo.PACK_SANDWICH && (!scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB))"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeWeight','takeWeightLabel', 'marker.takeWeightButton')">
                 {{takeWeightLabel}}
             </button>
 
             <button class="btn"
                     ng-show="sandwichModeAccepted"
-                    ng-disabled="!((scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH) && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.WEIGHT_STAB)"
+                    ng-disabled="!((scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH) && (!scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB)"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeTara','takeTaraLabel', 'marker.takeTaraButton')">
                 {{takeTaraLabel}}
             </button>
@@ -336,6 +346,7 @@
                 <input type="text" class="input-small"
                        ng-change="checkIsAcceptedOrder()"
                        ng-model="commOrder"
+                       ng-disabled="!standard"
                        my-enter="buildForm()" />
             </div>
 
@@ -357,30 +368,35 @@
 
         <button class="btn specialLabelMode"
                 ng-click="showBuildFormWindow('toggleModalMarker', 'reMarkerMode')"
-                ng-class="{'active': reMarkerMode}">
+                ng-class="{'active': reMarkerMode}"
+                ng-disabled="!standard">
             {{ 'marker.remarkingButton' | translate }}
         </button>
 
         <button class="btn specialLabelMode"
                 ng-click="showBuildFormWindow('toggleModalSort', 'sortingMode')"
-                ng-class="{'active': sortingMode}">
+                ng-class="{'active': sortingMode}"
+                ng-disabled="!standard && !sortingMode">
             {{ 'marker.sortingButton' | translate }}
         </button>
 
         <button class="btn specialLabelMode"
-                ng-click="showBuildFormWindow('toggleModalDefect', 'defectMode')"
-                ng-class="{'active': defectMode}">
-            {{ 'marker.defectButton' | translate }}
+                ng-click="showBuildFormWindow('toggleModalReject', 'rejectMode')"
+                ng-class="{'active': rejectMode}"
+                ng-disabled="!standard && !rejectMode">
+            {{ 'marker.rejectButton' | translate }}
         </button>
 
         <button class="btn specialLabelMode"
-                ng-click="showBuildFormWindow('toggleModalSplit', 'splitMode')"
-                ng-class="{'active': splitMode}">
-            {{ 'marker.splitButton' | translate }}
+                ng-click="showBuildFormWindow('toggleModalSeparate', 'separateMode')"
+                ng-class="{'active': separateMode}"
+                ng-disabled="!standard && !separateMode">
+            {{ 'marker.separateButton' | translate }}
         </button>
 
         <button class="btn specialLabelMode"
-                ng-click="showBuildFormWindow('toggleModalHandMode', 'handMode')">
+                ng-click="showBuildFormWindow('toggleModalHandMode', 'handMode')"
+                ng-disabled="!standard && !handMode">
             Ручной ввод
         </button>
 
@@ -450,60 +466,58 @@
     </div>
 </div>
 
-<div class="black-wrapper" ng-show="toggleModalDefect">
+<div class="black-wrapper" ng-show="toggleModalReject">
     <div class="modal additional">
-        <button ng-click="closeModal('toggleModalDefect');
-                actionsOnExit('defectForm', 'isShowDefectForm');"
+        <button ng-click="closeModal('toggleModalReject');
+                actionsOnExit('rejectForm', 'isShowRejectForm');"
                 class="btn btn-circle pull-right">
             <i class="icon-remove"></i>
         </button>
 
-        <h4>{{ 'marker.modalCaptions.DefectMode' | translate }}</h4>
+        <h4>{{ 'marker.modalCaptions.RejectMode' | translate }}</h4>
 
         <div class="enterLabelWrapper">
             <label>{{ 'marker.modalCaptions.enterLabelNumber' | translate }}</label>
             <input type="text" class="labelNumber"
                    ng-model="labelNumber"
-                   ng-readonly="readOnly" my-enter="buildFormSpecialMode('defectForm', 'isShowDefectForm')" />
+                   ng-readonly="readOnly" my-enter="buildFormSpecialMode('rejectForm', 'isShowRejectForm')" />
         </div>
 
 
-        <div class="formWrapper" ng-show="isShowDefectForm">
-            <form id="defectForm" novalidate></form>
+        <div class="formWrapper" ng-show="isShowRejectForm">
+            <form id="rejectForm" novalidate></form>
         </div>
     </div>
 </div>
 
-<div class="black-wrapper" ng-show="toggleModalSplit">
+<div class="black-wrapper" ng-show="toggleModalSeparate">
     <div class="modal additional">
-        <button ng-click="closeModal('toggleModalSplit');
-                actionsOnExit('splitForm', 'isShowSplitForm');"
+        <button ng-click="closeModal('toggleModalSeparate');
+                actionsOnExit('separateForm', 'isShowSeparateForm');"
                 class="btn btn-circle pull-right">
             <i class="icon-remove"></i>
         </button>
 
-        <h4>{{ 'marker.modalCaptions.SplitMode' | translate }}</h4>
+        <h4>{{ 'marker.modalCaptions.SeparateMode' | translate }}</h4>
 
         <div class="enterLabelWrapper">
             <label>{{ 'marker.modalCaptions.enterLabelNumber' | translate }}</label>
             <input type="text" class="labelNumber"
                    ng-model="labelNumber"
-                   ng-readonly="readOnly" my-enter="buildFormSpecialMode('splitForm', 'isShowSplitForm')" />
+                   ng-readonly="readOnly" my-enter="buildFormSpecialMode('separateForm', 'isShowSeparateForm')" />
         </div>
 
         <div class="enterLabelWrapper">
             <label>{{ 'marker.modalCaptions.changePackNumber' | translate }}</label>
-            <select class="input-small">
-                <option></option>
-                <option>1</option>
-                <option selected="selected">2</option>
-                <option>3</option>
-            </select>
+
+            <select class="input-small"
+                    ng-options="o for o in packs"
+                    ng-model="packsLeft"></select>
         </div>
 
 
-        <div class="formWrapper" ng-show="isShowSplitForm">
-            <form id="splitForm" novalidate></form>
+        <div class="formWrapper" ng-show="isShowSeparateForm">
+            <form id="separateForm" novalidate></form>
         </div>
     </div>
 </div>

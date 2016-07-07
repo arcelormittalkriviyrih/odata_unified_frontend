@@ -39,6 +39,8 @@
            
             var actionFields = action.fields.toArray();
             
+            //there is totally shit must be rewrited
+            //must be correctly data from outer sources
             if (escapedFields) {
 
                 actionFields = actionFields.filter(function (item) {
@@ -48,8 +50,7 @@
                 });
             };
 
-            //there is totally shit must be rewrited
-            //must be correctly data from outer sources
+            
             if (additionalActionFields) {
 
                 additionalActionFields.forEach(function (item) {
@@ -69,6 +70,7 @@
                 if (fieldData)
                     field.order = fieldData.properties.order;
             });
+            //end of totally shit
 
             actionFields = actionFields.sort(function (a, b) {
 
@@ -79,7 +81,7 @@
                 else
                     return 0;
             })
-            //end of totally shit
+            
                                
             actionFields.forEach(function (field) {
 
