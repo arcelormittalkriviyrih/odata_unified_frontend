@@ -647,7 +647,7 @@
 
     }).jsGrid('initOdata', {
         serviceUrl: serviceUrl,
-        table: 'MaterialLot',
+        table: 'v_MaterialLot',
 
         fields: [{
             id: 'FactoryNumber',
@@ -661,15 +661,15 @@
             order: 2
         },
         {
-            id: 'Status',
-            name: 'Status',
+            id: 'StatusName',
+            name: 'StatusName',
             title: $translate.instant('pa.grid.labels.status'),
             order: 3
         },
         {
-            id: 'Description',
-            name: 'Description',
-            title: $translate.instant('grid.common.description'),
+            id: 'CreatedDateTime',
+            name: 'CreatedDateTime',
+            title: $translate.instant('marker.date'),
             order: 4
         }],
 
@@ -700,7 +700,7 @@
 
     }).jsGrid('initOdata', {
         serviceUrl: serviceUrl,
-        table: 'MaterialLotProperty',
+        table: 'v_MaterialLotPropertySimple',
 
         fields: [{
             id: 'PropertyType',
@@ -713,12 +713,6 @@
             name: 'Value',
             title: $translate.instant('grid.common.value'),
             order: 2
-        },
-        {
-            id: 'Description',
-            name: 'Description',
-            title: $translate.instant('grid.common.description'),
-            order: 3
         }],
 
         controlProperties: {
