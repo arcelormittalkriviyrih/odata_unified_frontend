@@ -675,8 +675,8 @@
 
         controlProperties: {
             type: 'control',
-            editButton: true,
-            deleteButton: true,
+            editButton: false,
+            deleteButton: false,
             clearFilterButton: true,
             modeSwitchButton: true
         }
@@ -723,8 +723,8 @@
 
         controlProperties: {
             type: 'control',
-            editButton: true,
-            deleteButton: true,
+            editButton: false,
+            deleteButton: false,
             clearFilterButton: true,
             modeSwitchButton: true
         }

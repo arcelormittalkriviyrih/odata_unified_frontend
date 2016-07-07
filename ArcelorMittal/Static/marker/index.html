@@ -50,15 +50,8 @@
                     <h3 ng-show="scale.weightCurrent >=0">
                         {{scale.weightCurrent}} {{ 'marker.kg' | translate }}
                     </h3>
-                    <h4 ng-show="scale.ID != currentScaleID && scale.rodsQuantity > 0">
+                    <h4 ng-show="scale.rodsQuantity > 0">
                         {{scale.rodsQuantity}} {{ 'marker.pcs' | translate }}
-                    </h4>
-
-                    <p ng-show="!isRodsCalculated && scale.ID == currentScaleID && rodsQuantity >= 0">
-                        {{ 'calculatingMsg' | translate }}
-                    </p>
-                    <h4 ng-show="isRodsCalculated && scale.ID == currentScaleID && rodsQuantity > 0">
-                        {{rodsQuantity}} {{ 'marker.pcs' | translate }}
                     </h4>
                 </div>
 
@@ -286,23 +279,15 @@
         <p>
             {{ 'marker.rodsQuantity' | translate }}:
 
-            <span ng-show="!isRodsCalculated" class="pull-right">
-                {{ 'calculatingMsg' | translate }}
-            </span>
-
-            <span class="rodsValue" ng-show="isRodsCalculated && rodsQuantity && rodsQuantity > 0">
-                {{rodsQuantity}} {{ 'marker.pcs' | translate }}
+            <span class="rodsValue" ng-show="scalesDetailsInfo.RodsQuantity && scalesDetailsInfo.RodsQuantity > 0">
+                {{scalesDetailsInfo.RodsQuantity}} {{ 'marker.pcs' | translate }}
             </span>
         </p>
 
         <p>
             {{ 'marker.rodsLeft' | translate }}:
 
-            <span ng-show="!isRodsCalculated" class="pull-right">
-                {{ 'calculatingMsg' | translate }}
-            </span>
-
-            <span class="rodsValue" ng-show="isRodsCalculated && rodsLeft">
+            <span class="rodsValue" ng-show="rodsLeft">
                 {{rodsLeft}} {{ 'marker.pcs' | translate }}
             </span>
         </p>
@@ -405,11 +390,9 @@
 </div>
 
 <div class="black-wrapper" ng-show="isShowModal">
-    <div class="modal">
+    <div class="modal additional">
 
-        <!--<p>
-            WorkDefinitionID: {{WorkDefinitionID}}
-        </p>-->
+        <h4>{{ 'marker.modalCaptions.order' | translate }}</h4>
 
         <div class="formWrapper">
             <form id="orderForm" novalidate></form>
@@ -537,7 +520,7 @@
                    ng-model="handModeUserName" />
 
             <label>{{ 'marker.modalCaptions.enterPassword' | translate }}</label>
-            <input type="text"
+            <input type="password"
                    ng-model="handModeUserPassword" />
 
             <button class="btn" ng-click="getHandModeCredentials()">

@@ -20,6 +20,13 @@
             buttonDownloadTechSheet: 'Download Tech. Sheet',
             Order: {
 
+                caption: {
+
+                    create: 'Create order',
+                    edit: 'Edit order',
+                    copy: 'Copy order'
+                },
+
                 CreateDialogue: {
 
                     STANDARD: 'Standard',
@@ -97,7 +104,7 @@
             size: 'Size(m.)',
             rodsQuantityPcs: 'Rods quantity (pcs)',
             sandwich: 'Sandwich',
-            byAccept: 'Auto mode',
+            byAccept: 'By accept',
             nemera: 'Nemera',
             minMassRec: 'Minimal weight rec. (kg)',
             maxMass: 'Maximal weight(kg)',
@@ -148,7 +155,12 @@
                 RejectMode: 'Rejection mode',
                 SeparateMode: 'Separate mode',
                 enterLabelNumber: 'Enter label number',
-                changePackNumber: 'Select pucks number'
+                changePackNumber: 'Select pucks number',
+                order: 'Order',
+                HandMode: 'Hand mode',
+                enterName: 'Enter name',
+                enterPassword: 'Enter password',
+                getHandModeCredentials: 'Run'
             }
             
         },
@@ -205,6 +217,13 @@
             buttonAddTempate: 'Добавить Файл',
             buttonDownloadTechSheet: 'Скачать Тех. Лист',
             Order: {
+
+                caption: {
+
+                    create: 'Создать заказ',
+                    edit: 'Редактировать заказ',
+                    copy: 'Копировать заказ'
+                },
 
                 CreateDialogue: {
 
@@ -280,7 +299,7 @@
             size: 'Размер(м.)',
             rodsQuantityPcs: 'Количество прутков(шт.)',
             sandwich: 'Бутерброд',
-            byAccept: 'Автоматический',
+            byAccept: 'По подтверждению',
             nemera: 'Немера',
             minMassRec: 'Рек. масса минимум (кг)',
             maxMass: 'Масса максимум(кг.)',
@@ -331,7 +350,12 @@
                 RejectMode: 'Режим отбраковки',
                 SeparateMode: 'Режим разделения пачки',
                 enterLabelNumber: 'Введите номер бирки',
-                changePackNumber: 'Выберите число пачек'
+                changePackNumber: 'Выберите число пачек',
+                order: 'Заказ',
+                HandMode: 'Ручной ввод',
+                enterName: 'Введите имя',
+                enterPassword: 'Введите пароль',
+                getHandModeCredentials: 'Run'
             }
         },
         error: {
@@ -391,6 +415,13 @@
             buttonAddTempate: 'Додати Файл',
             buttonDownloadTechSheet: 'Скачати Тех. Лист',
             Order: {
+
+                caption: {
+
+                    create: 'Створити замовлення',
+                    edit: 'Редагувати замовлення',
+                    copy: 'Копіювати замовлення'
+                },
                  
                 CreateDialogue: {
 
@@ -465,7 +496,7 @@
             size: 'Розмір(м.)',
             rodsQuantityPcs: 'Кількість прутків(шт.)',
             sandwich: 'Бутерброд',
-            byAccept: 'Автоматичний',
+            byAccept: 'за підтвердженням',
             nemera: 'Немера',
             minMassRec: 'Рек. маса мінімум (кг)',
             maxMass: 'Маса максимум(кг.)',
@@ -516,7 +547,12 @@
                 RejectMode: 'Режим відбракування',
                 SeparateMode: 'Режим разділення пачки',
                 enterLabelNumber: 'Введіть номер бирки',
-                changePackNumber: 'Виберіть число пачок'
+                changePackNumber: 'Виберіть число пачок',
+                order: 'Замовлення',
+                HandMode: 'Ручне введення',
+                enterName: 'Введіть ім\'я',
+                enterPassword: 'Введіть пароль',
+                getHandModeCredentials: 'Run'
             }
         },
         error: {

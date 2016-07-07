@@ -140,6 +140,8 @@
 
         $scope.loadingModalData = true;
 
+        $scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
+
         var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label'")];
 
         if (id) {
@@ -176,7 +178,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.STANDARD')
+                            translate: $translate.instant('market.Order.CreateDialogue.STANDARD'),
+                            order: 21
                         }
                     }, {
 
@@ -184,7 +187,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.LENGTH')
+                            translate: $translate.instant('market.Order.CreateDialogue.LENGTH'),
+                            order: 6
                         }
                     }, {
 
@@ -192,7 +196,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD')
+                            translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD'),
+                            order: 12
                         }
                     }, {
 
@@ -200,7 +205,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO')
+                            translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO'),
+                            order: 3
                         }
                     }, {
 
@@ -208,7 +214,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.DIRECTION')
+                            translate: $translate.instant('market.Order.CreateDialogue.DIRECTION'),
+                            order: 4
                         }
                     }, {
 
@@ -216,7 +223,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.PRODUCT')
+                            translate: $translate.instant('market.Order.CreateDialogue.PRODUCT'),
+                            order: 20
                         }
                     }, {
 
@@ -224,7 +232,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.CLASS')
+                            translate: $translate.instant('market.Order.CreateDialogue.CLASS'),
+                            order: 8
                         }
                     }, {
 
@@ -232,7 +241,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS')
+                            translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS'),
+                            order: 9
                         }
                     }, {
 
@@ -240,7 +250,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS')
+                            translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS'),
+                            order: 22
                         }
                     }, {
 
@@ -248,7 +259,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA')
+                            translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA'),
+                            order: 19
                         }
                     }, {
 
@@ -256,7 +268,8 @@
                         properties: {
                             control: 'text',
                             required: true,
-                            translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER')
+                            translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER'),
+                            order: 1
                         },
                     }, {
 
@@ -264,7 +277,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER')
+                            translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER'),
+                            order: 2
                         },
                     }, {
 
@@ -272,7 +286,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.SIZE')
+                            translate: $translate.instant('market.Order.CreateDialogue.SIZE'),
+                            order: 5
                         },
                     }, {
 
@@ -280,7 +295,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE')
+                            translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE'),
+                            order: 7
                         },
                     }, {
 
@@ -288,7 +304,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.MELT_NO')
+                            translate: $translate.instant('market.Order.CreateDialogue.MELT_NO'),
+                            order: 10
                         },
                     }, {
 
@@ -296,7 +313,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.PART_NO')
+                            translate: $translate.instant('market.Order.CreateDialogue.PART_NO'),
+                            order: 11
                         },
                     }, {
 
@@ -304,7 +322,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO')
+                            translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO'),
+                            order: 13
                         },
                     }, {
 
@@ -312,7 +331,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO')
+                            translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO'),
+                            order: 14
                         },
                     }, {
 
@@ -320,7 +340,8 @@
                         properties: {
                             control: 'date',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE')
+                            translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE'),
+                            order: 15
                         },
                     }, {
 
@@ -328,7 +349,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.UTVK')
+                            translate: $translate.instant('market.Order.CreateDialogue.UTVK'),
+                            order: 16
                         },
                     }, {
 
@@ -336,7 +358,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO')
+                            translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO'),
+                            order: 17
                         },
                     }, {
 
@@ -344,7 +367,8 @@
                         properties: {
                             control: 'text',
                             required: false,
-                            translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO')
+                            translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO'),
+                            order: 18
                         },
                     }, {
                         name: 'TEMPLATE',
@@ -354,7 +378,8 @@
                             translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
                             data: templateData,
                             keyField: 'ID',
-                            valueField: 'Name'
+                            valueField: 'Name',
+                            order: 23
                         }
                     }]
                 });

@@ -492,8 +492,6 @@
 
         if ($scope.groups[0][0].isInfoLoaded) {
 
-            $scope.isRodsCalculated = false;
-
             //clear fields
             vmReset();
 
@@ -508,87 +506,112 @@
                     $scope.workRequestID = data[0].WorkRequestID;
                     $scope.selectedProfile = data[0].ProfileID;
 
-                    switch (data[0].WorkType) {
+                    indexService.getInfo('MaterialDefinitionProperty?$filter=MaterialDefinitionID eq ({0})'.format($scope.selectedProfile))
+                    .then(function (response) {
 
-                        case 'Standard':
+                        var profileProperties = response.data.value;
+
+                        if (profileProperties.length > 0) {
+
+                            $scope.linearMassFromBase = vmGetProfileProperty(profileProperties, 1) || null;
+                            $scope.length = vmGetProfileProperty(profileProperties, 2) || null;
+                            $scope.tolerancePlus = vmGetProfileProperty(profileProperties, 3) || null;
+                            $scope.toleranceMinus = vmGetProfileProperty(profileProperties, 4) || null;
+
+
+                        } else {
+
+                            $scope.linearMassFromBase = null;
+                            $scope.length = null;
+                            $scope.tolerancePlus = null;
+                            $scope.toleranceMinus = null;
+
+                        };
+
+                        switch (data[0].WorkType) {
+
+                            case 'Standard':
                                 $scope.standard = true;
                                 $scope.sortingMode = false;
                                 $scope.rejectMode = false;
                                 $scope.separateMode = false;
-                            break;
+                                break;
 
-                        case 'Sort':
+                            case 'Sort':
                                 $scope.standard = false;
                                 $scope.sortingMode = true;
-                            break;
+                                break;
 
-                        case 'Reject':
+                            case 'Reject':
                                 $scope.standard = false;
                                 $scope.rejectMode = true;
-                            break;
+                                break;
 
-                        case 'Separate':
+                            case 'Separate':
                                 $scope.standard = false;
                                 $scope.separateMode = true;
-                            break;
-                    };
-                    
-
-                    //find value of last work request for each field
-                    data.forEach(function (item) {
+                                break;
+                        };
 
 
-                        if (item.PropertyType == "COMM_ORDER") {
+                        //find value of last work request for each field
+                        data.forEach(function (item) {
 
-                            $scope.commOrder = item.Value;
-                            $scope.isAcceptedOrder = true;
-                        }
 
-                        else if (item.PropertyType == "MAX_WEIGHT")
-                            $scope.maxMass = parseInt(item.Value);
+                            if (item.PropertyType == "COMM_ORDER") {
 
-                        else if (item.PropertyType == "MIN_WEIGHT")
-                            $scope.minMass = parseInt(item.Value);
+                                $scope.commOrder = item.Value;
+                                $scope.isAcceptedOrder = true;
+                            }
 
-                        else if (item.PropertyType == "BAR_WEIGHT")
-                            $scope.barWeight = item.Value;
+                            else if (item.PropertyType == "MAX_WEIGHT")
+                                $scope.maxMass = parseInt(item.Value);
 
-                        else if (item.PropertyType == "SAMPLE_LENGTH")
-                            $scope.sampleLength = item.Value;
+                            else if (item.PropertyType == "MIN_WEIGHT")
+                                $scope.minMass = parseInt(item.Value);
 
-                        else if (item.PropertyType == "SAMPLE_WEIGHT")
-                            $scope.sampleMass = item.Value;
+                            else if (item.PropertyType == "BAR_WEIGHT")
+                                $scope.barWeight = item.Value;
 
-                        else if (item.PropertyType == "DEVIATION")
-                            $scope.deviation = item.Value;
+                            else if (item.PropertyType == "SAMPLE_LENGTH")
+                                $scope.sampleLength = item.Value;
 
-                        else if (item.PropertyType == "BRIGADE_NO")
-                            $scope.brigadeNo = item.Value;
+                            else if (item.PropertyType == "SAMPLE_WEIGHT")
+                                $scope.sampleMass = item.Value;
 
-                        else if (item.PropertyType == "PROD_DATE")
-                            $scope.prodDate = item.Value;
+                            else if (item.PropertyType == "DEVIATION")
+                                $scope.deviation = item.Value;
 
-                        else if (item.PropertyType == "LENGTH")
-                            $scope.length = item.Value;
+                            else if (item.PropertyType == "BRIGADE_NO")
+                                $scope.brigadeNo = item.Value;
 
-                        else if (item.PropertyType == "BAR_QUANTITY")
-                            $scope.barQuantity = item.Value;
+                            else if (item.PropertyType == "PROD_DATE")
+                                $scope.prodDate = item.Value;
 
-                        else if (item.PropertyType == "SANDWICH_MODE") {
-                            $scope.sandwichMode = item.Value == 'true' ? true : false;
-                            $scope.sandwichModeAccepted = $scope.sandwichMode;
-                        }
+                            else if (item.PropertyType == "LENGTH")
+                                $scope.length = item.Value;
 
-                        else if (item.PropertyType == "AUTO_MANU_VALUE")
-                            $scope.autoMode = item.Value == 'true' ? true : false;
+                            else if (item.PropertyType == "BAR_QUANTITY")
+                                $scope.barQuantity = item.Value;
 
-                        else if (item.PropertyType == "NEMERA")
-                            $scope.nemera = item.Value == 'true' ? true : false;
+                            else if (item.PropertyType == "SANDWICH_MODE") {
+                                $scope.sandwichMode = item.Value == 'true' ? true : false;
+                                $scope.sandwichModeAccepted = $scope.sandwichMode;
+                            }
 
-                        else if (item.PropertyType == "PACKS_LEFT")
-                            $scope.packsLeftCount = item.Value;
+                            else if (item.PropertyType == "AUTO_MANU_VALUE")
+                                $scope.autoMode = item.Value == 'true' ? true : false;
 
-                    });
+                            else if (item.PropertyType == "NEMERA")
+                                $scope.nemera = item.Value == 'true' ? true : false;
+
+                            else if (item.PropertyType == "PACKS_LEFT")
+                                $scope.packsLeftCount = item.Value;
+
+                        });
+
+                    })
+                           
                 };
             });
 
@@ -605,12 +628,13 @@
                     .then(function (response) {
 
                         $scope.profiles = response.data.value;
+                        $scope.selectedProfile = $scope.profiles[0];
                     });
     }
 
     //get profiles properties list
-    //'disable' param indicates is must button 'accept' to be disabled
-    function vmGetProfilePropertiesList() {
+    //'calledByLastWorkRequest' param indicates is must button 'accept' to be disabled
+    function vmGetProfilePropertiesList(calledByLastWorkRequest) {
 
         if ($scope.selectedProfile) {
 
@@ -645,7 +669,11 @@
                             
                         }
 
-                        vmCalculate();
+                        if (calledByLastWorkRequest)
+                            vmCalculate('disable');
+                        else
+                            vmCalculate();
+
                     })
 
         }
@@ -658,7 +686,10 @@
             $scope.toleranceMinus = null;
             $scope.barWeight = null;
 
-            vmCalculate();
+            if (calledByLastWorkRequest)
+                vmCalculate('disable');
+            else
+                vmCalculate();
             
         }
     }
@@ -855,10 +886,14 @@
         })[0];
     };
 
-    function vmCalculate() {
+    function vmCalculate(mode) {
 
         /*calculations for left form*/
-        $scope.disableButtonOKTask = false;
+
+        if (mode == 'disable')
+            $scope.disableButtonOKTask = true;
+        else
+            $scope.disableButtonOKTask = false;
 
         if ($scope.length && $scope.linearMassFromBase) {
             $scope.barWeight = $scope.length * $scope.linearMassFromBase;
@@ -926,20 +961,10 @@
 
     function vmCalculateRods() {
 
-        if ($scope.scalesDetailsInfo && $scope.scalesDetailsInfo.WEIGHT_CURRENT >= 0 && $scope.barWeight) {
-
-            $scope.rodsQuantity = parseInt($scope.scalesDetailsInfo.WEIGHT_CURRENT / $scope.barWeight);
-        } else {
-
-            $scope.rodsQuantity = 0;
-        }
-
-        if ($scope.barQuantity && $scope.rodsQuantity)
-            $scope.rodsLeft = $scope.barQuantity - $scope.rodsQuantity;
+        if ($scope.barQuantity && $scope.scalesDetailsInfo.RodsQuantity)
+            $scope.rodsLeft = $scope.barQuantity - $scope.scalesDetailsInfo.RodsQuantity;
         else
             $scope.rodsLeft = 0;
-
-        $scope.isRodsCalculated = true;
 
     };
 
@@ -1050,7 +1075,7 @@
 
                     if (parseInt($scope.packsLeftCount) > 1) {
 
-                        indexServise('set_DecreasePacksLeft', {
+                        indexService.sendInfo('set_DecreasePacksLeft', {
 
                             EquipmentID: parseInt($scope.currentScaleID)
                         }).then(function (response) {
@@ -1063,7 +1088,6 @@
 
                 } else
                     vmSetStandardMode();
-
                 
             }
 
@@ -1152,21 +1176,14 @@
 
         document.execCommand("ClearAuthenticationCache", "false");
 
-        $.ajax({
-            type: 'GET',
-            url: serviceUrl + 'v_System_User',
-            data: {},
-            crossDomain: true,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('Authorization', 'NTLM ' + window.btoa(unescape(encodeURIComponent($scope.handModeUserName + ':' + $scope.handModeUserPassword))))
-            }
-        }).done(function (response) {
+        //$http({
+        //    method: 'GET',
+        //    url: serviceUrl + 'v_System_User',
+        //    withCredentials: true
+        //}).then(function (response) {
 
-            response;
-        }).fail(function (response) {
-
-            response;
-        });
+        //    response;
+        //});
 
         //$http({
         //    method: 'GET',
