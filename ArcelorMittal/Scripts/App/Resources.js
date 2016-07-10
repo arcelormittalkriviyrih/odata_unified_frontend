@@ -39,6 +39,7 @@
                     STEEL_CLASS: 'Steel class',
                     CHEM_ANALYSIS: 'Chem. Analysis',
                     BUNT_DIA: 'Bunt Diameter',
+                    BUNT_NO: 'Bunt No',
                     ADDRESS: 'Provider Address',
                     COMM_ORDER: 'Order',
                     PROFILE: 'Profile',
@@ -139,6 +140,8 @@
             sortingButton: 'Resorting',
             rejectButton: 'Rejection',
             separateButton: 'Pack separate',
+            handModeButton: 'Hand enter',
+            changeOrderButton: 'Order change',
             errorMessages: {
 
                 noOrders: 'There is no orders with this name!',
@@ -160,7 +163,19 @@
                 HandMode: 'Hand mode',
                 enterName: 'Enter name',
                 enterPassword: 'Enter password',
-                getHandModeCredentials: 'Run'
+                getHandModeCredentials: 'Run',
+                OrderChangeMode: 'Change order',
+                enterNewOrder: 'Enter new order no'
+            },
+            grid: {
+
+                PROD_ORDER: 'Order No',
+                PART_NO: 'Part No',
+                FactoryNumber: 'label No',
+                BUNT_NO: 'Bunt No',
+                CreateTime: 'Date',
+                Quantity: 'Quantity',
+                selected: 'Select record needed to change'
             }
             
         },
@@ -237,6 +252,7 @@
                     STEEL_CLASS: 'Марка стали',
                     CHEM_ANALYSIS: 'Хим. Анализ',
                     BUNT_DIA: 'Диаметр бунта',
+                    BUNT_NO: '№ бунта',
                     ADDRESS: 'Адрес поставщика',
                     COMM_ORDER: 'Коммерческий заказ',
                     TEMPLATE: 'Шаблон бирки',
@@ -334,6 +350,8 @@
             sortingButton: 'Сортировка',
             rejectButton: 'Отбраковка',
             separateButton: 'Разделение пачки',
+            handModeButton: 'Ручной ввод',
+            changeOrderButton: 'Изменить заказ',
             errorMessages: {
 
                 noOrders: 'Нет заказа с таким номером!',
@@ -355,7 +373,19 @@
                 HandMode: 'Ручной ввод',
                 enterName: 'Введите имя',
                 enterPassword: 'Введите пароль',
-                getHandModeCredentials: 'Run'
+                getHandModeCredentials: 'Run',
+                OrderChangeMode: 'Изменить заказ',
+                enterNewOrder: 'Введите новый номер заказа'
+            },
+            grid: {
+
+                PROD_ORDER: '№ заказа',
+                PART_NO: '№ партии',
+                FactoryNumber: '№ бирки',
+                BUNT_NO: '№ бунта',
+                CreateTime: 'Дата',
+                Quantity: 'Вес',
+                selected: 'Отметьте запись, которую нужно изменить'
             }
         },
         error: {
@@ -435,6 +465,7 @@
                     STEEL_CLASS: 'Марка сталі',
                     CHEM_ANALYSIS: 'Хім. Аналіз',
                     BUNT_DIA: 'Діаметр бунта',
+                    BUNT_NO: '№ бунта',
                     ADDRESS: 'Адреса постачальника',
                     COMM_ORDER: 'Комерційне замовлення',
                     TEMPLATE: 'Шаблон бірки',
@@ -531,6 +562,8 @@
             sortingButton: 'Сортування',
             rejectButton: 'Відбракування',
             separateButton: 'Розділення пачки',
+            handModeButton: 'Ручне введення',
+            changeOrderButton: 'Змінити замовлення',
             errorMessages: {
 
                 noOrders: 'Немає замовлення з таким номером!',
@@ -552,7 +585,19 @@
                 HandMode: 'Ручне введення',
                 enterName: 'Введіть ім\'я',
                 enterPassword: 'Введіть пароль',
-                getHandModeCredentials: 'Run'
+                getHandModeCredentials: 'Run',
+                OrderChangeMode: 'Змінити замовлення',
+                enterNewOrder: 'Введіть новий номер замовлення'
+            },
+            grid: {
+
+                PROD_ORDER: '№ замовлення',
+                PART_NO: '№ партії',
+                FactoryNumber: '№ бірки',
+                BUNT_NO: '№ бунта',
+                CreateTime: 'Дата',
+                Quantity: 'Вага',
+                selected: 'Відмітьте запис, котрий необхідно змінити'
             }
         },
         error: {

@@ -69,6 +69,9 @@
     //method for checking is accepted current order for active scales
     //(Check whether the OK button on modal window with order form is pressed)
     $scope.checkIsAcceptedOrder = vmCheckIsAcceptedOrder;
+    $scope.showOrderChangeModal = vmShowOrderChangeModal;
+    $scope.acceptOrderChange = vmAcceptOrderChange;
+    $scope.cancelOrderChange = vmCancelOrderChange;
 
     vmInit();
 
@@ -184,6 +187,15 @@
                                         required: false,
                                         translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA'),
                                         order: 20
+                                    }
+                                }, {
+
+                                    name: 'BUNT_NO',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        translate: $translate.instant('market.Order.CreateDialogue.BUNT_NO'),
+                                        order: 25
                                     }
                                 }, {
 
@@ -785,13 +797,16 @@
         var procedureName;
         $scope.readOnly = true;
 
+        if (container == 'remarkerForm')
+            procedureName = 'ins_MaterialLotByFactoryNumber';
+
         if (container == 'sortingForm') 
             procedureName = 'set_SortMode';
         
-        else if (container == 'rejectForm') 
+        if (container == 'rejectForm') 
             procedureName = 'set_RejectMode';        
 
-        else if (container == 'separateForm'){
+        if (container == 'separateForm'){
 
             procedureName = 'set_SeparateMode';
             escapedFields.push('PACKS_LEFT');
@@ -804,10 +819,6 @@
             additionalActionFields = null;
         } 
                         
-        else {
-        
-            procedureName = 'ins_MaterialLotByFactoryNumber';            
-        };
 
         vmGetLatestWorkRequest($scope.currentScaleID);
 
@@ -1082,12 +1093,16 @@
 
                             vmGetLatestWorkRequest($scope.currentScaleID);
                         });
-                    } else
-                        vmSetStandardMode();
+                    } else {
+                        //vmSetStandardMode();
+                    }
+                        
                     
 
-                } else
-                    vmSetStandardMode();
+                } else {
+                    //vmSetStandardMode();
+                }
+                    
                 
             }
 
@@ -1201,6 +1216,104 @@
 
         
     };
+
+    function vmShowOrderChangeModal() {
+
+        $scope.toggleModalOrderChange = true;
+        $scope.factoryNumbers = [];
+
+        $('#changeOrderGrid').jsGrid({
+            height: "500px",
+            width: "750px",
+
+            sorting: false,
+            paging: true,
+            editing: false,
+            filtering: true,
+            autoload: true,
+            pageLoading: true,
+            inserting: false,
+            pageIndex: 1,
+            pageSize: 10,
+
+            rowClick: function(args){
+                
+                var FactoryNumber = args.item.FactoryNumber;
+                var index = $scope.factoryNumbers.indexOf(FactoryNumber);
+
+                if (index == -1)
+                    $scope.factoryNumbers.push(FactoryNumber);
+
+                else {
+                    $scope.factoryNumbers = $scope.factoryNumbers.filter(function (item) {
+                        return item != FactoryNumber;
+                    });
+                };
+            }
+
+        }).jsGrid('initOdata', {
+            serviceUrl: serviceUrl,
+            table: 'v_MaterialLotChange',
+
+            fields: [{
+                id: 'PROD_ORDER',
+                name: 'PROD_ORDER',
+                title: $translate.instant('marker.grid.PROD_ORDER'),
+                order: 1
+            },
+            {
+                id: 'PART_NO',
+                name: 'PART_NO',
+                title: $translate.instant('marker.grid.PART_NO'),
+                order: 2
+            },
+            {
+                id: 'FactoryNumber',
+                name: 'FactoryNumber',
+                title: $translate.instant('marker.grid.FactoryNumber'),
+                order: 3
+            },
+            {
+                id: 'BUNT_NO',
+                name: 'BUNT_NO',
+                title: $translate.instant('marker.grid.BUNT_NO'),
+                order: 4
+            },
+            {
+                id: 'CreateTime',
+                name: 'CreateTime',
+                title: $translate.instant('marker.grid.CreateTime'),
+                order: 5
+            },
+
+            {
+                id: 'Quantity',
+                name: 'Quantity',
+                title: $translate.instant('marker.grid.Quantity'),
+                order: 6
+            },
+            {
+                id: 'selected',
+                name: 'selected',
+                title: $translate.instant('marker.grid.selected'),
+                type: 'myCheckbox',
+                order: 7
+            }]
+
+        }).jsGrid('loadOdata', {});
+    }
+    function vmAcceptOrderChange() {
+
+        $scope.NewOrderNumber;
+        $scope.factoryNumbers = $scope.factoryNumbers.join(',');
+
+        $scope.factoryNumbers;
+    }
+
+    function vmCancelOrderChange() {
+
+        $scope.toggleModalOrderChange = false;
+    }
 
     //there are events triggered on success and cancel button click in order modal form
     $('#orderForm').on('oDataForm.success', function (e, data) {

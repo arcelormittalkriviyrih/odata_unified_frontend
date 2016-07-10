@@ -659,3 +659,57 @@
     jsGrid.fields.binary = binary;
 
 }(jsGrid, jQuery));
+
+//myCheckBox
+(function (jsGrid, $, undefined) {
+
+    var Field = jsGrid.Field;
+
+    function MyCheckboxField(config) {
+        Field.call(this, config);
+    }
+
+    MyCheckboxField.prototype = new Field({
+
+        sorter: "number",
+        align: "center",
+        autosearch: true,
+
+        itemTemplate: function (value) {
+            return this._createCheckbox().prop({
+                checked: false,
+            });
+        },
+
+        filterTemplate: function () {
+            return null;
+        },
+
+        insertTemplate: function () {
+            return null;
+        },
+
+        editTemplate: function (value) {
+            return null;
+        },
+
+        filterValue: function () {
+            return null;
+        },
+
+        insertValue: function () {
+            return null;
+        },
+
+        editValue: function () {
+            return null;
+        },
+
+        _createCheckbox: function () {
+            return $("<input>").attr("type", "checkbox");
+        }
+    });
+
+    jsGrid.fields.myCheckbox = jsGrid.MyCheckboxField = MyCheckboxField;
+
+}(jsGrid, jQuery));

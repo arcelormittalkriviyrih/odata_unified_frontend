@@ -624,11 +624,11 @@
 
         sorting: false,
         paging: true,
-        editing: true,
+        editing: false,
         filtering: true,
         autoload: true,
         pageLoading: true,
-        inserting: true,
+        inserting: false,
         pageIndex: 1,
         pageSize: 10,
 
@@ -671,15 +671,8 @@
             name: 'CreatedDateTime',
             title: $translate.instant('marker.date'),
             order: 4
-        }],
+        }]
 
-        controlProperties: {
-            type: 'control',
-            editButton: false,
-            deleteButton: false,
-            clearFilterButton: true,
-            modeSwitchButton: true
-        }
     }).jsGrid('loadOdata', {});
 
     $('div#material_lot_property').jsGrid({
@@ -688,11 +681,11 @@
 
         sorting: false,
         paging: true,
-        editing: true,
+        editing: false,
         filtering: true,
         autoload: true,
         pageLoading: true,
-        inserting: true,
+        inserting: false,
         pageIndex: 1,
         pageSize: 10,
 
@@ -713,15 +706,8 @@
             name: 'Value',
             title: $translate.instant('grid.common.value'),
             order: 2
-        }],
+        }]
 
-        controlProperties: {
-            type: 'control',
-            editButton: false,
-            deleteButton: false,
-            clearFilterButton: true,
-            modeSwitchButton: true
-        }
     });
 
 }]);

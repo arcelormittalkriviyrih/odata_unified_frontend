@@ -262,7 +262,16 @@
                             translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA'),
                             order: 19
                         }
-                    }, {
+                    }, {                        
+
+                            name: 'BUNT_NO',
+                            properties: {
+                                control: 'text',
+                                required: false,
+                                translate: $translate.instant('market.Order.CreateDialogue.BUNT_NO'),
+                                order: 24
+                           }
+                     }, {
 
                         name: 'COMM_ORDER',
                         properties: {

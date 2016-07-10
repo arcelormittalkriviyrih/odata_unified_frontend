@@ -225,7 +225,7 @@ button.add{
 }
 
 .formWrapper{
-    height: 650px;
+    min-height: 650px;
     margin: 10px 0 0 0;
 }
 
@@ -522,7 +522,7 @@ div.controlTask input, div.controlTask select {
 }
 
 .modal.additional{
-    padding: 0;
+    padding: 0 0 10px 0;
     overflow: hidden;
 }
 

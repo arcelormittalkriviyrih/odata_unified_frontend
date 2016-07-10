@@ -382,7 +382,12 @@
         <button class="btn specialLabelMode"
                 ng-click="showBuildFormWindow('toggleModalHandMode', 'handMode')"
                 ng-disabled="!standard && !handMode">
-            Ручной ввод
+            {{ 'marker.handModeButton' | translate }}
+        </button>
+
+        <button class="btn specialLabelMode"
+                ng-click="showOrderChangeModal()">
+            {{ 'marker.changeOrderButton' | translate }}
         </button>
 
     </div>
@@ -528,6 +533,32 @@
             </button>
         </div>
 
+    </div>
+</div>
+
+<div class="black-wrapper" ng-show="toggleModalOrderChange">
+    <div class="modal additional">
+
+        <h4>{{ 'marker.modalCaptions.OrderChangeMode' | translate }}</h4>
+
+        <div class="enterLabelWrapper">
+            <label>{{ 'marker.modalCaptions.enterNewOrder' | translate }}:</label>
+            <input type="text" ng-model="NewOrderNumber" />
+        </div>
+        
+
+        <div class="formWrapper" style="margin: 10px 0 0 13px;">
+            
+            <div id="changeOrderGrid">
+
+            </div>           
+        </div>
+
+        <div class="control-row">
+            <button class="btn" ng-click="acceptOrderChange()">OK</button>
+            <button class="btn" ng-click="cancelOrderChange()">{{ 'buttonCancel' | translate }}</button>
+        </div>
+        
     </div>
 </div>
 
