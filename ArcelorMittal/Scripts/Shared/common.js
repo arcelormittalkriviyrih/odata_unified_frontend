@@ -187,21 +187,35 @@ function handleError(err) {
     alert(msg);
 }
 
-function getTimeToUpdate(time) {
+function getTimeToUpdate(time, toUTC) {
 
-    var date;
+    var date, year, month, day, hour, minute, second;
+
 
     if (time)
         date = new Date(time);
     else
         date = new Date();
 
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    var hour = date.getHours();
-    var minute = date.getMinutes();
-    var second = date.getSeconds();
+    if (toUTC) {
+
+        year = date.getUTCFullYear();
+        month = date.getUTCMonth() + 1;
+        day = date.getUTCDate();
+        hour = date.getUTCHours();
+        minute = date.getUTCMinutes();
+        second = date.getUTCSeconds();
+    } else {
+
+        year = date.getFullYear();
+        month = date.getMonth() + 1;
+        day = date.getDate();
+        hour = date.getHours();
+        minute = date.getMinutes();
+        second = date.getSeconds();
+    }
+
+    
 
     return {
 

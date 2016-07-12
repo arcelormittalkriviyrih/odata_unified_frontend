@@ -327,7 +327,7 @@
 
         itemTemplate: function (value) {
 
-            var dateVal = getTimeToUpdate(value);
+            var dateVal = getTimeToUpdate(value, true);
 
             return dateVal.day + '-' + dateVal.month + '-' + dateVal.year + ' ' + dateVal.hour + ':' + dateVal.minute + ':' + dateVal.second;
         },

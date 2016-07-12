@@ -41,6 +41,10 @@
                  ng-class="{'active': scale.ID == currentScaleID && scale.isInfoLoaded}"
                  ng-click="showScaleInfo(scale.ID); getLatestWorkRequest(scale.ID)">
 
+                <div class="plotArea" 
+                     id="plot-{{scale.ID}}">
+                </div>
+
                 <div ng-show="!scale.isInfoLoaded" style="line-height: 6;">
                     {{ 'loadingMsg' | translate }}
                 </div>
@@ -548,7 +552,7 @@
     <div class="modal additional">
 
         <h4>{{ 'marker.modalCaptions.OrderChangeMode' | translate }}</h4>
-
+        
         <div class="enterLabelWrapper">
             <label>{{ 'marker.modalCaptions.enterNewOrder' | translate }}:</label>
             <input type="text" 
@@ -557,9 +561,10 @@
                    ng-change="noNewOrderNumber = false"/>
         </div>
         
-
         <div class="formWrapper" style="margin: 10px 0 0 13px;">
             
+            <p>{{'marker.grid.selected' | translate}}:</p>
+
             <div id="changeOrderGrid">
 
             </div>           
@@ -567,7 +572,7 @@
 
         <div class="control-row">
             <button class="btn" ng-click="acceptOrderChange()">OK</button>
-            <button class="btn" ng-click="cancelOrderChange()">{{ 'buttonCancel' | translate }}</button>
+            <button class="btn" ng-click="cancelOrderChange()">{{ 'marker.buttonExit' | translate }}</button>
         </div>
         
     </div>

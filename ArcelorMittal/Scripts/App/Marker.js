@@ -416,6 +416,17 @@
                     $scope.workRequestFilter.push('EquipmentID eq {0}'.format(scale.ID));
 
                     scale.isInfoLoaded = false;
+
+                    //$('#plot-' + scale.ID).addClass('plotVisible').empty();
+
+                    //scale.plot = $.jqplot('plot-' + scale.ID, [0], {
+
+                    //    seriesDefaults: {
+
+                    //        renderer: $.jqplot.MeterGaugeRenderer,
+                    //    }
+                    //});
+
                 });
 
                 $scope.groups = vmGetChunks($scope.scales, 4);
@@ -1264,7 +1275,6 @@
         $scope.materialLotProdorderIDs = [];
 
         $('#changeOrderGrid').jsGrid({
-            height: "500px",
             width: "750px",
 
             sorting: false,
@@ -1275,7 +1285,7 @@
             pageLoading: true,
             inserting: false,
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: 14,
 
             onDataLoaded: function(args){
 
@@ -1307,30 +1317,35 @@
                 id: 'PROD_ORDER',
                 name: 'PROD_ORDER',
                 title: $translate.instant('marker.grid.PROD_ORDER'),
+                width: 120,
                 order: 1
             },
             {
                 id: 'PART_NO',
                 name: 'PART_NO',
                 title: $translate.instant('marker.grid.PART_NO'),
+                width: 100,
                 order: 2
             },
             {
                 id: 'FactoryNumber',
                 name: 'FactoryNumber',
                 title: $translate.instant('marker.grid.FactoryNumber'),
+                width: 120,
                 order: 3
             },
             {
                 id: 'BUNT_NO',
                 name: 'BUNT_NO',
                 title: $translate.instant('marker.grid.BUNT_NO'),
+                width: 145,
                 order: 4
             },
             {
                 id: 'CreateTime',
                 name: 'CreateTime',
                 title: $translate.instant('marker.grid.CreateTime'),
+                width: 150,
                 order: 5
             },
 
@@ -1338,13 +1353,15 @@
                 id: 'Quantity',
                 name: 'Quantity',
                 title: $translate.instant('marker.grid.Quantity'),
+                width: 50,
                 order: 6
             },
             {
                 id: 'selected',
                 name: 'selected',
-                title: $translate.instant('marker.grid.selected'),
+                title: ' ',
                 type: 'myCheckbox',
+                width: 25,
                 order: 7
             }]
 
@@ -1377,7 +1394,11 @@
 
                 PROD_ORDER: $scope.NewOrderNumber,
                 MaterialLotIDs: $scope.MaterialLotIDs
-            }).then(vmCancelOrderChange);
+            }).then(function () {
+
+                $scope.NewOrderNumber = null;
+                $('#changeOrderGrid').jsGrid('loadData', {});
+            });
         }
     }
 
@@ -1385,6 +1406,7 @@
 
         $scope.noNewOrderNumber = false;
         $scope.toggleModalOrderChange = false;
+        $scope.NewOrderNumber = null;
     }
 
     //there are events triggered on success and cancel button click in order modal form

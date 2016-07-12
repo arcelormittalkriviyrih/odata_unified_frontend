@@ -177,7 +177,7 @@
                 BUNT_NO: 'Bunt No',
                 CreateTime: 'Date',
                 Quantity: 'Quantity',
-                selected: 'Select record needed to change'
+                selected: 'Select records needed to change'
             }
             
         },
@@ -389,7 +389,7 @@
                 BUNT_NO: '№ бунта',
                 CreateTime: 'Дата',
                 Quantity: 'Вес',
-                selected: 'Отметьте запись, которую нужно изменить'
+                selected: 'Отметьте записи, которые нужно изменить'
             }
         },
         error: {
@@ -603,7 +603,7 @@
                 BUNT_NO: '№ бунта',
                 CreateTime: 'Дата',
                 Quantity: 'Вага',
-                selected: 'Відмітьте запис, котрий необхідно змінити'
+                selected: 'Відмітьте записи, котрі необхідно змінити'
             }
         },
         error: {
