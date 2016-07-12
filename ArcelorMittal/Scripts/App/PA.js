@@ -173,12 +173,13 @@
             title: 'ID',
             readonly: true,
             type: 'number',
+            width: 65,
             order: 1
         }, {
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
             title: $translate.instant('grid.common.property'),
-            width: 175,
+            width: 200,
             order: 2,
             type: 'combo',
             table: {
@@ -193,7 +194,7 @@
             id: 'Value',
             name: 'Value',
             title: $translate.instant('grid.common.value'),
-            width: 100,
+            width: 80,
             order: 3
         },
         {

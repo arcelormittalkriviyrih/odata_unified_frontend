@@ -471,52 +471,48 @@
 
                                if (data.length > 0) {
 
-                                   scale.weightCurrent = data[0].WEIGHT_CURRENT;
-                                   scale.rodsQuantity = data[0].RodsQuantity;
-                                   scale.MinWeight = data[0].MinWeight;
-                                   scale.MaxWeight = data[0].MaxWeight;
-                                   scale.MaxPossibleWeight = data[0].MaxPossibleWeight;
-
-                                   if (scale.weightCurrent) {
-
-                                       var plotWeightData = [scale.weightCurrent];
-
-                                       if (!scale.plot) {
-
-                                           $('#plot-' + scale.ID).addClass('plotVisible').empty();
-
-                                           var seriesDefaults = {
-
-                                               renderer: $.jqplot.MeterGaugeRenderer,
-                                               min: 0,
-                                               max: scale.MaxPossibleWeight,
-                                           };
-
-                                           if (scale.MinWeight > 0 && scale.MaxWeight > 0) {
-
-                                               seriesDefaults.rendererOptions = {
-                                                   intervals: [scale.MinWeight, scale.MaxWeight, scale.MaxPossibleWeight],
-                                                   intervalColors: ['#E7E658', '#66cc66', '#cc6666']
-                                               };
-                                           };
-
-                                           scale.plot = $.jqplot('plot-' + scale.ID, [plotWeightData], {
-
-                                               seriesDefaults: seriesDefaults
-                                           })
-
-                                       } else {
-
-                                           scale.plot.data = [plotWeightData];
-                                           scale.plot.replot(plotWeightData);
-                                       }
-                                   } else {
-
-                                       $('#plot-' + scale.ID).removeClass('plotVisible');
-                                   }
+                                    scale.weightCurrent = data[0].WEIGHT_CURRENT;
+                                    scale.rodsQuantity = data[0].RodsQuantity;
+                                    scale.MinWeight = data[0].MinWeight;
+                                    scale.MaxWeight = data[0].MaxWeight;
+                                    scale.MaxPossibleWeight = data[0].MaxPossibleWeight;
 
                                    
-                               }
+                                    var plotWeightData = [scale.weightCurrent];
+
+                                    if (!scale.plot) {
+
+                                        $('#plot-' + scale.ID).addClass('plotVisible').empty();
+
+                                        var seriesDefaults = {
+
+                                            renderer: $.jqplot.MeterGaugeRenderer,
+                                            min: 0,
+                                            max: scale.MaxPossibleWeight,
+                                        };
+
+                                        if (scale.MinWeight > 0 && scale.MaxWeight > 0) {
+
+                                            seriesDefaults.rendererOptions = {
+                                                intervals: [scale.MinWeight, scale.MaxWeight, scale.MaxPossibleWeight],
+                                                intervalColors: ['#E7E658', '#66cc66', '#cc6666']
+                                            };
+                                        };
+
+                                        scale.plot = $.jqplot('plot-' + scale.ID, [plotWeightData], {
+
+                                            seriesDefaults: seriesDefaults
+                                        })
+
+                                    } else {
+
+                                        scale.plot.data = [plotWeightData];
+                                        scale.plot.replot(plotWeightData);
+                                    }
+                                   
+
+                                   
+                                }
                            });
 
                        });

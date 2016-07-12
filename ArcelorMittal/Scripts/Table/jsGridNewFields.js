@@ -407,7 +407,7 @@
 
     combo.prototype = new NumberField({
 
-        align: "center",
+        align: "left",
         valueType: "number",
 
         itemTemplate: function (value, item) {
