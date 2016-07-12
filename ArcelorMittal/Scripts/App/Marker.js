@@ -416,17 +416,7 @@
                     $scope.workRequestFilter.push('EquipmentID eq {0}'.format(scale.ID));
 
                     scale.isInfoLoaded = false;
-
-                    //$('#plot-' + scale.ID).addClass('plotVisible').empty();
-
-                    //scale.plot = $.jqplot('plot-' + scale.ID, [0], {
-
-                    //    seriesDefaults: {
-
-                    //        renderer: $.jqplot.MeterGaugeRenderer,
-                    //    }
-                    //});
-
+                   
                 });
 
                 $scope.groups = vmGetChunks($scope.scales, 4);
@@ -483,29 +473,49 @@
 
                                    scale.weightCurrent = data[0].WEIGHT_CURRENT;
                                    scale.rodsQuantity = data[0].RodsQuantity;
+                                   scale.MinWeight = data[0].MinWeight;
+                                   scale.MaxWeight = data[0].MaxWeight;
+                                   scale.MaxPossibleWeight = data[0].MaxPossibleWeight;
 
-                                   var plotWeightData = [scale.weightCurrent];
+                                   if (scale.weightCurrent) {
 
-                                   //if (scale.weightCurrent) {
+                                       var plotWeightData = [scale.weightCurrent];
 
-                                   //    $('#plot-' + scale.ID).addClass('plotVisible').empty();
+                                       if (!scale.plot) {
 
-                                   //    $.jqplot('plot-' + scale.ID, [plotWeightData], {
-                                   //        seriesDefaults: {
-                                   //            renderer: $.jqplot.MeterGaugeRenderer,
-                                   //            rendererOptions: {
-                                   //                   min: scale.minWeight,
-                                   //                   max: scale.maxWeight,
-                                   //                   intervals: [scale.minWeight, scale.maxWeight],
-                                   //                   intervalColors: ['transparent', 'red']
-                                   //                   label: $translate.instant('marker.kg')
-                                   //            }
-                                   //        }
-                                   //    });
-                                   //}else{
+                                           $('#plot-' + scale.ID).addClass('plotVisible').empty();
 
-                                   //    $('#plot-' + scale.ID).empty().removeClass('plotVisible');
-                                   //}
+                                           var seriesDefaults = {
+
+                                               renderer: $.jqplot.MeterGaugeRenderer,
+                                               min: 0,
+                                               max: scale.MaxPossibleWeight,
+                                           };
+
+                                           if (scale.MinWeight > 0 && scale.MaxWeight > 0) {
+
+                                               seriesDefaults.rendererOptions = {
+                                                   intervals: [scale.MinWeight, scale.MaxWeight, scale.MaxPossibleWeight],
+                                                   intervalColors: ['#E7E658', '#66cc66', '#cc6666']
+                                               };
+                                           };
+
+                                           scale.plot = $.jqplot('plot-' + scale.ID, [plotWeightData], {
+
+                                               seriesDefaults: seriesDefaults
+                                           })
+
+                                       } else {
+
+                                           scale.plot.data = [plotWeightData];
+                                           scale.plot.replot(plotWeightData);
+                                       }
+                                   } else {
+
+                                       $('#plot-' + scale.ID).removeClass('plotVisible');
+                                   }
+
+                                   
                                }
                            });
 

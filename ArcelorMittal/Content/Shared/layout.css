@@ -320,7 +320,7 @@ div.errorHandle label{
     text-align: center;
     vertical-align: top;
     position: relative;
-    background: linear-gradient(to bottom, #ffffff, #f2f2f2) #fafafa;
+    background: #f2f2f2;
     outline: 1px solid #d4d4d4;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
@@ -566,7 +566,15 @@ div.controlTask input, div.controlTask select {
 }
 
 .plotVisible{
-    height: 170px;
+    height: 145px;
+}
+
+.scaleContainer.active .jqplot-series-shadowCanvas{
+    background: #e5e5e5;
+}
+
+.scaleContainer .jqplot-series-shadowCanvas{
+    background: #f2f2f2;
 }
 
 
