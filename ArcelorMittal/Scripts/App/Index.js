@@ -101,6 +101,7 @@
                     var $rootScope = $injector.get('$rootScope');
 
                     $interval.cancel($rootScope.intervalScales);
+                    $interval.cancel($rootScope.intervalWorkRequest);
                 }
             })
 
@@ -192,6 +193,8 @@
 .value('withCredentials', true)
 
 .value('scalesRefresh', scalesRefresh)
+
+.value('workRequestRefresh', workRequestRefresh)
 
 .run(['$rootScope', '$state', function ($rootScope, $state) {
 

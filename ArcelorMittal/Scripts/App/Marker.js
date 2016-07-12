@@ -11,7 +11,7 @@
         })
 }])
 
-.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', '$interval', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, $interval, $http) {
+.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $http) {
 
     //properties
     $scope.filter = [];
@@ -72,6 +72,8 @@
     $scope.showOrderChangeModal = vmShowOrderChangeModal;
     $scope.acceptOrderChange = vmAcceptOrderChange;
     $scope.cancelOrderChange = vmCancelOrderChange;
+    $scope.acceptHandMode = vmAcceptHandMode;
+    $scope.cancelHandMode = vmCancelHandMode;
 
     vmInit();
 
@@ -401,7 +403,7 @@
                     return 1;
                 else
                     return 0;
-            })
+            });
 
             //there we build filter for request which get us short info for every scale
             if ($scope.scales.length > 0) {
@@ -470,6 +472,29 @@
 
                                    scale.weightCurrent = data[0].WEIGHT_CURRENT;
                                    scale.rodsQuantity = data[0].RodsQuantity;
+
+                                   var plotWeightData = [scale.weightCurrent];
+
+                                   //if (scale.weightCurrent) {
+
+                                   //    $('#plot-' + scale.ID).addClass('plotVisible').empty();
+
+                                   //    $.jqplot('plot-' + scale.ID, [plotWeightData], {
+                                   //        seriesDefaults: {
+                                   //            renderer: $.jqplot.MeterGaugeRenderer,
+                                   //            rendererOptions: {
+                                   //                   min: scale.minWeight,
+                                   //                   max: scale.maxWeight,
+                                   //                   intervals: [scale.minWeight, scale.maxWeight],
+                                   //                   intervalColors: ['transparent', 'red']
+                                   //                   label: $translate.instant('marker.kg')
+                                   //            }
+                                   //        }
+                                   //    });
+                                   //}else{
+
+                                   //    $('#plot-' + scale.ID).empty().removeClass('plotVisible');
+                                   //}
                                }
                            });
 
@@ -539,31 +564,41 @@
                             $scope.toleranceMinus = null;
 
                         };
+                        
+                        if (data[0].WorkType == 'Standard') {
+                            $scope.standard = true;
+                            $scope.sortingMode = false;
+                            $scope.rejectMode = false;
+                            $scope.separateMode = false;
 
-                        switch (data[0].WorkType) {
+                            if ($rootScope.intervalWorkRequest)
+                                $interval.cancel($rootScope.intervalWorkRequest);
 
-                            case 'Standard':
-                                $scope.standard = true;
-                                $scope.sortingMode = false;
-                                $scope.rejectMode = false;
-                                $scope.separateMode = false;
-                                break;
+                        } else {
 
-                            case 'Sort':
-                                $scope.standard = false;
+                            $scope.standard = false;
+
+                            if (data[0].WorkType == 'Sort')
                                 $scope.sortingMode = true;
-                                break;
 
-                            case 'Reject':
-                                $scope.standard = false;
+                            if (data[0].WorkType == 'Reject')
                                 $scope.rejectMode = true;
-                                break;
 
-                            case 'Separate':
-                                $scope.standard = false;
+                            if (data[0].WorkType == 'Separate')
                                 $scope.separateMode = true;
-                                break;
-                        };
+
+                            if ($rootScope.intervalWorkRequest)
+                                $interval.cancel($rootScope.intervalWorkRequest);
+
+                            //create interval for autorefresh scales
+                            //this interval must be clear on activity exit
+                            //so I create rootScope variable and set interval there
+                            //it will be called in $state onExit handler
+                            $rootScope.intervalWorkRequest = $interval(function () {
+
+                                vmGetLatestWorkRequest(id);
+                            }, workRequestRefresh);
+                        }
 
 
                         //find value of last work request for each field
@@ -758,6 +793,9 @@
         if (!$scope[mode])
             $scope[flag] = true;
         else {
+
+            if ($rootScope.intervalWorkRequest)
+                $interval.cancel($rootScope.intervalWorkRequest);
 
             indexService.sendInfo('set_StandardMode', {
 
@@ -1080,31 +1118,31 @@
                 $scope[label] = $translate.instant(text)
             });
 
-            if (!$scope.standard && label == 'takeWeightLabel') {
+            //if (!$scope.standard && label == 'takeWeightLabel') {
 
-                if ($scope.separateMode) {
+            //    if ($scope.separateMode) {
 
-                    if (parseInt($scope.packsLeftCount) > 1) {
+            //        if (parseInt($scope.packsLeftCount) > 1) {
 
-                        indexService.sendInfo('set_DecreasePacksLeft', {
+            //            indexService.sendInfo('set_DecreasePacksLeft', {
 
-                            EquipmentID: parseInt($scope.currentScaleID)
-                        }).then(function (response) {
+            //                EquipmentID: parseInt($scope.currentScaleID)
+            //            }).then(function (response) {
 
-                            vmGetLatestWorkRequest($scope.currentScaleID);
-                        });
-                    } else {
-                        //vmSetStandardMode();
-                    }
+            //                vmGetLatestWorkRequest($scope.currentScaleID);
+            //            });
+            //        } else {
+            //            //vmSetStandardMode();
+            //        }
                         
                     
 
-                } else {
-                    //vmSetStandardMode();
-                }
+            //    } else {
+            //        //vmSetStandardMode();
+            //    }
                     
                 
-            }
+            //}
 
 
         };
@@ -1190,37 +1228,40 @@
         $scope.handModeUserPassword;
 
         document.execCommand("ClearAuthenticationCache", "false");
-
-        //$http({
-        //    method: 'GET',
-        //    url: serviceUrl + 'v_System_User',
-        //    withCredentials: true
-        //}).then(function (response) {
-
-        //    response;
-        //});
-
-        //$http({
-        //    method: 'GET',
-        //    url: serviceUrl + 'v_System_User',
-        //    headers: {
-        //        'Content-Type' : 'application/json', 
-        //        'Authorization': 'NTLM TlRMTVNTUAADAAAAGAAYAIAAAABaAVoBmAAAAAwADABYAAAAEAAQAGQAAAAMAAwAdAAAAAAAAADyAQAABYKIogoAWikAAAAPiJqYFE3EV5AZ8aCdYRLsDGEAcwBrAC0AYQBkAG8AYwBoAGUAawBtAGUAegBaAEUATgBPAFMAUwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEde2qN7N6jb8ychv4qFI1AQEAAAAAAAA+L6Ow+dXRAaRt65dLvnpVAAAAAAIADABBAFMASwAtAEEARAABABgATQBTAFMAUQBMADIAMAAxADQAUwBSAFYABAAYAGEAcwBrAC0AYQBkAC4AdgBpAG0AYQBzAAMAMgBNAFMAUwBRAEwAMgAwADEANABTAFIAVgAuAGEAcwBrAC0AYQBkAC4AdgBpAG0AYQBzAAUAGABhAHMAawAtAGEAZAAuAHYAaQBtAGEAcwAHAAgAPi+jsPnV0QEGAAQAAgAAAAgAMAAwAAAAAAAAAAAAAAAAMAAAXF/xV8oq70bAQmBaNPTRsSKKet0jawtuvD8CqeHZxosKABAAAAAAAAAAAAAAAAAAAAAAAAkAKABIAFQAVABQAC8AMQA5ADIALgAxADYAOAAuADEAMAAwAC4AMQA3ADQAAAAAAAAAAAAAAAAA='
-        //    }
-        //}).then(function (response) {
-
-        //    response;
-        //});
-
-        //'Basic ' + window.btoa(unescape(encodeURIComponent(YOUR_USERNAME + ':' + YOUR_PASSWORD)));
-
         
+    };
+
+    function vmAcceptHandMode() {
+
+        if (!$scope.handModeQuantity){
+
+            alert($translate.instant('marker.errorMessages.handModeQuantity'));
+
+            $scope.noHandModeQuantity = true;
+        }
+            
+        else {
+
+            $scope.noHandModeQuantity = false;
+
+            indexService.sendInfo('ins_ManualWeightEntry', {
+                EquipmentID: parseInt($scope.currentScaleID) || null,
+                Quantity: $scope.handModeQuantity
+            }).then(vmCancelHandMode);
+        };
+    };
+
+    function vmCancelHandMode() {
+
+        $scope.toggleModalHandMode = false;
+        $scope.noHandModeQuantity = false;
+        $scope.handModeQuantity = null;
     };
 
     function vmShowOrderChangeModal() {
 
         $scope.toggleModalOrderChange = true;
-        $scope.factoryNumbers = [];
+        $scope.materialLotProdorderIDs = [];
 
         $('#changeOrderGrid').jsGrid({
             height: "500px",
@@ -1236,19 +1277,26 @@
             pageIndex: 1,
             pageSize: 10,
 
+            onDataLoaded: function(args){
+
+                $scope.materialLotProdorderIDs = [];
+            },
+            
             rowClick: function(args){
                 
-                var FactoryNumber = args.item.FactoryNumber;
-                var index = $scope.factoryNumbers.indexOf(FactoryNumber);
+                var materialLotProdorderID = args.item.ID;
+                var index = $scope.materialLotProdorderIDs.indexOf(materialLotProdorderID);
 
                 if (index == -1)
-                    $scope.factoryNumbers.push(FactoryNumber);
+                    $scope.materialLotProdorderIDs.push(materialLotProdorderID);
 
                 else {
-                    $scope.factoryNumbers = $scope.factoryNumbers.filter(function (item) {
-                        return item != FactoryNumber;
+                    $scope.materialLotProdorderIDs = $scope.materialLotProdorderIDs.filter(function (item) {
+                        return item != materialLotProdorderID;
                     });
                 };
+
+                $scope.$apply();
             }
 
         }).jsGrid('initOdata', {
@@ -1304,14 +1352,38 @@
     }
     function vmAcceptOrderChange() {
 
-        $scope.NewOrderNumber;
-        $scope.factoryNumbers = $scope.factoryNumbers.join(',');
+        $scope.MaterialLotIDs = $scope.materialLotProdorderIDs.join(',');
 
-        $scope.factoryNumbers;
+        var errors = [];
+
+        if (!$scope.NewOrderNumber) {
+
+            $scope.noNewOrderNumber = true;
+            errors.push($translate.instant('marker.errorMessages.enterProdOrder'));
+        }
+          
+        if ($scope.materialLotProdorderIDs.length == 0)
+            errors.push($translate.instant('marker.errorMessages.selectLabel'));
+
+        if (errors.length > 0) {
+
+            errors = errors.join(' \n ');
+            alert(errors);
+
+        } else {
+
+            $scope.noNewOrderNumber = false;
+            indexService.sendInfo('upd_MaterialLotProdOrder', {
+
+                PROD_ORDER: $scope.NewOrderNumber,
+                MaterialLotIDs: $scope.MaterialLotIDs
+            }).then(vmCancelOrderChange);
+        }
     }
 
     function vmCancelOrderChange() {
 
+        $scope.noNewOrderNumber = false;
         $scope.toggleModalOrderChange = false;
     }
 

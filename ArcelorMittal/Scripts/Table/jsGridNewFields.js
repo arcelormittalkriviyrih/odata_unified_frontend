@@ -326,7 +326,10 @@
         },
 
         itemTemplate: function (value) {
-            return new Date(value).toUTCString();
+
+            var dateVal = getTimeToUpdate(value);
+
+            return dateVal.day + '-' + dateVal.month + '-' + dateVal.year + ' ' + dateVal.hour + ':' + dateVal.minute + ':' + dateVal.second;
         },
 
         insertTemplate: function (value) {

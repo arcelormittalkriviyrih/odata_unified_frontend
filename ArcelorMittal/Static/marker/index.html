@@ -116,6 +116,7 @@
                 <div>
                     <input type="checkbox"
                            ng-model="autoMode"
+                           ng-checked="!scalesDetailsInfo.AUTO_MANU"
                            ng-disabled="!standard"
                            ng-change="enableControlOK()" />
                     {{ 'marker.byAccept' | translate }}
@@ -318,6 +319,11 @@
             <button class="btn" ng-click="doAction('ins_MaterialLotByEquipment', 'testPrintLabel', 'marker.testPrintButton')">
                 {{testPrintLabel}}
             </button>
+
+            <button class="btn specialLabelMode"
+                    ng-click="showBuildFormWindow('toggleModalHandMode', 'handMode')">
+                {{ 'marker.handModeButton' | translate }}
+            </button>
         </div>
 
     </div>
@@ -378,15 +384,10 @@
                 ng-disabled="!standard && !separateMode">
             {{ 'marker.separateButton' | translate }}
         </button>
-
+       
         <button class="btn specialLabelMode"
-                ng-click="showBuildFormWindow('toggleModalHandMode', 'handMode')"
-                ng-disabled="!standard && !handMode">
-            {{ 'marker.handModeButton' | translate }}
-        </button>
-
-        <button class="btn specialLabelMode"
-                ng-click="showOrderChangeModal()">
+                ng-click="showOrderChangeModal()"
+                ng-disabled="!standard">
             {{ 'marker.changeOrderButton' | translate }}
         </button>
 
@@ -520,16 +521,23 @@
         <h4>{{ 'marker.modalCaptions.HandMode' | translate }}</h4>
 
         <div class="enterLabelWrapper">
-            <label>{{ 'marker.modalCaptions.enterName' | translate }}</label>
+            <label>{{ 'marker.modalCaptions.enterQuantity' | translate }}:</label>
             <input type="text"
-                   ng-model="handModeUserName" />
+                   class="labelNumber"
+                   ng-class="{'wrong': noHandModeQuantity}"
+                   ng-model="handModeQuantity"
+                   ng-change="noHandModeQuantity = false" />
+            
+        </div>
 
-            <label>{{ 'marker.modalCaptions.enterPassword' | translate }}</label>
-            <input type="password"
-                   ng-model="handModeUserPassword" />
+        <div class="control-row">
 
-            <button class="btn" ng-click="getHandModeCredentials()">
-                {{ 'marker.modalCaptions.getHandModeCredentials' | translate }}
+            <button class="btn" ng-click="acceptHandMode()">
+                OK
+            </button>
+
+            <button class="btn" ng-click="cancelHandMode()">
+                {{ 'buttonCancel' | translate }}
             </button>
         </div>
 
@@ -543,7 +551,10 @@
 
         <div class="enterLabelWrapper">
             <label>{{ 'marker.modalCaptions.enterNewOrder' | translate }}:</label>
-            <input type="text" ng-model="NewOrderNumber" />
+            <input type="text" 
+                   ng-model="NewOrderNumber" 
+                   ng-class="{'wrong': noNewOrderNumber}" 
+                   ng-change="noNewOrderNumber = false"/>
         </div>
         
 

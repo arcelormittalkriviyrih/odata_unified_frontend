@@ -149,7 +149,10 @@
                 fillRequired: 'You must fill all required fields!',
                 acceptOrder: 'You must accept your order number!',
                 minMaxWeight: 'Max weight cannot be less then min weight!',
-                wrongDeviation: 'Deviation is wrong! Please, recalculate it!'
+                wrongDeviation: 'Deviation is wrong! Please, recalculate it!',
+                enterProdOrder: 'You must enter new prod order number!',
+                selectLabel: 'You must change label!',
+                handModeQuantity: 'You must enter weight!'
             },
             modalCaptions: {
 
@@ -161,8 +164,7 @@
                 changePackNumber: 'Select pucks number',
                 order: 'Order',
                 HandMode: 'Hand mode',
-                enterName: 'Enter name',
-                enterPassword: 'Enter password',
+                enterQuantity: 'Enter weight',
                 getHandModeCredentials: 'Run',
                 OrderChangeMode: 'Change order',
                 enterNewOrder: 'Enter new order no'
@@ -359,7 +361,10 @@
                 fillRequired: 'Вы должны заполнить все обязательные поля!',
                 acceptOrder: 'Вы должны подтвердить ваш номер заказа!',
                 minMaxWeight: 'Максимальный вес не может быть меньше минимального!',
-                wrongDeviation: 'Отклонение неверно! Пожалуйста, пересчитайте!'
+                wrongDeviation: 'Отклонение неверно! Пожалуйста, пересчитайте!',
+                enterProdOrder: 'Вы должны ввести новый номер производственного заказа!',
+                selectLabel: 'Вы должны выбрать бирку!',
+                handModeQuantity: 'Вы должны ввести вес!'
             },
             modalCaptions: {
 
@@ -371,8 +376,7 @@
                 changePackNumber: 'Выберите число пачек',
                 order: 'Заказ',
                 HandMode: 'Ручной ввод',
-                enterName: 'Введите имя',
-                enterPassword: 'Введите пароль',
+                enterQuantity: 'Введите вес',
                 getHandModeCredentials: 'Run',
                 OrderChangeMode: 'Изменить заказ',
                 enterNewOrder: 'Введите новый номер заказа'
@@ -571,7 +575,10 @@
                 fillRequired: 'Ви маєте заповнити всі обов\'язкові поля!',
                 acceptOrder: 'Ви маєте підтвердити ваш номер замовлення!',
                 minMaxWeight: 'Максимальна вага не може бути менше мінімальної!',
-                wrongDeviation: 'Відхилення невірне! Будь ласка, перерахуйте!'
+                wrongDeviation: 'Відхилення невірне! Будь ласка, перерахуйте!',
+                enterProdOrder: 'Ви повинні ввести новий номер виробничого замовлення!',
+                selectLabel: 'Ви повинні вибрати бірку!',
+                handModeQuantity: 'Ви повинні ввести вагу!'
             },
             modalCaptions: {
 
@@ -583,8 +590,7 @@
                 changePackNumber: 'Виберіть число пачок',
                 order: 'Замовлення',
                 HandMode: 'Ручне введення',
-                enterName: 'Введіть ім\'я',
-                enterPassword: 'Введіть пароль',
+                enterQuantity: 'Введіть вагу',
                 getHandModeCredentials: 'Run',
                 OrderChangeMode: 'Змінити замовлення',
                 enterNewOrder: 'Введіть новий номер замовлення'

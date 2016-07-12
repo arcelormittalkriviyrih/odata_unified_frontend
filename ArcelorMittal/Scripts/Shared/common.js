@@ -4,6 +4,7 @@ var serviceUrl = domainURL+'/api/Dynamic/';
 var interval = 5000; //grid auto refresh interval (5 sec)
 var _intervalID; //initiate interval ID
 var scalesRefresh = 1000; //scales autorefresh interval (1 sec)
+var workRequestRefresh = 1000; //last Work Refresh for scales;
 
 jQuery.ajaxSetup({
     global: true,
