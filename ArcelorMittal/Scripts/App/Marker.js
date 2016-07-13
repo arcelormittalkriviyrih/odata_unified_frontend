@@ -476,28 +476,32 @@
                                     scale.MinWeight = data[0].MinWeight;
                                     scale.MaxWeight = data[0].MaxWeight;
                                     scale.MaxPossibleWeight = data[0].MaxPossibleWeight;
-
-                                   
+                                                                    
                                     var plotWeightData = [scale.weightCurrent];
+
+                                    var seriesDefaults = {
+
+                                        renderer: $.jqplot.MeterGaugeRenderer,
+                                        min: 0,
+                                        max: scale.MaxPossibleWeight,
+                                    };
+
+                                    if (scale.MinWeight > 0 && scale.MaxWeight > 0) {
+
+                                        seriesDefaults.rendererOptions = {
+                                            intervals: [scale.MinWeight, scale.MaxWeight, scale.MaxPossibleWeight],
+                                            intervalColors: ['#E7E658', '#66cc66', '#cc6666'],
+                                            ringWidth: 4,
+                                            shadowDepth: 0,
+                                            intervalOuterRadius: 85,
+                                            intervalInnerRadius: 75,
+                                            hubRadius: 6
+                                        };
+                                    };
 
                                     if (!scale.plot) {
 
-                                        $('#plot-' + scale.ID).addClass('plotVisible').empty();
-
-                                        var seriesDefaults = {
-
-                                            renderer: $.jqplot.MeterGaugeRenderer,
-                                            min: 0,
-                                            max: scale.MaxPossibleWeight,
-                                        };
-
-                                        if (scale.MinWeight > 0 && scale.MaxWeight > 0) {
-
-                                            seriesDefaults.rendererOptions = {
-                                                intervals: [scale.MinWeight, scale.MaxWeight, scale.MaxPossibleWeight],
-                                                intervalColors: ['#E7E658', '#66cc66', '#cc6666']
-                                            };
-                                        };
+                                        $('#plot-' + scale.ID).addClass('plotVisible').empty();                                     
 
                                         scale.plot = $.jqplot('plot-' + scale.ID, [plotWeightData], {
 
@@ -505,13 +509,12 @@
                                         })
 
                                     } else {
-
-                                        scale.plot.data = [plotWeightData];
-                                        scale.plot.replot(plotWeightData);
+                                        
+                                        scale.plot.replot({
+                                            data: [plotWeightData],
+                                        });
                                     }
-                                   
-
-                                   
+                                                                      
                                 }
                            });
 

@@ -797,8 +797,8 @@
             
             ctx.save();
             ctx.beginPath();
-            ctx.fillStyle = this.ringColor;
-            ctx.strokeStyle = this.ringColor;
+            ctx.fillStyle = '#5B6E80';
+            ctx.strokeStyle = '#5B6E80';
             this.needleLength = (this.tickOuterRadius - this.tickLength) * 0.85;
             this.needleThickness = (this.needleThickness < 2) ? 2 : this.needleThickness;
             var endwidth = this.needleThickness * 0.4;
