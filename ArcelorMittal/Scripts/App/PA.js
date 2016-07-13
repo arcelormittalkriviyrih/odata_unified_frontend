@@ -131,6 +131,7 @@
 
         $('div#equipment_property').jsGrid('loadOdata', {
             defaultFilter: 'EquipmentID eq ({0})'.format(EquipmentID),
+            order: 'EquipmentClassProperty/Description',
 
             //settings for filtering of oData combobox by EquipmentClassID parent field
             comboFilter: [{
@@ -212,7 +213,7 @@
             modeSwitchButton: true
         }
     }).jsGrid('loadOdata', {
-        defaultFilter: 'ID eq -1'
+        defaultFilter: 'ID eq -1'        
     });
 
 }])
@@ -224,7 +225,7 @@
 
     $hierarchyMaterialClass = $('#hierarchy_material_class').empty();
 
-    indexService.getInfo('MaterialClass').then(function (response) {
+    indexService.getInfo('MaterialClass?$orderby=Description').then(function (response) {
 
         var material = response.data.value;
         material = material.sort(function (a, b) {
@@ -300,6 +301,7 @@
 
             $('div#material_definition_property').jsGrid('loadOdata', {
                 defaultFilter: 'MaterialDefinitionID eq ({0})'.format(args.item.ID),
+                order: 'MaterialClassProperty/Description',
 
                 //settings for filtering of oData combobox by EquipmentClassID parent field
                 comboFilter: [{
@@ -341,7 +343,8 @@
             modeSwitchButton: true
         }
     }).jsGrid('loadOdata', {
-        defaultFilter: 'ID eq -1'
+        defaultFilter: 'ID eq -1',
+        order: 'Description'
     });
 
     $('div#material_definition_property').jsGrid({
@@ -421,13 +424,7 @@
 
     $personnelClass = $('#personnel_class').empty();
 
-    indexService.getInfo('PersonnelClass').then(function (response) {
-
-        var personnel = response.data.value;
-        personnel = personnel.sort(function (a, b) {
-
-            return vmSort('Description', a, b);
-        });
+    indexService.getInfo('PersonnelClass?$orderby=Description').then(function (response) {
 
         $personnelClass.odataTree({
 
@@ -462,6 +459,7 @@
         $('div#person').jsGrid('loadOdata', {
 
             defaultFilter: 'PersonnelClassID eq ({0})'.format(PersonnelClassID),
+            order: 'PersonName',
 
             //set field 'MaterialClassID' from tree which will be included in JSON for inserting
             insertedAdditionalFields: [{
@@ -497,6 +495,7 @@
 
             $('div#person_property').jsGrid('loadOdata', {
                 defaultFilter: 'PersonID eq ({0})'.format(args.item.ID),
+                order: 'PersonnelClassProperty/Description',
 
                 //settings for filtering of oData combobox by EquipmentClassID parent field
                 comboFilter: [{
@@ -641,7 +640,7 @@
 
             $('div#material_lot_property').jsGrid('loadOdata', {
                 defaultFilter: 'MaterialLotID eq ({0})'.format(args.item.ID),
-
+                order: 'PropertyType',
             });
 
         }
@@ -674,7 +673,10 @@
             order: 4
         }]
 
-    }).jsGrid('loadOdata', {});
+    }).jsGrid('loadOdata', {
+
+        order: 'ID desc'
+    });
 
     $('div#material_lot_property').jsGrid({
         height: "500px",

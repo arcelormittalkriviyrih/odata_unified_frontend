@@ -319,7 +319,7 @@
 
             }, properties.autoRefresh);
         }
-
+        
         function loadData(filter) {
 
             // if not initialized
@@ -339,6 +339,12 @@
                 $skip: (filter.pageIndex - 1) * filter.pageSize
             };
 
+            if (properties.order) {
+
+                data.$orderby = properties.order;
+            }
+
+
             return $.ajax({
 
                 url: serviceUrl + table.name,
@@ -350,19 +356,6 @@
             }).then(function (response) {
 
                 var data = response.value;
-
-                if (properties.clientSort) {
-
-                    data.sort(function (a, b) {
-
-                        if (a[properties.clientSort] < b[properties.clientSort])
-                            return -1;
-                        else if (a[properties.clientSort] > b[properties.clientSort])
-                            return 1;
-                        else
-                            return 0;
-                    })
-                }
 
                 return {
                     itemsCount: response['@odata.count'],

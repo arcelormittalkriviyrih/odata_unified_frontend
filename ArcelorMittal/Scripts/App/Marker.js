@@ -415,8 +415,7 @@
                     $scope.filter.push('ID eq {0}'.format(scale.ID));
                     $scope.workRequestFilter.push('EquipmentID eq {0}'.format(scale.ID));
 
-                    scale.isInfoLoaded = false;
-                   
+                    scale.isInfoLoaded = false;                   
                 });
 
                 $scope.groups = vmGetChunks($scope.scales, 4);
@@ -457,68 +456,89 @@
 
                        .then(function (response) {
 
-                           $scope.scalesInfo = response.data.value;
+                           var scalesData = response.data.value;
 
                            $scope.scales.forEach(function (scale) {
 
                                scale.isInfoLoaded = true;
 
-                               var data = $scope.scalesInfo.filter(function (item) {
+                               var scaleData = scalesData.find(function (item) {
 
                                    if (item.ID == scale.ID)
                                        return item;
                                });
 
-                               if (data.length > 0) {
+                               if (scaleData) {
 
-                                    scale.weightCurrent = data[0].WEIGHT_CURRENT;
-                                    scale.rodsQuantity = data[0].RodsQuantity;
-                                    scale.MinWeight = data[0].MinWeight;
-                                    scale.MaxWeight = data[0].MaxWeight;
-                                    scale.MaxPossibleWeight = data[0].MaxPossibleWeight;
-                                                                    
-                                    var plotWeightData = [scale.weightCurrent];
+                                   for (var i in scaleData) {
 
-                                    var seriesDefaults = {
+                                       if (i != 'WEIGHT_CURRENT' && i != 'MinWeight' && i != 'MaxWeight' && i != 'MaxPossibleWeight')
+                                           scale[i] = scaleData[i];
+                                   };                                  
 
-                                        renderer: $.jqplot.MeterGaugeRenderer,
-                                        min: 0,
-                                        max: scale.MaxPossibleWeight,
-                                    };
+                                   scale.rodsQuantity = scaleData.RodsQuantity;
 
-                                    if (scale.MinWeight > 0 && scale.MaxWeight > 0) {
+                                   if (scale.MinWeight != scaleData.MinWeight ||
+                                       scale.MaxWeight != scaleData.MaxWeight ||
+                                       scale.MaxPossibleWeight != scaleData.MaxPossibleWeight) {
 
-                                        seriesDefaults.rendererOptions = {
-                                            intervals: [scale.MinWeight, scale.MaxWeight, scale.MaxPossibleWeight],
-                                            intervalColors: ['#E7E658', '#66cc66', '#cc6666'],
-                                            ringWidth: 4,
-                                            shadowDepth: 0,
-                                            intervalOuterRadius: 85,
-                                            intervalInnerRadius: 75,
-                                            hubRadius: 6
-                                        };
-                                    };
+                                       scale.weightCurrent = scaleData.WEIGHT_CURRENT;
+                                       scale.MinWeight = scaleData.MinWeight;
+                                       scale.MaxWeight = scaleData.MaxWeight;
+                                       scale.MaxPossibleWeight = scaleData.MaxPossibleWeight;
 
-                                    if (!scale.plot) {
+                                       vmRedrawScale(scale);
 
-                                        $('#plot-' + scale.ID).addClass('plotVisible').empty();                                     
+                                   } else if (scale.weightCurrent != scaleData.WEIGHT_CURRENT) {
 
-                                        scale.plot = $.jqplot('plot-' + scale.ID, [plotWeightData], {
+                                       scale.weightCurrent = scaleData.WEIGHT_CURRENT;
 
-                                            seriesDefaults: seriesDefaults
-                                        })
+                                       vmRedrawArrow(scale);
+                                   };
 
-                                    } else {
-                                        
-                                        scale.plot.replot({
-                                            data: [plotWeightData],
-                                        });
-                                    }
-                                                                      
-                                }
+                               };
                            });
 
                        });
+        
+    };
+
+    function vmRedrawScale(scale) {
+
+        var seriesDefaults = {
+
+            renderer: $.jqplot.MeterGaugeRenderer,
+            min: 0,
+            max: scale.MaxPossibleWeight,
+        };
+
+        if (scale.MinWeight > 0 && scale.MaxWeight > 0) {
+
+            seriesDefaults.rendererOptions = {
+                intervals: [scale.MinWeight, scale.MaxWeight, scale.MaxPossibleWeight],
+                intervalColors: ['#E7E658', '#66cc66', '#cc6666'],
+                ringWidth: 4,
+                shadowDepth: 0,
+                intervalOuterRadius: 85,
+                intervalInnerRadius: 80,
+                hubRadius: 6
+            };
+        };
+
+        $('#plot-' + scale.ID).addClass('plotVisible').empty();
+
+        scale.plot = $.jqplot('plot-' + scale.ID, [[scale.weightCurrent]], {
+
+            seriesDefaults: seriesDefaults
+        });
+    };
+
+    function vmRedrawArrow(scale) {
+
+        scale.plot.replot({
+            data: [[scale.weightCurrent]],
+        });
+
     };
 
     //this method shows detail info for selected scale
@@ -526,15 +546,18 @@
     //also we calculate rods quantity and rods left number
     function vmShowScaleInfo(id) {
 
-        if ($scope.groups[0][0].isInfoLoaded) {
+        if ($scope.scales[0].isInfoLoaded) {
 
             $scope.currentScaleID = id;            
 
-            $scope.scalesDetailsInfo = $scope.scalesInfo.filter(function (item) {
+            var currentScale = $scope.scales.find(function (item) {
 
                 if (item.ID == id)
                     return item;
-            })[0];
+            });
+
+            //this scope variable currently needed to show scale detail dataon user interface
+            $scope.scalesDetailsInfo = currentScale;
             
             vmCalculateRods();
             
@@ -547,7 +570,7 @@
 
         //get last work request for current scales
 
-        if ($scope.groups[0][0].isInfoLoaded) {
+        if ($scope.scales[0].isInfoLoaded) {
 
             //clear fields
             vmReset();
@@ -574,8 +597,7 @@
                             $scope.length = vmGetProfileProperty(profileProperties, 2) || null;
                             $scope.tolerancePlus = vmGetProfileProperty(profileProperties, 3) || null;
                             $scope.toleranceMinus = vmGetProfileProperty(profileProperties, 4) || null;
-
-
+                                                        
                         } else {
 
                             $scope.linearMassFromBase = null;
@@ -584,7 +606,7 @@
                             $scope.toleranceMinus = null;
 
                         };
-                        
+
                         if (data[0].WorkType == 'Standard') {
                             $scope.standard = true;
                             $scope.sortingMode = false;
@@ -677,14 +699,16 @@
 
                         });
 
+                        //calculate minimal recommended weight when we get last work request for scale
+                        if ($scope.barWeight && $scope.barQuantity)
+                            $scope.minMassRec = parseInt($scope.barWeight * $scope.barQuantity);
+
                     })
-                           
+
                 };
             });
 
-            
-
-        }
+        };
 
     };
 
@@ -721,7 +745,6 @@
                                 $scope.minMass = null;
                                 $scope.maxMass = null;
                             }
-
 
                         } else {                            
                             

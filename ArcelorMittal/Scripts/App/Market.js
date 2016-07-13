@@ -87,7 +87,7 @@
                 }]
             }).jsGrid('loadOdata', {
                 defaultFilter: 'OperationsRequest eq {0}'.format(id),
-                clientSort: 'Description'
+                order: 'Description',
             })
         }
     }).jsGrid('initOdata', {
@@ -115,7 +115,9 @@
             title: $translate.instant('market.grid.orders.labelTemplate'),
             order: 4
         }]
-    }).jsGrid('loadOdata', {})
+    }).jsGrid('loadOdata', {
+        order: 'id desc'
+    })
 
     $("#orderDetails").addClass('disabled-grid').jsGrid({
         height: "500px",
@@ -543,7 +545,8 @@
     })
     .jsGrid('loadOdata', {
 
-        defaultFilter: "FileType eq '{0}'".format($state.params.fileType)
+        defaultFilter: "FileType eq '{0}'".format($state.params.fileType),
+        order: 'ID desc'
     });
 
     // get form element
