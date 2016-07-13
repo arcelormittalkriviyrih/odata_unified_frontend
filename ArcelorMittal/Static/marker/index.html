@@ -67,11 +67,14 @@
 
 <div class="scaleDetailInfo" ng-show="currentScaleID">
 
+
+
     <div class="scaleInfo task">
         <h4 class="labelTask">{{ 'marker.task' | translate }}</h4>
 
         <div class="controlsWrapper">
-            <div class="controlsGroup">
+            <div class="controlsGroup" 
+                 ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' || scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
 
                 <div class="controlsRow">
                     <div class="captionTask">
@@ -108,7 +111,8 @@
 
             </div>
 
-            <div class="controlsGroup" style="padding:0 0 0 10px;">
+            <div class="controlsGroup" style="padding:0 0 0 10px;" 
+                 ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET'">
 
                 <div>
                     <input type="checkbox"
@@ -136,7 +140,9 @@
 
         </div>
 
-        <div class="controlsWrapper">
+        <div class="controlsWrapper" 
+             ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' ||
+                      scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
             <div class="controlsGroup">
                 <div class="controlsRow">
                     <div class="captionTask">{{ 'marker.rodsQuantityPcs' | translate }}</div>
@@ -167,7 +173,7 @@
         <div class="controlsWrapper">
 
             <div class="controlsGroup">
-                <div class="controlsRow">
+                <div class="controlsRow" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
                     <div class="captionTask">
                         {{ 'marker.minMass' | translate }}
                     </div>
@@ -181,7 +187,9 @@
                     </div>
                 </div>
 
-                <div class="controlsRow">
+                <div class="controlsRow" 
+                     ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' ||
+                              scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
                     <div class="captionTask">
                         {{ 'marker.sampleMass' | translate }}
                     </div>
@@ -193,7 +201,9 @@
                     </div>
                 </div>
 
-                <div class="controlsRow">
+                <div class="controlsRow"
+                     ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' ||
+                              scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
                     <div class="captionTask">
                         {{ 'marker.sampleLength' | translate }}
                     </div>
@@ -208,7 +218,7 @@
             </div>
             <div class="controlsGroup">
 
-                <div class="controlsRow">
+                <div class="controlsRow" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
                     <div class="captionTask">
                         {{ 'marker.maxMass' | translate }}
                     </div>
@@ -222,7 +232,9 @@
                     </div>
                 </div>
 
-                <div class="controlsRow">
+                <div class="controlsRow"
+                     ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' ||
+                              scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
                     <div class="captionTask">
                         {{ 'marker.rodsWeight' | translate }}
                     </div>
@@ -231,7 +243,9 @@
                     </div>
                 </div>
 
-                <div class="controlsRow">
+                <div class="controlsRow" 
+                     ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' ||
+                              scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
                     <div class="captionTask">
                         {{ 'marker.deviation' | translate }}
                     </div>
@@ -247,6 +261,7 @@
 
         <div class="controls">
             <button class="btn"
+                    ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
                     ng-disabled="disableButtonOKTask"
                     ng-click="workRequest()">
                 {{OKLabel}}
@@ -257,31 +272,30 @@
     <div class="scaleInfo">
 
         <h4 class="scalesName">{{scalesDetailsInfo.ScalesName}}</h4>
-
-        <span class="autoManuMsg" ng-show="scalesDetailsInfo && scalesDetailsInfo.AUTO_MANU">
+        <span class="autoManuMsg" ng-show="scalesDetailsInfo && scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
             {{ 'marker.autoMode' | translate }}
         </span>
 
         <p>
-            <span ng-show="scalesDetailsInfo.POCKET_LOC">
+            <span ng-show="scalesDetailsInfo.POCKET_LOC && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
                 {{ 'marker.scalesBlocked' | translate }}
             </span>
-            <span ng-show="sandwichMode && scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH">
+            <span ng-show="sandwichMode && scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
                 {{ 'marker.firstPack' | translate }}
             </span>
-            <span ng-show="sandwichMode && scalesDetailsInfo.PACK_SANDWICH">
+            <span ng-show="sandwichMode && scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
                 {{ 'marker.secondPack' | translate }}
             </span>
         </p>
 
-        <p>
+        <p ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
             {{ 'marker.weight' | translate }}:
             <span class="scalesValue" ng-show="scalesDetailsInfo.weightCurrent >=0">
                 {{scalesDetailsInfo.weightCurrent}} {{ 'marker.kg' | translate }}
             </span>
         </p>
 
-        <p>
+        <p ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
             {{ 'marker.rodsQuantity' | translate }}:
 
             <span class="rodsValue" ng-show="scalesDetailsInfo.RodsQuantity && scalesDetailsInfo.RodsQuantity > 0">
@@ -289,7 +303,7 @@
             </span>
         </p>
 
-        <p>
+        <p ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
             {{ 'marker.rodsLeft' | translate }}:
 
             <span class="rodsValue" ng-show="rodsLeft">
@@ -297,14 +311,17 @@
             </span>
         </p>
 
-        <div class="isStableScalesIndicator" ng-show="scalesDetailsInfo.WEIGHT_STAB">
+        <div class="isStableScalesIndicator" 
+             ng-show="scalesDetailsInfo.WEIGHT_STAB && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
         </div>
 
-        <span class="weightZeroIndicator" ng-show="scalesDetailsInfo.WEIGHT_ZERO">>0<</span>
+        <span class="weightZeroIndicator" 
+              ng-show="scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">>0<</span>
 
         <div class="controls">
 
             <button class="btn"
+                    ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
                     ng-disabled="!(
                     (!sandwichModeAccepted && (!scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB)
                     ||
@@ -314,13 +331,15 @@
             </button>
 
             <button class="btn"
-                    ng-show="sandwichModeAccepted"
+                    ng-show="sandwichModeAccepted && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
                     ng-disabled="!((scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH) && (!scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB)"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeTara','takeTaraLabel', 'marker.takeTaraButton')">
                 {{takeTaraLabel}}
             </button>
 
-            <button class="btn" ng-click="doAction('ins_MaterialLotByEquipment', 'testPrintLabel', 'marker.testPrintButton')">
+            <button class="btn"
+                    ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'" 
+                    ng-click="doAction('ins_MaterialLotByEquipment', 'testPrintLabel', 'marker.testPrintButton')">
                 {{testPrintLabel}}
             </button>
 
