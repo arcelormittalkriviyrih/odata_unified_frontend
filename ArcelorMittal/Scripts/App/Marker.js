@@ -520,7 +520,7 @@
                 ringWidth: 4,
                 shadowDepth: 0,
                 intervalOuterRadius: 85,
-                intervalInnerRadius: 80,
+                intervalInnerRadius: 75,
                 hubRadius: 6
             };
         };
