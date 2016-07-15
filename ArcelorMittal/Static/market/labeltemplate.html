@@ -8,6 +8,9 @@
 
 <div ng-show="!$root.showLoadingState">
     <button id="addFile" class="add btn btn-default">{{ 'market.buttonAddTempate' | translate }}</button>
+    <button class="add btn btn-default"
+            ng-click="createForm('edit', 'upd_Order', selectedTemplateID, 'TEMPLATE')" 
+            ng-disabled="!selectedTemplateID">Тестовая печать</button>
 
     <a href="{{downloadTechnicalList}}"
        class="btn btn-default pull-right"
@@ -75,6 +78,22 @@
         </div>
 
     </form>
+</div>
+
+<div class="black-wrapper" ng-class="{'show': isShowModal}" ng-show="isShowModal">
+    <div class="modal additional">
+
+        <h4>Тестовая печать</h4>
+
+        <div class="formWrapper">
+
+            <div class="loading" ng-show="loadingModalData || processingTestPrint">
+                loading...
+            </div>
+            <form id="orderForm" novalidate ng-show="!loadingModalData"></form>
+        </div>
+
+    </div>
 </div>
 
 

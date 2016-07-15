@@ -344,7 +344,7 @@
             </button>
 
             <button class="btn specialLabelMode"
-                    ng-show="userMetadata.indexOf('ins_ManualWeightEntry') > 0"
+                    ng-show="userMetadata.indexOf('ins_ManualWeightEntry') > -1"
                     ng-click="showBuildFormWindow('toggleModalHandMode', 'handMode')">
                 {{ 'marker.handModeButton' | translate }}
             </button>

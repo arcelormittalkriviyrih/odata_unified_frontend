@@ -12,6 +12,7 @@
             additionalFields = options.additionalFields,
             escapedFields = options.escapedFields,
             additionalActionFields = options.additionalActionFields,
+            controlList = options.controlList,
             _fields = null;
 
            
@@ -174,7 +175,7 @@
                     if (formType == 'edit') {
 
                         if (field.name == keyField)
-                            field.input.attr('readonly', 'readonly').val(fieldEditedData[0].Value);
+                            field.input.attr('disabled', 'disabled').val(fieldEditedData[0].Value);
                     };
 
                     //fill keyfield as empty if we build copy form
@@ -191,9 +192,9 @@
             
             
             var controlsSubmitGroup = $('<div />').addClass('control-row').appendTo($form);
-
+            
             // create submit button
-            $('<button />').addClass('btn runAction').text(controlCaptions.OK)
+            var submitBtn = $('<button />').addClass('btn runAction').text(controlCaptions.OK)
                 .appendTo(controlsSubmitGroup)
                 .click(function () {
 
@@ -225,7 +226,7 @@
                     return false;
                 });
 
-            $('<button />').addClass('btn cancelAction').text(controlCaptions.Cancel)
+            var cancelBtn = $('<button />').addClass('btn cancelAction').text(controlCaptions.Cancel)
                 .appendTo(controlsSubmitGroup).click(function () {
 
                     self.find('input, select').each(function (i, item) {
@@ -234,11 +235,48 @@
                     });
 
                     self.trigger('oDataForm.cancel');
+                });
+
+
+            if (controlList){
+                controlList.forEach(function (control) {
+
+                    if (control.type == 'additional') {
+
+                        var additionalControl = $('<button />').addClass('btn {0}'.format(control.name))
+                                                               .text(control.text)
+                                                               .click(function () {
+
+                                                                   if (!vmCheckRequiredFields($form)) {
+
+                                                                       alert('You must fill all required fields!');
+                                                                       return false;
+                                                                   }
+
+                                                                   self.trigger('oDataForm.procedureProcessing');
+
+                                                                   vmCallAction(action, control.procedure)
+                                                                        .done(function (result) {
+
+                                                                            self.trigger('oDataForm.procedureProcessed');
+                                                                        }).fail(handleError);
+                                                               });
+
+                        cancelBtn.before(additionalControl);
+                    }
+
+                    if (control.type == 'submit' && control.hide) {
+
+                        submitBtn.hide();
+                    }
                 })
+            } 
+
         };
 
-        function vmCallAction(action) {
-                        
+        function vmCallAction(action, procedure) {
+            
+            var url = serviceUrl;
             // collect param values
             var data = action.fields
                             .toArray()
@@ -267,17 +305,20 @@
                     data[prop] = null;
             }
 
+            if (procedure)
+                url += procedure;
+            else
+                url += action.name;
+
              //call service action
             return $.ajax({
-                url: serviceUrl + action.name,
+                url: url,
                 type: 'POST',
                 data: JSON.stringify(data),
                 contentType: "application/json"
             })
         };
-
         
-
     }
    
 })(jQuery);

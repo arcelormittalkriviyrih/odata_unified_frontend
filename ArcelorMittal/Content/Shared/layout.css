@@ -229,6 +229,17 @@ button.add{
     margin: 10px 0 0 0;
 }
 
+.formWrapper .loading{
+    top: 0;
+    left: 0;
+    height: 60%;
+    text-align: center;
+    padding-top: 34%;
+    width: 100%;
+    position: absolute;
+    display: block;
+}
+
 /*form style*/
 .control-group{
     display: inline-block;
@@ -248,8 +259,7 @@ button.add{
     text-align: center;
 }
 
-.runAction{
-
+div.control-row button.btn{
     margin-right: 5px;
 }
 

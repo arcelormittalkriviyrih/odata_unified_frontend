@@ -54,7 +54,11 @@
                     LEAVE_NO: 'Leave No',
                     MATERIAL_NO: 'Material No',
                     BRIGADE_NO: 'Brigade',
-                    PROD_DATE: 'Production date'
+                    PROD_DATE: 'Production date',
+                    additionalButtonCaptions: {
+
+                        testPrint: 'Test print'
+                    }
                 }
             },
             grid: {
@@ -268,7 +272,11 @@
                     LEAVE_NO: 'Смена',
                     MATERIAL_NO: '№ материала',
                     BRIGADE_NO: 'Бригада',
-                    PROD_DATE: 'Производственная дата'
+                    PROD_DATE: 'Производственная дата',
+                    additionalButtonCaptions: {
+
+                        testPrint: 'Тестовая печать'
+                    }
                 }
             },
             grid: {
@@ -483,7 +491,11 @@
                     LEAVE_NO: 'Зміна',
                     MATERIAL_NO: '№ материала',
                     BRIGADE_NO: 'Бригада',
-                    PROD_DATE: 'Виробнича дата'
+                    PROD_DATE: 'Виробнича дата',
+                    additionalButtonCaptions: {
+
+                        testPrint: 'Тестовий друк'
+                    }
                 }
             },
             grid: {

@@ -373,17 +373,22 @@
 
         //this flag is needed for disabling side list after selecting side
         $scope.sideIsSelected = true;
-        $scope.currentSide = $scope.sides.filter(function (item) {
-
-            return item.ID == side;
-        })[0].Description;
+        
 
         
 
         var url = 'v_AvailableScales';
 
-        if (side)
+        if (side) {
+
+            $scope.currentSide = $scope.sides.filter(function (item) {
+
+                return item.ID == side;
+            })[0].Description;
+
             url += '?$filter=sideID eq {0}'.format(side);
+        }
+            
 
         //set scaleLoading flag as true for showing 'loading' message while scales list loaded
         $scope.scaleLoading = true;
