@@ -567,6 +567,7 @@ div.controlTask input, div.controlTask select {
 
 .plotVisible{
     height: 145px;
+    margin-top: 15px;
 }
 
 .scaleContainer.active .jqplot-series-shadowCanvas{

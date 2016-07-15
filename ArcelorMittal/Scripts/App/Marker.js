@@ -510,24 +510,28 @@
             renderer: $.jqplot.MeterGaugeRenderer,
             min: 0,
             max: scale.MaxPossibleWeight,
-        };
 
-        if (scale.MinWeight > 0 && scale.MaxWeight > 0) {
-
-            seriesDefaults.rendererOptions = {
-                intervals: [scale.MinWeight, scale.MaxWeight, scale.MaxPossibleWeight],
-                intervalColors: ['#E7E658', '#66cc66', '#cc6666'],
+            rendererOptions: {                
                 ringWidth: 4,
                 shadowDepth: 0,
                 intervalOuterRadius: 85,
                 intervalInnerRadius: 75,
                 hubRadius: 6
-            };
+            }
         };
+
+
+        if (scale.MinWeight > 0 && scale.MaxWeight > 0) {
+
+            seriesDefaults.rendererOptions.intervals = [scale.MinWeight, scale.MaxWeight, scale.MaxPossibleWeight];
+            seriesDefaults.rendererOptions.intervalColors = ['#E7E658', '#66cc66', '#cc6666'];
+        };
+
+        
 
         $('#plot-' + scale.ID).addClass('plotVisible').empty();
 
-        scale.plot = $.jqplot('plot-' + scale.ID, [[scale.weightCurrent]], {
+        scale.plot = $.jqplot('plot-' + scale.ID, [[scale.weightCurrent || 0]], {
 
             seriesDefaults: seriesDefaults
         });
@@ -536,7 +540,7 @@
     function vmRedrawArrow(scale) {
 
         scale.plot.replot({
-            data: [[scale.weightCurrent]],
+            data: [[scale.weightCurrent || 0]],
         });
 
     };
@@ -1556,7 +1560,8 @@
         element.bind("keydown keypress", function (event) {
 
             if (!((event.which >= 48 && event.which <= 57) || (event.which >= 96 && event.which <= 105))
-                && event.which != 8 && event.which != 46 && event.which != 13) {
+                && event.which != 8 && event.which != 46 && event.which != 13 && event.which != 37
+                && event.which != 38 && event.which != 39 && event.which != 40 && event.which != 9) {
 
                 return false;
             };
