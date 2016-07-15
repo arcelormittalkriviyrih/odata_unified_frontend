@@ -353,16 +353,21 @@
 
     function vmGetCurrentSides() {
 
-        indexService.getInfo('v_AvailableSides').then(function (response) {
+        $q.all([indexService.getInfo('v_AvailableSides'), indexService.getInfo('GetUserMetadata')])
+               .then(function (responses) {
 
-            $scope.sides = response.data.value;
+                   $scope.sides = responses[0].data.value;
+                   $scope.userMetadata = responses[1].data.value.map(function (item) {
 
-            //if there is only one available side
-            //show all available scales without selecting side
-            if ($scope.sides.length == 1)
-                vmGetCurrentScales();
-        });
-    }
+                       return item.Name;
+                   });
+
+                   //if there is only one available side
+                   //show all available scales without selecting side
+                   if ($scope.sides.length == 1)
+                       vmGetCurrentScales();
+               });
+    };
 
     function vmGetCurrentScales(side) {
 
