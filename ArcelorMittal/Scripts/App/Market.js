@@ -120,9 +120,7 @@
     })
 
     $("#orderDetails").addClass('disabled-grid').jsGrid({
-        height: "500px",
         width: "950px",
-
         sorting: false,
         paging: true,
         editing: false,
@@ -131,7 +129,7 @@
         pageLoading: true,
         inserting: false,
         pageIndex: 1,
-        pageSize: 10,
+        pageSize: 20,
 
     });
 
@@ -198,7 +196,9 @@
 
         vmToggleModal(false);
 
-        $('#orders').jsGrid('loadOdata', {});
+        $('#orders').jsGrid('loadOdata', {
+            order: 'id desc'
+        });
 
         $("#orderDetails").jsGrid('loadOdata', {
             defaultFilter: 'OperationsRequest eq (-1)',
@@ -724,11 +724,11 @@
                 },
             }, {
 
-                name: 'LEAVE_NO',
+                name: 'CHANGE_NO',
                 properties: {
                     control: 'text',
                     required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO'),
+                    translate: $translate.instant('market.Order.CreateDialogue.CHANGE_NO'),
                     order: 17
                 },
             }, {

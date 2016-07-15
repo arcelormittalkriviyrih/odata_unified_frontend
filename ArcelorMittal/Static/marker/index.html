@@ -39,7 +39,7 @@
             <div class="scaleContainer"
                  ng-repeat="scale in group"
                  ng-class="{'active': scale.ID == currentScaleID && scale.isInfoLoaded}"
-                 ng-click="showScaleInfo(scale.ID); getLatestWorkRequest(scale.ID)">
+                 ng-click="selectCurrentSides(scale.ID)">
 
                 <div class="plotArea" 
                      id="plot-{{scale.ID}}">
@@ -85,7 +85,6 @@
                                 ng-class="{'wrong': !selectedProfile && standard}"
                                 ng-disabled="!standard"
                                 ng-change="getProfilePropertiesList();">
-                            <option></option>
                             <option ng-selected="selectedProfile==profile.ID" ng-repeat="profile in profiles"
                                     value="{{profile.ID}}">
                                 {{profile.Description}}
@@ -259,6 +258,36 @@
             </div>
         </div>
 
+        <div class="controlsWrapper" style="margin-top:40px;" ng-show="scalesDetailsInfo.SCALES_TYPE == 'BUNT'
+                && scalesDetailsInfo.PACK_RULE == 'CALC'">
+                <div class="controlsGroup">
+                    <div class="captionTask">
+                        {{ 'marker.bindingDia' | translate }}
+                    </div>
+                    <div class="controlTask">
+                        <select ng-model="bindingDia"
+                                ng-disabled="!standard"
+                                ng-change="enableControlOK()"
+                                ng-class="{'wrong': !bindingDia && standard}"
+                                ng-options="o.Value for o in BindingDiaData"></select>
+                    </div>
+                </div>
+
+            <div class="controlsGroup">
+                    <div class="captionTask">
+                        {{ 'marker.bindingQty' | translate }}
+                    </div>
+                    <div class="controlTask">
+                        <select ng-model="bindingQty"
+                                ng-disabled="!standard"
+                                ng-change="enableControlOK()"
+                                ng-class="{'wrong': !bindingQty && standard}"
+                                ng-options="o.Value for o in BindingQtyData"></select>
+                    </div>
+            </div>
+                       
+        </div>
+
         <div class="controls">
             <button class="btn"
                     ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
@@ -267,6 +296,7 @@
                 {{OKLabel}}
             </button>
         </div>
+
     </div>
 
     <div class="scaleInfo">

@@ -46,6 +46,7 @@
 
     //methods
     $scope.currentScales = vmGetCurrentScales;
+    $scope.selectCurrentSides = vmSelectCurrentSides;
     $scope.showScaleInfo = vmShowScaleInfo;
     $scope.getLatestWorkRequest = vmGetLatestWorkRequest;
     $scope.buildForm = vmBuildForm;
@@ -301,11 +302,11 @@
                                     },
                                 }, {
 
-                                    name: 'LEAVE_NO',
+                                    name: 'CHANGE_NO',
                                     properties: {
                                         control: 'text',
                                         required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.LEAVE_NO'),
+                                        translate: $translate.instant('market.Order.CreateDialogue.CHANGE_NO'),
                                         
                                     },
                                 }, {
@@ -555,6 +556,33 @@
 
     };
 
+    function vmSelectCurrentSides(id) {
+
+        vmShowScaleInfo(id);
+
+        if (($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT' && $scope.scalesDetailsInfo.PACK_RULE == 'CALC')){
+
+            $scope.BindingDiaData = null;
+            $scope.BindingQtyData = null;
+
+            $scope.scales[0].isInfoLoaded = false;
+
+            $q.all([indexService.getInfo('v_BindingDia'), indexService.getInfo('v_BindingQty')])
+                .then(function (responses) {
+
+                    $scope.BindingDiaData = responses[0].data.value;
+                    $scope.BindingQtyData = responses[1].data.value;
+
+                    $scope.scales[0].isInfoLoaded = true;
+
+                    vmGetLatestWorkRequest(id);
+                })
+        } else {
+
+            vmGetLatestWorkRequest(id);
+        }
+    }
+
     //this method shows detail info for selected scale
     //we get array with scale objects and just filter him by ID of current scale
     //also we calculate rods quantity and rods left number
@@ -564,15 +592,13 @@
 
             $scope.currentScaleID = id;            
 
-            var currentScale = $scope.scales.find(function (item) {
+            //this scope variable currently needed to show scale detail data on user interface
+            $scope.scalesDetailsInfo = $scope.scales.find(function (item) {
 
                 if (item.ID == id)
                     return item;
             });
-
-            //this scope variable currently needed to show scale detail dataon user interface
-            $scope.scalesDetailsInfo = currentScale;
-            
+                                            
             vmCalculateRods();
             
         }        
@@ -583,7 +609,6 @@
     function vmGetLatestWorkRequest(id) {
 
         //get last work request for current scales
-
         if ($scope.scales[0].isInfoLoaded) {
 
             //clear fields
@@ -710,6 +735,21 @@
 
                             else if (item.PropertyType == "PACKS_LEFT")
                                 $scope.packsLeftCount = item.Value;
+
+                            else if (item.PropertyType == 'BINDING_DIA') {
+
+                                $scope.bindingDia = $scope.BindingDiaData.find(function (data) {
+
+                                    return data.Value == item.Value;
+                                });
+                            }
+                                
+
+                            else if (item.PropertyType == 'BINDING_QTY')
+                                $scope.bindingQty = $scope.BindingQtyData.find(function (data) {
+
+                                    return data.Value == item.Value;
+                                });
 
                         });
 
@@ -1092,17 +1132,26 @@
         $scope.autoMode = null;
         $scope.nemera = null;
         $scope.packsLeftCount = null;
+        $scope.bindingDia = null;
+        $scope.bindingQty = null;
     };
 
     function vmWorkRequest() {
 
-        if ($scope.deviationState != 'wrong'
-            && $scope.commOrder
+        if (
+
+            ($scope.commOrder
             && $scope.minMass
             && $scope.maxMass
-            && $scope.selectedProfile
             && (parseInt($scope.maxMass) >= parseInt($scope.minMass))
-            && $scope.isAcceptedOrder) {
+            && $scope.isAcceptedOrder) ||
+
+            (($scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET' &&
+            $scope.deviationState != 'wrong' && $scope.selectedProfile)
+            ||
+            ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT' && $scope.scalesDetailsInfo.PACK_RULE == 'CALC'            
+            && $scope.bindingDia && $scope.bindingQty))
+            ) {
 
             $scope.minMassWrongClass = false;
             $scope.maxMassWrongClass = false;
@@ -1122,7 +1171,15 @@
                 DEVIATION: $scope.deviation ? $scope.deviation.toString() : null,
                 SANDWICH_MODE: $scope.sandwichMode ? 'true' : 'false',
                 AUTO_MANU_VALUE: $scope.autoMode ? 'true' : 'false',
-                NEMERA: $scope.nemera ? 'true' : 'false'
+                NEMERA: $scope.nemera ? 'true' : 'false',
+                BINDING_DIA: null,
+                BINDING_QTY: null
+            }
+
+            if ($scope.bindingDia && $scope.bindingQty) {
+
+                data.BINDING_DIA = $scope.bindingDia.Value;
+                data.BINDING_QTY = $scope.bindingQty.Value;
             }
 
             $scope.OKLabel = $translate.instant('loadingMsg');

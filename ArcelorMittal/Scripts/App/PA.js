@@ -149,9 +149,7 @@
     });
 
     $('div#equipment_property').jsGrid({
-        height: "500px",
         width: "620px",
-
         sorting: false,
         paging: true,
         editing: true,
@@ -160,7 +158,7 @@
         pageLoading: true,
         inserting: true,
         pageIndex: 1,
-        pageSize: 10,
+        pageSize: 20,
 
         rowClick: vmActiveRow
 
@@ -266,6 +264,7 @@
         $('div#material_definition').jsGrid('loadOdata', {
 
             defaultFilter: 'MaterialClassID eq ({0})'.format(MaterialClassID),
+            order: 'Description',
 
             //set field 'MaterialClassID' from tree which will be included in JSON for inserting
             insertedAdditionalFields: [{
@@ -679,9 +678,7 @@
     });
 
     $('div#material_lot_property').jsGrid({
-        height: "500px",
         width: "1000px",
-
         sorting: false,
         paging: true,
         editing: false,
@@ -690,7 +687,7 @@
         pageLoading: true,
         inserting: false,
         pageIndex: 1,
-        pageSize: 10,
+        pageSize: 30,
 
         rowClick: vmActiveRow
 
