@@ -316,7 +316,22 @@ div.errorHandle label{
 
 .scaleWrapper{
     display: table;
-    width: 100%;
+}
+
+.scaleCount-1{
+    width: 235px;
+}
+
+.scaleCount-2{
+    width: 470px;
+}
+
+.scaleCount-3{
+    width: 705px;
+}
+
+.scaleCount-4{
+    width: 940px;
 }
 
 .scaleGroup{
