@@ -127,7 +127,7 @@
             secondPack: 'Second pack',
             bindingDia: 'Bindind diameter',
             bindingQty: 'Bindind quantity',
-
+            monitor: 'Monitor',
             order: 'Order',
             brigadeNo: 'Brigade No',
             date: 'Date',
@@ -184,6 +184,14 @@
                 CreateTime: 'Date',
                 Quantity: 'Quantity',
                 selected: 'Select records needed to change'
+            },
+            monitorCaptions: {
+
+                scales: 'Scales',
+                weightRods: 'Weight/Rods',
+                packWeight: 'Pack weight',
+                rodsQuantity: 'Rods quantity',
+                rodsLeft: 'Rods left'
             }
             
         },
@@ -345,7 +353,7 @@
             secondPack: 'Вторая пачка',
             bindingDia: 'Диаметр увязки',
             bindingQty: 'Количество увязок',
-
+            monitor: 'Монитор',
             order: 'Заказ',
             brigadeNo: '№ бригады',
             date: 'Дата',
@@ -402,6 +410,14 @@
                 CreateTime: 'Дата',
                 Quantity: 'Вес',
                 selected: 'Отметьте записи, которые нужно изменить'
+            },
+            monitorCaptions: {
+
+                scales: 'Весы',
+                weightRods: 'Вес/Прутки',
+                packWeight: 'Вес пачки',
+                rodsQuantity: 'Количество прутков',
+                rodsLeft: 'Осталось прутков'
             }
         },
         error: {
@@ -565,7 +581,7 @@
             secondPack: 'Друга пачка',
             bindingDia: 'Діаметр ув\'язки',
             bindingQty: 'Кількість ув\'язок',
-
+            monitor: 'Монітор',
             order: 'Замовлення',
             brigadeNo: '№ бригади',
             date: 'Дата',
@@ -622,6 +638,14 @@
                 CreateTime: 'Дата',
                 Quantity: 'Вага',
                 selected: 'Відмітьте записи, котрі необхідно змінити'
+            },
+            monitorCaptions: {
+
+                scales: 'Ваги',
+                weightRods: 'Вага/Прутки',
+                packWeight: 'Вага пачки',
+                rodsQuantity: 'Кількість прутків',
+                rodsLeft: 'Залишилось прутків'
             }
         },
         error: {

@@ -3,15 +3,49 @@
 .config(['$stateProvider', function ($stateProvider) {
 
     $stateProvider
-        .state('app.Marker.ScaleInfo', {
+        .state('app.Marker.Index', {
 
-            url: '/scaleinfo',
-            templateUrl: 'Static/marker/scaleinfo.html',
-            controller: 'markerScaleInfoCtrl'
+            url: '/index',
+            templateUrl: 'Static/marker/marker.html',
+            controller: 'markerIndexCtrl',
+            
+            onExit: function ($state, $injector) {
+
+                var $interval = $injector.get('$interval');
+                var $rootScope = $injector.get('$rootScope');
+
+                $interval.cancel($rootScope.intervalScales);
+                $interval.cancel($rootScope.intervalWorkRequest);
+            }
         })
+
+    .state('app.Marker.Monitor', {
+
+        url: '/monitor/:side',
+        templateUrl: 'Static/marker/monitor.html',
+        controller: 'markerMonitorCtrl',
+        params: {
+            side: null
+        },
+        onExit: function ($state, $injector) {
+
+            var $interval = $injector.get('$interval');
+            var $rootScope = $injector.get('$rootScope');
+
+            $interval.cancel($rootScope.intervalMonitor);
+        }
+    });
+
 }])
 
-.controller('markerCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $http) {
+.controller('markerCtrl', ['$scope', '$state', function ($scope, $state) {
+
+    if ($state.current.name != 'app.Marker.Monitor')
+        $state.go('app.Marker.Index');
+
+}])
+
+.controller('markerIndexCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $http) {
 
     //properties
     $scope.filter = [];
@@ -75,6 +109,7 @@
     $scope.cancelOrderChange = vmCancelOrderChange;
     $scope.acceptHandMode = vmAcceptHandMode;
     $scope.cancelHandMode = vmCancelHandMode;
+    $scope.showMonitor = vmShowMonitor;
 
     vmInit();
 
@@ -354,7 +389,7 @@
 
     function vmGetCurrentSides() {
 
-        $q.all([indexService.getInfo('v_AvailableSides'), indexService.getInfo('GetUserMetadata')])
+        $q.all([indexService.getInfo('v_AvailableSides'), indexService.getInfo('GetUserProcedure')])
                .then(function (responses) {
 
                    $scope.sides = responses[0].data.value;
@@ -373,11 +408,8 @@
     function vmGetCurrentScales(side) {
 
         //this flag is needed for disabling side list after selecting side
-        $scope.sideIsSelected = true;
+        $scope.sideIsSelected = side;
         
-
-        
-
         var url = 'v_AvailableScales';
 
         if (side) {
@@ -1512,6 +1544,16 @@
         $scope.NewOrderNumber = null;
     }
 
+    function vmShowMonitor() {
+
+        var url = $state.href('app.Marker.Monitor', {
+
+            side: $scope.sideIsSelected
+        });
+
+        window.open(url, '_blank');
+    };
+
     //there are events triggered on success and cancel button click in order modal form
     $('#orderForm').on('oDataForm.success', function (e, data) {
 
@@ -1605,6 +1647,100 @@
         $scope.$apply();
     });
 
+}])
+
+.controller('markerMonitorCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $http) {
+
+    $scope.shownParamsList = [{
+                                id: 0,
+                                Name: 'Вес'
+                                }, {
+                                    id: 1,
+                                    Name: 'Прутки'
+                                }];
+
+    $scope.filter = {
+
+        left: null,
+        right: null
+    };
+
+    $scope.getScalesInfo = vmGetScalesInfo;
+
+    if ($state.params.side) {
+
+        indexService.getInfo('v_AvailableScales?$filter=sideID eq {0}'.format($state.params.side))
+                    .then(function (response) {
+
+                        $scope.scalesList = response.data.value;
+
+                    });
+       
+    }
+
+    function vmGetScalesInfo() {
+
+        if ($rootScope.intervalMonitor)
+            $interval.cancel($rootScope.intervalMonitor);
+
+        if ($scope.scaleLeft) {
+
+            $scope.filter.left = 'ID eq {0}'.format($scope.scaleLeft.ID);
+        };
+
+        if ($scope.scaleRight) {
+
+            $scope.filter.right = 'ID eq {0}'.format($scope.scaleRight.ID);
+        };
+
+        
+        $rootScope.intervalMonitor = $interval(function () {
+
+                vmGetScaleInfo();
+        }, scalesRefresh);
+    };
+
+    function vmGetScaleInfo() {
+
+        var filter = [];
+
+        if ($scope.filter.left == $scope.filter.right) {
+
+            filter = $scope.filter.left;
+        } else {
+
+            for (var i in $scope.filter) {
+
+                if ($scope.filter[i])
+                    filter.push($scope.filter[i]);
+            };
+
+            filter = filter.join(' or ');
+        };
+                
+        indexService.getInfo('v_ScalesDetailInfo?$filter={0}'.format(filter))
+            .then(function (response) {
+
+               var scaleInfo = response.data.value;
+
+               if ($scope.scaleLeft) {
+
+                   $scope.scalesLeftSideInfo = scaleInfo.find(function (item) {
+
+                       return item.ID == $scope.scaleLeft.ID
+                   });
+               }
+               
+               if ($scope.scaleRight) {
+
+                   $scope.scalesRightSideInfo = scaleInfo.find(function (item) {
+
+                       return item.ID == $scope.scaleRight.ID
+                   });
+               }
+               
+            });
+    }
 }])
 
 .directive('myEnter', function () {

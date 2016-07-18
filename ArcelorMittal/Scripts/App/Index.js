@@ -95,14 +95,6 @@
                     if (!vmIsAuthorized('Marker', roles))
                         $state.go('app.error', { code: 'unauthorized' });
                 },
-                onExit: function ($state, $injector) {
-
-                    var $interval = $injector.get('$interval');
-                    var $rootScope = $injector.get('$rootScope');
-
-                    $interval.cancel($rootScope.intervalScales);
-                    $interval.cancel($rootScope.intervalWorkRequest);
-                }
             })
 
             .state('app.Market', {
