@@ -75,7 +75,8 @@
                     status: 'Status',
                     fileType: 'File Type',
                     templateName: 'Name',
-                    file: 'File'
+                    file: 'File',
+                    preview: 'Preview'
                 }
             }
 
@@ -303,7 +304,8 @@
                     status: 'Статус',
                     fileType: 'Тип файла',
                     templateName: 'Название',
-                    file: 'Файл'
+                    file: 'Файл',
+                    preview: 'Превью'
                 }
             }
         },
@@ -531,7 +533,8 @@
                     status: 'Статус',
                     fileType: 'Тип файла',
                     templateName: 'Назва',
-                    file: 'Файл'
+                    file: 'Файл',
+                    preview: 'Прев\'ю'
                 }
             }
         },

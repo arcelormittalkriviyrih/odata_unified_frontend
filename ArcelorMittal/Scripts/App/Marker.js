@@ -1139,8 +1139,8 @@
 
     function vmCalculateRods() {
 
-        if ($scope.barQuantity && $scope.scalesDetailsInfo.RodsQuantity)
-            $scope.rodsLeft = $scope.barQuantity - $scope.scalesDetailsInfo.RodsQuantity;
+        if ($scope.scalesDetailsInfo.BAR_QUANTITY && $scope.scalesDetailsInfo.RodsQuantity)
+            $scope.rodsLeft = $scope.scalesDetailsInfo.BAR_QUANTITY - $scope.scalesDetailsInfo.RodsQuantity;
         else
             $scope.rodsLeft = 0;
 
@@ -1427,21 +1427,37 @@
                 $scope.materialLotProdorderIDs = [];
             },
             
-            rowClick: function(args){
+            rowClick: function (args) {
                 
+                var elem = $(args.event.target);
+                var checkbox = $(args.event.currentTarget).find('input[type=checkbox]');
+
                 var materialLotProdorderID = args.item.ID;
                 var index = $scope.materialLotProdorderIDs.indexOf(materialLotProdorderID);
+               
 
-                if (index == -1)
+                if (index == -1) {
+
+                    if (!elem.is('input')) 
+                        $(checkbox).prop('checked', true);
+                                        
                     $scope.materialLotProdorderIDs.push(materialLotProdorderID);
+                }
 
                 else {
+
+                    if (!elem.is('input'))
+                        $(checkbox).prop('checked', false);
+
                     $scope.materialLotProdorderIDs = $scope.materialLotProdorderIDs.filter(function (item) {
                         return item != materialLotProdorderID;
                     });
                 };
 
                 $scope.$apply();
+                
+
+                
             }
 
         }).jsGrid('initOdata', {
@@ -1718,7 +1734,7 @@
             filter = filter.join(' or ');
         };
                 
-        indexService.getInfo('v_ScalesDetailInfo?$filter={0}'.format(filter))
+        indexService.getInfo('v_ScalesMonitorInfo?$filter={0}'.format(filter))
             .then(function (response) {
 
                var scaleInfo = response.data.value;
@@ -1729,7 +1745,9 @@
 
                        return item.ID == $scope.scaleLeft.ID
                    });
-               }
+
+                   vmCalculateRods($scope.scalesLeftSideInfo);
+               };
                
                if ($scope.scaleRight) {
 
@@ -1737,10 +1755,21 @@
 
                        return item.ID == $scope.scaleRight.ID
                    });
-               }
-               
+
+                   vmCalculateRods($scope.scalesRightSideInfo);
+               };
+                              
             });
     }
+
+    function vmCalculateRods(info) {
+
+        if (info.BAR_QUANTITY && info.RodsQuantity)
+            info.rodsLeftCounted = info.BAR_QUANTITY - info.RodsQuantity;
+        else
+            info.rodsLeftCounted = 0;
+
+    };
 }])
 
 .directive('myEnter', function () {

@@ -248,7 +248,8 @@
             translates: {
                 nodeName: $translate.instant('tree.nodeName'),
                 parentID: $translate.instant('tree.parentID')
-            }
+            },
+            disableControls: true
         });
     })
 
@@ -442,7 +443,8 @@
             translates: {
                 nodeName: $translate.instant('tree.nodeName'),
                 parentID: $translate.instant('tree.parentID')
-            }
+            },            
+            disableControls: true
         });
     })
 

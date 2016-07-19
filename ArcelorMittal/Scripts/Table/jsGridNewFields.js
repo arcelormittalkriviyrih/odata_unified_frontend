@@ -679,8 +679,9 @@
         autosearch: true,
 
         itemTemplate: function (value) {
+
             return this._createCheckbox().prop({
-                checked: false,
+                checked: value,
             });
         },
 
@@ -714,5 +715,92 @@
     });
 
     jsGrid.fields.myCheckbox = jsGrid.MyCheckboxField = MyCheckboxField;
+
+}(jsGrid, jQuery));
+
+//preview
+(function (jsGrid, $, undefined) {
+
+    var Field = jsGrid.Field;
+
+    function PreviewField(config) {
+        Field.call(this, config);
+    }
+
+    PreviewField.prototype = new Field({
+
+        sorter: "number",
+        align: "center",
+        autosearch: false,
+
+        itemTemplate: function (value, item) {
+
+            if (item.PreviewID) {
+
+                var table = this._grid.table.name;
+                var id = item['PreviewID'];
+
+                // create download link
+                var link = serviceUrl + table + '(' + id + ')/$value';
+
+                return $('<img />').attr('src', link)
+                                        .click(function () {
+
+                                            if (document.body.createControlRange) {
+
+                                                // for IE specific
+                                                // add image to control range
+                                                // execute copy command
+                                                var range = document.body.createControlRange();
+                                                range.add(this);
+                                                range.execCommand('copy');
+
+                                            } else {
+
+                                                // create range and add image to it
+                                                var range = document.createRange();
+                                                range.selectNode(this);
+
+                                                // clear selection ranges
+                                                // add range with image
+                                                window.getSelection().removeAllRanges();
+                                                window.getSelection().addRange(range);
+
+                                                // execute copy command
+                                                document.execCommand('copy');
+                                            };
+                                        });
+            } else return null;
+
+            
+        },
+
+        filterTemplate: function () {
+            return null;
+        },
+
+        insertTemplate: function () {
+            return null;
+        },
+
+        editTemplate: function (value) {
+            return null;
+        },
+
+        filterValue: function () {
+            return null;
+        },
+
+        insertValue: function () {
+            return null;
+        },
+
+        editValue: function () {
+            return null;
+        },
+
+    });
+
+    jsGrid.fields.preview = jsGrid.PreviewField = PreviewField;
 
 }(jsGrid, jQuery));

@@ -240,8 +240,53 @@
     $scope.toggleModal = false;
     $scope.createForm = vmCreateForm;
 
-    if ($state.current.name.indexOf('Logotypes')>-1)
+    var fields = [{
+        id: 'ID',
+        name: 'ID',
+        title: 'ID',
+        order: 1
+    }, {
+        id: 'FileName',
+        name: 'FileName',
+        title: $translate.instant('market.grid.labelTemplate.fileName'),
+        order: 4
+    }, {
+        id: 'Name',
+        name: 'Name',
+        title: $translate.instant('market.grid.labelTemplate.templateName'),
+        order: 2
+    }, {
+        id: 'Status',
+        name: 'Status',
+        title: $translate.instant('market.grid.labelTemplate.status'),
+        order: 3
+    }, {
+        id: 'FileType',
+        name: 'FileType',
+        title: $translate.instant('market.grid.labelTemplate.fileType'),
+        order: 5
+    }, {
+        id: 'Data',
+        name: 'Data',
+        title: $translate.instant('market.grid.labelTemplate.file'),
+        order: 6
+    }];
+
+    if ($state.current.name.indexOf('Logotypes') > -1) 
         $scope.showDownloadButton = false;
+    else {
+
+        fields.push({
+            id: 'PreviewID',
+            name: 'PreviewID',
+            title: $translate.instant('market.grid.labelTemplate.preview'),
+            type: 'preview',
+            order: 7
+        })
+    }
+        
+    
+        
 
     //handle required fields for IE 9 browser
     if ($("<input />").prop("required") === undefined) {
@@ -293,37 +338,7 @@
         serviceUrl: serviceUrl,
         table: 'Files',
 
-        fields: [{
-            id: 'ID',
-            name: 'ID',
-            title: 'ID',
-            order: 1
-        }, {
-            id: 'FileName',
-            name: 'FileName',
-            title: $translate.instant('market.grid.labelTemplate.fileName'),
-            order: 4
-        }, {
-            id: 'Name',
-            name: 'Name',
-            title: $translate.instant('market.grid.labelTemplate.templateName'),
-            order: 2
-        }, {
-            id: 'Status',
-            name: 'Status',
-            title: $translate.instant('market.grid.labelTemplate.status'),
-            order: 3
-        }, {
-            id: 'FileType',
-            name: 'FileType',
-            title: $translate.instant('market.grid.labelTemplate.fileType'),
-            order: 5
-        }, {
-            id: 'Data',
-            name: 'Data',
-            title: $translate.instant('market.grid.labelTemplate.file'),
-            order: 6
-        }],
+        fields: fields,
 
         controlProperties: {
             type: 'control',

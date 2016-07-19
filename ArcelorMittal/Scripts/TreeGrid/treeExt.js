@@ -10,7 +10,12 @@
             translates = options.translates,
             parentID = options.parentID,
             additionalFields = options.additionalFields,
-            navigationBar = $('<div />').attr('id', 'navigationBar').appendTo(self),
+            navigationBar = $('<div />').attr('id', 'navigationBar')
+            .css({
+
+                display: options.disableControls ? 'none' : 'block'
+            })
+            .appendTo(self),
             treeRoot = $('<div />').attr('id', 'treeRoot').appendTo(self),
             mainButtonsRoot = $('<div />').addClass('mainButtonsControls').appendTo(navigationBar),
             blackWrapper = $('<div />').addClass('black-wrapper').appendTo('body').hide();
