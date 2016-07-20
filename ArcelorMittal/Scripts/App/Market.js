@@ -302,7 +302,7 @@
     }
 
     $('div#files').jsGrid({
-        height: "500px",
+        height: "550px",
         width: "950px",
 
         sorting: false,
@@ -313,7 +313,7 @@
         pageLoading: true,
         inserting: false,
         pageIndex: 1,
-        pageSize: 10,
+        pageSize: 4,
 
         rowClick: function (args) {
 

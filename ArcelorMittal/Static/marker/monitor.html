@@ -55,7 +55,7 @@
                 <p ng-show="shownTypeLeft.id == 1">
                     <span class="paramCaption">{{'marker.monitorCaptions.rodsQuantity' | translate}}:</span>
                     <span class="paramValue">{{scalesLeftSideInfo.RodsQuantity}}</span>
-                     
+
                 </p>
             </div>
             <div class="monitorSideItem item-3" ng-show="shownTypeLeft.id == 1"
@@ -65,7 +65,8 @@
                 <span class="paramCaption">
                     {{'marker.monitorCaptions.rodsLeft' | translate}}:
                 </span>
-                <span class="paramValue">
+                <span class="paramValue"
+                      ng-show="scalesLeftSideInfo.rodsLeftCounted > 0">
                     {{scalesLeftSideInfo.rodsLeftCounted}}
                 </span>
 
@@ -91,8 +92,11 @@
                  ng-class="{'red': scalesRightSideInfo && shownTypeRight && scalesRightSideInfo.POCKED_LOCK,
                             'green': scalesRightSideInfo && shownTypeRight && !scalesRightSideInfo.POCKED_LOCK}">
                 <span class="paramCaption">{{'marker.monitorCaptions.rodsLeft' | translate}}:</span>
-                <span class="paramValue">{{scalesRightSideInfo.rodsLeftCounted}}</span>
-                 
+                <span class="paramValue"
+                      ng-show="scalesRightSideInfo.rodsLeftCounted > 0">
+                    {{scalesRightSideInfo.rodsLeftCounted}}
+                </span>
+
             </div>
         </div>
     </div>

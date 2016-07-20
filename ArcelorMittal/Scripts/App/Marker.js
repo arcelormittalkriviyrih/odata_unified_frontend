@@ -408,18 +408,18 @@
     function vmGetCurrentScales(side) {
 
         //this flag is needed for disabling side list after selecting side
-        $scope.sideIsSelected = side;
+        $scope.sideIsSelected = side || $scope.sides[0].ID;
         
         var url = 'v_AvailableScales';
 
-        if (side) {
+        if ($scope.sideIsSelected) {
 
             $scope.currentSide = $scope.sides.filter(function (item) {
 
-                return item.ID == side;
+                return item.ID == $scope.sideIsSelected;
             })[0].Description;
 
-            url += '?$filter=sideID eq {0}'.format(side);
+            url += '?$filter=sideID eq {0}'.format($scope.sideIsSelected);
         }
             
 
