@@ -332,6 +332,10 @@
     
     $scope.errorCode = error.status + ' ' + error.statusText + '\n' + responseText;
 
+    var stacktrace = getLastChild(error, ['data', 'error', 'innererror'], 'stacktrace');
+    $scope.errorCode += stacktrace;
+
+
     $scope.sendError = vmSendError;
     $scope.cancel = vmCancel;
 

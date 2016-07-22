@@ -7,6 +7,20 @@
 </div>
 
 <div ng-show="!$root.showLoadingState">
+
+    <button class="btn add"
+            ng-click="labelPrintAction('upd_JobOrderPrintLabelReprint')">
+        {{ 'pa.LabelButtons.print' | translate }}
+    </button>
+    <button class="btn add"
+            ng-click="labelPrintAction('upd_JobOrderPrintLabelCancel')">
+        {{ 'pa.LabelButtons.cancelPrint' | translate }}
+    </button>
+    <button class="btn add"
+            ng-click="refreshInfo()">
+        {{ 'pa.LabelButtons.refresh' | translate }}
+    </button>
+
     <div>
         <div id="material_lot">
 

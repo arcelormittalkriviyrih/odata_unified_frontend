@@ -86,6 +86,11 @@
             Material: 'Material',
             Personnel: 'Personnel',
             Label: 'Labels',
+            LabelButtons: {
+                print: 'Print',
+                cancelPrint: 'Print cancel',
+                refresh: 'Refresh'
+            },
             OrderLabel: 'Orders',
             TemplateLabel: 'Label Templates',
             Logotypes: 'Logos',
@@ -97,7 +102,8 @@
                 labels: {
                     number: 'Number',
                     quantity: 'Quantity',
-                    status: 'Status'
+                    status: 'Status',
+                    isPrinted: 'Is printed'
                 },
             }
         },
@@ -314,6 +320,11 @@
             Material: 'Материалы',
             Personnel: 'Персонал',
             Label: 'Бирки',
+            LabelButtons: {
+                print: 'Печать',
+                cancelPrint: 'Отмена печати',
+                refresh: 'Обновить'
+            },
             OrderLabel: 'Заказы',
             TemplateLabel: 'Шаблоны Бирок',
             Logotypes: 'Логотипы',
@@ -324,7 +335,8 @@
                 labels: {
                     number: 'Номер',
                     quantity: 'Количество',
-                    status: 'Статус'
+                    status: 'Статус',
+                    isPrinted: 'Напечатано'
                 }
             }
         },
@@ -543,6 +555,11 @@
             Material: 'Матеріали',
             Personnel: 'Персонал',
             Label: 'Бирки',
+            LabelButtons: {
+                print: 'Друк',
+                cancelPrint: 'Відміна друку',
+                refresh: 'Оновити'
+            },
             OrderLabel: 'Замовлення',
             TemplateLabel: 'Шаблони Бирок',
             Logotypes: 'Логотипи',
@@ -553,7 +570,8 @@
                 labels: {
                     number: 'Номер',
                     quantity: 'Кількість',
-                    status: 'Статус'
+                    status: 'Статус',
+                    isPrinted: 'Надруковано'
                 }
             }
         },

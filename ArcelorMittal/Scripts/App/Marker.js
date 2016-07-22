@@ -1424,10 +1424,20 @@
 
             onDataLoaded: function(args){
 
-                $scope.materialLotProdorderIDs = [];
+                var rows = vmShowSelectedRows(args, $scope.materialLotProdorderIDs, 'ID', 'FactoryNumber');
+
+                if (rows)
+                    rows.forEach(function (row) {
+
+                        var checkbox = row.find('input[type=checkbox]');
+                        $(checkbox).prop('checked', true);
+                    });
             },
             
             rowClick: function (args) {
+
+                var $tr = $(args.event.currentTarget);
+                $tr.toggleClass('selected-row');
                 
                 var elem = $(args.event.target);
                 var checkbox = $(args.event.currentTarget).find('input[type=checkbox]');

@@ -299,5 +299,31 @@ function vmGetChunks(arr, chunkSize) {
     return groups;
 }
 
+function vmShowSelectedRows(args, list, key, property) {
+
+    var selectedRowsList = [];
+
+    var data = args.data.data.filter(function (item) {
+
+        if (list.indexOf(item[key]) > -1)
+            return item[key]
+
+    });
+
+    if (data.length > 0) {
+        data = data.map(function (item) {
+            return item[property]
+        }).forEach(function (item) {
+
+            var row = args.grid._body.find('td:contains("{0}")'.format(item))
+                                     .parent().addClass('selected-row');
+
+            selectedRowsList.push(row);
+        });
+
+        return selectedRowsList;
+    };
+}
+
 
 

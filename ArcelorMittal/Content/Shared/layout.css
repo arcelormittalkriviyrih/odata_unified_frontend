@@ -188,6 +188,11 @@ div.modal.treeControls select{
     border-color: #c4e2ff!important;
 }
 
+.selected-row > td{
+    background: #75BCFF!important;
+    border-color: #75BCFF!important;
+}
+
 /*index page*/
 
 .loading{

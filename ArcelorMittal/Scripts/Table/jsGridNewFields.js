@@ -807,3 +807,60 @@
     jsGrid.fields.preview = jsGrid.PreviewField = PreviewField;
 
 }(jsGrid, jQuery));
+
+// control for Indication
+(function (jsGrid, $, undefined) {
+
+    var Field = jsGrid.Field;
+
+    function Indication(config) {
+        Field.call(this, config);
+    }
+
+    Indication.prototype = new Field({
+
+        align: "center",
+        autosearch: false,
+        readOnly: false,
+
+        itemTemplate: function (value, item) {
+
+            if (value)
+                return '<i class="icon-ok"></i>';
+            else
+                return '<i class="icon-remove"></i>'
+        },
+
+        filterTemplate: function () {
+            return null;
+        },
+
+        insertTemplate: function () {
+
+            return null;
+        },
+
+        editTemplate: function (value) {
+            return null;
+        },
+
+        filterValue: function () {
+
+            return null;
+        },
+
+        insertValue: function () {
+
+            return null;
+        },
+
+        editValue: function () {
+
+            return null;
+        },
+
+    });
+
+    jsGrid.fields.indication = jsGrid.Indication = Indication;
+
+}(jsGrid, jQuery));

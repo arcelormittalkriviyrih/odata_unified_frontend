@@ -626,13 +626,43 @@
 
 }])
 
-.controller('PAlabelCtrl', ['$scope', '$translate', function ($scope, $translate) {
+.controller('PAlabelCtrl', ['$scope', '$translate', 'indexService', function ($scope, $translate, indexService) {
 
-    $materialLotPropertyDisable = $('#materialLotPropertyDisable').show();
+    $scope.labelList = [];
+    $scope.labelPrintAction = vmLabelPrintAction;
+    $scope.refreshInfo = vmRefreshInfo;
+
+    function vmLabelPrintAction(action) {
+
+        var labelList = $scope.labelList.join(',');
+
+        indexService.sendInfo(action, {
+
+            MaterialLotIDs: labelList
+        }).then(function () {
+            vmRefreshInfo();
+        });
+        
+    };
+
+    function vmRefreshInfo() {
+
+        $scope.labelList = [];
+
+        $('div#material_lot').jsGrid('loadOdata', {
+            order: 'ID desc'
+        });
+
+        $('div#material_lot_property').jsGrid('loadOdata', {
+            defaultFilter: 'MaterialLotID eq (-1)',
+        });
+    }
+
+    var $materialLotPropertyDisable = $('#materialLotPropertyDisable').show();
 
     $('div#material_lot').jsGrid({
         height: "500px",
-        width: "1000px",
+        width: "940px",
 
         sorting: false,
         paging: true,
@@ -644,16 +674,38 @@
         pageIndex: 1,
         pageSize: 10,
 
-        rowClick: function (args) {
+        onDataLoaded: function (args) {
 
-            vmActiveRow(args);
+            vmShowSelectedRows(args, $scope.labelList, 'ID', 'FactoryNumber');             
+        },
+
+        rowClick: function (args) {
+            
+            var $tr = $(args.event.currentTarget);
+
+            $tr.toggleClass('selected-row');
 
             $materialLotPropertyDisable.hide();
+
+            var labelID = args.item.ID;
+            var index = $scope.labelList.indexOf(labelID);
+
+            if (index == -1) 
+                $scope.labelList.push(labelID);           
+
+            else {
+
+                $scope.labelList = $scope.labelList.filter(function (item) {
+                    return item != labelID;
+                });
+            };
 
             $('div#material_lot_property').jsGrid('loadOdata', {
                 defaultFilter: 'MaterialLotID eq ({0})'.format(args.item.ID),
                 order: 'PropertyType',
             });
+
+            $scope.$apply();
 
         }
 
@@ -683,6 +735,13 @@
             name: 'CreateTime',
             title: $translate.instant('marker.date'),
             order: 4
+        },
+        {
+            id: 'isPrinted',
+            name: 'isPrinted',
+            title: $translate.instant('pa.grid.labels.isPrinted'),
+            type: 'indication',
+            order: 5
         }]
 
     }).jsGrid('loadOdata', {
@@ -691,7 +750,7 @@
     });
 
     $('div#material_lot_property').jsGrid({
-        width: "1000px",
+        width: "940px",
         sorting: false,
         paging: true,
         editing: false,
