@@ -498,6 +498,9 @@
                 //    withCredentials: true
                 //}
             })
+            .success(function () {
+                $(self._container).trigger('oDataGrid.removed');
+            })
             .fail(handleError);
         };
 

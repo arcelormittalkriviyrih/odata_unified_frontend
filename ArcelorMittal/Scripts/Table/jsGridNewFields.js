@@ -735,6 +735,28 @@
 
         itemTemplate: function (value, item) {
 
+            var blackWrapper = $('<div />').attr({ 'id': 'fullImage' })
+                                           .addClass('black-wrapper')
+                                           .appendTo('body').hide(),
+
+                controlsRootModal = $('<div />').addClass('modal fullImage')
+                                        .appendTo(blackWrapper),
+
+                fullImageZone = $('<div />').addClass('scaleZone')
+                                        .appendTo(controlsRootModal),
+
+                fullImage = $('<img />').appendTo(fullImageZone),
+
+                cancelBtn = $('<button />')
+                                        .addClass('btn btn-circle')
+                                        .append('<i class="icon-remove"></i>')
+                                        .appendTo(controlsRootModal)
+                                        .click(function () {
+
+                                            fullImage.removeAttr('src');
+                                            blackWrapper.hide();
+                                        })
+
             if (item.PreviewID) {
 
                 var table = this._grid.table.name;
@@ -746,29 +768,10 @@
                 return $('<img />').attr('src', link)
                                         .click(function () {
 
-                                            if (document.body.createControlRange) {
+                                            blackWrapper.show();
 
-                                                // for IE specific
-                                                // add image to control range
-                                                // execute copy command
-                                                var range = document.body.createControlRange();
-                                                range.add(this);
-                                                range.execCommand('copy');
+                                            fullImage.attr('src', link);
 
-                                            } else {
-
-                                                // create range and add image to it
-                                                var range = document.createRange();
-                                                range.selectNode(this);
-
-                                                // clear selection ranges
-                                                // add range with image
-                                                window.getSelection().removeAllRanges();
-                                                window.getSelection().addRange(range);
-
-                                                // execute copy command
-                                                document.execCommand('copy');
-                                            };
                                         });
             } else return null;
 

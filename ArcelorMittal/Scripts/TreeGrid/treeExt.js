@@ -44,22 +44,22 @@
                                         .on('click', vmRemove),
 
             nodeNameLabel = $('<label />').text(translates.nodeName)
-                                        .appendTo(controlsRootModal)
+                                        .appendTo(controlsRootModal),
 
             nodeNameInput = $('<input />').attr({
                                             'id': 'createTreeItem',
                                             'type': 'text',
                                             'required': 'required'
                                         }).focus(vmClear)
-                                        .appendTo(controlsRootModal)
+                                        .appendTo(controlsRootModal),
 
             parentNodeLabel = $('<label />').text(translates.parentID)
-                                                    .appendTo(controlsRootModal)
+                                                    .appendTo(controlsRootModal),
 
-            parentNodeInput = $('<select />').attr({
+            parentNodeTree = $('<div />').attr({
                                             'id': 'parentID'
                                             }).focus(vmClear)
-                                              .appendTo(controlsRootModal)
+                                              .appendTo(controlsRootModal),
 
             additionalFieldsRoot = $('<div />').addClass('additionalFields')
                                         .appendTo(controlsRootModal),
@@ -74,7 +74,8 @@
                                         .addClass('btn')
                                         .append('<i class="icon-remove"></i>')
                                         .appendTo(controlsRootModal)
-                                        .on('click', vmCancel);
+                                        .on('click', vmCancel),
+            parentNodeID = null, _isCancel = false;
             
         vmInit(_data);
 
@@ -104,17 +105,21 @@
 
                 renameBtn.attr('disabled', false);
                 removeBtn.attr('disabled', false);
-                //var _sel = $.jstree.reference('#treeRoot').get_selected(true)[0] || '#';
+                
             });
+            parentNodeTree.jstree({
+                'core': {
 
-            parentNodeInput.append('<option />');
+                    'data': treeData,
+                    'check_callback': true
+                },
+                check_callback: true
+            }).on('changed.jstree', function (e, data) {
 
-            data.forEach(function (field) {
-
-                var option = $('<option />')
-                                .val(field[parentID.keyField])
-                                .text(field[parentID.valueField])
-                                .appendTo(parentNodeInput);
+                if (!_isCancel)
+                    parentNodeID = data.node.id;
+                else
+                    parentNodeID = null;
             });
 
             if (additionalFields)
@@ -157,6 +162,8 @@
 
         function vmShowModal(e) {
 
+            _isCancel = false;
+
             var buttonId = $(e.currentTarget).attr('id');
             var sel = $.jstree.reference('#treeRoot').get_selected(true)[0] || '#';
 
@@ -166,9 +173,9 @@
                     acceptBtn.on('click', vmCreate);
                     nodeNameInput.val('');
 
-                    if (sel)
-                        parentNodeInput.val(sel.id);
-                                        
+                    if (sel) 
+                        parentNodeTree.jstree('select_node', sel.id);
+                                                            
                     vmHandleAdditionalFields(controlsRootModal, additionalFields, sel, 'create');
 
                     break;
@@ -178,9 +185,10 @@
                     acceptBtn.on('click', vmEdit);
                     nodeNameInput.val(sel.text);
 
-                    if (sel && sel.parent!= '#')
-                        parentNodeInput.val(sel.parent);
+                    if (sel && sel.parent != '#') 
+                        parentNodeTree.jstree('select_node', sel.parent);
                     
+                                           
                     vmHandleAdditionalFields(controlsRootModal, additionalFields, sel, 'edit');
                     break;
             };
@@ -199,7 +207,7 @@
             }
 
             var nodeText = nodeNameInput.val();
-            var parentId = parentNodeInput.val() || null;
+            var parentId = parentNodeID || null;
 
             var node = {
 
@@ -247,16 +255,16 @@
                         contentType: "application/json;odata=verbose"
                     }).success(function (responce) {
                         
-                        //node.id = responce[keys.id];
+                        node.id = responce[keys.id];
 
-                        //var ref = treeRoot.jstree(true),
-                        //            sel = ref.get_selected();
-                        //if (!sel.length) { location.reload() }
-                        //sel = sel[0];
-                        //sel = ref.create_node(sel, node);
+                        var ref = treeRoot.jstree(true),
+                                    sel = ref.get_selected();
+                        if (!sel.length) { location.reload() }
+                        sel = sel[0];
+                        sel = ref.create_node(sel, node);
 
                         vmCancel();
-                        location.reload();
+                        //location.reload();
 
                     }).fail(handleError)
 
@@ -279,7 +287,7 @@
 
                         delete json['@odata.context'];
                         json[keys.text] = nodeNameInput.val();
-                        json[keys.parent] = parentNodeInput.val();
+                        json[keys.parent] = parentNodeID;
                         
                         if (additionalFields) {
 
@@ -295,7 +303,7 @@
                         if (json[keys.parent] == sel.id) {
 
                             alert('Parent cannot be the same with node name! Please, select another parent');
-                            parentNodeInput.val('');
+                            parentNodeID = null;
                             return false;
                         }
                         $.ajax({
@@ -342,6 +350,9 @@
                 vmClear(item);
             });
 
+            _isCancel = true;
+
+            parentNodeTree.jstree('deselect_all');
             acceptBtn.off('click');
 
             blackWrapper.hide();
@@ -386,12 +397,12 @@
             var val = fieldData[0][field.id];
 
             if (field.editReadOnly)
-                vmHAndleReadOnly(field, mode, control);
+                vmHandleReadOnly(field, mode, control);
                                          
             control.val(val);
         };
 
-        function vmHAndleReadOnly(field, mode, control) {
+        function vmHandleReadOnly(field, mode, control) {
             switch (mode) {
                 case 'create':
                     control.removeAttr('disabled')

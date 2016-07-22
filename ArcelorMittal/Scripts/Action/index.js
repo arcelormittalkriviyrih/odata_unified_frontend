@@ -259,7 +259,12 @@
                                                                         .done(function (result) {
 
                                                                             self.trigger('oDataForm.procedureProcessed');
-                                                                        }).fail(handleError);
+                                                                        }).fail(function(err){
+                                                                        
+                                                                            self.trigger('oDataForm.procedureFailed');
+                                                                            handleError(err);
+
+                                                                        });
                                                                });
 
                         cancelBtn.before(additionalControl);

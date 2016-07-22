@@ -122,32 +122,10 @@
     $treeContainer.on('tree-item-selected', function (e, data) {
 
         var EquipmentID = parseInt(data.id);
-        var equipment = $scope.equipment.filter(function (item) {
 
-            return item.ID == EquipmentID;
-        });
-               
-        $equipmentPropertyDisable.hide();
-
-        $('div#equipment_property').jsGrid('loadOdata', {
-            defaultFilter: 'EquipmentID eq ({0})'.format(EquipmentID),
-            order: 'EquipmentClassProperty/Description',
-
-            //settings for filtering of oData combobox by EquipmentClassID parent field
-            comboFilter: [{
-                name: 'ClassPropertyID',
-                filter: 'EquipmentClassID eq ({0})'.format(equipment[0].EquipmentClassID)
-            }],
-
-            //set field 'EquipmentID' from parent grid which will be included in JSON for inserting
-            insertedAdditionalFields: [{
-                name: 'EquipmentID',
-                value: EquipmentID
-            }]
-        });
-
+        vmGetEquipmentClass(EquipmentID, $scope.equipment);
     });
-
+    
     $('div#equipment_property').jsGrid({
         width: "620px",
         sorting: false,
@@ -193,15 +171,8 @@
             id: 'Value',
             name: 'Value',
             title: $translate.instant('grid.common.value'),
-            width: 80,
+            width: 200,
             order: 3
-        },
-        {
-            id: 'Description',
-            name: 'Description',
-            title: $translate.instant('grid.common.description'),
-            width: 175,
-            order: 4
         }],
         controlProperties: {
             type: 'control',
@@ -213,6 +184,53 @@
     }).jsGrid('loadOdata', {
         defaultFilter: 'ID eq -1'        
     });
+
+    function vmGetEquipmentClass(equipmentID, equipmentList, typeNode) {
+
+        var equipmentClassID;
+
+        var equipment = equipmentList.find(function (item) {
+
+            return item.ID == equipmentID;
+        });
+
+        if (equipment) {
+            equipmentClassID = equipment.EquipmentClassID;
+            vmLoadEquipmentPropertyGrid(equipmentID, equipmentClassID);
+        }
+        else {
+            if (typeNode != 'new') {
+
+                indexService.getInfo('Equipment').then(function (response) {
+                    vmGetEquipmentClass(equipmentID, response.data.value, 'new');
+                });
+            } else return false;
+            
+        };
+
+    };
+
+    function vmLoadEquipmentPropertyGrid(EquipmentID, equipmentClassID) {
+
+        $equipmentPropertyDisable.hide();
+
+        $('div#equipment_property').jsGrid('loadOdata', {
+            defaultFilter: 'EquipmentID eq ({0})'.format(EquipmentID),
+            order: 'EquipmentClassProperty/Description',
+
+            //settings for filtering of oData combobox by EquipmentClassID parent field
+            comboFilter: [{
+                name: 'ClassPropertyID',
+                filter: 'EquipmentClassID eq ({0})'.format(equipmentClassID)
+            }],
+
+            //set field 'EquipmentID' from parent grid which will be included in JSON for inserting
+            insertedAdditionalFields: [{
+                name: 'EquipmentID',
+                value: EquipmentID
+            }]
+        });
+    };
 
 }])
 
@@ -347,6 +365,13 @@
         order: 'Description'
     });
 
+    $('div#material_definition').on('oDataGrid.removed', function (e) {
+
+        $('div#material_definition_property').jsGrid('loadOdata', {
+            defaultFilter: 'ID eq -1'
+        });
+    })
+
     $('div#material_definition_property').jsGrid({
         height: "500px",
         width: "720px",
@@ -378,7 +403,7 @@
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
             title: $translate.instant('grid.common.property'),
-            width: 200,
+            width: 250,
             order: 2,
             type: 'combo',
             table: {
@@ -393,15 +418,8 @@
             id: 'Value',
             name: 'Value',
             title: $translate.instant('grid.common.value'),
-            width: 150,
+            width: 250,
             order: 3
-        },
-        {
-            id: 'Description',
-            name: 'Description',
-            title: $translate.instant('grid.common.description'),
-            width: 200,
-            order: 4
         }],
         controlProperties: {
             type: 'control',
@@ -577,7 +595,7 @@
             id: 'ClassPropertyID',
             name: 'ClassPropertyID',
             title: $translate.instant('grid.common.property'),
-            width: 200,
+            width: 250,
             order: 2,
             type: 'combo',
             table: {
@@ -592,15 +610,8 @@
             id: 'Value',
             name: 'Value',
             title: $translate.instant('grid.common.value'),
-            width: 150,
+            width: 250,
             order: 3
-        },
-        {
-            id: 'Description',
-            name: 'Description',
-            title: $translate.instant('grid.common.description'),
-            width: 200,
-            order: 4
         }],
         controlProperties: {
             type: 'control',
@@ -668,8 +679,8 @@
             order: 3
         },
         {
-            id: 'CreatedDateTime',
-            name: 'CreatedDateTime',
+            id: 'CreateTime',
+            name: 'CreateTime',
             title: $translate.instant('marker.date'),
             order: 4
         }]

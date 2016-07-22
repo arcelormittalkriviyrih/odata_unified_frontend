@@ -224,6 +224,12 @@
         $scope.processingTestPrint = false;
         $scope.$apply();
     });
+
+    $('#orderForm').on('oDataForm.procedureFailed', function (e) {
+
+        $scope.processingTestPrint = false;
+        $scope.$apply();
+    });
 }])
 
 .controller('marketLabelTemplateCtrl', ['$scope', '$state', '$rootScope', '$translate', 'indexService', '$q', 'marketService', function ($scope, $state, $rootScope, $translate, indexService, $q, marketService) {
@@ -505,7 +511,12 @@
     $('#orderForm').on('oDataForm.procedureProcessed', function (e) {
 
         $scope.processingTestPrint = false;
+        $scope.$apply();
+    });
 
+    $('#orderForm').on('oDataForm.procedureFailed', function (e) {
+
+        $scope.processingTestPrint = false;
         $scope.$apply();
     });
 
