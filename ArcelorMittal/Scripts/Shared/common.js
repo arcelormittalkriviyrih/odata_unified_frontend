@@ -299,6 +299,7 @@ function vmGetChunks(arr, chunkSize) {
     return groups;
 }
 
+//show selected rows when we use pagination
 function vmShowSelectedRows(args, list, key, property) {
 
     var selectedRowsList = [];
@@ -325,5 +326,62 @@ function vmShowSelectedRows(args, list, key, property) {
     };
 }
 
+//set active row as selected in ctrl or shift mode
+function vmChangeActiveRowToSelected(container, tr) {
+
+    tr.toggleClass('selected-row');
+
+    container.find('tr.active-row')
+             .removeClass('active-row')
+             .addClass('selected-row');
+}
+
+//in shift mode we work with next data:
+//array of extreme selected rows between which we must select all
+//array of extreme item ID.  
+function vmPushDataShift(container, currentTr, intervalLabelNumbers, intervalSelectedRows, data, labelList) {
+
+    var rows = container.find('tr.jsgrid-row, tr.jsgrid-alt-row');
+    rows = rows.toArray();
+
+    var index = rows.indexOf(currentTr);
+    var selectedRowData = data[index];
+
+    if (selectedRowData) {
+
+        intervalLabelNumbers.push(selectedRowData.ID);
+        intervalSelectedRows.push(index);
+
+        intervalSelectedRows.sort();
+        intervalLabelNumbers.sort();
+    };
+
+    if (intervalLabelNumbers.length == 2 && intervalSelectedRows.length == 2) 
+        fillShiftedData(data, rows, intervalSelectedRows, intervalLabelNumbers, labelList);
+    
+};
+
+//fill list of labels in shift mode
+function fillShiftedData(data, rows, intervalSelectedRows, intervalLabelNumbers, labelList) {
+
+    rows.forEach(function (row, i) {
+
+        if (i > intervalSelectedRows[0] && i < intervalSelectedRows[1])
+            $(row).addClass('selected-row');
+    });
+
+    data.forEach(function (item) {
+
+        if (item.ID > intervalLabelNumbers[0] && item.ID < intervalLabelNumbers[1]) {
+
+            labelList.push(item.ID);
+        };
+    });
+
+    intervalLabelNumbers.shift();
+    intervalSelectedRows.shift();
+
+    labelList = labelList.unique();
+}
 
 
