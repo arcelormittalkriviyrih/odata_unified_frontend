@@ -357,10 +357,14 @@
 
                 var data = response.value;
 
+                self.tableInfo = self.table;
+                self.table = null;
+
                 return {
                     itemsCount: response['@odata.count'],
                     data: data
                 };
+
             });
         };
 

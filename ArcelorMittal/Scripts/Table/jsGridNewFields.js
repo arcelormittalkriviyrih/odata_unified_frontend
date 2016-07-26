@@ -579,8 +579,8 @@
 
             // get name of table
             // current ID and filename
-            var table = this._grid.table.name;
-            var id = item[this._grid.table.key];
+            var table = this._grid.tableInfo.name;
+            var id = item[this._grid.tableInfo.key];
             var filename = item['FileName'].split('\\').pop();            
 
             // create download link
@@ -759,7 +759,7 @@
 
             if (item.PreviewID) {
 
-                var table = this._grid.table.name;
+                var table = this._grid.tableInfo.name;
                 var id = item['PreviewID'];
 
                 // create download link
