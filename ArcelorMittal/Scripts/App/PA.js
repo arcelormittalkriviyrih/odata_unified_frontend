@@ -631,11 +631,6 @@
     $scope.labelList = [];
     $scope.labelPrintAction = vmLabelPrintAction;
     $scope.refreshInfo = vmRefreshInfo;
-    $scope.isCtrlHolded = false;
-    $scope.isShiftHolded = false;
-    $scope.intervalLabelNumbers = [];
-    $scope.intervalSelectedRows = [];
-    var _data;
 
     function vmLabelPrintAction(action) {
 
@@ -681,65 +676,22 @@
 
         onDataLoaded: function (args) {
 
-            _data = args.data.data;
-            $scope.intervalLabelNumbers = [];
-            $scope.intervalSelectedRows = [];
-            $scope.labelList = [];
-
-            $scope.$apply();
+            vmShowSelectedRows(args, $scope.labelList, 'ID', 'FactoryNumber');             
         },
 
         rowClick: function (args) {
-
-            var labelID = args.item.ID;
+            
             var $tr = $(args.event.currentTarget);
 
-            if ($scope.isCtrlHolded && !$scope.isShiftHolded) {
-
-                $scope.intervalLabelNumbers = [];
-                $scope.intervalSelectedRows = [];
-
-                vmChangeActiveRowToSelected($('div#material_lot'), $tr);
-                vmPushDataShift($('div#material_lot'), $tr[0], $scope.intervalLabelNumbers, $scope.intervalSelectedRows, _data, $scope.labelList);
-
-            } else if (!$scope.isCtrlHolded && $scope.isShiftHolded) {
-
-                vmChangeActiveRowToSelected($('div#material_lot'), $tr);
-                vmPushDataShift($('div#material_lot'), $tr[0], $scope.intervalLabelNumbers, $scope.intervalSelectedRows, _data, $scope.labelList);
-            }
-            else {
-
-                var selectedRows = $('div#material_lot').find('tr.selected-row');
-
-                if (selectedRows.length > 0) {
-                    selectedRows.removeClass('selected-row');
-
-                    $scope.labelList = [];
-
-                    $scope.intervalLabelNumbers = [];
-                    $scope.intervalSelectedRows = [];
-
-                    vmPushDataShift($('div#material_lot'), $tr[0], $scope.intervalLabelNumbers, $scope.intervalSelectedRows, _data, $scope.labelList);
-
-                }
-                else {
-
-                    $scope.intervalLabelNumbers = [];
-                    $scope.intervalSelectedRows = [];
-
-                    vmPushDataShift($('div#material_lot'), $tr[0], $scope.intervalLabelNumbers, $scope.intervalSelectedRows, _data, $scope.labelList);
-
-                }
-
-                vmActiveRow(args);
-            }
+            $tr.toggleClass('selected-row');
 
             $materialLotPropertyDisable.hide();
 
+            var labelID = args.item.ID;
             var index = $scope.labelList.indexOf(labelID);
 
-            if (index == -1)
-                $scope.labelList.push(labelID);
+            if (index == -1) 
+                $scope.labelList.push(labelID);           
 
             else {
 
@@ -748,24 +700,7 @@
                 });
             };
 
-            $('div#material_lot_property').jsGrid('initOdata', {
-                serviceUrl: serviceUrl,
-                table: 'v_MaterialLotPropertySimple',
-
-                fields: [{
-                    id: 'PropertyType',
-                    name: 'PropertyType',
-                    title: $translate.instant('grid.common.property'),
-                    order: 1
-                },
-                {
-                    id: 'Value',
-                    name: 'Value',
-                    title: $translate.instant('grid.common.value'),
-                    order: 2
-                }]
-
-            }).jsGrid('loadOdata', {
+            $('div#material_lot_property').jsGrid('loadOdata', {
                 defaultFilter: 'MaterialLotID eq ({0})'.format(args.item.ID),
                 order: 'PropertyType',
             });
@@ -812,9 +747,8 @@
     }).jsGrid('loadOdata', {
 
         order: 'ID desc'
-    });;
+    });
 
-       
     $('div#material_lot_property').jsGrid({
         width: "940px",
         sorting: false,
@@ -829,38 +763,23 @@
 
         rowClick: vmActiveRow
 
-    });
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'v_MaterialLotPropertySimple',
 
-    
-
-    
-    $(document).keydown(function (event) {
-        if (event.keyCode == 17) {
-            $scope.isCtrlHolded = true;
-            $scope.$apply();
-        }
-
-        if (event.keyCode == 16) {
-
-            $scope.isShiftHolded = true;
-            $scope.$apply();
-        }
-
-    }).keyup(function (event) {
-        if (event.keyCode == 17) {
-
-            $scope.isCtrlHolded = false;
-            $scope.$apply();
-        }
-
-        if (event.keyCode == 16) {
-
-            $scope.isShiftHolded = false;
-            $scope.$apply();
-        }
-
+        fields: [{
+            id: 'PropertyType',
+            name: 'PropertyType',
+            title: $translate.instant('grid.common.property'),
+            order: 1
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: $translate.instant('grid.common.value'),
+            order: 2
+        }]
 
     });
-
 
 }]);
