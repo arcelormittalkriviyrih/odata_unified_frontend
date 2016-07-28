@@ -30,6 +30,8 @@
     })
 }])
 
+.value('sapUrl', sapUrl)
+
 .controller('marketCtrl', ['$scope', 'indexService', '$state', 'roles', function ($scope, indexService, $state, roles) {
 
 }])
@@ -528,7 +530,7 @@
 
 }])
 
-.service('marketService', ['$translate', function ($translate) {
+.service('marketService', ['$translate', 'sapUrl', function ($translate, sapUrl) {
 
     this.createForm = function (type, procedure, id, keyField, templateData, rowData, hideSubmit) {
 
@@ -547,240 +549,350 @@
                 hide: true
             })
         };
+
+        var fields = [{
+
+            name: 'STANDARD',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                sapName: 'DSTU',
+                translate: $translate.instant('market.Order.CreateDialogue.STANDARD'),
+                order: 21
+            }
+        }, {
+
+            name: 'LENGTH',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                sapName: 'Lenght',
+                translate: $translate.instant('market.Order.CreateDialogue.LENGTH'),
+                order: 6
+            }
+        }, {
+
+            name: 'MIN_ROD',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                sapName: 'Quantity',
+                translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD'),
+                order: 12
+            }
+        }, {
+
+            name: 'CONTRACT_NO',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                sapName: 'Contract',
+                translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO'),
+                order: 3
+            }
+        }, {
+
+            name: 'DIRECTION',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                sapName: 'CountryName',
+                translate: $translate.instant('market.Order.CreateDialogue.DIRECTION'),
+                order: 4
+            }
+        }, {
+
+            name: 'PRODUCT',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                sapName: 'ProductName',
+                translate: $translate.instant('market.Order.CreateDialogue.PRODUCT'),
+                order: 20
+            }
+        }, {
+
+            name: 'CLASS',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                sapName: 'ProductClass',
+                translate: $translate.instant('market.Order.CreateDialogue.CLASS'),
+                order: 8
+            }
+        }, {
+
+            name: 'STEEL_CLASS',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                sapName: 'SteelGrade',
+                translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS'),
+                order: 9
+            }
+        }, {
+
+            name: 'CHEM_ANALYSIS',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS'),
+                order: 22
+            }
+        }, {
+
+            name: 'BUNT_DIA',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA'),
+                order: 19
+            }
+        }, {
+
+            name: 'BUNT_NO',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.BUNT_NO'),
+                order: 24
+            }
+        }, {
+
+            name: 'COMM_ORDER',
+            properties: {
+                control: 'text',
+                required: true,
+                show: true,
+                disable: false,
+                send: true,
+                enterAction: sapUrl,
+                sapName: 'SelesOrder',
+                translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER'),
+                order: 1
+            },
+        }, {
+
+            name: 'PROD_ORDER',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER'),
+                order: 2
+            },
+        }, {
+
+            name: 'SIZE',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                sapName: 'Size',
+                translate: $translate.instant('market.Order.CreateDialogue.SIZE'),
+                order: 5
+            },
+        }, {
+
+            name: 'TOLERANCE',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE'),
+                order: 7
+            },
+        }, {
+
+            name: 'MELT_NO',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.MELT_NO'),
+                order: 10
+
+            },
+        }, {
+
+            name: 'PART_NO',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.PART_NO'),
+                order: 11
+            },
+        }, {
+
+            name: 'BUYER_ORDER_NO',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                sapName: 'Order',
+                translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO'),
+                order: 13
+            },
+        }, {
+
+            name: 'BRIGADE_NO',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO'),
+                order: 14
+            },
+        }, {
+
+            name: 'PROD_DATE',
+            properties: {
+                control: 'date',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE'),
+                order: 15
+            },
+        }, {
+
+            name: 'UTVK',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.UTVK'),
+                order: 16
+            },
+        }, {
+
+            name: 'CHANGE_NO',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.CHANGE_NO'),
+                order: 17
+
+            },
+        }, {
+
+            name: 'MATERIAL_NO',
+            properties: {
+                control: 'text',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO'),
+                order: 18
+            },
+        }, {
+            name: 'TEMPLATE',
+            properties: {
+                control: 'combo',
+                required: true,
+                show: true,
+                disable: false,
+                send: true,
+                translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
+                data: templateData,
+                keyField: 'ID',
+                valueField: 'Name',
+                order: 23
+            }
+        }];
+
+        fields.forEach(function (field) {
+
+            if (rowData) {
+
+                var data = rowData.find(function (item) {
+
+                    return item.Property == field.name;
+                })
+
+                if (data)
+                    field.properties.defaultValue = data.Value;
+                else
+                    field.properties.defaultValue = null;
+            }else
+                field.properties.defaultValue = null;
+            
+        });
               
         $('#orderForm').oDataAction({
 
             action: procedure,
             type: type,
             keyField: keyField,
-            rowData: rowData,
             controlCaptions: {
 
                 OK: 'OK',
                 Cancel: $translate.instant('buttonCancel')
             },
-            fields: [{
+            translates: {
 
-                name: 'STANDARD',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.STANDARD'),
-                    order: 21
-                }
-            }, {
-
-                name: 'LENGTH',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.LENGTH'),
-                    order: 6
-                }
-            }, {
-
-                name: 'MIN_ROD',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD'),
-                    order: 12
-                }
-            }, {
-
-                name: 'CONTRACT_NO',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO'),
-                    order: 3
-                }
-            }, {
-
-                name: 'DIRECTION',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.DIRECTION'),
-                    order: 4
-                }
-            }, {
-
-                name: 'PRODUCT',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.PRODUCT'),
-                    order: 20
-                }
-            }, {
-
-                name: 'CLASS',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.CLASS'),
-                    order: 8
-                }
-            }, {
-
-                name: 'STEEL_CLASS',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS'),
-                    order: 9
-                }
-            }, {
-
-                name: 'CHEM_ANALYSIS',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS'),
-                    order: 22
-                }
-            }, {
-
-                name: 'BUNT_DIA',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA'),
-                    order: 19
-                }
-            }, {
-
-                name: 'BUNT_NO',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.BUNT_NO'),
-                    order: 24
-                }
-            }, {
-
-                name: 'COMM_ORDER',
-                properties: {
-                    control: 'text',
-                    required: true,
-                    translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER'),
-                    order: 1
-                },
-            }, {
-
-                name: 'PROD_ORDER',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER'),
-                    order: 2
-                },
-            }, {
-
-                name: 'SIZE',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.SIZE'),
-                    order: 5
-                },
-            }, {
-
-                name: 'TOLERANCE',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE'),
-                    order: 7
-                },
-            }, {
-
-                name: 'MELT_NO',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.MELT_NO'),
-                    order: 10
-                },
-            }, {
-
-                name: 'PART_NO',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.PART_NO'),
-                    order: 11
-                },
-            }, {
-
-                name: 'BUYER_ORDER_NO',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO'),
-                    order: 13
-                },
-            }, {
-
-                name: 'BRIGADE_NO',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO'),
-                    order: 14
-                },
-            }, {
-
-                name: 'PROD_DATE',
-                properties: {
-                    control: 'date',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE'),
-                    order: 15
-                },
-            }, {
-
-                name: 'UTVK',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.UTVK'),
-                    order: 16
-                },
-            }, {
-
-                name: 'CHANGE_NO',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.CHANGE_NO'),
-                    order: 17
-                },
-            }, {
-
-                name: 'MATERIAL_NO',
-                properties: {
-                    control: 'text',
-                    required: false,
-                    translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO'),
-                    order: 18
-                },
-            }, {
-                name: 'TEMPLATE',
-                properties: {
-                    control: 'combo',
-                    required: true,
-                    translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
-                    data: templateData,
-                    keyField: 'ID',
-                    valueField: 'Name',
-                    order: 23
-                }
-            }],
-            controlList: controlList
+                fillRequired: $translate.instant('marker.errorMessages.fillRequired')
+            },
+            fields: fields,
+            controlList: controlList,
+            preventEnterSubmit: true
         });
             
     };
-}])
+}]) 
 

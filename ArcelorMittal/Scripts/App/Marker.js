@@ -127,263 +127,299 @@
 
                                 var templateData = response.data.value;
 
-                                $scope.fields = [
-                                {
+                                $scope.fields = [{
 
-                                    name: 'FACTORY_NUMBER',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('marker.CreateDialogue.FactoryNumber')
-                                    }
-                                }, {
+                                     name: 'STANDARD',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.STANDARD'),
+                                         order: 22
+                                     }
+                                 }, {
 
-                                    name: 'STANDARD',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.STANDARD'),
-                                        order: 22
-                                    }
-                                }, {
+                                     name: 'LENGTH',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.LENGTH'),
+                                         order: 6
+                                     }
+                                 }, {
 
-                                    name: 'LENGTH',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.LENGTH'),
-                                        order: 6
-                                    }
-                                }, {
+                                     name: 'MIN_ROD',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD'),
+                                         order: 13
+                                     }
+                                 }, {
 
-                                    name: 'MIN_ROD',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.MIN_ROD'),
-                                        order: 13
-                                    }
-                                }, {
+                                     name: 'CONTRACT_NO',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO'),
+                                         order: 3
+                                     }
+                                 }, {
 
-                                    name: 'CONTRACT_NO',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.CONTRACT_NO'),
-                                        order: 3
-                                    }
-                                }, {
+                                     name: 'DIRECTION',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.DIRECTION'),
+                                         order: 4
+                                     }
+                                 }, {
 
-                                    name: 'DIRECTION',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.DIRECTION'),
-                                        order: 4
-                                    }
-                                }, {
+                                     name: 'PRODUCT',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.PRODUCT'),
+                                         order: 21
+                                     }
+                                 }, {
 
-                                    name: 'PRODUCT',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.PRODUCT'),
-                                        order: 21
-                                    }
-                                }, {
+                                     name: 'CLASS',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.CLASS'),
+                                         order: 8
+                                     }
+                                 }, {
 
-                                    name: 'CLASS',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.CLASS'),
-                                        order: 8
-                                    }
-                                }, {
+                                     name: 'STEEL_CLASS',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS'),
+                                         order: 9
+                                     }
+                                 }, {
 
-                                    name: 'STEEL_CLASS',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.STEEL_CLASS'),
-                                        order: 9
-                                    }
-                                }, {
+                                     name: 'CHEM_ANALYSIS',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS'),
+                                         order: 23
+                                     }
+                                 }, {
 
-                                    name: 'CHEM_ANALYSIS',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.CHEM_ANALYSIS'),
-                                        order: 23
-                                    }
-                                }, {
+                                     name: 'BUNT_DIA',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA'),
+                                         order: 20
+                                     }
+                                 }, {
 
-                                    name: 'BUNT_DIA',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.BUNT_DIA'),
-                                        order: 20
-                                    }
-                                }, {
+                                     name: 'BUNT_NO',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.BUNT_NO'),
+                                         order: 25
+                                     }
+                                 }, {
 
-                                    name: 'BUNT_NO',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.BUNT_NO'),
-                                        order: 25
-                                    }
-                                }, {
+                                     name: 'COMM_ORDER',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER'),
+                                         order: 1
+                                     },
+                                 }, {
 
-                                    name: 'COMM_ORDER',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER'),
-                                        order: 1
-                                    },
-                                }, {
+                                     name: 'PROD_ORDER',
+                                     properties: {
+                                         control: 'text',
+                                         required: true,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER'),
+                                         order: 2
+                                     },
+                                 }, {
 
-                                    name: 'PROD_ORDER',
-                                    properties: {
-                                        control: 'text',
-                                        required: true,
-                                        translate: $translate.instant('market.Order.CreateDialogue.PROD_ORDER'),
-                                        order: 2
-                                    },
-                                }, {
+                                     name: 'SIZE',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.SIZE'),
+                                         order: 5
+                                     },
+                                 }, {
 
-                                    name: 'SIZE',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.SIZE'),
-                                        order: 5
-                                    },
-                                }, {
+                                     name: 'TOLERANCE',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE'),
+                                         order: 7
+                                     },
+                                 }, {
 
-                                    name: 'TOLERANCE',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.TOLERANCE'),
-                                        order: 7
-                                    },
-                                }, {
+                                     name: 'MELT_NO',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.MELT_NO'),
+                                         order: 10
 
-                                    name: 'MELT_NO',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.MELT_NO'),
-                                        order: 10
+                                     },
+                                 }, {
 
-                                    },
-                                }, {
+                                     name: 'PART_NO',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.PART_NO'),
+                                         order: 11
+                                     },
+                                 }, {
 
-                                    name: 'PART_NO',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.PART_NO'),
-                                        order: 11
-                                    },
-                                }, {
+                                     name: 'BUYER_ORDER_NO',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO'),
+                                         order: 14
+                                     },
+                                 }, {
 
-                                    name: 'Weight',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('marker.CreateDialogue.mass'),
-                                        order: 12
-                                    },
-                                }, {
+                                     name: 'BRIGADE_NO',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO'),
+                                         order: 15
+                                     },
+                                 }, {
 
-                                    name: 'BUYER_ORDER_NO',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.BUYER_ORDER_NO'),
-                                        order: 14
-                                    },
-                                }, {
+                                     name: 'PROD_DATE',
+                                     properties: {
+                                         control: 'date',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE'),
+                                         order: 16
+                                     },
+                                 }, {
 
-                                    name: 'BRIGADE_NO',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.BRIGADE_NO'),
-                                        order: 15
-                                    },
-                                }, {
+                                     name: 'UTVK',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.UTVK'),
+                                         order: 17
+                                     },
+                                 }, {
 
-                                    name: 'PROD_DATE',
-                                    properties: {
-                                        control: 'date',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.PROD_DATE'),
-                                        order: 16
-                                    },
-                                }, {
+                                     name: 'CHANGE_NO',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.CHANGE_NO'),
+                                         order: 18
+                                     },
+                                 }, {
 
-                                    name: 'UTVK',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.UTVK'),
-                                        order: 17
-                                    },
-                                }, {
-
-                                    name: 'CHANGE_NO',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.CHANGE_NO'),
-                                        
-                                    },
-                                }, {
-
-                                    name: 'MATERIAL_NO',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO'),
-                                        order: 19
-                                    },
-                                }, {
-
-                                    name: 'CHANGE_NO',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('marker.CreateDialogue.CHANGE_NO'),
-                                        order: 18
-                                    },
-                                },
-                                {
-                                    name: 'PACKS_LEFT',
-                                    properties: {
-                                        control: 'text',
-                                        required: false,
-                                        translate: $translate.instant('market.Order.CreateDialogue.PAKCS_LEFT'),
-                                        order: 24
-                                    }
-                                },
-                                {
-                                    name: 'TEMPLATE',
-                                    properties: {
-                                        control: 'combo',
-                                        required: true,
-                                        translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
-                                        data: templateData,
-                                        keyField: 'ID',
-                                        valueField: 'Name',
-                                        order: 24
-                                    }
-                                }]
+                                     name: 'MATERIAL_NO',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO'),
+                                         order: 19
+                                     },
+                                 }, {
+                                     name: 'TEMPLATE',
+                                     properties: {
+                                         control: 'combo',
+                                         required: true,
+                                         show: true,
+                                         disable: false,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.TEMPLATE'),
+                                         data: templateData,
+                                         keyField: 'ID',
+                                         valueField: 'Name',
+                                         order: 24
+                                     }
+                                 }];
+                                                                
                             });
     };
 
@@ -891,17 +927,41 @@
                                  else
                                      procedure = 'ins_WorkDefinitionStandard';
 
+                                 var fields = $scope.fields;
+
+                                 fields.forEach(function (field) {
+
+                                     var data = orderData.find(function (item) {
+
+                                         return item.Property == field.name;
+                                     })
+
+                                     if (data)
+                                         field.properties.defaultValue = data.Value;
+                                     else
+                                         field.properties.defaultValue = null;
+                                 });
+
+                                 $scope.fields.push({
+
+                                     name: 'EquipmentID',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: false,
+                                         disable: false,
+                                         send: true,
+                                         defaultValue: $scope.currentScaleID,
+                                         order: -1
+                                     }
+ 
+                                 });
+
                                  vmCreateForm($('#orderForm'),
                                               'edit',
                                               procedure,
-                                              orderData,
-                                              'COMM_ORDER',
-                                               [{
-
-                                                   name: 'EquipmentID',
-                                                   value: $scope.currentScaleID
-                                               }],
-                                               ['EquipmentID'],
+                                              fields,
+                                              'COMM_ORDER',                                               
                                                {
                                                    OK: 'OK',
                                                    Cancel: $translate.instant('buttonCancel')
@@ -942,25 +1002,6 @@
 
     function vmBuildFormSpecialMode(container, showFlag) {
 
-        var additionalFields = [{
-
-            name: 'EquipmentID',
-            value: $scope.currentScaleID
-        }, {
-
-            name: 'FACTORY_NUMBER',
-            value: $scope.labelNumber
-        }];
-
-        var escapedFields = ['EquipmentID', 'FACTORY_NUMBER'];
-
-        var additionalActionFields = [{
-            mandatory: false,
-            maxlength: undefined,
-            name: "Weight",
-            type: "Edm.String"
-        }];
-
         var procedureName;
         $scope.readOnly = true;
 
@@ -974,47 +1015,126 @@
             procedureName = 'set_RejectMode';        
 
         if (container == 'separateForm'){
-
             procedureName = 'set_SeparateMode';
-            escapedFields.push('PACKS_LEFT');
-            additionalFields.push({
-
-                name: 'PACKS_LEFT',
-                value: $scope.packsLeft.toString()
-            });
-
-            additionalActionFields = null;
-        } 
-                        
+        }                         
 
         vmGetLatestWorkRequest($scope.currentScaleID);
 
         indexService.getInfo("v_MaterialLotProperty?$filter=FactoryNumber eq '{0}'".format($scope.labelNumber))
                     .then(function (response) {
 
-                        var data = response.data.value;
+                        var rowData = response.data.value;
 
-                        if (data.length > 0) {
+                        if (rowData.length > 0) {
 
                             $scope[showFlag] = true;
-                            data.push({
+                            
+                            $scope.fieldsSpecialMode = $scope.fields.slice(0);
 
-                                Property: 'Weight',
-                                Value: data[0].Quantity
+                            var currentScaleID = $scope.currentScaleID;
+                            var quantity = rowData[0].Quantity;
+
+                            $scope.fieldsSpecialMode.push({
+
+                                    name: 'EquipmentID',
+                                    properties: {
+                                        control: 'text',
+                                        required: false,
+                                        show: false,
+                                        disable: false,
+                                        send: true,
+                                        defaultValue: $scope.currentScaleID,
+                                        order: -1
+                                    }
+
+                                },
+                            {
+
+                                name: 'Weight',
+                                properties: {
+                                    control: 'text',
+                                    required: false,
+                                    show: true,
+                                    disable: true,
+                                    send: false,
+                                    defaultValue: rowData[0].Quantity,
+                                    translate: $translate.instant('marker.CreateDialogue.mass'),
+                                    order: 12
+                                },
+ 
+                            }, {
+
+                                name: 'FACTORY_NUMBER',
+                                properties: {
+                                    control: 'text',
+                                    required: false,
+                                    show: false,
+                                    disable: false,
+                                    send: true,
+                                    defaultValue: $scope.labelNumber,
+                                    translate: $translate.instant('marker.CreateDialogue.FactoryNumber'),
+                                    order: -1
+
+                                }
+                            });
+
+                            $scope.fieldsSeparateMode = $scope.fieldsSpecialMode.slice(0);
+                            $scope.fieldsSeparateMode.push({
+                                name: 'PACKS_LEFT',
+                                properties: {
+                                    control: 'text',
+                                    required: false,
+                                    show: false,
+                                    disable: false,
+                                    send: true,
+                                    defaultValue: $scope.packsLeft,
+                                    translate: $translate.instant('market.Order.CreateDialogue.PACKS_LEFT'),
+                                    order: 24
+                                }
+                            });
+
+                            $scope.fieldsSeparateMode = $scope.fieldsSeparateMode.filter(function (item) {
+
+                                return item.name != 'Weight';
+                            });
+
+                            var fields;
+
+                            if (container != 'separateForm') {
+
+                                fields = $scope.fieldsSpecialMode;
+                            } else {
+
+                                fields = $scope.fieldsSeparateMode;
+                            };
+                                
+
+                            fields.forEach(function (field) {
+
+                                var data = rowData.find(function (item) {
+
+                                    return item.Property == field.name;
+                                })
+
+                                if (data)
+                                    field.properties.defaultValue = data.Value;
+                                else {
+
+                                    if (['PACKS_LEFT', 'FACTORY_NUMBER', 'Weight', 'EquipmentID'].indexOf(field.name) == -1)
+                                        field.properties.defaultValue = null;
+                                }
+                                    
                             });
 
                             vmCreateForm($('#' + container),
                             'edit',
                             procedureName,
-                            data,
-                            'Weight',
-                            additionalFields,
-                            escapedFields,
+                            fields,
+                            null,
                             {
                                 OK: 'OK',
                                 Cancel: container == 'remarkerForm' ? $translate.instant('marker.buttonExit') : $translate.instant('buttonCancel')
-                            },
-                            additionalActionFields);
+                            });
                         }
                         else {
                             $scope.readOnly = false;
@@ -1025,7 +1145,7 @@
                     });
     };
 
-    function vmCreateForm(container, type, procedure, orderData, keyField, additionalFields, escapedFields, captions, additionalActionFields) {
+    function vmCreateForm(container, type, procedure, fields, keyField, captions) {
 
         vmToggleModal(true);
 
@@ -1034,16 +1154,16 @@
             action: procedure,
             type: type,
             keyField: keyField,
-            rowData: orderData,
             controlCaptions: {
 
                 OK: captions.OK,
                 Cancel: captions.Cancel
             },
-            fields: $scope.fields,
-            additionalFields: additionalFields,
-            escapedFields: escapedFields,
-            additionalActionFields: additionalActionFields
+            translates: {
+
+                fillRequired: $translate.instant('marker.errorMessages.fillRequired')
+            },
+            fields: fields
         });
 
     };
@@ -1139,7 +1259,7 @@
 
     function vmCalculateRods() {
 
-        if ($scope.scalesDetailsInfo.BAR_QUANTITY && $scope.scalesDetailsInfo.RodsQuantity)
+        if ($scope.scalesDetailsInfo.BAR_QUANTITY && $scope.scalesDetailsInfo.RodsQuantity >= 0)
             $scope.rodsLeft = $scope.scalesDetailsInfo.BAR_QUANTITY - $scope.scalesDetailsInfo.RodsQuantity;
         else
             $scope.rodsLeft = 0;
@@ -1774,7 +1894,7 @@
 
     function vmCalculateRods(info) {
 
-        if (info.BAR_QUANTITY && info.RodsQuantity)
+        if (info.BAR_QUANTITY && info.RodsQuantity>=0)
             info.rodsLeftCounted = info.BAR_QUANTITY - info.RodsQuantity;
         else
             info.rodsLeftCounted = 0;

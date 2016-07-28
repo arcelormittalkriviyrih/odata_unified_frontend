@@ -28,7 +28,17 @@
 
             url: '/label',
             templateUrl: 'Static/pa/label.html',
-            controller: 'PAlabelCtrl'
+            controller: 'PAlabelCtrl',
+            onExit: function ($state, $injector) {
+
+                $("#material_lot").jsGrid({
+ 
+                    onDataLoading: function(args) {
+                        
+                            args.grid.table = null;                        
+                    }
+                });
+            }
         })
 
         .state('app.PA.Order', {
