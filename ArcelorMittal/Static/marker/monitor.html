@@ -41,8 +41,8 @@
     <div class="monitorSidesWrapper">
         <div class="monitorSide">
             <div class="monitorSideItem item-1"
-                 ng-class="{'red': scalesLeftSideInfo && shownTypeLeft && scalesLeftSideInfo.POCKED_LOCK,
-                            'green': scalesLeftSideInfo && shownTypeLeft && !scalesLeftSideInfo.POCKED_LOCK}">
+                 ng-class="{'red': scalesLeftSideInfo && shownTypeLeft && scalesLeftSideInfo.POCKET_LOC,
+                            'green': scalesLeftSideInfo && shownTypeLeft && !scalesLeftSideInfo.POCKET_LOC}">
 
                 <p ng-show="shownTypeLeft.id == 0">
                     <span class="paramCaption">
@@ -59,8 +59,8 @@
                 </p>
             </div>
             <div class="monitorSideItem item-3" ng-show="shownTypeLeft.id == 1"
-                 ng-class="{'red': scalesLeftSideInfo && shownTypeLeft && scalesLeftSideInfo.POCKED_LOCK,
-                            'green': scalesLeftSideInfo && shownTypeLeft && !scalesLeftSideInfo.POCKED_LOCK}">
+                 ng-class="{'red': scalesLeftSideInfo && shownTypeLeft && scalesLeftSideInfo.POCKET_LOC,
+                            'green': scalesLeftSideInfo && shownTypeLeft && !scalesLeftSideInfo.POCKET_LOC}">
 
                 <span class="paramCaption">
                     {{'marker.monitorCaptions.rodsLeft' | translate}}:
@@ -76,8 +76,8 @@
         </div>
         <div class="monitorSide">
             <div class="monitorSideItem item-2"
-                 ng-class="{'red': scalesRightSideInfo && shownTypeRight && scalesRightSideInfo.POCKED_LOCK,
-                            'green': scalesRightSideInfo && shownTypeRight && !scalesRightSideInfo.POCKED_LOCK}">
+                 ng-class="{'red': scalesRightSideInfo && shownTypeRight && scalesRightSideInfo.POCKET_LOC,
+                            'green': scalesRightSideInfo && shownTypeRight && !scalesRightSideInfo.POCKET_LOC}">
                 <p ng-show="shownTypeRight.id == 0">
                     <span class="paramCaption">{{'marker.monitorCaptions.packWeight' | translate}}:</span>
                     <span class="paramValue">{{scalesRightSideInfo.WEIGHT_CURRENT}}</span>
@@ -90,8 +90,8 @@
                 </p>
             </div>
             <div class="monitorSideItem item-4" ng-show="shownTypeRight.id == 1"
-                 ng-class="{'red': scalesRightSideInfo && shownTypeRight && scalesRightSideInfo.POCKED_LOCK,
-                            'green': scalesRightSideInfo && shownTypeRight && !scalesRightSideInfo.POCKED_LOCK}">
+                 ng-class="{'red': scalesRightSideInfo && shownTypeRight && scalesRightSideInfo.POCKET_LOC,
+                            'green': scalesRightSideInfo && shownTypeRight && !scalesRightSideInfo.POCKET_LOC}">
                 <span class="paramCaption">{{'marker.monitorCaptions.rodsLeft' | translate}}:</span>
 
                 <span class="paramValue"
