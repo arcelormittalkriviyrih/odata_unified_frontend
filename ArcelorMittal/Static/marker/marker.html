@@ -309,9 +309,12 @@
         </span>
 
         <span class="autoManuMsg" ng-show="scalesDetailsInfo && !scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
-            По подтверждению
-            <!--{{ 'marker.autoMode' | translate }}-->
+            {{ 'marker.byAccept' | translate }}
         </span>
+
+        <p class="msgRed" ng-show="scalesDetailsInfo.weightCurrent > lastRequestMaxMass">
+            {{'marker.weightOver' | translate}}
+        </p>
 
         <p>
             <span class="msgRed"
@@ -343,7 +346,7 @@
 
         <p ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
             {{ 'marker.rodsLeft' | translate }}:
-            <span class="rodsValue" ng-show="rodsLeft >= 0 || rodsLeft < 0">
+            <span class="rodsValue" ng-show="rodsLeft != null">
                 <span ng-show="rodsLeft > 0">+</span>
                 {{rodsLeft}} {{ 'marker.pcs' | translate }}
             </span>

@@ -760,8 +760,11 @@
                                 $scope.isAcceptedOrder = true;
                             }
 
-                            else if (item.PropertyType == "MAX_WEIGHT")
+                            else if (item.PropertyType == "MAX_WEIGHT"){
                                 $scope.maxMass = parseInt(item.Value);
+                                $scope.lastRequestMaxMass = parseInt(item.Value);
+                            }
+                                
 
                             else if (item.PropertyType == "MIN_WEIGHT")
                                 $scope.minMass = parseInt(item.Value);
@@ -1258,9 +1261,13 @@
     };
 
     function vmCalculateRods() {
-
-        if ($scope.scalesDetailsInfo.BAR_QUANTITY >=0 && $scope.scalesDetailsInfo.RodsQuantity >= 0)
-            $scope.rodsLeft = $scope.scalesDetailsInfo.BAR_QUANTITY - $scope.scalesDetailsInfo.RodsQuantity;
+       
+        if (
+            (typeof $scope.scalesDetailsInfo.BAR_QUANTITY === 'undefined' || $scope.scalesDetailsInfo.BAR_QUANTITY === null)
+            ||
+            (typeof $scope.scalesDetailsInfo.RodsQuantity === 'undefined' || $scope.scalesDetailsInfo.RodsQuantity === null)
+            )
+            $scope.rodsLeft = null;
         else
             $scope.rodsLeft = $scope.scalesDetailsInfo.BAR_QUANTITY - $scope.scalesDetailsInfo.RodsQuantity;
 
@@ -1894,8 +1901,15 @@
 
     function vmCalculateRods(info) {
 
-        if (info.BAR_QUANTITY>=0 && info.RodsQuantity>=0)
+        if (
+            (typeof info.BAR_QUANTITY === 'undefined' || info.BAR_QUANTITY === null)
+            ||
+            (typeof info.RodsQuantity === 'undefined' || info.RodsQuantity === null)
+            )
+            info.rodsLeftCounted = null;
+        else
             info.rodsLeftCounted = info.BAR_QUANTITY - info.RodsQuantity;
+
     };
 }])
 

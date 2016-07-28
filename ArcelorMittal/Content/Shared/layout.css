@@ -388,7 +388,7 @@ div.errorHandle label{
     background: red;
 }
 
-span.msgRed{
+.msgRed{
     color: red;
     display: block;
     text-align: center;
