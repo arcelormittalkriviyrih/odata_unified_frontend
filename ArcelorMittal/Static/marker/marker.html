@@ -335,8 +335,8 @@
 
         <p ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
             {{ 'marker.rodsLeft' | translate }}:
-
-            <span class="rodsValue" ng-show="rodsLeft">
+            <span class="rodsValue" ng-show="rodsLeft >= 0 || rodsLeft < 0">
+                <span ng-show="rodsLeft > 0">+</span>
                 {{rodsLeft}} {{ 'marker.pcs' | translate }}
             </span>
         </p>
@@ -445,7 +445,7 @@
             {{ 'marker.changeOrderButton' | translate }}
         </button>
 
-        <button class="btn specialLabelMode"                
+        <button class="btn specialLabelMode"
                 ng-click="showMonitor()">
             {{'marker.monitor' | translate}}
         </button>

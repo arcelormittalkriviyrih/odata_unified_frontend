@@ -1259,10 +1259,10 @@
 
     function vmCalculateRods() {
 
-        if ($scope.scalesDetailsInfo.BAR_QUANTITY && $scope.scalesDetailsInfo.RodsQuantity >= 0)
+        if ($scope.scalesDetailsInfo.BAR_QUANTITY >=0 && $scope.scalesDetailsInfo.RodsQuantity >= 0)
             $scope.rodsLeft = $scope.scalesDetailsInfo.BAR_QUANTITY - $scope.scalesDetailsInfo.RodsQuantity;
         else
-            $scope.rodsLeft = 0;
+            $scope.rodsLeft = $scope.scalesDetailsInfo.BAR_QUANTITY - $scope.scalesDetailsInfo.RodsQuantity;
 
     };
 
@@ -1894,11 +1894,8 @@
 
     function vmCalculateRods(info) {
 
-        if (info.BAR_QUANTITY && info.RodsQuantity>=0)
+        if (info.BAR_QUANTITY>=0 && info.RodsQuantity>=0)
             info.rodsLeftCounted = info.BAR_QUANTITY - info.RodsQuantity;
-        else
-            info.rodsLeftCounted = 0;
-
     };
 }])
 

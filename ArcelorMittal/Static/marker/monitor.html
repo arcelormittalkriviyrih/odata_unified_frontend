@@ -66,7 +66,8 @@
                     {{'marker.monitorCaptions.rodsLeft' | translate}}:
                 </span>
                 <span class="paramValue"
-                      ng-show="scalesLeftSideInfo.rodsLeftCounted > 0">
+                      ng-show="scalesLeftSideInfo.rodsLeftCounted >= 0 || scalesLeftSideInfo.rodsLeftCounted < 0">
+                    <span ng-show="scalesLeftSideInfo.rodsLeftCounted > 0">+</span>
                     {{scalesLeftSideInfo.rodsLeftCounted}}
                 </span>
 
@@ -92,8 +93,10 @@
                  ng-class="{'red': scalesRightSideInfo && shownTypeRight && scalesRightSideInfo.POCKED_LOCK,
                             'green': scalesRightSideInfo && shownTypeRight && !scalesRightSideInfo.POCKED_LOCK}">
                 <span class="paramCaption">{{'marker.monitorCaptions.rodsLeft' | translate}}:</span>
+
                 <span class="paramValue"
-                      ng-show="scalesRightSideInfo.rodsLeftCounted > 0">
+                      ng-show="scalesRightSideInfo.rodsLeftCounted >= 0 || scalesRightSideInfo.rodsLeftCounted < 0">
+                    <span ng-show="scalesRightSideInfo.rodsLeftCounted > 0">+</span>
                     {{scalesRightSideInfo.rodsLeftCounted}}
                 </span>
 
