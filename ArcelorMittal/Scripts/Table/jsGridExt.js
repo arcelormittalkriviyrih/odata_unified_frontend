@@ -361,6 +361,7 @@
                     itemsCount: response['@odata.count'],
                     data: data
                 };
+
             });
         };
 

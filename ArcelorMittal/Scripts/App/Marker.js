@@ -1254,7 +1254,7 @@
 
     function vmCalculateMaxMass() {
 
-        $scope.maxMass = parseInt($scope.minMass) + 200;
+        $scope.maxMass = parseInt($scope.minMass) + 20;
     };
 
     function vmCalculateRods() {
