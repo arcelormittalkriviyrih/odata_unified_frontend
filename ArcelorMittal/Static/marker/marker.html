@@ -59,6 +59,8 @@
                     </h4>
                 </div>
 
+                <i class="circle" ng-class="{'red': scale.POCKET_LOC, 'green': !scale.POCKET_LOC}"></i>
+
             </div>
         </div>
     </div>
@@ -306,8 +308,14 @@
             {{ 'marker.autoMode' | translate }}
         </span>
 
+        <span class="autoManuMsg" ng-show="scalesDetailsInfo && !scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
+            По подтверждению
+            <!--{{ 'marker.autoMode' | translate }}-->
+        </span>
+
         <p>
-            <span ng-show="scalesDetailsInfo.POCKET_LOC && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
+            <span class="msgRed"
+                  ng-show="scalesDetailsInfo.POCKET_LOC && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
                 {{ 'marker.scalesBlocked' | translate }}
             </span>
             <span ng-show="sandwichMode && scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
