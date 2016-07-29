@@ -123,9 +123,10 @@
                     {{ 'marker.sandwich' | translate }}
                 </div>
                 <div>
+
                     <input type="checkbox"
                            ng-model="autoMode"
-                           ng-checked="!scalesDetailsInfo.AUTO_MANU"
+                           ng-checked="autoMode"
                            ng-disabled="!standard"
                            ng-change="enableControlOK()" />
                     {{ 'marker.byAccept' | translate }}

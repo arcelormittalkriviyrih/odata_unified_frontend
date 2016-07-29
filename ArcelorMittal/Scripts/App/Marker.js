@@ -799,7 +799,7 @@
                             }
 
                             else if (item.PropertyType == "AUTO_MANU_VALUE")
-                                $scope.autoMode = item.Value == 'true' ? true : false;
+                                $scope.autoMode = item.Value == 'true' ? false : true;
 
                             else if (item.PropertyType == "NEMERA")
                                 $scope.nemera = item.Value == 'true' ? true : false;
@@ -1329,7 +1329,7 @@
                 SAMPLE_LENGTH: $scope.sampleLength ? $scope.sampleLength.toString() : null,
                 DEVIATION: $scope.deviation ? $scope.deviation.toString() : null,
                 SANDWICH_MODE: $scope.sandwichMode ? 'true' : 'false',
-                AUTO_MANU_VALUE: $scope.autoMode ? 'true' : 'false',
+                AUTO_MANU_VALUE: $scope.autoMode ? 'false' : 'true',
                 NEMERA: $scope.nemera ? 'true' : 'false',
                 BINDING_DIA: null,
                 BINDING_QTY: null
