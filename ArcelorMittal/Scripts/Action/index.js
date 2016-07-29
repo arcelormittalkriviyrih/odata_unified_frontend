@@ -136,6 +136,20 @@
                 if (properties.disable)
                     field.input.attr('disabled', 'disabled');
 
+                if (properties.maxlength)
+                    field.input.attr('maxlength', properties.maxlength)
+
+                if (properties.countOnly)
+                    field.input.on("keydown keypress", function (event) {
+
+                        if (!((event.which >= 48 && event.which <= 57) || (event.which >= 96 && event.which <= 105))
+                            && event.which != 8 && event.which != 46 && event.which != 13 && event.which != 37
+                            && event.which != 38 && event.which != 39 && event.which != 40 && event.which != 9) {
+
+                            return false;
+                        };
+                    });
+
                 //set keyfield as readonly if we build edit form
                 if (formType == 'edit') {
 

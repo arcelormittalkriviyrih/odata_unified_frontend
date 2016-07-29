@@ -268,6 +268,8 @@
                                          show: true,
                                          disable: false,
                                          send: true,
+                                         maxlength: '10',
+                                         countOnly: true,
                                          translate: $translate.instant('market.Order.CreateDialogue.COMM_ORDER'),
                                          order: 1
                                      },
