@@ -418,7 +418,14 @@
                 };
             };
 
-            return filter.length > 1 ? filter.join(' and ') : filter[0];
+            filter = filter.length > 1 ? filter.join(' and ') : filter[0];
+
+            //trigger event binded on grid container
+            //this event calls on filtering and get possibility
+            //get filter data in outer source
+            $(self._container).trigger('odata.filter', { filter: filter });
+
+            return filter;
         };
 
         function insertItem(item) {
