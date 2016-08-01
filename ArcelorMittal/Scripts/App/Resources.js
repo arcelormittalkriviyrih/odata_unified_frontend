@@ -86,6 +86,7 @@
             Material: 'Material',
             Personnel: 'Personnel',
             Label: 'Labels',
+            SAPCommunication: "SAP communication",
             LabelButtons: {
                 print: 'Print',
                 cancelPrint: 'Print cancel',
@@ -105,6 +106,11 @@
                     status: 'Status',
                     isPrinted: 'Is printed'
                 },
+            },
+            sap: {
+                address: 'SAP address',
+                login: 'Login',
+                password: 'Password'
             }
         },
         marker: {            
@@ -321,6 +327,7 @@
             Material: 'Материалы',
             Personnel: 'Персонал',
             Label: 'Бирки',
+            SAPCommunication: "Связь с SAP",
             LabelButtons: {
                 print: 'Печать',
                 cancelPrint: 'Отмена печати',
@@ -339,6 +346,11 @@
                     status: 'Статус',
                     isPrinted: 'Напечатано'
                 }
+            },
+            sap: {
+                address: 'Адрес SAP',
+                login: 'Логин',
+                password: 'Пароль'
             }
         },
         marker: {            
@@ -557,6 +569,7 @@
             Material: 'Матеріали',
             Personnel: 'Персонал',
             Label: 'Бирки',
+            SAPCommunication: "Зв\'язок з SAP",
             LabelButtons: {
                 print: 'Друк',
                 cancelPrint: 'Відміна друку',
@@ -575,6 +588,11 @@
                     status: 'Статус',
                     isPrinted: 'Надруковано'
                 }
+            },
+            sap: {
+                address: 'Адреса SAP',
+                login: 'Логін',
+                password: 'Пароль'
             }
         },
         marker: {

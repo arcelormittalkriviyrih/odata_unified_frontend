@@ -32,10 +32,10 @@
             onExit: function ($state, $injector) {
 
                 $("#material_lot").jsGrid({
- 
-                    onDataLoading: function(args) {
-                        
-                            args.grid.table = null;                        
+
+                    onDataLoading: function (args) {
+
+                        args.grid.table = null;
                     }
                 });
             }
@@ -58,15 +58,24 @@
             }
         })
 
-    .state('app.PA.Logotypes', {
+        .state('app.PA.Logotypes', {
 
-        url: '/logotypes',
-        templateUrl: 'Static/market/labeltemplate.html',
-        controller: 'marketLabelTemplateCtrl',
-        params: {
-            fileType: 'Image'
-        }
-    })
+            url: '/logotypes',
+            templateUrl: 'Static/market/labeltemplate.html',
+            controller: 'marketLabelTemplateCtrl',
+            params: {
+                fileType: 'Image'
+            }
+        })
+
+        .state('app.PA.SAPCommunication', {
+
+            url: '/sapcommunication',
+            templateUrl: 'Static/pa/sapcommunication.html',
+            controller: 'PASAPCommunicationCtrl'
+        })
+
+
 }])
 
 .controller('PACtrl', ['$scope', 'indexService', '$state', 'roles', function ($scope, indexService, $state, roles) {
@@ -127,7 +136,7 @@
             });
         });
 
-    
+
 
     $treeContainer.on('tree-item-selected', function (e, data) {
 
@@ -135,7 +144,7 @@
 
         vmGetEquipmentClass(EquipmentID, $scope.equipment);
     });
-    
+
     $('div#equipment_property').jsGrid({
         width: "620px",
         sorting: false,
@@ -192,7 +201,7 @@
             modeSwitchButton: true
         }
     }).jsGrid('loadOdata', {
-        defaultFilter: 'ID eq -1'        
+        defaultFilter: 'ID eq -1'
     });
 
     function vmGetEquipmentClass(equipmentID, equipmentList, typeNode) {
@@ -215,7 +224,7 @@
                     vmGetEquipmentClass(equipmentID, response.data.value, 'new');
                 });
             } else return false;
-            
+
         };
 
     };
@@ -281,7 +290,7 @@
         });
     })
 
-    
+
 
     $hierarchyMaterialClass.on('tree-item-selected', function (e, data) {
 
@@ -459,7 +468,7 @@
             serviceUrl: serviceUrl,
             table: 'PersonnelClass',
             data: response.data.value,
-            keys : {
+            keys: {
                 id: 'ID',
                 parent: 'ParentID',
                 text: 'Description'
@@ -471,12 +480,12 @@
             translates: {
                 nodeName: $translate.instant('tree.nodeName'),
                 parentID: $translate.instant('tree.parentID')
-            },            
+            },
             disableControls: true
         });
     })
 
-    
+
 
     $personnelClass.on('tree-item-selected', function (e, data) {
 
@@ -645,7 +654,7 @@
     $scope.isShiftHolded = false;
     $scope.intervalLabelNumbers = [];
     $scope.intervalSelectedRows = [];
-    var _data;
+    var _data, _defaultFilterMaterialLot;
 
     function vmLabelPrintAction(action) {
 
@@ -657,16 +666,21 @@
         }).then(function () {
             vmRefreshInfo();
         });
-        
+
     };
 
     function vmRefreshInfo() {
 
         $scope.labelList = [];
+        var loadPropertiesmaterialLot = {
 
-        $('div#material_lot').jsGrid('loadOdata', {
             order: 'ID desc'
-        });
+        };
+
+        if (_defaultFilterMaterialLot)
+            loadPropertiesmaterialLot.defaultFilter = _defaultFilterMaterialLot;
+
+        $('div#material_lot').jsGrid('loadOdata', loadPropertiesmaterialLot);
 
         $('div#material_lot_property').jsGrid('loadOdata', {
             defaultFilter: 'MaterialLotID eq (-1)',
@@ -822,9 +836,15 @@
     }).jsGrid('loadOdata', {
 
         order: 'ID desc'
-    });;
+    });
 
-       
+    //get filter for material lot grid to save this filter after refresh
+    $('div#material_lot').on('odata.filter', function (e, data) {
+
+        _defaultFilterMaterialLot = data.filter;
+    })
+
+
     $('div#material_lot_property').jsGrid({
         width: "940px",
         sorting: false,
@@ -841,9 +861,9 @@
 
     });
 
-    
 
-    
+
+
     $(document).keydown(function (event) {
         if (event.keyCode == 17) {
             $scope.isCtrlHolded = true;
@@ -873,4 +893,27 @@
     });
 
 
+}])
+
+.controller('PASAPCommunicationCtrl', ['$scope', '$translate', 'indexService', function ($scope, $translate, indexService) {
+
+    $scope.updateSAP = vmUpdateSAP;
+
+    indexService.getInfo('v_SAPOrderRequest').then(function (responce) {
+
+        $scope.sapUrl = responce.data.value[0].Value;
+    });
+
+    function vmUpdateSAP() {
+
+        if ($scope.sapUrl && $scope.login.length > 0 && $scope.password.length > 0) {
+
+            indexService.sendInfo('upd_JobOrderSAPOrderRequest', {
+
+                ServiceURL: $scope.sapUrl,
+                Login: $scope.login,
+                Password: $scope.password
+            })
+        } 
+    }
 }]);
