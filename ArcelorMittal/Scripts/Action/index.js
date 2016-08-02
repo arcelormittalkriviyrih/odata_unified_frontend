@@ -127,6 +127,8 @@
 
                         if (e.keyCode == 13) {
 
+                            self.trigger('oDataForm.outerDataReceipt');
+
                             vmFillFieldsOuterData(properties.enterAction, fieldsList, field.input.val());
                         }
                     })
@@ -268,6 +270,8 @@
 
                 var data = response.value;
 
+                self.trigger('oDataForm.OuterDataReceived');
+
                 data.forEach(function (item) {
 
                     var field = fields.find(function (field) {
@@ -292,6 +296,11 @@
                         
 
                 })
+            }).fail(function (err) {
+
+                self.trigger('oDataForm.OuterDataReceiptFailed');
+
+                handleError(err);
             })
         }
 

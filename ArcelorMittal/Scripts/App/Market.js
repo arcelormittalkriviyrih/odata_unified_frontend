@@ -232,6 +232,26 @@
         $scope.processingTestPrint = false;
         $scope.$apply();
     });
+
+    $('#orderForm').on('oDataForm.outerDataReceipt', function (e) {
+
+        $scope.processingOuterDataReceipt = true;
+        $scope.$apply();
+    });
+
+    $('#orderForm').on('oDataForm.OuterDataReceived', function (e) {
+
+        $scope.processingOuterDataReceipt = false;
+        $scope.$apply();
+    });
+
+    $('#orderForm').on('oDataForm.OuterDataReceiptFailed', function (e) {
+
+        $scope.processingOuterDataReceipt = false;
+        $scope.$apply();
+    });
+
+    
 }])
 
 .controller('marketLabelTemplateCtrl', ['$scope', '$state', '$rootScope', '$translate', 'indexService', '$q', 'marketService', function ($scope, $state, $rootScope, $translate, indexService, $q, marketService) {
