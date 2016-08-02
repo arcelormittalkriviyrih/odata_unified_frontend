@@ -654,7 +654,7 @@
     $scope.isShiftHolded = false;
     $scope.intervalLabelNumbers = [];
     $scope.intervalSelectedRows = [];
-    var _data, _defaultFilterMaterialLot;
+    var _data, _filter, _gridObj;
 
     function vmLabelPrintAction(action) {
 
@@ -672,15 +672,29 @@
     function vmRefreshInfo() {
 
         $scope.labelList = [];
-        var loadPropertiesmaterialLot = {
 
+        $('div#material_lot').jsGrid('loadOdata', {
             order: 'ID desc'
-        };
+        });
 
-        if (_defaultFilterMaterialLot)
-            loadPropertiesmaterialLot.defaultFilter = _defaultFilterMaterialLot;
+        if (_filter) {
 
-        $('div#material_lot').jsGrid('loadOdata', loadPropertiesmaterialLot);
+            //load data for grid after refresh if before refresh grid had filter 
+            _gridObj.loadData(_filter);
+
+            //after data loading get filter object and fill filter row items by this object value
+            $('#material_lot').on('oDataGrid.dataLoadedSuccessfull', function (e) {
+
+                var filterControls = $('#material_lot').find('.jsgrid-filter-row').find('input, select').toArray();
+
+                for (var prop in _filter) {
+
+                    var i = Object.keys(_filter).indexOf(prop);
+                    $(filterControls[i]).val(_filter[prop]);
+                };
+
+            });
+        }
 
         $('div#material_lot_property').jsGrid('loadOdata', {
             defaultFilter: 'MaterialLotID eq (-1)',
@@ -838,13 +852,6 @@
         order: 'ID desc'
     });
 
-    //get filter for material lot grid to save this filter after refresh
-    $('div#material_lot').on('odata.filter', function (e, data) {
-
-        _defaultFilterMaterialLot = data.filter;
-    })
-
-
     $('div#material_lot_property').jsGrid({
         width: "940px",
         sorting: false,
@@ -861,8 +868,11 @@
 
     });
 
+    $('div#material_lot').on('oDataGrid.getFilter', function (e, data) {
 
-
+        _gridObj = data.grid;
+        _filter = data.filter;
+    });
 
     $(document).keydown(function (event) {
         if (event.keyCode == 17) {

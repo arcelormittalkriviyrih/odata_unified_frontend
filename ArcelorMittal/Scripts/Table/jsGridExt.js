@@ -321,6 +321,19 @@
         }
         
         function loadData(filter) {
+            
+            //for save filter data after refresh check filter
+            var isEmptyFilter = vmCheckFilterForEmpty(filter);
+
+            if (!isEmptyFilter) {
+                
+                //and trigger event with this filter value
+                //for handling in outer sources
+                $(self._container).trigger('oDataGrid.getFilter', {
+                    grid: self,
+                    filter: filter
+                });
+            }
 
             // if not initialized
             // than skip and do nothing
@@ -357,12 +370,32 @@
 
                 var data = response.value;
 
+                $(self._container).trigger('oDataGrid.dataLoadedSuccessfull');
+
                 return {
                     itemsCount: response['@odata.count'],
                     data: data
                 };
 
             });
+
+            //this method is checking filter object on emptyness
+            //there are ignored 'pageIndex' and 'pageSize' properties
+            //because they are already exists
+            //so we check other properties
+            function vmCheckFilterForEmpty(filter) {
+
+                for (var i in filter) {
+
+                    if (i != 'pageIndex' && i != 'pageSize') {
+
+                        if (filter[i])
+                            return false
+                        else
+                            return true
+                    };
+                };
+            };
         };
 
         function vmGetFilter(conditions, fields, defaultFilter) {
@@ -419,11 +452,6 @@
             };
 
             filter = filter.length > 1 ? filter.join(' and ') : filter[0];
-
-            //trigger event binded on grid container
-            //this event calls on filtering and get possibility
-            //get filter data in outer source
-            $(self._container).trigger('odata.filter', { filter: filter });
 
             return filter;
         };
