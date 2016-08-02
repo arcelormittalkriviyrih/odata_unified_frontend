@@ -1,18 +1,6 @@
 ﻿<ul class="nav nav-tabs">
 
     <li class="tab" ui-sref-active="active">
-        <a ui-sref=".Equipment" ui-sref-opts="{reload: true}">{{ 'pa.Equipment' | translate }}</a>
-    </li>
-
-    <li class="tab" ui-sref-active="active">
-        <a ui-sref=".Material" ui-sref-opts="{reload: true}">{{ 'pa.Material' | translate }}</a>
-    </li>
-
-    <li class="tab" ui-sref-active="active">
-        <a ui-sref=".Personnel" ui-sref-opts="{reload: true}">{{ 'pa.Personnel' | translate }}</a>
-    </li>
-
-    <li class="tab" ui-sref-active="active">
         <a ui-sref=".Label" ui-sref-opts="{reload: true}">{{ 'pa.Label' | translate }}</a>
     </li>
 
@@ -21,16 +9,29 @@
     </li>
 
     <li class="tab" ui-sref-active="active">
-        <a ui-sref=".LabelTemplate" ui-sref-opts="{reload: true}">{{ 'pa.TemplateLabel' | translate }}</a>
-    </li>
-
-    <li class="tab" ui-sref-active="active">
         <a ui-sref=".Logotypes" ui-sref-opts="{reload: true}">{{ 'pa.Logotypes' | translate }}</a>
     </li>
 
     <li class="tab" ui-sref-active="active">
+        <a ui-sref=".Material" ui-sref-opts="{reload: true}">{{ 'pa.Material' | translate }}</a>
+    </li>
+
+    <li class="tab" ui-sref-active="active">
+        <a ui-sref=".Equipment" ui-sref-opts="{reload: true}">{{ 'pa.Equipment' | translate }}</a>
+    </li>
+    
+    <li class="tab" ui-sref-active="active">
+        <a ui-sref=".Personnel" ui-sref-opts="{reload: true}">{{ 'pa.Personnel' | translate }}</a>
+    </li>
+    
+    <li class="tab" ui-sref-active="active">
         <a ui-sref=".SAPCommunication" ui-sref-opts="{reload: true}">{{ 'pa.SAPCommunication' | translate }}</a>
     </li>
+    
+    <li class="tab" ui-sref-active="active">
+        <a ui-sref=".LabelTemplate" ui-sref-opts="{reload: true}">{{ 'pa.TemplateLabel' | translate }}</a>
+    </li>
+       
 </ul>
 
 <ui-view></ui-view>

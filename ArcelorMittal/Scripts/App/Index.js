@@ -228,6 +228,34 @@
 
     $scope.user = user;
     $scope.roles = roles;
+
+    $scope.roles.forEach(function (role) {
+
+        switch (role.RoleName) {
+
+            case 'Market':
+                role.order = 1;
+                break;
+
+            case 'Marker':
+                role.order = 2;
+                break;
+
+            case 'PA':
+                role.order = 3;
+                break;
+
+            case 'WorkshopSpecs':
+                role.order = 4;
+                break;
+
+        };
+    });
+
+    $scope.roles = $scope.roles.sort(function (a, b) {
+
+        return a.order - b.order
+    })
     
     // check if locale specified    
     if (!$state.params.locale) {
