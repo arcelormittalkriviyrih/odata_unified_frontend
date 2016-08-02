@@ -913,6 +913,9 @@
                 ServiceURL: $scope.sapUrl,
                 Login: $scope.login,
                 Password: $scope.password
+            }).then(function () {
+
+                alert($translate.instant('pa.sap.communicationSuccess'));
             })
         } 
     }

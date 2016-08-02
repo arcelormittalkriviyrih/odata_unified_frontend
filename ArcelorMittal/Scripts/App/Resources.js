@@ -110,7 +110,8 @@
             sap: {
                 address: 'SAP address',
                 login: 'Login',
-                password: 'Password'
+                password: 'Password',
+                communicationSuccess: 'Parameters successfully saved'
             }
         },
         marker: {            
@@ -350,7 +351,8 @@
             sap: {
                 address: 'Адрес SAP',
                 login: 'Логин',
-                password: 'Пароль'
+                password: 'Пароль',
+                communicationSuccess: 'Параметры успешно сохранены'
             }
         },
         marker: {            
@@ -592,7 +594,8 @@
             sap: {
                 address: 'Адреса SAP',
                 login: 'Логін',
-                password: 'Пароль'
+                password: 'Пароль',
+                communicationSuccess: 'Параметри успішно збережені'
             }
         },
         marker: {
