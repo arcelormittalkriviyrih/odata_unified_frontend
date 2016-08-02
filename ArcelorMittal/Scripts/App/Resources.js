@@ -76,7 +76,11 @@
                     fileType: 'File Type',
                     templateName: 'Name',
                     file: 'File',
-                    preview: 'Preview'
+                    preview: 'Preview',
+                    changeFile: 'Change file',
+                    changeDescription: 'Change description',
+                    upload: 'Upload',
+                    update: 'Update'
                 }
             }
 
@@ -319,7 +323,11 @@
                     fileType: 'Тип файла',
                     templateName: 'Название',
                     file: 'Файл',
-                    preview: 'Превью'
+                    preview: 'Превью',
+                    changeFile: 'Обновить файл',
+                    changeDescription: 'Обновить описание',
+                    upload: 'Загрузить',
+                    update: 'Обновить'
                 }
             }
         },
@@ -562,7 +570,11 @@
                     fileType: 'Тип файла',
                     templateName: 'Назва',
                     file: 'Файл',
-                    preview: 'Прев\'ю'
+                    preview: 'Прев\'ю',
+                    changeFile: 'Оновити файл',
+                    changeDescription: 'Оновити опис',
+                    upload: 'Завантажити',
+                    update: 'Оновити'
                 }
             }
         },

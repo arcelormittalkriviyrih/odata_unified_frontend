@@ -267,6 +267,7 @@
     $scope.showDownloadButton = true;
     $scope.toggleModal = false;
     $scope.createForm = vmCreateForm;
+    $scope.locale = $state.params.locale;
 
     var fields = [{
         id: 'ID',
@@ -346,11 +347,11 @@
         rowClick: function (args) {
 
             vmActiveRow(args);
-            vmPopulateForm(args.item);
+            vmPopulateFormEdit(args.item);
             $scope.selectedTemplateID = args.item.ID;
 
-            $form.find('input[type=file]').prop('required', false);
-            $form.find('input[type=file]').attr('required', false);
+            $fileUploadForm.find('input[type=file]').prop('required', false);
+            $fileUploadForm.find('input[type=file]').attr('required', false);
 
             $scope.$apply();
         },
@@ -359,7 +360,7 @@
 
             // hide edit form
             // on successfull delete
-            $form.hide();
+            $formCreateWrapper.hide();
         }
     })
     .jsGrid('initOdata', {
@@ -382,32 +383,89 @@
     });
 
     // get form element
-    var $form = $('#fileForm');
+    var $formCreate = $('#fileForm');
+    var $formCreateWrapper = $('#createForm');
+    var $formEditWrapper = $('#editForm');
+    var $fileUploadForm = $('#fileUploadForm');
+    var $filePropertiesForm = $('#filePropertiesForm');
 
     // add new record
-    $('#addFile').click(vmAddRecord);
-    $('#cancel').click(vmResetForm);
-    $('#fileData').change(vmFileSelected);
+    $('#addFile').click(vmAddRecord);    
+    $('#fileDataCreate').change(vmFileSelected);
+    $('#fileDataEdit').change(vmFileSelected);
 
-    function vmPopulateForm(item) {
+    $('#cancelCreate').click(function (e) {
+
+        e.preventDefault();
+
+        vmResetForm({
+            forms: [$formCreate],
+            container: $formCreateWrapper
+        });
+    });
+
+    $('#cancelEdit').click(function (e) {
+
+        e.preventDefault();
+
+        vmResetForm({
+            forms: [$filePropertiesForm, $fileUploadForm],
+            container: $formEditWrapper
+        });
+    });
+
+    function vmPopulateFormCreate(item) {
 
         // create service URL
         // to create / update file by ID
         // and assign it as form action
         var action = serviceUrl + 'Files(' + item.ID + ')/$value';
-        $form.attr('action', action);
+
+        $formCreate.attr('action', action);
 
         $('input[type=text], select').removeClass('wrong');
         $('input[type=file]').parent().removeClass('wrong');
 
-        $form.find('[name="FileName"]').val(item.FileName);
-        $form.find('[name="Name"]').val(item.Name);
-        $form.find('[name="Status"]').val(item.Status);
-        $form.find('[name="FileType"]').val(item.FileType);
+        $formCreate.find('[name="FileName"]').val(item.FileName);
+        $formCreate.find('[name="Name"]').val(item.Name);
+        $formCreate.find('[name="Status"]').val(item.Status);
+        $formCreate.find('[name="FileType"]').val(item.FileType);
 
         // show form
-        $form.show();
+        $formCreateWrapper.show();
+        $formEditWrapper.hide();
+
     };
+
+    function vmPopulateFormEdit(item) {
+
+        // create service URL
+        // to create / update file by ID
+        // and assign it as form action
+        var action = serviceUrl + 'Files(' + item.ID + ')';
+        _actionEdit = action;
+
+        var actionFileUpload = action + '/$value';
+
+        $fileUploadForm.attr('action', actionFileUpload);
+        $filePropertiesForm.attr('action', action);
+
+        $('input[type=text], select').removeClass('wrong');
+        $('input[type=file]').parent().removeClass('wrong');
+
+        $fileUploadForm.find('[name="FileName"]').val(item.FileName);
+        $fileUploadForm.find('[name="Name"]').val(item.Name);
+        $fileUploadForm.find('[name="Status"]').val(item.Status);
+        $fileUploadForm.find('[name="FileType"]').val(item.FileType);
+
+
+        $filePropertiesForm.find('[name="Name"]').val(item.Name);
+        $filePropertiesForm.find('[name="Status"]').val(item.Status);
+        $filePropertiesForm.find('[name="FileType"]').val(item.FileType);
+
+        $formCreateWrapper.hide();
+        $formEditWrapper.show();
+    }
 
     function vmAddRecord() {
 
@@ -416,15 +474,15 @@
         // prepare form for INSERT
         // set ID to -1
         // set File type to default value
-        vmPopulateForm({
+        vmPopulateFormCreate({
             ID: -1,
             FileName: '',
             Name: '',
             FileType: $state.params.fileType
         });
 
-        $form.find('input[type=file]').prop('required', true);
-        $form.find('input[type=file]').attr('required', true);
+        $formCreate.find('input[type=file]').prop('required', true);
+        $formCreate.find('input[type=file]').attr('required', true);
 
         return false;
     }
@@ -433,66 +491,70 @@
     function vmFileSelected() {
 
         // get filename
-        var filename = $form.find('[name="Data"]')
+        var filenameCreate = $formCreate.find('[name="Data"]')
                             .val()
                             .split('\\')
                             .pop();
 
+        var filenameEdit = $fileUploadForm.find('[name="Data"]')
+                                    .val()
+                                    .split('\\')
+                                    .pop();
+
         // get "file name" control
         // update with name of file selected
-        var $input = $form.find('[name="FileName"]');
+        var $inputCreate = $formCreate.find('[name="FileName"]');
+        var $inputEdit = $fileUploadForm.find('[name="FileName"]');
 
-        $input.val(filename)
+        $inputCreate.val(filenameCreate);
+        $inputEdit.val(filenameEdit);
     }
 
-    function vmResetForm() {
+    function vmResetForm(formObj) {
 
-        //reset form entered data
-        $form[0].reset();
+        formObj.forms.forEach(function ($form) {
+            //reset form entered data
+            $form[0].reset();
+        });
+
+        formObj.container.hide();
 
         _isReset = true; //hack for IE
 
-        //and hide it
-        $form.hide();
-    }
+    };
 
-    //check required fields before submit
-    //if all required fields are filled - refresh page after submit
-    $form.on('submit', function (e) {
+    $formCreate.on('submit', function (e) {
 
-        var unFilledFields = $(this)
-                    .find("input, select")
-                    .filter("[required]")
-                    .filter(function () { return this.value == ''; });
-
-        if (unFilledFields.length > 0) {
-
-            unFilledFields.each(function () {
-                e.preventDefault();
-
-
-                if ($(this).attr('type') == 'file') {
-
-                    if ($('input#fileName').val() == '')
-                        $(this).parent().addClass('wrong');
-
-                } else
-                    $(this).addClass('wrong');
-
-                if (!_isReset) //hack for IE
-                    alert($('label[for=' + $(this).attr('id') + ']').html() + " is required!");
-
-            });
-        } else {
-
-            setTimeout(function () {
-                window.location.reload();
-            }, 1000);
-        }
-
-
-
+        vmSubmitForm(e, this, vmLocationReload);
     });
+
+    $fileUploadForm.on('submit', function (e) {
+       
+        vmSubmitForm(e, this, vmLocationReload);
+    });
+
+    $filePropertiesForm.find('button[type=submit]').click(function (e) {
+
+        e.preventDefault();
+        vmSubmitForm(e, $filePropertiesForm, vmUpdateFileProperties);
+    });
+
+    function vmUpdateFileProperties(){
+
+        var data = {
+            Status: $filePropertiesForm.find('[name="Status"]').val(),
+            Name: $filePropertiesForm.find('[name="Name"]').val()
+        };
+        
+        $.ajax({
+
+            url: _actionEdit,
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            type: 'PATCH'
+
+        }).then(vmLocationReload);
+    };
 
     function vmCreateForm(type, procedure, id, keyField) {
 
@@ -516,6 +578,38 @@
                 marketService.createForm(type, procedure, id, keyField, templateData, rowData, true);
 
             });
+    };
+
+    function vmSubmitForm(e, self, handler) {
+
+        var unFilledFields = $(self)
+                    .find("input, select")
+                    .filter("[required]")
+                    .filter(function () { return this.value == ''; });
+
+        if (unFilledFields.length > 0) {
+
+            unFilledFields.each(function () {
+                e.preventDefault();
+
+                if ($('input#fileName').val() == '')
+                    $(this).parent().addClass('wrong');
+                
+                if (!_isReset) //hack for IE
+                    alert($('label[for=' + $(this).attr('id') + ']').html() + " is required!");
+
+            });
+        } else {
+
+            handler(); 
+        }
+    };
+
+    function vmLocationReload(){
+
+        setTimeout(function () {
+            window.location.reload();
+        }, 1000);
     };
 
     function vmToggleModal(expr) {
