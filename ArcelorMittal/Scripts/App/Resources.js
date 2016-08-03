@@ -91,6 +91,7 @@
             Personnel: 'Personnel',
             Label: 'Labels',
             SAPCommunication: "SAP communication",
+            Diagnostics: 'Diagnostics',
             LabelButtons: {
                 print: 'Print',
                 cancelPrint: 'Print cancel',
@@ -337,6 +338,7 @@
             Personnel: 'Персонал',
             Label: 'Бирки',
             SAPCommunication: "Связь с SAP",
+            Diagnostics: 'Диагностика',
             LabelButtons: {
                 print: 'Печать',
                 cancelPrint: 'Отмена печати',
@@ -584,6 +586,7 @@
             Personnel: 'Персонал',
             Label: 'Бирки',
             SAPCommunication: "Зв\'язок з SAP",
+            Diagnostics: 'Діагностика',
             LabelButtons: {
                 print: 'Друк',
                 cancelPrint: 'Відміна друку',
