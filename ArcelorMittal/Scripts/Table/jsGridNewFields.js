@@ -22,6 +22,10 @@
             if (this.autosearch) {
                 $result.on("keypress", function (e) {
                     if (e.which === 13) {
+
+                        if ($(this).val() == '')
+                            $(document).trigger('oDataGrid.filterEmpty');
+
                         grid.search();
                         e.preventDefault();
                     }

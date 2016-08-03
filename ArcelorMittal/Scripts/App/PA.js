@@ -75,6 +75,13 @@
             controller: 'PASAPCommunicationCtrl'
         })
 
+        .state('app.PA.Diagnostics', {
+
+            url: '/diagnostics',
+            templateUrl: 'Static/pa/diagnostics.html',
+            controller: 'diagnosticsCtrl'
+        })
+
 
 }])
 
@@ -654,6 +661,7 @@
     $scope.isShiftHolded = false;
     $scope.intervalLabelNumbers = [];
     $scope.intervalSelectedRows = [];
+    $scope.showGrid = true;
     var _data, _filter, _gridObj;
 
     function vmLabelPrintAction(action) {
@@ -679,6 +687,8 @@
 
         if (_filter) {
 
+            $scope.showGrid = false;
+
             //load data for grid after refresh if before refresh grid had filter 
             _gridObj.loadData(_filter);
 
@@ -693,6 +703,9 @@
                     $(filterControls[i]).val(_filter[prop]);
                 };
 
+                $scope.showGrid = true;
+
+                $scope.$apply();
             });
         }
 
@@ -874,6 +887,11 @@
         _filter = data.filter;
     });
 
+    $(document).on('oDataGrid.filterEmpty', function (e, data) {
+
+        _filter = null;
+    })
+
     $(document).keydown(function (event) {
         if (event.keyCode == 17) {
             $scope.isCtrlHolded = true;
@@ -927,6 +945,61 @@
 
                 alert($translate.instant('pa.sap.communicationSuccess'));
             })
-        } 
+        }
     }
+}])
+
+.controller('diagnosticsCtrl', ['$scope', '$translate', 'indexService', function ($scope, $translate, indexService) {
+
+    indexService.getInfo('GetServiceInfo').then(function (responce) {
+
+        $scope.diagnosticsData = responce.data;
+        
+        $scope.AssemblyDictionaryData = vmPrepareData($scope.diagnosticsData.AssemblyDictionary)
+                                                .map(function (item) {
+
+                                                    var itemToArray = item.split(',');
+                                                    itemToArray = itemToArray.map(vmMapData);
+
+                                                    return vmBuildDataobj(itemToArray);
+                                                });
+
+        $scope.AppSettingsData = vmPrepareData($scope.diagnosticsData.AppSettings)
+                                                .map(vmMapData);
+
+        $scope.AppSettingsDataObj = vmBuildDataobj($scope.AppSettingsData);
+
+    });
+
+    function vmPrepareData(string) {
+
+        var arr = string.split('\r\n');
+        arr = arr.filter(function (item) {
+
+            return item.length > 0;
+        });
+
+        return arr;
+    };
+
+    function vmMapData(itemArray) {
+
+        itemArray = itemArray.split('=');
+        itemArray[0] = itemArray[0].replace(/\W/g, '');
+
+        return itemArray;
+    }
+
+    function vmBuildDataobj(arr) {
+
+        var obj = {};
+
+        for (var i = 0; i < arr.length; i++) {
+
+            obj[arr[i][0]] = arr[i][1];
+        };
+
+        return obj;
+    };
+
 }]);

@@ -22,8 +22,15 @@
     </button>
 
     <div>
-        <div id="material_lot">
+        <div id="material_lot" ng-show="showGrid">
 
+        </div>
+
+        <div ng-show="!showGrid" style="display: table; height:500px; width: 940px">
+            <p style="display: table-cell;text-align: center;vertical-align: middle;">
+                Loading ...
+            </p>
+                
         </div>
     </div>
 
