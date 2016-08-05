@@ -313,7 +313,7 @@
             {{ 'marker.byAccept' | translate }}
         </span>
 
-        <p class="msgRed" ng-show="scalesDetailsInfo.weightCurrent > lastRequestMaxMass">
+        <p class="msgRed" ng-show="scalesDetailsInfo.weightCurrent > scalesDetailsInfo.MaxWeight">
             {{'marker.weightOver' | translate}}
         </p>
 

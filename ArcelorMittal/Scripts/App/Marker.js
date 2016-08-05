@@ -764,7 +764,7 @@
 
                             else if (item.PropertyType == "MAX_WEIGHT"){
                                 $scope.maxMass = parseInt(item.Value);
-                                $scope.lastRequestMaxMass = parseInt(item.Value);
+                                //$scope.lastRequestMaxMass = parseInt(item.Value);
                             }
                                 
 
