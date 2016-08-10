@@ -9,12 +9,13 @@
 <div ng-show="!$root.showLoadingState">
     <button id="addFile" class="add btn btn-default">{{ 'market.buttonAddTempate' | translate }}</button>
     <button class="add btn btn-default"
+			ng-if="labelTemplateMode"
             ng-click="createForm('edit', 'upd_Order', selectedTemplateID, 'TEMPLATE')" 
             ng-disabled="!selectedTemplateID">Тестовая печать</button>
 
     <a href="{{downloadTechnicalList}}"
        class="btn btn-default pull-right"
-       ng-if="showDownloadButton">
+       ng-if="labelTemplateMode">
         {{ 'market.buttonDownloadTechSheet' | translate }}
     </a>
 
