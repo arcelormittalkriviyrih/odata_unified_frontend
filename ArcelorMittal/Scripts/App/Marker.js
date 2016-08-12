@@ -574,7 +574,8 @@
 
                                        scale.weightCurrent = scaleData.WEIGHT_CURRENT;
 
-                                       vmRedrawArrow(scale);
+                                       if (!scale.ALARM)
+                                           vmRedrawArrow(scale);
                                    };
 
                                };
@@ -619,11 +620,11 @@
     };
 
     function vmRedrawArrow(scale) {
-
+      
         scale.plot.replot({
+
             data: [[scale.weightCurrent || 0]],
         });
-
     };
 
     function vmSelectCurrentSides(id) {

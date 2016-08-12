@@ -38,28 +38,37 @@
 
             <div class="scaleContainer"
                  ng-repeat="scale in group"
-                 ng-class="{'active': scale.ID == currentScaleID && scale.isInfoLoaded}"
+                 ng-class="{'active': scale.ID == currentScaleID && scale.isInfoLoaded, 'failure': scale.ALARM}"
                  ng-click="selectCurrentSides(scale.ID)">
 
-                <div class="plotArea"
-                     id="plot-{{scale.ID}}">
-                </div>
+                <label>{{scale.Description}}</label>
 
-                <div ng-show="!scale.isInfoLoaded" style="line-height: 6;">
-                    {{ 'loadingMsg' | translate }}
-                </div>
+                <span class="failureMsg" ng-show="scale.ALARM">
+                    {{ 'marker.failure' | translate }}
+                </span>
 
-                <div ng-show="scale.isInfoLoaded" style="margin-top: -30px;">
-                    <label>{{scale.Description}}</label>
-                    <h3 ng-show="scale.weightCurrent >=0">
-                        {{scale.weightCurrent}} {{ 'marker.kg' | translate }}
-                    </h3>
-                    <h4 ng-show="scale.rodsQuantity > 0">
-                        {{scale.rodsQuantity}} {{ 'marker.pcs' | translate }}
-                    </h4>
-                </div>
+                <div ng-show="!scale.ALARM">
+                   
+                    <div class="plotArea"
+                         id="plot-{{scale.ID}}">
+                    </div>
 
-                <i class="circle" ng-class="{'red': scale.POCKET_LOC, 'green': !scale.POCKET_LOC}"></i>
+                    <div ng-show="!scale.isInfoLoaded" style="line-height: 6;">
+                        {{ 'loadingMsg' | translate }}
+                    </div>
+
+                    <div ng-show="scale.isInfoLoaded" style="margin-top: -30px;">
+                        
+                        <h3 ng-show="scale.weightCurrent >=0">
+                            {{scale.weightCurrent}} {{ 'marker.kg' | translate }}
+                        </h3>
+                        <h4 ng-show="scale.rodsQuantity > 0">
+                            {{scale.rodsQuantity}} {{ 'marker.pcs' | translate }}
+                        </h4>
+                    </div>
+
+                    <i class="circle" ng-class="{'red': scale.POCKET_LOC, 'green': !scale.POCKET_LOC}"></i>
+                </div>
 
             </div>
         </div>
@@ -67,7 +76,7 @@
 
 </div>
 
-<div class="scaleDetailInfo" ng-show="currentScaleID">
+<div class="scaleDetailInfo" ng-show="currentScaleID && !scalesDetailsInfo.ALARM">
 
 
 

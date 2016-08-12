@@ -121,6 +121,7 @@
         },
         marker: {            
             changeSide: 'Change side for work:',
+            failure: 'failure',
             kg: 'kg',
             pcs: 'pcs',
             task: 'Task',
@@ -367,6 +368,7 @@
         },
         marker: {            
             changeSide: 'Выберите сторону стана для работы:',
+            failure: 'авария',
             kg: 'кг',
             pcs: 'шт',
             task: 'Задание',
@@ -465,7 +467,7 @@
         },
         errorLog: {
             errorCode: 'Текст ошибки',
-            description: 'Введите под. информацию',
+            description: 'Введите доп. информацию',
             sending: 'Отправка...'
         },
         buttonCreate: 'Создать',
@@ -615,6 +617,7 @@
         },
         marker: {
             changeSide: 'Виберіть сторону стана для роботи:',
+            failure: 'аварія',
             kg: 'кг',
             pcs: 'шт',
             task: 'Завдання',

@@ -470,6 +470,17 @@ div.errorHandle label{
     min-height: 100%;
 }
 
+.failure{
+    vertical-align: middle;
+    
+}
+
+.failureMsg{
+    text-transform: uppercase;
+    font-size: 36px;
+    color: red;
+}
+
 .scaleInfo:nth-child(2){
     border-left:1px solid #d4d4d4;
     border-right:1px solid #d4d4d4;
