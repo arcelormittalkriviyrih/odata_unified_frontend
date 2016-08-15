@@ -34,13 +34,23 @@
 
             $interval.cancel($rootScope.intervalMonitor);
         }
-    });
+    })
+
+    .state('app.Marker.Diagnostics', {
+
+        url: '/diagnostics/:side',
+        templateUrl: 'Static/pa/diagnostics.html',
+        controller: 'diagnosticsCtrl',
+        params: {
+            side: null
+        }
+    })
 
 }])
 
 .controller('markerCtrl', ['$scope', '$state', function ($scope, $state) {
 
-    if ($state.current.name != 'app.Marker.Monitor')
+    if ($state.current.name != 'app.Marker.Monitor' && $state.current.name != 'app.Marker.Diagnostics')
         $state.go('app.Marker.Index');
 
 }])
@@ -110,6 +120,7 @@
     $scope.acceptHandMode = vmAcceptHandMode;
     $scope.cancelHandMode = vmCancelHandMode;
     $scope.showMonitor = vmShowMonitor;
+    $scope.showDiagnostics = vmShowDiagnostics;
 
     vmInit();
 
@@ -1709,6 +1720,16 @@
 
         window.open(url, '_blank');
     };
+
+    function vmShowDiagnostics() {
+
+        var url = $state.href('app.Marker.Diagnostics', {
+
+            side: $scope.sideIsSelected
+        });
+
+        window.open(url, '_blank');
+    }
 
     //there are events triggered on success and cancel button click in order modal form
     $('#orderForm').on('oDataForm.success', function (e, data) {

@@ -1,46 +1,30 @@
-﻿
-<div class="diagnosticsData">
-
-    <table class="table table-striped table-condensed">
-        <tr ng-repeat="(key, value) in diagnosticsData">
-            <td ng-show="key != 'AssemblyDictionary' && key != 'AppSettings'">
-                {{key}}
-            </td>
-            <td ng-show="key != 'AssemblyDictionary' && key != 'AppSettings'">{{value}}</td>
-            <td ng-show="key == 'AssemblyDictionary'">
-                {{key}}
-            </td>
-            <td ng-show="key == 'AssemblyDictionary'">
-                <table class="table">
-                    <tr>
-                        <th ng-repeat="(k, v) in AssemblyDictionaryData[0]">
-                            {{k}}
-                        </th>
-                    </tr>
-
-                    <tr ng-repeat="item in AssemblyDictionaryData">
-                        <td ng-repeat="(k, v) in item">
-                            {{v}}
-
-                        </td>
-                    </tr>
-
-                </table>
-            </td>
-
-            <td ng-show="key == 'AppSettings'">
-                {{key}}
-            </td>
-            <td ng-show="key == 'AppSettings'">
-                <table class="table">
-                    <tr ng-repeat="(key, value) in AppSettingsDataObj">
-                        <td>{{key}}</td>
-                        <td>{{value}}</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+﻿<div class="dropdown" ng-hide="side">
+    <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        {{ 'pa.diagnostics.changeSide' | translate }}            
+        <span class="caret"></span>
+    </div>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        <li ng-repeat="side in availableSides">
+            <a href="#"
+                ng-click="changeSide(side); $event.preventDefault();">
+                {{side.Description}}
+            </a>
+        </li>
+    </ul>
 </div>
 
+<table ng-show="selectedSide" class="table table-striped table-condensed">
+    <caption>
+        <span ng-show="!side">{{selectedSideDescription}}</span>
+        <span ng-show="side">{{availableSides[0].Description}}</span>
+    </caption>
+    <tr>
+        <th>{{'pa.diagnostics.equipmentName' | translate}}</th>
+        <th>{{'pa.diagnostics.equipmentStatus' | translate}}</th>
+    </tr>
+    <tr ng-repeat="item in diagnosticsInfo">
+        <td>{{item.EquipmentName}}</td>
+        <td>{{item.EquipmentStatus}}</td>
+    </tr>
+</table>
 

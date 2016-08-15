@@ -213,6 +213,7 @@
     <Content Include="Static\market\labeltemplate.html" />
     <Content Include="Static\market\order.html" />
     <Content Include="Static\pa\diagnostics.html" />
+    <Content Include="Static\pa\version.html" />
     <Content Include="Static\pa\sapcommunication.html" />
     <Content Include="Static\root.html" />
     <Content Include="Static\workshopspecs.html" />

@@ -75,11 +75,18 @@
             controller: 'PASAPCommunicationCtrl'
         })
 
+        .state('app.PA.Version', {
+
+            url: '/version',
+            templateUrl: 'Static/pa/version.html',
+            controller: 'versionCtrl'
+        })
+
         .state('app.PA.Diagnostics', {
 
-            url: '/diagnostics',
+            url: '/diagnostics/',
             templateUrl: 'Static/pa/diagnostics.html',
-            controller: 'diagnosticsCtrl'
+            controller: 'diagnosticsCtrl',
         })
 
 
@@ -949,13 +956,13 @@
     }
 }])
 
-.controller('diagnosticsCtrl', ['$scope', '$translate', 'indexService', function ($scope, $translate, indexService) {
+.controller('versionCtrl', ['$scope', '$translate', 'indexService', function ($scope, $translate, indexService) {
 
     indexService.getInfo('GetServiceInfo').then(function (responce) {
 
-        $scope.diagnosticsData = responce.data;
-        
-        $scope.AssemblyDictionaryData = vmPrepareData($scope.diagnosticsData.AssemblyDictionary)
+        $scope.versionData = responce.data;
+
+        $scope.AssemblyDictionaryData = vmPrepareData($scope.versionData.AssemblyDictionary)
                                                 .map(function (item) {
 
                                                     var itemToArray = item.split(',');
@@ -964,7 +971,7 @@
                                                     return vmBuildDataobj(itemToArray);
                                                 });
 
-        $scope.AppSettingsData = vmPrepareData($scope.diagnosticsData.AppSettings)
+        $scope.AppSettingsData = vmPrepareData($scope.versionData.AppSettings)
                                                 .map(vmMapData);
 
         $scope.AppSettingsDataObj = vmBuildDataobj($scope.AppSettingsData);
@@ -1002,4 +1009,44 @@
         return obj;
     };
 
+}])
+
+.controller('diagnosticsCtrl', ['$scope', '$translate', 'indexService', '$state', function ($scope, $translate, indexService, $state) {
+
+    $scope.changeSide = vmChangeSide;
+    $scope.side = $state.params.side;
+    var sidesListUrl = 'v_AvailableSidesAll';
+
+
+    if ($scope.side) {
+
+        vmChangeSide(parseInt($scope.side));
+        sidesListUrl += '?$filter=ID eq {0}'.format(parseInt($scope.side));
+    } 
+
+    indexService.getInfo(sidesListUrl).then(function (response) {
+
+        $scope.availableSides = response.data.value;
+    });
+    
+
+    function vmChangeSide(side) {
+
+        if (typeof side == 'object') {
+            $scope.selectedSide = side.ID;
+            $scope.selectedSideDescription = side.Description;
+        }
+        else
+            $scope.selectedSide = side;
+
+        indexService.getInfo('v_DiagInfo?$filter=SideID eq {0}'.format($scope.selectedSide))
+                    .then(function (response) {
+
+                        $scope.diagnosticsInfo = response.data.value;
+                        $scope.diagnosticsInfo = $scope.diagnosticsInfo.sort(function (a, b) {
+
+                            return a.EquipmentName - b.EquipmentName
+                        })
+                    });
+    };
 }]);

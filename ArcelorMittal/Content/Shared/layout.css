@@ -40,6 +40,13 @@ input.form{
     margin-left: 12px;
 }
 
+caption{
+    text-align: center;
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
 ul#item_list.pre-scrollable{
     max-height:500px;
 }
@@ -813,16 +820,21 @@ div.controlTask input, div.controlTask select {
     border-left: 2px solid #ccc;
 }
 
-/*diagnostics*/
+/*version*/
 
 .vertical-align-top{
     vertical-align: top;
 }
 
-div.diagnosticsData table{
+div.versionData table{
     width: 100%;
 }
 
+/*diagnostics*/
+.diagnosticsTableContainer{
+    margin-top: 10px;
+
+}
 
 
 

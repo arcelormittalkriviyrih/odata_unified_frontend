@@ -91,6 +91,7 @@
             Personnel: 'Personnel',
             Label: 'Labels',
             SAPCommunication: "SAP communication",
+            Version: 'Version',
             Diagnostics: 'Diagnostics',
             LabelButtons: {
                 print: 'Print',
@@ -117,6 +118,11 @@
                 login: 'Login',
                 password: 'Password',
                 communicationSuccess: 'Parameters successfully saved'
+            },
+            diagnostics: {
+                changeSide: 'Change side',
+                equipmentName: 'Equipment name',
+                equipmentStatus: 'Equipment status'
             }
         },
         marker: {            
@@ -339,6 +345,7 @@
             Personnel: 'Персонал',
             Label: 'Бирки',
             SAPCommunication: "Связь с SAP",
+            Version: 'Версия',
             Diagnostics: 'Диагностика',
             LabelButtons: {
                 print: 'Печать',
@@ -364,6 +371,11 @@
                 login: 'Логин',
                 password: 'Пароль',
                 communicationSuccess: 'Параметры успешно сохранены'
+            },
+            diagnostics: {
+                changeSide: 'Выберите сторону',
+                equipmentName: 'Название оборудования',
+                equipmentStatus: 'Статус оборудования'
             }
         },
         marker: {            
@@ -588,6 +600,7 @@
             Personnel: 'Персонал',
             Label: 'Бирки',
             SAPCommunication: "Зв\'язок з SAP",
+            Version: 'Версія',
             Diagnostics: 'Діагностика',
             LabelButtons: {
                 print: 'Друк',
@@ -613,6 +626,11 @@
                 login: 'Логін',
                 password: 'Пароль',
                 communicationSuccess: 'Параметри успішно збережені'
+            },
+            diagnostics: {
+                changeSide: 'Виберіть сторону',
+                equipmentName: 'Назва обладнання',
+                equipmentStatus: 'Статус обладнання'
             }
         },
         marker: {

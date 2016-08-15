@@ -264,7 +264,7 @@
     //For resolving this problem I add special flag will be 'true' only in form reset mode
     var _isReset = false;
     $scope.downloadTechnicalList = domainURL + '/api/MediaData/GenerateTemplate';
-    $scope.labelTemplateMode = true;
+    $scope.showDownloadButton = true;
     $scope.toggleModal = false;
     $scope.createForm = vmCreateForm;
     $scope.locale = $state.params.locale;
@@ -302,7 +302,7 @@
     }];
 
     if ($state.current.name.indexOf('Logotypes') > -1) 
-        $scope.labelTemplateMode = false;
+        $scope.showDownloadButton = false;
     else {
 
         fields.push({
