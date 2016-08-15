@@ -121,10 +121,43 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Action\style.css" />
+    <Content Include="Content\Calendar\calendar.css" />
+    <Content Include="Content\Calendar\img\imgs\buttons.png" />
+    <Content Include="Content\Calendar\img\imgs\but_repeat.gif" />
+    <Content Include="Content\Calendar\img\imgs\calendar.gif" />
+    <Content Include="Content\Calendar\img\imgs\clock_big.gif" />
+    <Content Include="Content\Calendar\img\imgs\clock_small.gif" />
+    <Content Include="Content\Calendar\img\imgs\collapse_expand_icon.gif" />
+    <Content Include="Content\Calendar\img\imgs\controls.gif" />
+    <Content Include="Content\Calendar\img\imgs\databg.png" />
+    <Content Include="Content\Calendar\img\imgs\databg_now.png" />
+    <Content Include="Content\Calendar\img\imgs\export_ical.png" />
+    <Content Include="Content\Calendar\img\imgs\export_pdf.png" />
+    <Content Include="Content\Calendar\img\imgs\icon.png" />
+    <Content Include="Content\Calendar\img\imgs\images.png" />
+    <Content Include="Content\Calendar\img\imgs\loading.gif" />
+    <Content Include="Content\Calendar\img\imgs\resize_dots.png" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\arrow_left.png" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\arrow_right.png" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\but_repeat.gif" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\calendar.gif" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\clock_big.gif" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\clock_small.gif" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\close_icon.png" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\collapse_expand_icon.gif" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\controls.png" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\databg.png" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\databg_now.png" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\export_ical.png" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\export_pdf.png" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\resize_dots.png" />
+    <Content Include="Content\Calendar\img\imgs_dhx_terrace\resizing.png" />
     <Content Include="Content\Chart\jquery.jqplot.css" />
     <Content Include="Content\Chart\jquery.jqplot.min.css" />
-    <Content Include="Content\Shared\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\Shared\bootstrap\css\bootstrap-non-responsive.css" />
+    <Content Include="Content\Shared\bootstrap\css\bootstrap3.css" />
     <Content Include="Content\Shared\bootstrap\extend.css" />
+    <Content Include="Content\Shared\bootstrap\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\Shared\bootstrap\img\glyphicons-halflings-white.png" />
     <Content Include="Content\Shared\bootstrap\img\glyphicons-halflings.png" />
     <Content Include="Content\Shared\favicon.ico" />
@@ -140,6 +173,9 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
     <Content Include="Scripts\App\Resources.js" />
+    <Content Include="Scripts\Vendor\dhtmlxscheduler.js" />
+    <Content Include="Scripts\Vendor\dhtmlxscheduler_year_view.js" />
+    <Content Include="Scripts\Calendar\index.js" />
     <Content Include="Scripts\Chart\index.js" />
     <Content Include="Scripts\Chart\jsPlotBarExt.js" />
     <Content Include="Scripts\Chart\jsPlotGaugeExt.js" />
@@ -160,6 +196,7 @@
     <Content Include="Scripts\Vendor\angular-translate.min.js" />
     <Content Include="Scripts\Vendor\angular-ui-router.js" />
     <Content Include="Scripts\Vendor\angular.min.js" />
+    <Content Include="Scripts\Vendor\bootstrap.min.js" />
     <Content Include="Scripts\Vendor\jqplot\excanvas.js" />
     <Content Include="Scripts\Vendor\jqplot\jquery.jqplot.js" />
     <Content Include="Scripts\Vendor\jqplot\jquery.jqplot.min.js" />
@@ -231,6 +268,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\actionController.cs" />
+    <Compile Include="Controllers\calendarController.cs" />
     <Compile Include="Controllers\chartController.cs" />
     <Compile Include="Controllers\appController.cs" />
     <Compile Include="Controllers\treeGridController.cs" />
@@ -244,15 +282,20 @@
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Scripts\Vendor\_Layout.cshtml" />
     <Content Include="Views\Table\Index.cshtml" />
     <Content Include="Views\Action\Index.cshtml" />
+    <Content Include="Content\Shared\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Shared\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Shared\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Shared\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Views\Form\Index.cshtml" />
     <Content Include="Views\Shared\_App.cshtml" />
     <Content Include="Views\TreeGrid\Index.cshtml" />
     <Content Include="Views\Chart\Index.cshtml" />
     <Content Include="Views\App\Index.cshtml" />
+    <Content Include="Views\calendar\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

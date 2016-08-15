@@ -65,23 +65,32 @@
 
                     case 'text':
 
-                        field.input = $('<input />').attr('type', 'text');
+                        field.input = $('<input />').addClass('form-control')
+                                                    .attr('type', 'text');
                            
                         break;
 
                     case 'date':
 
-                        field.input = $("<input type='text'>").datepicker({ defaultDate: '', dateFormat: 'dd.mm.yy' });
+                        field.input = $("<input type='text'>").addClass('form-control')
+                                                              .datepicker({
+                                                                  defaultDate: '',
+                                                                  dateFormat: 'dd.mm.yy'
+                                                              });
 
                         break;
 
                     case 'combo':
 
-                        var control = $('<select />');
-                        control.append('<option></option>')
 
-                        //map data array to key-value array for building select
-                        data = properties.data.map(function (item) {
+                        controlsControlGroup.append(dropBoxTmpl.format('selectedComboTextValue', 'selectedComboDataValue', 'oDataFormCombo'));
+
+                        var selectedComboTextValue = $('#selectedComboTextValue');
+                        var selectedComboDataValue = $('#selectedComboDataValue');
+
+                        var ul = $('#oDataFormCombo');
+
+                        var data = properties.data.map(function (item) {
 
                             return {
                                 key: item[properties.keyField],
@@ -91,13 +100,28 @@
                                 
                             if (item.value == '')
                                 item.value = 'no name';
+                           
+                            var li = $('<li />').appendTo(ul);
 
-                            var option = $('<option />').attr('value', item.key)
-                                                        .text(item.value)
-                                                        .appendTo(control);
+
+                            var a = $('<a />').attr({
+                                                    href: '#',
+                                                    dataValue: item.key                            
+                                                    })
+                                                    .text(item.value)
+                                                    .on('click', function(e){
+
+                                                        e.preventDefault();
+
+                                                        selectedComboTextValue.val($.trim($(this).text()));
+                                                        selectedComboDataValue.val($(this).attr('dataValue'));
+
+                                                        $(this).closest('.dropdown').removeClass('wrong');
+                                                    })
+                                                    .appendTo(li);
                         });
 
-                        field.input = control;
+                        field.input = selectedComboDataValue;
 
                         break;
 
@@ -118,8 +142,21 @@
                     
                 //fill field if there is data for this field (in edit and copy mode)
                 
-                if (formType != 'create')
+                if (formType != 'create') {
+
+                    if (field.input.attr('data-parent') == 'dropDown') {
+
+                        var defaultValue = field.properties.data.find(function (item) {
+
+                            return item.ID == field.properties.defaultValue;
+                        });
+                        
+                        field.input.siblings('.dropdown-input').val(defaultValue.Name);
+                    }
+
                     field.input.val(field.properties.defaultValue);
+                }
+                    
                 
                 if (formType == 'create' && properties.enterAction) {
 
@@ -173,7 +210,7 @@
             var controlsSubmitGroup = $('<div />').addClass('control-row').appendTo($form);
             
             // create submit button
-            var submitBtn = $('<button />').addClass('btn runAction').text(controlCaptions.OK)
+            var submitBtn = $('<button />').addClass('btn btn-default runAction').text(controlCaptions.OK)
                 .appendTo(controlsSubmitGroup)
                 .click(function (e) {
 
@@ -205,7 +242,7 @@
                     return false;
                 });
 
-            var cancelBtn = $('<button />').addClass('btn cancelAction').text(controlCaptions.Cancel)
+            var cancelBtn = $('<button />').addClass('btn btn-default cancelAction').text(controlCaptions.Cancel)
                 .appendTo(controlsSubmitGroup).click(function () {
 
                     self.find('input, select').each(function (i, item) {
@@ -222,7 +259,7 @@
 
                     if (control.type == 'additional') {
 
-                        var additionalControl = $('<button />').addClass('btn {0}'.format(control.name))
+                        var additionalControl = $('<button />').addClass('btn btn-default {0}'.format(control.name))
                                                                .text(control.text)
                                                                .click(function () {
 

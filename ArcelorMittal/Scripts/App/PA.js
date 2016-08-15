@@ -1016,30 +1016,28 @@
     $scope.changeSide = vmChangeSide;
     $scope.side = $state.params.side;
     var sidesListUrl = 'v_AvailableSidesAll';
-
-
-    if ($scope.side) {
-
-        vmChangeSide(parseInt($scope.side));
+    
+    if ($scope.side)        
         sidesListUrl += '?$filter=ID eq {0}'.format(parseInt($scope.side));
-    } 
-
+    
     indexService.getInfo(sidesListUrl).then(function (response) {
 
         $scope.availableSides = response.data.value;
+
+        if ($scope.side)
+            vmChangeSide(parseInt($scope.side));
+        
     });
     
 
-    function vmChangeSide(side) {
+    function vmChangeSide(sideID) {
 
-        if (typeof side == 'object') {
-            $scope.selectedSide = side.ID;
-            $scope.selectedSideDescription = side.Description;
-        }
-        else
-            $scope.selectedSide = side;
+        $scope.selectedSide = $scope.availableSides.find(function (item) {
 
-        indexService.getInfo('v_DiagInfo?$filter=SideID eq {0}'.format($scope.selectedSide))
+            return item.ID == sideID;
+        });
+
+        indexService.getInfo('v_DiagInfo?$filter=SideID eq {0}'.format(sideID))
                     .then(function (response) {
 
                         $scope.diagnosticsInfo = response.data.value;

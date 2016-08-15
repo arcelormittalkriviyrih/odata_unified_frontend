@@ -6,6 +6,15 @@ var interval = 5000; //grid auto refresh interval (5 sec)
 var _intervalID; //initiate interval ID
 var scalesRefresh = 1000; //scales autorefresh interval (1 sec)
 var workRequestRefresh = 1000; //last Work Refresh for scales;
+var dropBoxTmpl = '<div class="dropdown form-control">' +
+                                       '<div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">' +
+                                       '<input type="text" class="dropdown-input" id="{0}" />' +
+                                       '<input type="hidden" id="{1}" data-parent="dropDown"/>' +
+                                       '<span class="caret"></span>' +
+                                       '</div>' +
+                                       '<ul class="dropdown-menu" id="{2}" aria-labelledby="dropdownMenu1">' +
+                                       '</ul>' +
+                                       '</div>';
 
 jQuery.ajaxSetup({
     global: true,
@@ -277,9 +286,13 @@ function vmShowUnfilledRequiredFields(unFilledFields) {
 
     unFilledFields.each(function (i, item) {
 
-        $(item).addClass('wrong');
+        if ($(item).attr('data-parent') == 'dropDown') {
 
-    })
+            $(item).siblings('.dropdown').addClass('wrong');
+        } else
+            $(item).addClass('wrong');
+
+    });
 }
 
 function vmSort(property, a, b) {

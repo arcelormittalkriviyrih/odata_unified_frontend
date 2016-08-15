@@ -264,7 +264,7 @@
     //For resolving this problem I add special flag will be 'true' only in form reset mode
     var _isReset = false;
     $scope.downloadTechnicalList = domainURL + '/api/MediaData/GenerateTemplate';
-    $scope.showDownloadButton = true;
+    $scope.labelTemplateMode = true;
     $scope.toggleModal = false;
     $scope.createForm = vmCreateForm;
     $scope.locale = $state.params.locale;
@@ -301,8 +301,9 @@
         order: 6
     }];
 
-    if ($state.current.name.indexOf('Logotypes') > -1) 
-        $scope.showDownloadButton = false;
+    if ($state.current.name.indexOf('Logotypes') > -1){
+        $scope.labelTemplateMode = false;
+    }        
     else {
 
         fields.push({
@@ -428,7 +429,14 @@
 
         $formCreate.find('[name="FileName"]').val(item.FileName);
         $formCreate.find('[name="Name"]').val(item.Name);
-        $formCreate.find('[name="Status"]').val(item.Status);
+
+        $formCreate.find('ul#status li a').click(function (e) {
+
+            e.preventDefault();
+
+            $formCreate.find('[name="Status"]').val($.trim($(this).text()));
+        });
+
         $formCreate.find('[name="FileType"]').val(item.FileType);
 
         // show form
@@ -462,6 +470,13 @@
         $filePropertiesForm.find('[name="Name"]').val(item.Name);
         $filePropertiesForm.find('[name="Status"]').val(item.Status);
         $filePropertiesForm.find('[name="FileType"]').val(item.FileType);
+
+        $filePropertiesForm.find('ul#status li a').click(function (e) {
+
+            e.preventDefault();
+
+            $filePropertiesForm.find('[name="Status"]').val($.trim($(this).text()));
+        });
 
         $formCreateWrapper.hide();
         $formEditWrapper.show();

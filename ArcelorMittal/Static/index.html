@@ -6,36 +6,42 @@
 
 </div>
 
-<div class="navbar">
-    <div class="navbar-inner">
+<div class="main-menu navbar navbar-default navbar-fixed-top">
 
-        <a class="brand" ui-sref="app.welcome">ArcelorMittal</a>
-
-        <ul id="navigation" class="nav">
-
-            <li ng-repeat="role in roles" ui-sref-active="active">
-                <a ui-sref="app.{{role.RoleName}}" ui-sref-opts="{reload: true}">{{ 'index.' + role.RoleName | translate }}</a>
-            </li>
-
-        </ul>
-
-        <ul class="nav navbar-nav pull-right">                       
-
-            <li class="navbar-text">{{ 'index.User' | translate }}: {{user}}</li>
-
-            <li>
-                <select ng-model="language"
-                        ng-change="changeLanguage(language)"
-                        class="navbar-text input-small">
-                    <option value="ua">UA</option>
-                    <option value="ru">RU</option>                    
-                    <option value="en">EN</option>                    
-                </select>
-            </li>
-
-        </ul>
-
+    <div class="navbar-header">
+        <a class="navbar-brand my-navbar-brand" ui-sref="app.welcome">ArcelorMittal</a>
     </div>
+
+
+    <ul id="navigation" class="nav navbar-nav">
+
+        <li ng-repeat="role in roles" 
+            ui-sref-active="active">
+            <a ui-sref="app.{{role.RoleName}}" ui-sref-opts="{reload: true}">{{ 'index.' + role.RoleName | translate }}</a>
+        </li>
+
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+
+        <li class="navbar-text">{{ 'index.User' | translate }}: {{user}}</li>
+
+        <li class="navbar-text">
+            <div class="dropdown">
+                <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    {{localeCaption}}
+                    <span class="caret"></span>
+                </div>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#" ng-click="changeLanguage('ua'); $event.preventDefault();">UA</a></li>
+                    <li><a href="#" ng-click="changeLanguage('ru'); $event.preventDefault();">RU</a></li>
+                    <li><a href="#" ng-click="changeLanguage('en'); $event.preventDefault();">EN</a></li>
+                </ul>
+            </div>
+        </li>
+
+    </ul>
+   
 </div>
 
 <ui-view></ui-view>

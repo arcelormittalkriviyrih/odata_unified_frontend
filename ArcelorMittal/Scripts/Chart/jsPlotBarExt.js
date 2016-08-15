@@ -49,7 +49,7 @@
 
             refreshBtn = $('<button />').attr('id', 'refresh')
                                         .addClass('btn')
-                                        .append('<i class="icon-refresh"></i>')
+                                        .append('<span class="glyphicon glyphicon-refresh"></span>')
                                         .appendTo(mainButtonsRoot)
                                         .on('click', vmRefresh),
             plot = $('<div />').attr({ 'id': 'plot' })

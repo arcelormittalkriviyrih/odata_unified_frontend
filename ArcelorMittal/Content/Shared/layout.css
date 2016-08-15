@@ -11,6 +11,19 @@ html, body, section.container{
     margin-bottom: 0;
 }
 
+.jsgrid-table img{
+    width: 130px;
+    height: auto;
+}
+
+.logo .jsgrid-table img{
+    width: 100px;
+}
+
+.row{
+    padding: 0;
+}
+
 /*hide 'default' datepicker div*/
 div.row + #ui-datepicker-div,
 form#form + #ui-datepicker-div{
@@ -31,6 +44,29 @@ form#form + #ui-datepicker-div{
 }
 
 /*modified bootstrap*/
+
+label{
+    font-weight: normal
+}
+
+.my-navbar-brand{
+    margin-left: -5px;
+}
+
+th {
+    text-align: center;
+}
+
+.dropdown-toggle{
+    cursor: pointer;
+}
+
+.container {
+    padding-right: 0;
+    padding-left: 0;
+    margin-right: auto;
+    margin-left: auto;
+}
 
 .cancelMarginLeft{
     margin-left:0;
@@ -87,6 +123,12 @@ input#fileUpload{
     margin-left: 12px;
 }
 
+input.dropdown-input{
+    outline: none;
+    border: none;
+    width: 93%!important;
+}
+
 .inputfile {
 	width: 0.1px;
 	height: 0.1px;
@@ -108,6 +150,18 @@ input#fileUpload{
     top: 7%;
 }
 
+.scaleZone img{
+    width: 100%;
+}
+
+.nav-tabs{
+    margin-bottom: 10px;
+}
+
+.nav-tabs > li > a {
+    padding: 10px 14px;
+}
+
 .btn-circle{
     width: 30px;
     height: 30px;
@@ -117,39 +171,16 @@ input#fileUpload{
     line-height: 1.428571429;
     border-radius: 15px;
     outline:none;
-}
-
-.panel-default {
-    border-color: #ddd;
-}
-.panel {
-    margin-bottom: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
-    box-shadow: 0 1px 1px rgba(0,0,0,.05);
-    min-height:190px;
-}
-
-.panel-default>.panel-heading {
-    color: #333;
-    background-color: #f5f5f5;
-    border-color: #ddd;
-}
-.panel-heading {
-    padding: 10px 15px;
-    border-bottom: 1px solid transparent;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-}
-
-.panel-body {
-    padding: 15px;
+    box-sizing: border-box;
+    padding-top: 7px;
 }
 
 .remove-margin-left{
     margin-left: 0;
+}
+
+label.control-label{
+    margin-bottom: 0;
 }
 
 /*modified datetimepicker*/
@@ -221,6 +252,14 @@ div.modal.treeControls select{
     width: 278px;
 }
 
+.modal.treeControls .additionalFields{
+    margin-bottom: 10px;
+}
+
+.modal.treeControls button{
+    margin-right: 5px;
+}
+
 /*workshop specs*/
 
 .active-row > td{
@@ -234,6 +273,10 @@ div.modal.treeControls select{
 }
 
 /*index page*/
+
+.main-menu{
+    z-index:1;
+}
 
 .loading{
 
@@ -276,7 +319,7 @@ button.add{
 }
 
 .formWrapper{
-    min-height: 650px;
+    min-height: 510px;
     margin: 10px 0 0 0;
 }
 
@@ -311,9 +354,11 @@ button.add{
 .control-group{
     display: inline-block;
     width: 244px;
+    margin-bottom: 5px;
+    vertical-align:top;
 }
 
-.control-group input{
+.control-group input, .control-group .dropdown.form-control{
     width: 220px;
 }
 
@@ -328,6 +373,7 @@ button.add{
 
 div.control-row button.btn{
     margin-right: 5px;
+    margin-top: 10px;
 }
 
 /*modified tree*/
@@ -529,7 +575,8 @@ h4.scalesName{
 }
 
 .rodsValue{
-    float:right;
+    position:absolute;
+    right: 0;
     font-size:18px;
     font-weight: bold;
 }
@@ -550,7 +597,7 @@ h4.scalesName{
     box-sizing:border-box;
     padding: 10px 0 0 0;
     border-bottom: 1px solid #d4d4d4;
-    font-size: 0;
+    /*font-size: 0;*/
     margin-bottom: 5px;
 }
 
@@ -605,25 +652,50 @@ div.controlTask{
     right: 0;
 }
 
-div.controlTask input{
-    width: 50px;
+div.controlTask div.disableDropDown{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 105%;
+    height: 100%;
+    background-color: lightgray;
+    opacity: 0.4;
+    z-index: 11;
 }
 
-div.controlTask select{
-    width: 64px;
-    font-size:12px;
+div.controlTask input, div.controlTask .dropdown{
+    width: 66px;
+    padding: 3px 5px;
+    margin-bottom: 0;
+    height: auto;
 }
 
-div.controlTask input, div.controlTask select {
-    margin-bottom:0;
+div.controlTask .dropdown {
+    position:relative;
+    z-index:10;
 }
 
+div.controlTask .dropdown-toggle{
+    position: relative;
+}
+
+div.controlTask .dropdown-toggle .dropdown-input {
+    position: absolute;
+    left: -1px;
+    top: -3px;
+    height: 24px;
+    width: 46px!important;
+}
+
+div.controlTask .dropdown-toggle .dropdown-input[disabled]{
+    background: #fff;
+}
 
 /* task (right part)*/
 
 .sectionItem{
     display:inline-block;
-    width: 90px;
+    width: 95px;
 }
 
 .autoManuMsg{
@@ -632,8 +704,12 @@ div.controlTask input, div.controlTask select {
     right: 10px;
 }
 
+.sectionItem label{
+    font-size: 13px;
+}
+
 .sectionItem:nth-child(1){
-    width: 128px;
+    width: 110px;
 }
 
 .sectionItem:nth-child(1) input{
@@ -641,11 +717,11 @@ div.controlTask input, div.controlTask select {
 }
 
 .sectionItem:nth-child(2) input{
-    width: 72px;
+    width: 95px;
 }
 
 .sectionItem:nth-child(3) input{
-    width: 75px;
+    width: 97px;
 }
 
 .labelTask{
@@ -655,7 +731,6 @@ div.controlTask input, div.controlTask select {
 
 .modal.additional{
     padding: 0 0 10px 0;
-    overflow: hidden;
 }
 
 .modal.additional h4{
@@ -718,6 +793,7 @@ div.controlTask input, div.controlTask select {
     left: 0;
     top: 0;
     background: #fff;
+    z-index:2;
 }
 
 .monitorControls{
@@ -726,7 +802,7 @@ div.controlTask input, div.controlTask select {
 }
 
 .monitorCaptions{
-    height: 15%;
+    height: 10%;
     font-size: 0;
 }
 
@@ -741,12 +817,12 @@ div.controlTask input, div.controlTask select {
 .monitorSide.caption{
     font-size: 70px;
     box-sizing: border-box;
-    padding: 3%;
+    padding-left: 3%;
 }
 
 .monitorSidesWrapper{
     font-size:0; 
-    height: 80%;  
+    height: 90%;  
 }
 
 .monitorSideItem{
@@ -770,7 +846,7 @@ div.controlTask input, div.controlTask select {
 
 .monitorSideItem .paramCaption{
     display: block;
-    padding: 40px;
+    padding: 20px 0 60px 0;
     text-align: center;
     font-size: 64px;
     font-family: 'Arial Narrow', sans-serif
@@ -778,7 +854,7 @@ div.controlTask input, div.controlTask select {
 
 .monitorSideItem .paramValue{
     display: block;
-    margin-top: 100px;
+    margin-top: -17%;
     text-align: center;
     font-size: 300px;
     font-family: 'Arial Narrow', sans-serif
@@ -835,6 +911,36 @@ div.versionData table{
     margin-top: 10px;
 
 }
+
+/*sap comm.*/
+.sapCommunicationContainer .row{
+    margin-bottom:10px;
+}
+
+/*label template*/
+#editForm .panel{
+    padding: 0;
+}
+
+/*calendar events*/
+.dhx_wrap_section{
+    min-height: 36px;
+    padding: 2px 0px 2px 10px; 
+}
+
+.dhx_cal_event_clear.dhx_cal_event_line_start.dhx_cal_event_line_end{
+    line-height: normal;
+}
+
+.dhx_cal_light.dhx_cal_light_wide{
+    height: auto!important;
+    padding-bottom: 10px!important;
+}
+
+.dhx_section_time select{
+    width: 70px;
+}
+
 
 
 

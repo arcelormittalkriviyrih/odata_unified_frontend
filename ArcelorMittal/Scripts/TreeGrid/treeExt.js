@@ -23,7 +23,7 @@
                                         .appendTo(blackWrapper),
             createBtn = $('<button />').attr('id', 'createTreeItem')
                                         .addClass('btn')
-                                        .append('<i class="icon-plus"></i>')
+                                        .append('<span class="glyphicon glyphicon-plus"></span>')
                                         .appendTo(mainButtonsRoot)
                                         .on('click', vmShowModal),
             renameBtn = $('<button />').attr({
@@ -31,7 +31,7 @@
                                             'disabled': true
                                         })
                                         .addClass('btn')
-                                        .append('<i class="icon-pencil"></i>')
+                                        .append('<span class="glyphicon glyphicon-pencil"></span>')
                                         .appendTo(mainButtonsRoot)
                                         .on('click', vmShowModal),
             removeBtn = $('<button />').attr({
@@ -39,7 +39,7 @@
                                             'disabled': true
                                         })
                                         .addClass('btn')
-                                        .append('<i class="icon-remove"></i>')
+                                        .append('<span class="glyphicon glyphicon-remove"></span>')
                                         .appendTo(mainButtonsRoot)
                                         .on('click', vmRemove),
 
@@ -51,6 +51,7 @@
                                             'type': 'text',
                                             'required': 'required'
                                         }).focus(vmClear)
+                                        .addClass('form-control')
                                         .appendTo(controlsRootModal),
 
             parentNodeLabel = $('<label />').text(translates.parentID)
@@ -68,11 +69,11 @@
                                             'id': 'accept'
                                         })
                                         .addClass('btn')
-                                        .append('<i class="icon-ok"></i>')
+                                        .append('<span class="glyphicon glyphicon-ok"></span>')
                                         .appendTo(controlsRootModal),
             cancelBtn = $('<button />').attr({ 'id': 'cancel' })
                                         .addClass('btn')
-                                        .append('<i class="icon-remove"></i>')
+                                        .append('<span class="glyphicon glyphicon-remove"></span>')
                                         .appendTo(controlsRootModal)
                                         .on('click', vmCancel),
             parentNodeID = null, _isCancel = false;
@@ -137,11 +138,11 @@
 
                     case 'combo':
                         
-                        control = $('<select />').attr(
-                                                    {
+                        control = $('<select />').attr({
                                                         'id': item.id,
                                                         'required': item.required
                                                     })
+                                                 .addClass('form-control')
                                                  .focus(vmClear)
                                                  .append('<option />')
                                             .appendTo(additionalFieldsRoot);

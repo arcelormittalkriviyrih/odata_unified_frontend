@@ -95,6 +95,11 @@
     $scope.getLatestWorkRequest = vmGetLatestWorkRequest;
     $scope.buildForm = vmBuildForm;
     $scope.getProfiles = vmGetProfiles;
+    $scope.changeProfile = vmChangeProfile;
+
+    $scope.changeBindingDiaData = vmChangeBindingDiaData;
+    $scope.changeBindingQtyData = vmChangeBindingQtyData;
+
     $scope.getProfilePropertiesList = vmGetProfilePropertiesList;
     $scope.calculate = vmCalculate;
     $scope.reset = vmReset;
@@ -706,6 +711,12 @@
 
                     $scope.workRequestID = data[0].WorkRequestID;
                     $scope.selectedProfile = data[0].ProfileID;
+                    var selectedProfileInfo = $scope.profiles.find(function (profile) {
+
+                        return profile.ID == $scope.selectedProfile;
+                    });
+                    if (selectedProfileInfo)
+                        $scope.selectedProfileDescription = selectedProfileInfo.Description;
 
                     indexService.getInfo('MaterialDefinitionProperty?$filter=MaterialDefinitionID eq ({0})'.format($scope.selectedProfile))
                     .then(function (response) {
@@ -827,14 +838,21 @@
 
                                     return data.Value == item.Value;
                                 });
+
+                                $scope.BindingDiaDataValue = $scope.bindingDia.Value;
                             }
                                 
 
-                            else if (item.PropertyType == 'BINDING_QTY')
+                            else if (item.PropertyType == 'BINDING_QTY') {
+
                                 $scope.bindingQty = $scope.BindingQtyData.find(function (data) {
 
                                     return data.Value == item.Value;
                                 });
+
+                                $scope.BindingQtyDataValue = $scope.bindingQty.Value;
+                            }
+                                
 
                         });
 
@@ -860,6 +878,24 @@
                         $scope.profiles = response.data.value;
                         $scope.selectedProfile = $scope.profiles[0];
                     });
+    }
+
+    function vmChangeProfile(profile) {
+
+        $scope.selectedProfile = profile.ID;
+        $scope.selectedProfileDescription = profile.Description;
+    };
+
+    function vmChangeBindingDiaData(item) {
+
+        $scope.BindingDiaDataValue = item.Value;
+        $scope.bindingDia = item;
+    }
+
+    function vmChangeBindingQtyData(item) {
+
+        $scope.BindingQtyDataValue = item.Value;
+        $scope.bindingQty = item;
     }
 
     //get profiles properties list

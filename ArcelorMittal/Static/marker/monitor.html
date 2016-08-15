@@ -2,26 +2,26 @@
     <div class="monitorControls">
         <div class="monitorSide control">
             {{'marker.monitorCaptions.scales' | translate}}:
-            <select class="input-medium"
+            <select class="form-control input-medium"
                     ng-model="scaleLeft"
                     ng-change="getScalesInfo()"
                     ng-options="o.Description for o in scalesList track by o.ID"></select>
 
             {{'marker.monitorCaptions.weightRods' | translate}}:
-            <select class="input-medium"
+            <select class="form-control input-medium"
                     ng-model="shownTypeLeft"
                     ng-change="changeParamTypeLeftSide()"
                     ng-options="o.Name for o in shownParamsList"></select>
         </div>
         <div class="monitorSide control">
             {{'marker.monitorCaptions.scales' | translate}}:
-            <select class="input-medium"
+            <select class="form-control input-medium"
                     ng-model="scaleRight"
                     ng-change="getScalesInfo()"
                     ng-options="o.Description for o in scalesList track by o.ID"></select>
 
             {{'marker.monitorCaptions.weightRods' | translate}}:
-            <select class="input-medium"
+            <select class="form-control input-medium"
                     ng-model="shownTypeRight"
                     ng-change="changeParamTypeLeftSide()"
                     ng-options="o.Name for o in shownParamsList"></select>

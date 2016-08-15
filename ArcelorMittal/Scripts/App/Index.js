@@ -255,7 +255,13 @@
     $scope.roles = $scope.roles.sort(function (a, b) {
 
         return a.order - b.order
-    })
+    });
+
+    $scope.languageCaptions = {
+        ua: 'UA',
+        ru: 'RU',
+        en: 'EN'
+    };
     
     // check if locale specified    
     if (!$state.params.locale) {
@@ -273,6 +279,8 @@
 
         // set interface language
         $scope.language = $state.params.locale;
+        $scope.localeCaption = $scope.languageCaptions[$scope.language];
+        
         $translate.use($scope.language);
 
         // if on root state

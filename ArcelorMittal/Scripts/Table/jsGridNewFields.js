@@ -80,6 +80,7 @@
 
         _createTextBox: function () {
             return $("<input>").attr("type", "text")
+                   .addClass('form-control')
                 .prop("readonly", !!this.readOnly);
         }
     });
@@ -132,6 +133,7 @@
 
         _createTextBox: function () {
             return $("<input>").attr("type", "number")
+                .addClass('form-control')
                 .prop("readonly", !!this.readOnly);
         }
     });
@@ -184,6 +186,7 @@
 
         _createTextBox: function () {
             return $("<input type='number' step='0.0000000001'>")
+                .addClass('form-control')
                 .prop("readonly", !!this.readOnly);
         }
     });
@@ -213,32 +216,41 @@
         },
 
         insertTemplate: function (value) {
-            return this._insertPicker = $("<input type='text'>").datepicker({ defaultDate: new Date(), dateFormat: 'yy-mm-dd' });
+            return this._insertPicker = $("<input type='text'>")
+                                            .addClass('form-control')
+                                            .datepicker({
+                                                defaultDate: new Date(),
+                                                dateFormat: 'yy-mm-dd'
+                                            });
         },
 
         filterTemplate: function (value) {
 
             var grid = this._grid;
 
-            return this._filterPicker = $("<input type='text'>").datepicker(
-                {
-                    defaultDate: new Date(),
-                    dateFormat: 'yy-mm-dd',
-                    onSelect: function (dateText, inst) {
+            return this._filterPicker = $("<input type='text'>")
+                                            .addClass('form-control')
+                                            .datepicker({
+                                                defaultDate: new Date(),
+                                                dateFormat: 'yy-mm-dd',
+                                                onSelect: function (dateText, inst) {
 
-                        grid.search();
-                    }
-                }).on('keypress', function (e) {
+                                                    grid.search();
+                                                }
+                                            }).on('keypress', function (e) {
 
-                    if (e.which === 13) {
-                        grid.search();
-                        e.preventDefault();
-                    }
-                });
+                                                if (e.which === 13) {
+                                                    grid.search();
+                                                    e.preventDefault();
+                                                }
+                                            });
         },
 
         editTemplate: function (value) {
-            return this._editPicker = $("<input type='text'>").datepicker({ dateFormat: 'yy-mm-dd' }).datepicker("setDate", new Date(value));
+            return this._editPicker = $("<input type='text'>")
+                                            .addClass('form-control')
+                                            .datepicker({ dateFormat: 'yy-mm-dd' })
+                                            .datepicker("setDate", new Date(value));
         },
 
         filterValue: function () {
@@ -267,7 +279,7 @@
 
     var myControl = {
         create: function (tp_inst, obj, unit, val, min, max, step) {
-            $('<input type="text" class="ui-timepicker-input" value="' + val + '" style="width:80%">')
+            $('<input type="text" class="ui-timepicker-input form-control" value="' + val + '" style="width:80%">')
                 .appendTo(obj)
                 .spinner({
                     min: 0,
@@ -398,6 +410,7 @@
 
 }(jsGrid, jQuery));
 
+//combo
 (function (jsGrid, $, undefined) {
 
     var NumberField = jsGrid.NumberField;
@@ -499,7 +512,7 @@
         },
 
         _createSelect: function () {
-            var $result = $("<select>"),
+            var $result = $("<select>").addClass('form-control'),
                 valueField = 'id',
                 textField = 'name',
                 selectedIndex = this.selectedIndex,
@@ -753,7 +766,7 @@
 
                 cancelBtn = $('<button />')
                                         .addClass('btn btn-circle')
-                                        .append('<i class="icon-remove"></i>')
+                                        .append('<span class="glyphicon glyphicon-remove"></span>')
                                         .appendTo(controlsRootModal)
                                         .click(function () {
 
@@ -830,9 +843,9 @@
         itemTemplate: function (value, item) {
 
             if (value)
-                return '<i class="icon-ok"></i>';
+                return '<span class="glyphicon glyphicon-ok"></span>';
             else
-                return '<i class="icon-remove"></i>'
+                return '<span class="glyphicon glyphicon-remove"></span>';
         },
 
         filterTemplate: function () {

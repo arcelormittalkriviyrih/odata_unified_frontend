@@ -5,6 +5,7 @@ public class BundleConfig
     public static void RegisterBundles(BundleCollection bundles)
     {
         bundles.Add(new Bundle("~/bundles/js/vendor").Include(
+            "~/scripts/vendor/bootstrap.min.js",
             "~/scripts/vendor/angular.min.js",
             "~/scripts/vendor/angular-ui-router.js",
             "~/scripts/vendor/angular-translate.min.js",
@@ -15,7 +16,9 @@ public class BundleConfig
             "~/scripts/vendor/jsgrid.js",
             "~/scripts/vendor/jstree.js",
             "~/scripts/vendor/jqplot/jquery.jqplot.min.js",
-            "~/Scripts/Vendor/jqplot/plugins/jqplot.meterGaugeRenderer.js"
+            "~/Scripts/Vendor/jqplot/plugins/jqplot.meterGaugeRenderer.js",
+            "~/scripts/vendor/dhtmlxscheduler.js",
+            "~/scripts/vendor/dhtmlxscheduler_year_view.js"
         ));
 
         bundles.Add(new Bundle("~/bundles/js/app").Include(
