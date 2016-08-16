@@ -273,7 +273,6 @@ function vmBuildForm(table, root) {
 
                     vmUpdateRow(table, _key, _input);
                 },
-                beforeShow: addBootstrapClassToControls
             })
             .datetimepicker("setDate", new Date(value));
 

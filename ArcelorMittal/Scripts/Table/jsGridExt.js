@@ -430,6 +430,9 @@
 
                     } else if (field.type == 'dateTime') {
 
+                        condition = condition.split(' ');
+                        condition = condition[0] + 'T' + condition[1] + '.000Z';
+
                         getDateFilterParams(['year', 'month', 'day', 'hour', 'minute', 'second'], filter, field, new Date(condition));
 
                     } else if (field.type == 'number' || field.type == 'select') {
@@ -570,7 +573,7 @@
 
         function getDateFilterParams(timeProperties, filter, field, time) {
 
-            var date = getTimeToUpdate(time);
+            var date = getTimeToUpdate(time, true);
 
             for (var i in date) {
 

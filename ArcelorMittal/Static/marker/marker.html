@@ -8,9 +8,14 @@
 
 <div class="container" ng-if="sides && sides.length > 1" ng-hide="sideIsSelected">
 
-    <div class="dropdown">
-        <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            {{ 'marker.changeSide' | translate }}
+    <label>{{ 'marker.changeSide' | translate }}</label>
+    <div class="dropdown form-control changeSide">
+        <div class="dropdown-toggle" 
+             type="button" 
+             id="dropdownMenu1" 
+             data-toggle="dropdown" 
+             aria-haspopup="true" 
+             aria-expanded="true">
             <span class="caret"></span>
         </div>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -423,24 +428,24 @@
             </span>
         </p>
 
-        <p ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
-            {{ 'marker.weight' | translate }}:
-            <span class="scalesValue" ng-show="scalesDetailsInfo.weightCurrent >=0">
+        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
+            <span class="description">{{ 'marker.weight' | translate }}:</span>
+            <span class="value scalesValue" ng-show="scalesDetailsInfo.weightCurrent >=0">
                 {{scalesDetailsInfo.weightCurrent}} {{ 'marker.kg' | translate }}
             </span>
         </p>
 
-        <p class="relative" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
-            {{ 'marker.rodsQuantity' | translate }}:
+        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
+            <span class="description">{{ 'marker.rodsQuantity' | translate }}:</span>
 
-            <span class="rodsValue" ng-show="scalesDetailsInfo.RodsQuantity && scalesDetailsInfo.RodsQuantity > 0">
+            <span class="value rodsValue" ng-show="scalesDetailsInfo.RodsQuantity && scalesDetailsInfo.RodsQuantity > 0">
                 {{scalesDetailsInfo.RodsQuantity}} {{ 'marker.pcs' | translate }}
             </span>
         </p>
 
-        <p class="relative" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
-            {{ 'marker.rodsLeft' | translate }}:
-            <span class="rodsValue" ng-show="rodsLeft != null">
+        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
+            <span class="description">{{ 'marker.rodsLeft' | translate }}:</span>
+            <span class="value rodsValue" ng-show="rodsLeft != null">
                 <span ng-show="rodsLeft > 0">+</span>
                 {{rodsLeft}} {{ 'marker.pcs' | translate }}
             </span>

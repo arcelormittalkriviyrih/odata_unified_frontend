@@ -1,12 +1,16 @@
-﻿<div class="dropdown" ng-hide="side">
+﻿<label>{{ 'pa.diagnostics.changeSide' | translate }}:</label>
+<div class="dropdown form-control changeSideDiagnostics" ng-hide="side">
     <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        {{ 'pa.diagnostics.changeSide' | translate }}            
+        
+        <input type="text"
+               class="dropdown-input"
+               ng-model="selectedSide.Description" />
         <span class="caret"></span>
     </div>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-        <li ng-repeat="side in availableSides">
+        <li ng-repeat="side in availableSides | orderBy:'Description'">
             <a href="#"
-                ng-click="changeSide(side.ID); $event.preventDefault();">
+               ng-click="changeSide(side.ID); $event.preventDefault();">
                 {{side.Description}}
             </a>
         </li>
@@ -22,7 +26,7 @@
         <th>{{'pa.diagnostics.equipmentName' | translate}}</th>
         <th>{{'pa.diagnostics.equipmentStatus' | translate}}</th>
     </tr>
-    <tr ng-repeat="item in diagnosticsInfo">
+    <tr ng-repeat="item in diagnosticsInfo | orderBy:'EquipmentName'">
         <td>{{item.EquipmentName}}</td>
         <td>{{item.EquipmentStatus}}</td>
     </tr>

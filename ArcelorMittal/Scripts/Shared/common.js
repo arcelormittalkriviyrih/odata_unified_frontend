@@ -70,6 +70,11 @@ $(function () {
 
         $('.labelNumber').focus();
     });
+
+    //set btn and btn-default bootstrap classes fot buttons in datepicker and datetimepicker component
+    $("body").bind("DOMNodeInserted", function () {
+        $(this).find('.ui-datepicker-current, .ui-datepicker-close').addClass('btn btn-default');
+    });
 });
 
 function vmGetMetadata() {
@@ -245,18 +250,6 @@ function addZero(item) {
     else
         return item;
 
-}
-
-//add bootstrap class to buttons 'now' and 'done' in datetimepicker
-function addBootstrapClassToControls(input) {
-    setTimeout(function () {
-        var btn = $(input).datepicker("widget").find(".ui-datepicker-buttonpane button");
-
-        btn.each(function (i, btn) {
-
-            $(btn).addClass('btn');
-        })
-    }, 1)
 }
 
 //change active row in grid

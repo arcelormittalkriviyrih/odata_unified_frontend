@@ -10,17 +10,17 @@
 <div class="container errorHandle" ng-if="!disable">
     <p>
         <label>{{ 'errorLog.errorCode' | translate }}:</label>
-        <textarea class="errorCode" readonly maxlength="2000">
+        <textarea class="form-control errorCode" readonly maxlength="2000">
             {{errorCode}}
         </textarea>
     </p>
 
     <p>
         <label>{{ 'errorLog.description' | translate }}:</label>
-        <textarea class="userErrorDescription"
+        <textarea class="form-control userErrorDescription"
                   ng-model="errorDescription" maxlength="2000"></textarea>
     </p>
-
+ 
 
     <div class="control-row">
         <button class="btn btn-default"

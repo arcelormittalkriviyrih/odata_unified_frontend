@@ -1041,10 +1041,6 @@
                     .then(function (response) {
 
                         $scope.diagnosticsInfo = response.data.value;
-                        $scope.diagnosticsInfo = $scope.diagnosticsInfo.sort(function (a, b) {
-
-                            return a.EquipmentName - b.EquipmentName
-                        })
                     });
     };
 }]);

@@ -349,12 +349,11 @@
         },
 
         insertTemplate: function (value) {
-            return this._insertPicker = $("<input type='text'>").datetimepicker({
+            return this._insertPicker = $("<input type='text' class='form-control'>").datetimepicker({
                 defaultDate: new Date(),
                 dateFormat: 'yy-mm-dd',
                 timeFormat: 'HH:mm:ss',
                 controlType: myControl,
-                beforeShow: addBootstrapClassToControls
             });
         },
 
@@ -362,13 +361,12 @@
 
             var grid = this._grid;
 
-            return this._filterPicker = $("<input type='text'>").datetimepicker(
+            return this._filterPicker = $("<input type='text' class='form-control'>").datetimepicker(
                 {
                     defaultDate: new Date(),
                     dateFormat: 'yy-mm-dd',
                     timeFormat: 'HH:mm:ss',
                     controlType: myControl,
-                    beforeShow: addBootstrapClassToControls,
                     onClose: function () {
 
                         grid.search();
@@ -377,11 +375,10 @@
         },
 
         editTemplate: function (value) {
-            return this._editPicker = $("<input type='text'>").datetimepicker({
+            return this._editPicker = $("<input type='text' class='form-control'>").datetimepicker({
                 timeFormat: 'HH:mm:ss',
                 dateFormat: 'yy-mm-dd',
                 controlType: myControl,
-                beforeShow: addBootstrapClassToControls
             }).datetimepicker("setDate", new Date(value));
         },
 
