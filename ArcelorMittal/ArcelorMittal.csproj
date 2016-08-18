@@ -253,6 +253,7 @@
     <Content Include="Static\pa\version.html" />
     <Content Include="Static\pa\sapcommunication.html" />
     <Content Include="Static\root.html" />
+    <Content Include="Static\templates\dropdown.html" />
     <Content Include="Static\workshopspecs.html" />
     <Content Include="Static\index.html" />
     <Content Include="Static\welcome.html" />

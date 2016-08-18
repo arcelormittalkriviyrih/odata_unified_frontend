@@ -10,6 +10,7 @@
             translates = options.translates,
             parentID = options.parentID,
             additionalFields = options.additionalFields,
+
             navigationBar = $('<div />').attr('id', 'navigationBar')
             .css({
 
@@ -18,9 +19,8 @@
             .appendTo(self),
             treeRoot = $('<div />').attr('id', 'treeRoot').appendTo(self),
             mainButtonsRoot = $('<div />').addClass('mainButtonsControls').appendTo(navigationBar),
-            blackWrapper = $('<div />').addClass('black-wrapper').appendTo('body').hide();
-            controlsRootModal = $('<div />').addClass('modal treeControls')
-                                        .appendTo(blackWrapper),
+            blackWrapper = $('<div />').attr('id', 'modal-' + options.table).addClass('black-wrapper').hide();
+            controlsRootModal = $('<div />').addClass('modal treeControls'),
             createBtn = $('<button />').attr('id', 'createTreeItem')
                                         .addClass('btn')
                                         .append('<span class="glyphicon glyphicon-plus"></span>')
@@ -58,16 +58,16 @@
                                                     .appendTo(controlsRootModal),
 
             parentNodeTree = $('<div />').attr({
-                                            'id': 'parentID'
-                                            }).focus(vmClear)
+                'id': 'parentID'
+            }).focus(vmClear)
                                               .appendTo(controlsRootModal),
 
             additionalFieldsRoot = $('<div />').addClass('additionalFields')
                                         .appendTo(controlsRootModal),
 
             acceptBtn = $('<button />').attr({
-                                            'id': 'accept'
-                                        })
+                'id': 'accept'
+            })
                                         .addClass('btn')
                                         .append('<span class="glyphicon glyphicon-ok"></span>')
                                         .appendTo(controlsRootModal),
@@ -76,12 +76,24 @@
                                         .append('<span class="glyphicon glyphicon-remove"></span>')
                                         .appendTo(controlsRootModal)
                                         .on('click', vmCancel),
-            parentNodeID = null, _isCancel = false;
+            disableCombo = $('<div />').addClass('disableComboTree form-control')
+                                       .hide(),
+        parentNodeID = null, _isCancel = false, _justCreatedData = null;
+
+        if (!options.disableControls) {
+
+            var modalRoot = self.find('.black-wrapper#modal-' + options.table);
+            if (modalRoot.length == 0) {
+
+                blackWrapper.appendTo(self);
+                controlsRootModal.appendTo(blackWrapper);
+            };
+        };
             
         vmInit(_data);
 
         function vmInit(data) {
-
+            
             var treeData = data.map(function (item, index, arr) {
 
                 return {
@@ -104,28 +116,33 @@
 
                 self.trigger('tree-item-selected', { id: data.node.id, action: data.action });
 
-                renameBtn.attr('disabled', false);
-                removeBtn.attr('disabled', false);
-                
+                if (renameBtn && removeBtn) {
+                    renameBtn.attr('disabled', false);
+                    removeBtn.attr('disabled', false);
+                }
+                                
             });
-            parentNodeTree.jstree({
-                'core': {
 
-                    'data': treeData,
-                    'check_callback': true
-                },
-                check_callback: true
-            }).on('changed.jstree', function (e, data) {
+            if (parentNodeTree)
+                parentNodeTree.jstree({
 
-                if (!_isCancel)
-                    parentNodeID = data.node.id;
-                else
-                    parentNodeID = null;
-            });
+                    'core': {
+
+                        'data': treeData,
+                        'check_callback': true
+                    },
+                    check_callback: true
+                }).on('changed.jstree', function (e, data) {
+
+                    if (!_isCancel)
+                        parentNodeID = data.node.id;
+                    else
+                        parentNodeID = null;
+                });
 
             if (additionalFields)
                 vmAddAdditionalFields();
-           
+                       
         };
                
         function vmAddAdditionalFields() {
@@ -138,23 +155,40 @@
 
                     case 'combo':
                         
-                        control = $('<select />').attr({
-                                                        'id': item.id,
-                                                        'required': item.required
-                                                    })
-                                                 .addClass('form-control')
-                                                 .focus(vmClear)
-                                                 .append('<option />')
-                                            .appendTo(additionalFieldsRoot);
-                         
+                        var comboRoot = $('<div />').addClass('relative').appendTo(additionalFieldsRoot);
+
+                        comboRoot.append(dropBoxTmpl.format(item.valueField, item.id, 'oDataTreeCombo'));
+                        
+                        disableCombo.appendTo(comboRoot);
+
+                        var ul = $('#oDataTreeCombo').empty();
+                        var keyElem = $('#' + item.id);
+                        var valElem = $('#' + item.valueField);
+
+                        if (item.required) {
+
+                            keyElem.attr('required', 'required') // for IE
+                            keyElem.prop('required', true)
+                        }
+
                         item.data.forEach(function (field) {
 
-                            var option = $('<option />')
-                                            .val(field[item.keyField])
+                            var li = $('<li />').appendTo(ul);
+
+                            var a = $('<a />').on('click', function (e) {
+
+                                                e.preventDefault();
+                                                
+                                                keyElem.val(field[item.keyField]);
+                                                valElem.val(field[item.valueField]);
+
+                                            })
+                                            .attr('data-value', field[item.keyField])
                                             .text(field[item.valueField])
-                                            .appendTo(control);
+                                            .appendTo(li);
                         });
 
+                        item.comboControl = comboRoot;
                       
                         break;
                 };
@@ -193,7 +227,7 @@
                     vmHandleAdditionalFields(controlsRootModal, additionalFields, sel, 'edit');
                     break;
             };
-
+            
             blackWrapper.show();
         };
 
@@ -255,6 +289,8 @@
                         data: JSON.stringify(json),
                         contentType: "application/json;odata=verbose"
                     }).success(function (responce) {
+
+                        _justCreatedData = responce;
                         
                         node.id = responce[keys.id];
 
@@ -380,8 +416,13 @@
                 additionalFields.forEach(function (field) {
 
                     var id = field.id;
+                    var valueField = field.valueField;
+
                     var control = controlsRootModal.find('#' + id);
 
+                    if (field.control == 'combo')
+                        field.valueFieldControl = controlsRootModal.find('#' + valueField);
+                                           
                     if (sel && sel != '#') 
                         vmGetActiveAdditionalFieldValue(sel, _data, control, field, mode);                   
                 });
@@ -391,25 +432,41 @@
         function vmGetActiveAdditionalFieldValue(sel, data, control, field, mode) {
 
             var id = sel.id;
-            var fieldData = data.filter(function (item) {
+            var val;
+            var fieldData = data.find(function (item) {
                 return item.ID == id;
             });
 
-            var val = fieldData[0][field.id];
+            if (fieldData)
+                val = fieldData[field.id];
+            else if (_justCreatedData)
+                val = _justCreatedData[field.id];
 
             if (field.editReadOnly)
                 vmHandleReadOnly(field, mode, control);
-                                         
+
+            if (field.control == 'combo' && field.valueFieldControl) {
+
+                var valueFieldControlVal = field.comboControl.find('a[data-value={0}]'.format(val));
+                field.valueFieldControl.val($.trim(valueFieldControlVal.text()));
+            };
+                                                         
             control.val(val);
         };
 
         function vmHandleReadOnly(field, mode, control) {
             switch (mode) {
                 case 'create':
-                    control.removeAttr('disabled')
+                    if (field.control != 'combo')
+                        control.removeAttr('disabled')
+                    else
+                        disableCombo.hide();
                     break;
                 case 'edit':
-                    control.attr('disabled', 'disabled')
+                    if (field.control != 'combo')
+                        control.attr('disabled', 'disabled')
+                    else
+                        disableCombo.show();
                     break;
             };
         };

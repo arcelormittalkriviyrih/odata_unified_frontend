@@ -9,24 +9,15 @@
 <div class="container" ng-if="sides && sides.length > 1" ng-hide="sideIsSelected">
 
     <label>{{ 'marker.changeSide' | translate }}</label>
-    <div class="dropdown form-control changeSide">
-        <div class="dropdown-toggle" 
-             type="button" 
-             id="dropdownMenu1" 
-             data-toggle="dropdown" 
-             aria-haspopup="true" 
-             aria-expanded="true">
-            <span class="caret"></span>
-        </div>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li ng-repeat="side in sides">
-                <a href="#" 
-                   ng-click="currentScales(side.ID); $event.preventDefault();">
-                    {{side.Description}}
-                </a>
-            </li>
-        </ul>
+    
+    <div class="col-md-4 cancelPaddingLeft">
+        <dropdown iterator="sides"
+                  method-on-click="currentScales"
+                  show-disable-div="false">
+
+        </dropdown>
     </div>
+    
 </div> 
 
 <div class="container loading" ng-if="!scales && scaleLoading">
@@ -101,33 +92,16 @@
                         {{ 'marker.profile' | translate }}
                     </div>
                     <div class="controlTask">
+                       
+                        <dropdown iterator="profiles"
+                                 model="selectedProfile"
+                                 description="selectedProfileDescription"
+                                 wrong-expr="!selectedProfile && standard"
+                                 method-on-click="actionsProfileChanged"
+                                 show-disable-div="true"
+                                 standard="standard">
 
-                        <div class="disableDropDown" ng-show="!standard">
-
-                        </div>
-
-                        <div class="dropdown form-control"
-                             ng-class="{'wrong': !selectedProfile && standard}">
-
-                            <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <input type="text"
-                                       class="dropdown-input"
-                                       ng-model="selectedProfileDescription"
-                                       />
-                                <input type="hidden" ng-model="selectedProfile" />
-                                <span class="caret"></span>
-                            </div>
-                            <ul class="dropdown-menu" id="status" aria-labelledby="dropdownMenu1">
-                                <li ng-repeat="profile in profiles">
-                                    <a href="#"
-                                       ng-click="changeProfile(profile); getProfilePropertiesList(); enableControlOK(); $event.preventDefault();">
-                                        {{profile.Description}}
-                                    </a>
-                                </li>
-                            </ul>
-
-
-                        </div>
+                        </dropdown>
                     </div>
                 </div>
 
@@ -310,81 +284,49 @@
         <div class="controlsWrapper" style="margin-top:40px;" ng-show="scalesDetailsInfo.SCALES_TYPE == 'BUNT'
                 && scalesDetailsInfo.PACK_RULE == 'CALC'">
             <div class="controlsGroup">
-                <div class="captionTask">
-                    {{ 'marker.bindingDia' | translate }}
-                </div>
-                <div class="controlTask">
-                    <!--<select class="form-control"
-                            ng-model="bindingDia"                            
-                            ng-disabled="!standard"
-                            ng-change="enableControlOK()"
-                            ng-class="{'wrong': !bindingDia && standard}"
-                            ng-options="o.Value for o in BindingDiaData"></select>-->
-                    <div class="disableDropDown" ng-show="!standard">
 
+                <div class="controlsRow">
+                    <div class="captionTask">
+                        {{ 'marker.bindingDia' | translate }}
                     </div>
+                    <div class="controlTask">
 
-                    <div class="dropdown form-control"
-                         ng-class="{'wrong': !bindingDia && standard}">
+                        <dropdown iterator="BindingDiaData"
+                                  model="BindingDia"
+                                  description="BindingDiaDataValue"
+                                  wrong-expr="!bindingDia && standard"
+                                  method-on-click="changeBindingDiaData"
+                                  show-disable-div="true"
+                                  standard="standard">
 
-                        <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <input type="text"
-                                   class="dropdown-input"
-                                   ng-model="BindingDiaDataValue" />
-                            <input type="hidden" ng-model="bindingDia" />
-                            <span class="caret"></span>
-                        </div>
-                        <ul class="dropdown-menu" id="status" aria-labelledby="dropdownMenu1">
-                            <li ng-repeat="item in BindingDiaData">
-                                <a href="#"
-                                   ng-click="changeBindingDiaData(item); enableControlOK(); $event.preventDefault();">
-                                    {{item.Value}}
-                                </a>
-                            </li>
-                        </ul>
-
-
+                        </dropdown>
                     </div>
                 </div>
+
+                    
             </div>
 
             <div class="controlsGroup">
-                <div class="captionTask">
-                    {{ 'marker.bindingQty' | translate }}
-                </div>
-                <div class="controlTask">
-                    <!--<select class="form-control"
-                            ng-model="bindingQty"
-                            ng-disabled="!standard"
-                            ng-change="enableControlOK()"
-                            ng-class="{'wrong': !bindingQty && standard}"
-                            ng-options="o.Value for o in BindingQtyData"></select>-->
-                    <div class="disableDropDown" ng-show="!standard">
 
+                <div class="controlsRow">
+                    <div class="captionTask">
+                        {{ 'marker.bindingQty' | translate }}
                     </div>
+                    <div class="controlTask">
 
-                    <div class="dropdown form-control"
-                         ng-class="{'wrong': !bindingQty && standard}">
+                        <dropdown iterator="BindingQtyData"
+                                  model="bindingQty"
+                                  description="BindingQtyDataValue"
+                                  wrong-expr="!bindingQty && standard"
+                                  method-on-click="changeBindingQtyData"
+                                  show-disable-div="true"
+                                  standard="standard">
 
-                        <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <input type="text"
-                                   class="dropdown-input"
-                                   ng-model="BindingQtyDataValue" />
-                            <input type="hidden" ng-model="bindingQty" />
-                            <span class="caret"></span>
-                        </div>
-                        <ul class="dropdown-menu" id="status" aria-labelledby="dropdownMenu1">
-                            <li ng-repeat="item in BindingQtyData">
-                                <a href="#"
-                                   ng-click="changeBindingQtyData(item); enableControlOK(); $event.preventDefault();">
-                                    {{item.Value}}
-                                </a>
-                            </li>
-                        </ul>
-
-
+                        </dropdown>
                     </div>
                 </div>
+
+                
             </div>
 
         </div>
@@ -673,9 +615,14 @@
         <div class="enterLabelWrapper">
             <label>{{ 'marker.modalCaptions.changePackNumber' | translate }}</label>
 
-            <select class="input-small form-control"
-                    ng-options="o for o in packs"
-                    ng-model="packsLeft"></select>
+                <dropdown iterator="packs"
+                          model="packsLeft"
+                          description="2"                         
+                          show-disable-div="false"
+                          >
+
+                </dropdown>
+                       
         </div>
 
 

@@ -1,0 +1,25 @@
+﻿<div class="disableDropDown" ng-show="showDisableDiv && !standard">
+
+</div>
+
+<div class="dropdown form-control"
+     ng-class="{'wrong': wrongExpr, 'disabled': showDisableDiv && !standard}">
+
+    <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <input type="text"
+               class="dropdown-input"
+               ng-model="description" disabled/>
+        <input type="hidden" ng-model="model" />
+        <span class="caret"></span>
+    </div>
+    <ul class="dropdown-menu" id="status" aria-labelledby="dropdownMenu1">
+        <li ng-repeat="item in iterator">
+            <a href="#"
+               ng-click="changeDropBoxValue(item); methodOnClick(item); $event.preventDefault();">
+                {{item.Description || item.Value || item}}
+            </a>
+            
+        </li>
+    </ul>
+
+</div>

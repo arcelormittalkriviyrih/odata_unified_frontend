@@ -270,18 +270,18 @@ function vmCheckRequiredFields(form) {
 
     if (unFilledFields.length > 0) {
 
-        vmShowUnfilledRequiredFields(unFilledFields);
+        vmShowUnfilledRequiredFields(form, unFilledFields);
         return false;
     } else return true;
 }
 
-function vmShowUnfilledRequiredFields(unFilledFields) {
+function vmShowUnfilledRequiredFields(form, unFilledFields) {
 
     unFilledFields.each(function (i, item) {
 
         if ($(item).attr('data-parent') == 'dropDown') {
 
-            $(item).siblings('.dropdown').addClass('wrong');
+            form.find('.dropdown').addClass('wrong');
         } else
             $(item).addClass('wrong');
 

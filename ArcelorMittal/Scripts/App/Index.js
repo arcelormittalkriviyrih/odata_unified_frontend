@@ -262,7 +262,7 @@
         ru: 'RU',
         en: 'EN'
     };
-    
+
     // check if locale specified    
     if (!$state.params.locale) {
 
@@ -280,7 +280,7 @@
         // set interface language
         $scope.language = $state.params.locale;
         $scope.localeCaption = $scope.languageCaptions[$scope.language];
-        
+
         $translate.use($scope.language);
 
         // if on root state
@@ -358,14 +358,14 @@
 
     var params = $state.params,
         error = params.error,
-        responseText = params.responseText; 
+        responseText = params.responseText;
 
     $scope.disable = false;
     $scope.back = params.back;
 
-    if (typeof responseText == 'object') 
+    if (typeof responseText == 'object')
         responseText = responseText.error.innererror.message;
-    
+
     $scope.errorCode = error.status + ' ' + error.statusText + '\n' + responseText;
 
     var stacktrace = getLastChild(error, ['data', 'error', 'innererror'], 'stacktrace');
@@ -439,4 +439,38 @@
         return request;
     }
 
-}]);
+}])
+
+
+.directive('dropdown', function () {
+
+    function vmController($scope) {
+
+        $scope.changeDropBoxValue = vmChangeDropBoxValue;
+
+        function vmChangeDropBoxValue(item) {
+
+            $scope.description = item.Description || item.Value || item;
+            $scope.model = item.ID || item;
+            if ($scope.side)
+                item.side = $scope.side;
+        };
+    };
+
+    return {
+
+        restrict: 'E',
+        controller: vmController,
+        templateUrl: 'Static/templates/dropdown.html',
+        scope: {
+            iterator: '=',
+            wrongExpr: '=?',
+            description: '=?',
+            model: '=?',
+            methodOnClick: '=?',            
+            standard: '=?',
+            showDisableDiv: '=?',
+            side: '=?'
+        }
+    };
+});

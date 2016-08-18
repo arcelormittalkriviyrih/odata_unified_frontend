@@ -95,7 +95,7 @@
     $scope.getLatestWorkRequest = vmGetLatestWorkRequest;
     $scope.buildForm = vmBuildForm;
     $scope.getProfiles = vmGetProfiles;
-    $scope.changeProfile = vmChangeProfile;
+    $scope.actionsProfileChanged = vmActionsProfileChanged;
 
     $scope.changeBindingDiaData = vmChangeBindingDiaData;
     $scope.changeBindingQtyData = vmChangeBindingQtyData;
@@ -462,7 +462,7 @@
     function vmGetCurrentScales(side) {
 
         //this flag is needed for disabling side list after selecting side
-        $scope.sideIsSelected = side || $scope.sides[0].ID;
+        $scope.sideIsSelected = side.ID || $scope.sides[0].ID;
         
         var url = 'v_AvailableScales';
 
@@ -880,27 +880,33 @@
                     });
     }
 
-    function vmChangeProfile(profile) {
+    function vmActionsProfileChanged(item) {
 
-        $scope.selectedProfile = profile.ID;
-        $scope.selectedProfileDescription = profile.Description;
-    };
+        vmGetProfilePropertiesList(item.ID);
+        vmEnableControlOK();
+    }
+
 
     function vmChangeBindingDiaData(item) {
 
         $scope.BindingDiaDataValue = item.Value;
         $scope.bindingDia = item;
+        vmEnableControlOK();
     }
 
     function vmChangeBindingQtyData(item) {
 
         $scope.BindingQtyDataValue = item.Value;
         $scope.bindingQty = item;
+        vmEnableControlOK();
     }
 
     //get profiles properties list
     //'calledByLastWorkRequest' param indicates is must button 'accept' to be disabled
-    function vmGetProfilePropertiesList(calledByLastWorkRequest) {
+    function vmGetProfilePropertiesList(id, calledByLastWorkRequest) {
+
+        if (id)
+            $scope.selectedProfile = id;
 
         if ($scope.selectedProfile) {
 
@@ -1866,10 +1872,10 @@
 
     $scope.shownParamsList = [{
                                 id: 0,
-                                Name: 'Вес'
+                                Description: 'Вес'
                                 }, {
                                     id: 1,
-                                    Name: 'Прутки'
+                                    Description: 'Прутки'
                                 }];
 
     $scope.filter = {
@@ -1891,7 +1897,10 @@
        
     }
 
-    function vmGetScalesInfo() {
+    function vmGetScalesInfo(item) {
+
+        if (item)
+            item.side == 'left' ? $scope.scaleLeft = item : $scope.scaleRight = item;
 
         if ($rootScope.intervalMonitor)
             $interval.cancel($rootScope.intervalMonitor);
