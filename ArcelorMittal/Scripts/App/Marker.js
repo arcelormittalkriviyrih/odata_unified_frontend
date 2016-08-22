@@ -46,11 +46,23 @@
         }
     })
 
+    .state('app.Marker.Charts', {
+
+        url: '/charts/:side',
+        templateUrl: 'Static/marker/charts.html',
+        controller: 'markerChartsCtrl',
+        params: {
+            side: null
+        }
+    })
+
 }])
 
 .controller('markerCtrl', ['$scope', '$state', function ($scope, $state) {
 
-    if ($state.current.name != 'app.Marker.Monitor' && $state.current.name != 'app.Marker.Diagnostics')
+    if ($state.current.name != 'app.Marker.Monitor'
+        && $state.current.name != 'app.Marker.Diagnostics'
+        && $state.current.name != 'app.Marker.Charts')
         $state.go('app.Marker.Index');
 
 }])
@@ -124,8 +136,7 @@
     $scope.cancelOrderChange = vmCancelOrderChange;
     $scope.acceptHandMode = vmAcceptHandMode;
     $scope.cancelHandMode = vmCancelHandMode;
-    $scope.showMonitor = vmShowMonitor;
-    $scope.showDiagnostics = vmShowDiagnostics;
+    $scope.showOuterPage = vmShowOuterPage;
 
     vmInit();
 
@@ -1753,25 +1764,15 @@
         $scope.NewOrderNumber = null;
     }
 
-    function vmShowMonitor() {
+    function vmShowOuterPage(state) {
 
-        var url = $state.href('app.Marker.Monitor', {
+        var url = $state.href(state, {
 
             side: $scope.sideIsSelected
         });
 
         window.open(url, '_blank');
     };
-
-    function vmShowDiagnostics() {
-
-        var url = $state.href('app.Marker.Diagnostics', {
-
-            side: $scope.sideIsSelected
-        });
-
-        window.open(url, '_blank');
-    }
 
     //there are events triggered on success and cancel button click in order modal form
     $('#orderForm').on('oDataForm.success', function (e, data) {
@@ -1868,7 +1869,7 @@
 
 }])
 
-.controller('markerMonitorCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $http) {
+.controller('markerMonitorCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'scalesRefresh', '$interval', function ($scope, $rootScope, indexService, $state, scalesRefresh, $interval) {
 
     $scope.shownParamsList = [{
                                 id: 0,
@@ -1980,6 +1981,137 @@
             info.rodsLeftCounted = info.BAR_QUANTITY - info.RodsQuantity;
 
     };
+}])
+
+.controller('markerChartsCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'dateTimePickerControl', '$q', function ($scope, $rootScope, indexService, $state, dateTimePickerControl, $q) {
+    
+    var date = new Date();
+
+    $scope.dateEnd = vmGetDateChartFormat(date);
+    $scope.dateStart = vmGetDateChartFormat(new Date(date.setHours(date.getHours() - 1)));
+
+    $scope.getChartData = vmGetChartData;
+
+    $('#chart-date-start').datetimepicker({
+        defaultDate: new Date($scope.dateStart),
+        dateFormat: 'yy-mm-dd',
+        timeFormat: 'HH:mm:ss',
+        controlType: dateTimePickerControl
+    });
+
+    $('#chart-date-end').datetimepicker({
+        defaultDate: new Date($scope.dateEnd),
+        dateFormat: 'yy-mm-dd',
+        timeFormat: 'HH:mm:ss',
+        controlType: dateTimePickerControl
+    });
+
+    vmGetChartData($scope.dateStart, $scope.dateEnd);
+
+    function vmGetChartData(dateStart, dateEnd) {
+
+        dateStart = vmGetOdataDate(dateStart);
+        dateEnd = vmGetOdataDate(dateEnd);
+
+        $q.all([indexService.getInfo('v_ScalesWeightHistory?$filter=SideID eq {0} and WEIGHT_TIMESTAMP gt {1} and WEIGHT_TIMESTAMP lt {2}'
+                            .format($state.params.side, dateStart, dateEnd)),
+                indexService.getInfo('v_AvailableScales?$filter=sideID eq {0}'.format($state.params.side))
+        ])
+                    .then(function (responses) {
+
+                        var chartData = responses[0].data.value;
+                        var scalesList = responses[1].data.value;
+
+                        scalesList = scalesList.map(function (item) {
+
+                            return {
+                                
+                                id: item.ID,
+                                name: item.Description
+                            }
+                        }).sort(function (a, b) {
+                            return a.ID - b.ID;
+                        });
+
+                        var chartDataChunks = [], chartDataForScale = [], labels = [];
+
+                        scalesList.forEach(function (scale) {
+
+                            chartDataForScale = chartData.filter(function (item) {
+
+                                return item.ID == scale.id;
+                            }).map(function (item) {
+
+                                var date = new Date(item.WEIGHT_TIMESTAMP);
+
+                                date = vmGetDateChartFormat(date, true);
+
+                                return [date, item.WEIGHT_CURRENT];
+                            });
+
+                            chartDataChunks.push(chartDataForScale);
+                            labels.push(scale.name);
+                        });
+
+                        
+
+                        var plotLine = $.jqplot('chart', chartDataChunks, {
+
+                            seriesDefaults: { showMarker: false },
+
+                            legend: {
+                                show: true,
+                                labels: labels,
+                                placement: "outside",
+                                rendererOptions: { numberRows: 1 },
+                                location: 's',
+                            },
+
+                            axes: {
+
+                                xaxis: {
+                                    renderer: $.jqplot.DateAxisRenderer,
+                                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                                    tickOptions: {
+                                        formatString: '%Y-%m-%d %H:%M:%S',
+                                        angle: -30,
+                                    },
+                                    min: $scope.dateStart,
+                                    max: $scope.dateEnd,
+                                    tickInterval: "10 minute",
+                                    drawMajorGridlines: false
+                                },
+
+                                yaxis: {
+                                    label: 'КГ',
+                                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+                                },
+                            },
+                            
+                        });
+
+                        plotLine.replot(chartDataChunks);                        
+                    });
+    }
+
+    function vmGetOdataDate(date) {
+
+        date = date.split(' ');
+        date = date[0] + 'T' + date[1] + '.000Z';
+
+        return date;
+    }
+
+    function vmGetDateChartFormat(date, toUTC) {
+
+        var dateItem = getTimeToUpdate(date, toUTC);
+
+        var dateBlock = dateItem.year + '-' + dateItem.month + '-' + dateItem.day;
+        var timeBlock = dateItem.hour + ':' + dateItem.minute + ':' + dateItem.second;
+
+        return dateBlock + ' ' + timeBlock;
+    };
+
 }])
 
 .directive('myEnter', function () {

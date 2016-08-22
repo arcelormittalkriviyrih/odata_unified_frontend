@@ -16,7 +16,9 @@ public class BundleConfig
             "~/scripts/vendor/jsgrid.js",
             "~/scripts/vendor/jstree.js",
             "~/scripts/vendor/jqplot/jquery.jqplot.min.js",
-            "~/Scripts/Vendor/jqplot/plugins/jqplot.meterGaugeRenderer.js",
+            "~/scripts/vendor/jqplot/plugins/jqplot.meterGaugeRenderer.js",
+            "~/scripts/vendor/jqplot/plugins/jqplot.barRenderer.js",
+            "~/scripts/vendor/jqplot/plugins/jqplot.dateAxisRenderer.js",
             "~/scripts/vendor/dhtmlxscheduler.js",
             "~/scripts/vendor/dhtmlxscheduler_year_view.js"
         ));
@@ -33,6 +35,7 @@ public class BundleConfig
             "~/scripts/treeGrid/treeExt.js",
             "~/scripts/table/jsGridExt.js",
             "~/scripts/table/jsGridNewFields.js",
+            "~/scripts/chart/jsPlotLineExt.js",
             "~/scripts/action/index.js"
         ));
 
@@ -40,7 +43,8 @@ public class BundleConfig
             "~/content/table/jsgrid.css",
             "~/content/table/jsgrid-theme.css",
             "~/content/shared/datetimepicker.css",
-            "~/content/shared/layout.css"
+            "~/content/shared/layout.css",
+            "~/content/chart/jquery.jqplot.css"
         ));
     }
 }

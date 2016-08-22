@@ -583,6 +583,10 @@ div.errorHandle label{
     padding: 65px 10px 10px 10px;
 }
 
+.scaleInfo:nth-child(3) {
+    padding: 10px;
+}
+
 h4.scalesName{
     position: absolute;
     top:5px;
@@ -629,19 +633,12 @@ h4.scalesName{
     text-align: right;
 }
 
-
-
 .scalesValue{
-    font-size: 25px;
+    font-size: 50px;
     font-weight: bold;
-    /*position: absolute;
-    right: 0;
-    top: -7px;*/
 }
 
 .rodsValue{
-    /*position:absolute;
-    right: 0;*/
     font-size:18px;
     font-weight: bold;
 }
@@ -660,8 +657,8 @@ h4.scalesName{
 
 .section{
     box-sizing:border-box;
-    padding: 10px 0 0 0;
     margin-bottom: 5px;
+    margin-left: 12px;
 }
 
 /*task (left part in marker interface)*/
@@ -747,7 +744,7 @@ div.controlTask .dropdown-toggle{
 div.controlTask .dropdown-toggle .dropdown-input {
     position: absolute;
     left: -1px;
-    top: -3px;
+    top: -1px;
     height: 28px;
     width: 46px!important;
 }
@@ -767,7 +764,7 @@ div.controlTask .dropdown-toggle .dropdown-input {
 
 .sectionItem{
     display:inline-block;
-    width: 92px;
+    width: 80px;
 }
 
 .autoManuMsg{
@@ -789,7 +786,7 @@ div.controlTask .dropdown-toggle .dropdown-input {
 }
 
 .sectionItem:nth-child(2) input{
-    width: 92px;
+    width: 80px;
 }
 
 .sectionItem:nth-child(3) input{
@@ -1029,6 +1026,36 @@ div.versionData table{
 
 .dhx_section_time select{
     width: 70px;
+}
+
+/*chart*/
+
+.date-control-wrapper{
+    display: inline-block;
+    min-width: 25%;
+    margin-right:10px;
+}
+
+.date-control-wrapper input{
+    display: inline-block;
+    width: 180px;
+}
+
+.chart-container{
+    height: 500px;
+}
+
+table.jqplot-table-legend, table.jqplot-table-legend tbody,
+table.jqplot-table-legend tr{
+    display:inline-block;
+}
+
+table.jqplot-table-legend{
+    top:520px!important;
+}
+
+table.jqplot-table-legend tr{
+    padding: 10px;
 }
 
 

@@ -15,6 +15,60 @@ var dropBoxTmpl = '<div class="dropdown form-control">' +
                                        '<ul class="dropdown-menu" id="{2}" aria-labelledby="dropdownMenu1">' +
                                        '</ul>' +
                                        '</div>';
+var dateTimePickerControl = {
+    create: function (tp_inst, obj, unit, val, min, max, step) {
+        $('<input type="text" class="ui-timepicker-input form-control" value="' + val + '" style="width:80%">')
+            .appendTo(obj)
+            .spinner({
+                min: 0,
+                max: unit == 'hour' ? 23 : 59,
+                step: step,
+                change: function (e, ui) { // key events
+                    // don't call if api was used and not key press
+                    if (e.originalEvent !== undefined)
+                        tp_inst._onTimeChange();
+
+                    if (tp_inst.hour && tp_inst.hour > 23)
+                        tp_inst.hour = 23;
+                    if (tp_inst.minute && tp_inst.minute > 59)
+                        tp_inst.minute = 59;
+                    if (tp_inst.second && tp_inst.second > 59)
+                        tp_inst.second = 59;
+
+                    tp_inst._onSelectHandler();
+                },
+                spin: function (e, ui) { // spin events
+                    tp_inst.control.value(tp_inst, obj, unit, ui.value);
+                    tp_inst._onTimeChange();
+                    tp_inst._onSelectHandler();
+                }
+            });
+        return obj;
+    },
+    options: function (tp_inst, obj, unit, opts, val) {
+        if (typeof (opts) == 'string' && val !== undefined)
+            return obj.find('.ui-timepicker-input').spinner(opts, val);
+        return obj.find('.ui-timepicker-input').spinner(opts);
+    },
+    value: function (tp_inst, obj, unit, val) {
+        if (val !== undefined) {
+
+            if (unit == 'hour') {
+
+                if (val > 23)
+                    val = 23;
+            } else {
+
+                if (val > 59)
+                    val = 59;
+            }
+
+            return obj.find('.ui-timepicker-input').spinner('value', val);
+        }
+
+        return obj.find('.ui-timepicker-input').spinner('value');
+    }
+};
 
 jQuery.ajaxSetup({
     global: true,

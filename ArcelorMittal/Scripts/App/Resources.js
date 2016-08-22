@@ -158,6 +158,10 @@
             order: 'Order',
             brigadeNo: 'Brigade No',
             date: 'Date',
+            charts: 'Charts',
+            chartStartDate: 'Begin Date',
+            chartEndDate: 'End Date',
+            getChartDataBtn: 'Get',
 
             CreateDialogue: {
                 CHANGE_NO: 'Change',
@@ -411,6 +415,10 @@
             order: 'Заказ',
             brigadeNo: '№ бригады',
             date: 'Дата',
+            charts: 'Графики',
+            chartStartDate: 'Дата с',
+            chartEndDate: 'Дата до',
+            getChartDataBtn: 'Получить',
 
             CreateDialogue: {
                 CHANGE_NO: 'Смена',
@@ -666,6 +674,10 @@
             order: 'Замовлення',
             brigadeNo: '№ бригади',
             date: 'Дата',
+            charts: 'Графіки',
+            chartStartDate: 'Дата з',
+            chartEndDate: 'Дата до',
+            getChartDataBtn: 'Отримати',
 
             CreateDialogue: {
                 FactoryNumber: 'Номер бірки',

@@ -188,6 +188,8 @@
 
 .value('workRequestRefresh', workRequestRefresh)
 
+.value('dateTimePickerControl', dateTimePickerControl)
+
 .run(['$rootScope', '$state', function ($rootScope, $state) {
 
     $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {

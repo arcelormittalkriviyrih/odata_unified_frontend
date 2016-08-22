@@ -246,6 +246,7 @@
     <Content Include="Static\marker\index.html" />
     <Content Include="Static\marker\marker.html" />
     <Content Include="Static\marker\monitor.html" />
+    <Content Include="Static\marker\charts.html" />
     <Content Include="Static\market\index.html" />
     <Content Include="Static\market\labeltemplate.html" />
     <Content Include="Static\market\order.html" />
