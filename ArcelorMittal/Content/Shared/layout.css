@@ -1045,6 +1045,11 @@ div.versionData table{
     height: 500px;
 }
 
+.chart-container.loading{
+    position: relative;
+    width:100%;
+}
+
 table.jqplot-table-legend, table.jqplot-table-legend tbody,
 table.jqplot-table-legend tr{
     display:inline-block;

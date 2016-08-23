@@ -1983,12 +1983,13 @@
     };
 }])
 
-.controller('markerChartsCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'dateTimePickerControl', '$q', function ($scope, $rootScope, indexService, $state, dateTimePickerControl, $q) {
+.controller('markerChartsCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'dateTimePickerControl', '$q', '$translate', function ($scope, $rootScope, indexService, $state, dateTimePickerControl, $q, $translate) {
     
     var date = new Date();
 
     $scope.dateEnd = vmGetDateChartFormat(date);
     $scope.dateStart = vmGetDateChartFormat(new Date(date.setHours(date.getHours() - 1)));
+    $scope.chartDataLoaded = false;
 
     $scope.getChartData = vmGetChartData;
 
@@ -2012,6 +2013,7 @@
 
         dateStart = vmGetOdataDate(dateStart);
         dateEnd = vmGetOdataDate(dateEnd);
+        $scope.chartDataLoaded = true;
 
         $q.all([indexService.getInfo('v_ScalesWeightHistory?$filter=SideID eq {0} and WEIGHT_TIMESTAMP gt {1} and WEIGHT_TIMESTAMP lt {2}'
                             .format($state.params.side, dateStart, dateEnd)),
@@ -2019,78 +2021,89 @@
         ])
                     .then(function (responses) {
 
+                        $scope.chartDataLoaded = false;
+
                         var chartData = responses[0].data.value;
                         var scalesList = responses[1].data.value;
 
-                        scalesList = scalesList.map(function (item) {
+                        if (chartData.length == 0) {
 
-                            return {
-                                
-                                id: item.ID,
-                                name: item.Description
-                            }
-                        }).sort(function (a, b) {
-                            return a.ID - b.ID;
-                        });
+                            alert($translate.instant('marker.chartNoData'));
 
-                        var chartDataChunks = [], chartDataForScale = [], labels = [];
+                        } else {
 
-                        scalesList.forEach(function (scale) {
+                            scalesList = scalesList.map(function (item) {
 
-                            chartDataForScale = chartData.filter(function (item) {
+                                return {
 
-                                return item.ID == scale.id;
-                            }).map(function (item) {
-
-                                var date = new Date(item.WEIGHT_TIMESTAMP);
-
-                                date = vmGetDateChartFormat(date, true);
-
-                                return [date, item.WEIGHT_CURRENT];
+                                    id: item.ID,
+                                    name: item.Description
+                                }
+                            }).sort(function (a, b) {
+                                return a.id - b.id;
                             });
 
-                            chartDataChunks.push(chartDataForScale);
-                            labels.push(scale.name);
-                        });
+                            var chartDataChunks = [], chartDataForScale = [], labels = [];
 
-                        
+                            scalesList.forEach(function (scale) {
 
-                        var plotLine = $.jqplot('chart', chartDataChunks, {
+                                chartDataForScale = chartData.filter(function (item) {
 
-                            seriesDefaults: { showMarker: false },
+                                    return item.EquipmentID == scale.id;
+                                }).map(function (item) {
 
-                            legend: {
-                                show: true,
-                                labels: labels,
-                                placement: "outside",
-                                rendererOptions: { numberRows: 1 },
-                                location: 's',
-                            },
+                                    var date = new Date(item.WEIGHT_TIMESTAMP);
 
-                            axes: {
+                                    date = vmGetDateChartFormat(date, true);
 
-                                xaxis: {
-                                    renderer: $.jqplot.DateAxisRenderer,
-                                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                                    tickOptions: {
-                                        formatString: '%Y-%m-%d %H:%M:%S',
-                                        angle: -30,
+                                    return [date, item.WEIGHT_CURRENT];
+                                });
+
+                                chartDataChunks.push(chartDataForScale);
+                                labels.push(scale.name);
+                            });
+
+
+
+                            var plotLine = $.jqplot('chart', chartDataChunks, {
+
+                                seriesDefaults: { showMarker: false },
+
+                                legend: {
+                                    show: true,
+                                    labels: labels,
+                                    placement: "outside",
+                                    rendererOptions: { numberRows: 1 },
+                                    location: 's',
+                                },
+
+                                axes: {
+
+                                    xaxis: {
+                                        renderer: $.jqplot.DateAxisRenderer,
+                                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                                        tickOptions: {
+                                            formatString: '%Y-%m-%d %H:%M:%S',
+                                            angle: -30,
+                                        },
+                                        min: $scope.dateStart,
+                                        max: $scope.dateEnd,
+                                        tickInterval: "10 minute",
+                                        drawMajorGridlines: false
                                     },
-                                    min: $scope.dateStart,
-                                    max: $scope.dateEnd,
-                                    tickInterval: "10 minute",
-                                    drawMajorGridlines: false
+
+                                    yaxis: {
+                                        label: 'КГ',
+                                        labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+                                    },
                                 },
 
-                                yaxis: {
-                                    label: 'КГ',
-                                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer
-                                },
-                            },
-                            
-                        });
+                            });
 
-                        plotLine.replot(chartDataChunks);                        
+                            plotLine.replot(chartDataChunks);
+                        }
+
+                                                
                     });
     }
 
