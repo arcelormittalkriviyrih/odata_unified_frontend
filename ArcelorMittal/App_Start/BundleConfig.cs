@@ -19,8 +19,11 @@ public class BundleConfig
             "~/scripts/vendor/jqplot/plugins/jqplot.meterGaugeRenderer.js",
             "~/scripts/vendor/jqplot/plugins/jqplot.barRenderer.js",
             "~/scripts/vendor/jqplot/plugins/jqplot.dateAxisRenderer.js",
+            "~/scripts/vendor/jqplot/plugins/jqplot.enhancedLegendRenderer.js",
+            "~/scripts/vendor/jqplot/plugins/jqplot.highlighter.js",
             "~/scripts/vendor/dhtmlxscheduler.js",
             "~/scripts/vendor/dhtmlxscheduler_year_view.js"
+            
         ));
 
         bundles.Add(new Bundle("~/bundles/js/app").Include(
@@ -35,7 +38,6 @@ public class BundleConfig
             "~/scripts/treeGrid/treeExt.js",
             "~/scripts/table/jsGridExt.js",
             "~/scripts/table/jsGridNewFields.js",
-            "~/scripts/chart/jsPlotLineExt.js",
             "~/scripts/action/index.js"
         ));
 

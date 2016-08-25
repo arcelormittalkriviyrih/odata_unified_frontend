@@ -1050,17 +1050,39 @@ div.versionData table{
     width:100%;
 }
 
-table.jqplot-table-legend, table.jqplot-table-legend tbody,
-table.jqplot-table-legend tr{
-    display:inline-block;
-}
-
 table.jqplot-table-legend{
     top:520px!important;
 }
 
 table.jqplot-table-legend tr{
     padding: 10px;
+}
+
+.jqplot-highlighter-tooltip{
+    font-size: 22px!important;
+}
+
+td.jqplot-table-legend{
+    font-size: 18px;
+    padding:5px!important;
+}
+
+.jqplot-table-legend .jqplot-series-hidden{
+    text-decoration: none!important;
+}
+
+table.jqplot-table-legend input[type=checkbox]{
+    float:left;
+    margin: 5px 5px 0 0!important;
+}
+
+.div.jqplot-table-legend-swatch{
+    border-width: 6px 6px;
+}
+
+.jqplot-table-legend-swatch-outline{
+    float:right;
+    margin-top:4px;
 }
 
 

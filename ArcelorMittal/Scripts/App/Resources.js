@@ -164,6 +164,7 @@
             getChartDataBtn: 'Get',
             chartNoData: 'There are no data for this period! select another period!',
 
+
             CreateDialogue: {
                 CHANGE_NO: 'Change',
                 FactoryNumber: 'Factory number',

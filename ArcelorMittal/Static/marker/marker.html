@@ -83,6 +83,33 @@
     <div class="scaleInfo task">
         <h4 class="labelTask">{{ 'marker.task' | translate }}</h4>
 
+        <div class="section">
+
+            <div class="sectionItem">
+                <label>{{ 'marker.order' | translate }}:</label>
+                <input type="text" class="input-small form-control"
+                       ng-change="checkIsAcceptedOrder()"
+                       ng-model="commOrder"
+                       ng-disabled="!standard"
+                       my-enter="buildForm()" />
+            </div>
+
+            <div class="sectionItem">
+                <label>{{ 'marker.brigadeNo' | translate }}:</label>
+                <input type="text" class="input-small form-control"
+                       readonly
+                       ng-model="brigadeNo" />
+            </div>
+
+            <div class="sectionItem">
+                <label>{{ 'marker.date' | translate }}</label>
+                <input type="text" class="input-small form-control"
+                       readonly
+                       ng-model="prodDate" />
+            </div>
+
+        </div>
+
         <div class="controlsWrapper">
             <div class="controlsGroup"
                  ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' || scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
@@ -329,34 +356,7 @@
                 
             </div>
 
-        </div>
-
-        <div class="section">
-
-            <div class="sectionItem">
-                <label>{{ 'marker.order' | translate }}:</label>
-                <input type="text" class="input-small form-control"
-                       ng-change="checkIsAcceptedOrder()"
-                       ng-model="commOrder"
-                       ng-disabled="!standard"
-                       my-enter="buildForm()" />
-            </div>
-
-            <div class="sectionItem">
-                <label>{{ 'marker.brigadeNo' | translate }}:</label>
-                <input type="text" class="input-small form-control"
-                       readonly
-                       ng-model="brigadeNo" />
-            </div>
-
-            <div class="sectionItem">
-                <label>{{ 'marker.date' | translate }}</label>
-                <input type="text" class="input-small form-control"
-                       readonly
-                       ng-model="prodDate" />
-            </div>
-
-        </div>
+        </div>        
 
         <div class="controls">
             <button class="btn btn-default"

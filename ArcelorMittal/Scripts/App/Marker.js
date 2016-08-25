@@ -2011,8 +2011,11 @@
 
     function vmGetChartData(dateStart, dateEnd) {
 
+        $('#chart').empty();
+
         dateStart = vmGetOdataDate(dateStart);
         dateEnd = vmGetOdataDate(dateEnd);
+       
         $scope.chartDataLoaded = true;
 
         $q.all([indexService.getInfo('v_ScalesWeightHistory?$filter=SideID eq {0} and WEIGHT_TIMESTAMP gt {1} and WEIGHT_TIMESTAMP lt {2}'
@@ -2073,7 +2076,8 @@
                                     show: true,
                                     labels: labels,
                                     placement: "outside",
-                                    rendererOptions: { numberRows: 1 },
+                                    renderer: $.jqplot.EnhancedLegendRenderer,
+                                    //rendererOptions: { numberRows: 1 },
                                     location: 's',
                                 },
 
@@ -2088,19 +2092,48 @@
                                         },
                                         min: $scope.dateStart,
                                         max: $scope.dateEnd,
-                                        tickInterval: "10 minute",
+                                        tickInterval: vmGetAxeInterval(dateStart, dateEnd),
                                         drawMajorGridlines: false
                                     },
 
                                     yaxis: {
                                         label: 'КГ',
-                                        labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+                                        labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
                                     },
                                 },
 
-                            });
+                                highlighter: {
+                                    show: true,
+                                    sizeAdjust: 7.5,
+                                    useAxesFormatters: true,
+                                    formatString: '%s , %s {0}'.format($translate.instant('marker.kg'))
+                                    
+                                },
+                                cursor: {
+                                    show: false
+                                }
 
-                            plotLine.replot(chartDataChunks);
+                            });
+                    
+                            setTimeout(function () {
+
+                                var td = $('table.jqplot-table-legend')
+                                            .find('td.jqplot-table-legend-swatch');
+
+                                td.append('<input type="checkbox" checked/>');
+
+                                $('tr.jqplot-table-legend').bind('click', function (e) {
+
+                                    if (e.target.tagName != 'INPUT') {
+
+                                        var checkbox = $(this).find('input[type=checkbox]');
+                                        checkbox.prop("checked", !checkbox.prop("checked"));
+                                    };
+                                });
+                            }, 0);
+
+                            
+
                         }
 
                                                 
@@ -2113,6 +2146,21 @@
         date = date[0] + 'T' + date[1] + '.000Z';
 
         return date;
+    }
+
+    function vmGetAxeInterval(dateStart, dateEnd) {
+
+        var interval = '';
+
+        dateStart = new Date(dateStart);
+        dateEnd = new Date(dateEnd);
+
+        var timeDiff = Math.abs(dateEnd.getTime() - dateStart.getTime())/1000/60;
+               
+        interval = (timeDiff / 6).toFixed(2);
+        interval += ' minute';
+            
+        return interval;
     }
 
     function vmGetDateChartFormat(date, toUTC) {
