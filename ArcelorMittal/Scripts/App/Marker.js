@@ -8,7 +8,7 @@
             url: '/index',
             templateUrl: 'Static/marker/marker.html',
             controller: 'markerIndexCtrl',
-            
+
             onExit: function ($state, $injector) {
 
                 var $interval = $injector.get('$interval');
@@ -56,13 +56,104 @@
         }
     })
 
+    .state('app.Marker.Statistics', {
+
+        url: '/statistics/:side',
+        templateUrl: 'Static/marker/statistics.html',
+        controller: 'markerStatisticsCtrl',
+        params: {
+            side: null
+        }
+    })
+
+    .state('app.Marker.Statistics.labelsCount', {
+
+        url: '/labelscount',
+        templateUrl: 'Static/marker/statistics/labelscount.html',
+        controller: 'markerStatisticsLabelsCountCtrl',
+        params: {
+            data: null
+        }
+    })
+
+    .state('app.Marker.Statistics.weightOverall', {
+
+        url: '/weightoverall',
+        templateUrl: 'Static/marker/statistics/weightoverall.html',
+        controller: 'markerStatisticsWeightOverallCtrl',
+        params: {
+            data: null
+        }
+    })
+
+    .state('app.Marker.Statistics.byChanges', {
+
+        url: '/bychanges',
+        templateUrl: 'Static/marker/statistics/bychanges.html',
+        controller: 'markerStatisticsByChangesCtrl',
+        params: {
+            data: null
+        }
+    })
+
+    .state('app.Marker.Statistics.byBrigades', {
+
+        url: '/bybrigades',
+        templateUrl: 'Static/marker/statistics/bybrigades.html',
+        controller: 'markerStatisticsByBrigadesCtrl',
+        params: {
+            data: null
+        }
+    })
+
+    .state('app.Marker.Statistics.byMelt', {
+
+        url: '/bymelt',
+        templateUrl: 'Static/marker/statistics/bymelt.html',
+        controller: 'markerStatisticsByMeltCtrl',
+        params: {
+            data: null
+        }
+    })
+
+    .state('app.Marker.Statistics.byOrder', {
+
+        url: '/byorder',
+        templateUrl: 'Static/marker/statistics/byorder.html',
+        controller: 'markerStatisticsByOrderCtrl',
+        params: {
+            data: null
+        }
+    })
+
+    .state('app.Marker.Statistics.byParty', {
+
+        url: '/byparty',
+        templateUrl: 'Static/marker/statistics/byparty.html',
+        controller: 'markerStatisticsByPartyCtrl',
+        params: {
+            data: null
+        }
+    })
+
+    .state('app.Marker.Statistics.handMode', {
+
+        url: '/handmode',
+        templateUrl: 'Static/marker/statistics/handmode.html',
+        controller: 'markerStatisticsHandModeCtrl',
+        params: {
+            data: null
+        }
+    })
+
 }])
 
 .controller('markerCtrl', ['$scope', '$state', function ($scope, $state) {
 
     if ($state.current.name != 'app.Marker.Monitor'
         && $state.current.name != 'app.Marker.Diagnostics'
-        && $state.current.name != 'app.Marker.Charts')
+        && $state.current.name != 'app.Marker.Charts'
+        && $state.current.name.indexOf('Statistics') == -1)
         $state.go('app.Marker.Index');
 
 }])
@@ -473,7 +564,11 @@
     function vmGetCurrentScales(side) {
 
         //this flag is needed for disabling side list after selecting side
-        $scope.sideIsSelected = side.ID || $scope.sides[0].ID;
+
+        if (side)
+            $scope.sideIsSelected = side.ID
+        else
+            $scope.sideIsSelected = $scope.sides[0].ID;
         
         var url = 'v_AvailableScales';
 
@@ -1720,7 +1815,10 @@
                 order: 7
             }]
 
-        }).jsGrid('loadOdata', {});
+        }).jsGrid('loadOdata', {
+
+            order: 'ID desc'
+        });
     }
     function vmAcceptOrderChange() {
 
@@ -1987,8 +2085,8 @@
     
     var date = new Date();
 
-    $scope.dateEnd = vmGetDateChartFormat(date);
-    $scope.dateStart = vmGetDateChartFormat(new Date(date.setHours(date.getHours() - 1)));
+    $scope.dateEnd = indexService.getDateChartFormat(date);
+    $scope.dateStart = indexService.getDateChartFormat(new Date(date.setHours(date.getHours() - 1)));
     $scope.chartDataLoaded = false;
 
     $scope.getChartData = vmGetChartData;
@@ -2013,8 +2111,8 @@
 
         $('#chart').empty();
 
-        dateStart = vmGetOdataDate(dateStart);
-        dateEnd = vmGetOdataDate(dateEnd);
+        dateStart = indexService.getOdataDate(dateStart);
+        dateEnd = indexService.getOdataDate(dateEnd);
        
         $scope.chartDataLoaded = true;
 
@@ -2057,7 +2155,7 @@
 
                                     var date = new Date(item.WEIGHT_TIMESTAMP);
 
-                                    date = vmGetDateChartFormat(date, true);
+                                    date = indexService.getDateChartFormat(date, true);
 
                                     return [date, item.WEIGHT_CURRENT];
                                 });
@@ -2065,8 +2163,6 @@
                                 chartDataChunks.push(chartDataForScale);
                                 labels.push(scale.name);
                             });
-
-
 
                             var plotLine = $.jqplot('chart', chartDataChunks, {
 
@@ -2077,7 +2173,6 @@
                                     labels: labels,
                                     placement: "outside",
                                     renderer: $.jqplot.EnhancedLegendRenderer,
-                                    //rendererOptions: { numberRows: 1 },
                                     location: 's',
                                 },
 
@@ -2140,14 +2235,6 @@
                     });
     }
 
-    function vmGetOdataDate(date) {
-
-        date = date.split(' ');
-        date = date[0] + 'T' + date[1] + '.000Z';
-
-        return date;
-    }
-
     function vmGetAxeInterval(dateStart, dateEnd) {
 
         var interval = '';
@@ -2163,15 +2250,320 @@
         return interval;
     }
 
-    function vmGetDateChartFormat(date, toUTC) {
+}])
 
-        var dateItem = getTimeToUpdate(date, toUTC);
+.controller('markerStatisticsCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
 
-        var dateBlock = dateItem.year + '-' + dateItem.month + '-' + dateItem.day;
-        var timeBlock = dateItem.hour + ':' + dateItem.minute + ':' + dateItem.second;
+    var date = getTimeToUpdate();
 
-        return dateBlock + ' ' + timeBlock;
+    $scope.dateStart = $scope.dateEnd = '{0}-{1}-{2}'.format(date.year, date.month, date.day);   
+    $scope.groupParams = [{
+
+                            ID: 'labelsCount',
+                            Description: $translate.instant('marker.statistics.labelsOverall')
+                        }, {
+
+                            ID: 'weightOverall',
+                            Description: $translate.instant('marker.statistics.weightOverall')
+                        }, {
+
+                            ID: 'byChanges',
+                            Description: $translate.instant('marker.statistics.byChanges')
+                        }, {
+
+                            ID: 'byBrigades',
+                            Description: $translate.instant('marker.statistics.byBrigades')
+                        }, {
+
+                            ID: 'byMelt',
+                            Description: $translate.instant('marker.statistics.byMelts')
+                        }, {
+
+                            ID: 'byOrder',
+                            Description: $translate.instant('marker.statistics.byOrders')
+                        },
+                        {
+
+                            ID: 'byParty',
+                            Description: $translate.instant('marker.statistics.byParties')
+                        }, {
+
+                            ID: 'handMode',
+                            Description: $translate.instant('marker.statistics.handMode')
+                        }];
+    $scope.groupBy = null;
+
+    $scope.getReportData = vmGetReportData;
+    $scope.clearData = vmClearData;
+    $scope.groupByParam = vmGroupByParam;
+
+    $('#statistics-date-start').datepicker({
+        defaultDate: new Date($scope.dateStart),
+        dateFormat: 'yy-mm-dd',
+        controlType: dateTimePickerControl
+    });
+
+    $('#statistics-date-end').datepicker({
+        defaultDate: new Date($scope.dateEnd),
+        dateFormat: 'yy-mm-dd',
+        controlType: dateTimePickerControl
+    });
+
+    function vmGetReportData(dateStart, dateEnd) {
+
+        $scope.reportDataLoading = true;
+
+        dateStart = dateStart + 'T00:00:00.000Z';
+        dateEnd = dateEnd + 'T23:59:59.000Z';
+
+        var url = 'v_MaterialLotReport?$filter=SideID eq {0} and MEASURE_TIME gt {1} and MEASURE_TIME lt {2}'
+                            .format($state.params.side, dateStart, dateEnd);
+
+        indexService.getInfo(url).then(function (responce) {
+
+                                $scope.reportDataLoading = false;
+                                $scope.reportData = responce.data.value;
+
+                                if ($scope.groupBy) {
+
+                                    vmGroupByParam();
+                                };
+
+                        });
     };
+
+    function vmClearData() {
+
+        $scope.reportData = null;
+    };
+
+    function vmGroupByParam(groupBy) {
+
+            if (groupBy)
+                $scope.groupBy = groupBy;
+
+            if ($scope.reportData) {
+
+                $state.go('app.Marker.Statistics.{0}'.format($scope.groupBy.ID), {
+
+                    data: $scope.reportData
+
+                });
+            }
+            
+    }
+
+
+    
+}])
+
+.controller('markerStatisticsLabelsCountCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+
+    var data = $state.params.data;
+
+    $scope.labelCount = [{length: data.length}];
+}])
+
+.controller('markerStatisticsWeightOverallCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+
+    var data = indexService.countParam($state.params.data, 'Quantity');
+
+    $scope.weightOverall = [{ weightOverall: data }];
+}])
+
+.controller('markerStatisticsByChangesCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+
+    var data = indexService.getGrouppedData($state.params.data, 'CHANGE_NO');
+
+    $('#byChangeGrid').jsGrid({
+        width: "940px",
+
+        filtering: true,
+        editing: false,
+        sorting: false,
+        paging: true,
+        autoload: true,
+
+        pageSize: 10,
+        data: data,
+
+        controller: {
+            loadData: function (filter) {
+
+                return vmLoadStaticData(filter, data)
+            }
+        },
+
+        fields: [
+            { name: "groupParamValue", title: $translate.instant('marker.statistics.change'), type: "text", width: 150 },
+            { name: "countedWeight", title: $translate.instant('marker.statistics.weight'), type: "text", width: 150 },
+        ]
+    });
+}])
+
+.controller('markerStatisticsByBrigadesCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+
+    var data = indexService.getGrouppedData($state.params.data, 'BRIGADE_NO');
+
+    $('#byBrigadeGrid').jsGrid({
+        width: "940px",
+
+        filtering: true,
+        editing: false,
+        sorting: false,
+        paging: true,
+        autoload: true,
+
+        pageSize: 10,
+        data: data,
+
+        controller: {
+            loadData: function (filter) {
+
+                return vmLoadStaticData(filter, data)
+            }
+        },
+
+        fields: [
+            { name: "groupParamValue", title: $translate.instant('marker.statistics.brigade'), type: "text", width: 150 },
+            { name: "countedWeight", title: $translate.instant('marker.statistics.weight'), type: "text", width: 150 },
+        ]
+    });
+}])
+
+.controller('markerStatisticsByMeltCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+
+    var data = indexService.getGrouppedData($state.params.data, 'MELT_NO');
+
+    $('#byMeltGrid').jsGrid({
+        width: "940px",
+
+        filtering: true,
+        editing: false,
+        sorting: false,
+        paging: true,
+        autoload: true,
+
+        pageSize: 10,
+        data: data,
+
+        controller: {
+            loadData: function (filter) {
+
+                return vmLoadStaticData(filter, data)
+            }
+        },
+
+        fields: [
+            { name: "groupParamValue", title: $translate.instant('marker.statistics.melt'), type: "text", width: 150 },
+            { name: "countedWeight", title: $translate.instant('marker.statistics.weight'), type: "text", width: 150 },
+        ]
+    });
+}])
+
+.controller('markerStatisticsByOrderCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+
+    var data = indexService.getGrouppedData($state.params.data, 'PROD_ORDER');
+
+    $('#byOrderGrid').jsGrid({
+        width: "940px",
+
+        filtering: true,
+        editing: false,
+        sorting: false,
+        paging: true,
+        autoload: true,
+
+        pageSize: 10,
+        data: data,
+
+        controller: {
+            loadData: function (filter) {
+
+                return vmLoadStaticData(filter, data)
+            }
+        },
+
+        fields: [
+            { name: "groupParamValue", title: $translate.instant('marker.statistics.prodOrder'), type: "text", width: 150 },
+            { name: "countedWeight", title: $translate.instant('marker.statistics.weight'), type: "text", width: 150 },
+        ]
+    });
+}])
+
+.controller('markerStatisticsByPartyCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+
+    var data = indexService.getGrouppedData($state.params.data, 'PART_NO');
+
+    $('#byPartyGrid').jsGrid({
+        width: "940px",
+
+        filtering: true,
+        editing: false,
+        sorting: false,
+        paging: true,
+        autoload: true,
+
+        pageSize: 10,
+        data: data,
+
+        controller: {
+            loadData: function (filter) {
+
+                return vmLoadStaticData(filter, data)
+            }
+        },
+
+        fields: [
+            { name: "groupParamValue", title: $translate.instant('marker.statistics.party'), type: "text", width: 150 },
+            { name: "countedWeight", title: $translate.instant('marker.statistics.weight'), type: "text", width: 150 },
+        ]
+    });
+}])
+
+.controller('markerStatisticsHandModeCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+
+    var data = $state.params.data;
+
+    data = data.filter(function (item) {
+
+        return item.CREATE_MODE == 'Печать с ручным вводом веса';
+    });
+
+    
+
+    $('#handModeGrid').jsGrid({
+        width: "940px",
+ 
+        filtering: true,
+        editing: false,
+        sorting: false,
+        paging: true,
+        autoload: true,
+ 
+        pageSize: 10,
+        data: data,
+
+        controller: {
+            loadData: function (filter) {
+
+                return vmLoadStaticData(filter, data)
+            }
+        },
+
+
+        fields: [
+            { name: "FactoryNumber", title: $translate.instant('marker.statistics.labelNumder'), type: "text", width: 150 },
+            { name: "Quantity", title: $translate.instant('marker.statistics.mass'), type: "text", width: 150 },
+            { name: "BRIGADE_NO", title: $translate.instant('marker.statistics.brigade'), type: "text", width: 150 },
+            { name: "MEASURE_TIME", title: $translate.instant('marker.statistics.dateTimeMeasure'), type: "dateTime", width: 150 },
+            { name: "PART_NO", title: $translate.instant('marker.statistics.party'), type: "text", width: 150 },
+            { name: "MELT_NO", title: $translate.instant('marker.statistics.melt'), type: "text", width: 150 },
+            { name: "PROD_ORDER", title: $translate.instant('marker.statistics.prodOrder'), type: "text", width: 150 },
+            { name: "MATERIAL_NO", title: $translate.instant('marker.statistics.materialNo'), type: "text", width: 150 },
+
+        ]
+    });
 
 }])
 

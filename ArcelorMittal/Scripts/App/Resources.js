@@ -181,6 +181,7 @@
             separateButton: 'Split pack',
             handModeButton: 'Manual input',
             changeOrderButton: 'Change order',
+            statisticsButton: 'Statistics',
             errorMessages: {
 
                 noOrders: 'There is no orders with this name!',
@@ -225,6 +226,32 @@
                 packWeight: 'Pack weight',
                 rodsQuantity: 'Rods quantity',
                 rodsLeft: 'Rods left'
+            },
+            statistics: {
+
+                getBtn: 'Get',
+                SelectGrouppingMode: 'Select groupping mode',
+                labelsOverall: 'Labels overall',
+                weightOverall: 'Weight overall',
+                byChanges: 'By changes',
+                byBrigades: 'By brigades',
+                byMelts: 'By melts',
+                byOrders: 'by orders',
+                byParties: 'By parties',
+                handMode: 'Hand mode',
+                labelQuantity: 'Label quantity',
+                totalWeigth: 'Total weight',
+                weight: 'Weight',
+                change: 'Change',
+                brigade: 'Brigade',
+                melt: 'Melt',
+                order: 'Order',
+                party: 'Party',
+                labelNumder: 'Factory number',
+                dateTimeMeasure: 'Measure date and time',
+                prodOrder: 'Product order',
+                materialNo: 'Number of material',
+                mass: 'Mass'
             }
             
         },
@@ -439,6 +466,7 @@
             separateButton: 'Разделение пачки',
             handModeButton: 'Ручной ввод',
             changeOrderButton: 'Изменить заказ',
+            statisticsButton: 'Статистика',
             errorMessages: {
 
                 noOrders: 'Нет заказа с таким номером!',
@@ -483,6 +511,32 @@
                 packWeight: 'Вес пачки',
                 rodsQuantity: 'Количество прутков',
                 rodsLeft: 'Осталось прутков'
+            },
+            statistics: {
+
+                getBtn: 'Получить',
+                SelectGrouppingMode: 'Выберите режим группировки',
+                labelsOverall: 'Бирок всего',
+                weightOverall: 'Масса всего',
+                byChanges: 'По сменам',
+                byBrigades: 'По бригадам',
+                byMelts: 'По плавкам',
+                byOrders: 'По заказам',
+                byParties: 'По партиям',
+                handMode: 'Ручной режим',
+                labelQuantity: 'Количество бирок',
+                totalWeigth: 'Общий вес',
+                weight: 'Вес',
+                change: 'Смена',
+                brigade: 'Бригада',
+                melt: 'Плавка',
+                order: 'Заказ',
+                party: 'Партия',
+                labelNumder: 'Номер бирки',
+                dateTimeMeasure: 'Дата и время взвешивания',
+                prodOrder: 'Производственный заказ',
+                materialNo: 'Номер материала',
+                mass: 'Масса'
             }
         },
         error: {
@@ -699,6 +753,7 @@
             separateButton: 'Розділення пачки',
             handModeButton: 'Ручне введення',
             changeOrderButton: 'Змінити замовлення',
+            statisticsButton: 'Статистика',
             errorMessages: {
 
                 noOrders: 'Немає замовлення з таким номером!',
@@ -743,6 +798,32 @@
                 packWeight: 'Вага пачки',
                 rodsQuantity: 'Кількість прутків',
                 rodsLeft: 'Залишилось прутків'
+            },
+            statistics: {
+
+                getBtn: 'Отримати',
+                SelectGrouppingMode: 'Виберіть режим групування',
+                labelsOverall: 'Бирок всього',
+                weightOverall: 'Маса всього',
+                byChanges: 'За змінами',
+                byBrigades: 'За бригадами',
+                byMelts: 'За плавками',
+                byOrders: 'За замовленнями',
+                byParties: 'За партіями',
+                handMode: 'Ручний режим',
+                labelQuantity: 'Кількість бирок',
+                totalWeigth: 'Загальна вага',
+                weight: 'Вага',
+                change: 'Зміна',
+                brigade: 'Бригада',
+                melt: 'Плавка',
+                order: 'Замовлення',
+                party: 'Партія',
+                labelNumder: 'Номер бирки',
+                dateTimeMeasure: 'Дата та час зважування',
+                prodOrder: 'Виробниче замовлення',
+                materialNo: 'Номер матеріала',
+                mass: 'Маса'
             }
         },
         error: {

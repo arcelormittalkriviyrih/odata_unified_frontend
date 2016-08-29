@@ -1,0 +1,55 @@
+﻿<div class="row chart-control-wrapper">
+
+    <div class="date-control-wrapper">
+        {{ 'marker.chartStartDate' | translate }}
+        <input type="text"
+               id="statistics-date-start"
+               class="form-control"
+               ng-model="dateStart"
+               ng-change="clearData()" />
+    </div>
+
+    <div class="date-control-wrapper">
+        {{ 'marker.chartEndDate' | translate }}
+        <input type="text"
+               id="statistics-date-end"
+               class="form-control"
+               ng-model="dateEnd"
+               ng-change="clearData()" />
+    </div>    
+
+    <button class="btn btn-default"
+            ng-click="getReportData(dateStart, dateEnd)">
+        {{'marker.statistics.getBtn' | translate}}
+    </button>
+
+</div>
+
+<div class="row" style="margin-top: 20px;" ng-show="reportData">
+
+        {{'marker.statistics.SelectGrouppingMode' | translate}}:
+
+        <div class="date-control-wrapper">
+            <dropdown iterator="groupParams"
+                      method-on-click="groupByParam"
+                      show-disable-div="false">
+
+            </dropdown>
+        </div>
+        
+</div>
+
+<div class="container">
+
+    <div ng-show="reportDataLoading">
+        <div class="state-data-inside loading">
+            <span class="loading-msg">loading...</span>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;" ng-show="reportData">
+        <ui-view></ui-view>
+    </div>
+    
+    
+</div>

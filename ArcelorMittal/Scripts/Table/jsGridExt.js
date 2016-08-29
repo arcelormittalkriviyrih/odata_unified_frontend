@@ -424,18 +424,13 @@
 
                         filter.push("contains({0},'{1}')".format(field.name, condition));
 
-                    } else if (field.type == 'date') {
+                    } else if (field.type == 'date' || field.type == 'dateTime') {
 
                         getDateFilterParams(['year', 'month', 'day'], filter, field, new Date(condition));
 
-                    } else if (field.type == 'dateTime') {
+                    }
 
-                        condition = condition.split(' ');
-                        condition = condition[0] + 'T' + condition[1] + '.000Z';
-
-                        getDateFilterParams(['year', 'month', 'day', 'hour', 'minute', 'second'], filter, field, new Date(condition));
-
-                    } else if (field.type == 'number' || field.type == 'select') {
+                    else if (field.type == 'number' || field.type == 'select') {
 
                         filter.push("{0} eq {1}".format(field.name, condition));
 

@@ -247,6 +247,15 @@
     <Content Include="Static\marker\marker.html" />
     <Content Include="Static\marker\monitor.html" />
     <Content Include="Static\marker\charts.html" />
+    <Content Include="Static\marker\statistics.html" />
+    <Content Include="Static\marker\statistics\weightoverall.html" />
+    <Content Include="Static\marker\statistics\bychanges.html" />
+    <Content Include="Static\marker\statistics\bybrigades.html" />
+    <Content Include="Static\marker\statistics\bymelt.html" />
+    <Content Include="Static\marker\statistics\byorder.html" />
+    <Content Include="Static\marker\statistics\byparty.html" />
+    <Content Include="Static\marker\statistics\handmode.html" />
+    <Content Include="Static\marker\statistics\labelscount.html" />
     <Content Include="Static\market\index.html" />
     <Content Include="Static\market\labeltemplate.html" />
     <Content Include="Static\market\order.html" />

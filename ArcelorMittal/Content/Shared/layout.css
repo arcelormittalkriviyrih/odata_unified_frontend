@@ -1045,7 +1045,7 @@ div.versionData table{
     height: 500px;
 }
 
-.chart-container.loading{
+.state-data-inside.loading{
     position: relative;
     width:100%;
 }

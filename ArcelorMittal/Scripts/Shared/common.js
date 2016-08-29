@@ -445,4 +445,44 @@ function fillShiftedData(data, rows, intervalSelectedRows, intervalLabelNumbers,
     labelList = labelList.unique();
 }
 
+function groupBy(array, f) {
+    var groups = {};
+    array.forEach(function (item) {
+        var group = JSON.stringify(f(item));
+        groups[group] = groups[group] || [];
+        groups[group].push(item);
+    });
+    return Object.keys(groups).map(function (group) {
+        return groups[group];
+    })
+}
+
+function vmLoadStaticData(filter, data) {
+
+    var dataFilter = data;
+
+    var d = $.Deferred();
+
+    if (filter) {
+        for (var i in filter) {
+
+            if (filter[i])
+                dataFilter = dataFilter.filter(function (item) {
+
+                    if (item[i]) {
+
+                        if (typeof item[i] == 'number')
+                            return item[i] == filter[i]
+                        else if (typeof item[i] == 'string')
+                            return item[i].toString().indexOf(filter[i]) > -1
+
+                    } else return false;
+                });
+        };
+    };
+
+    d.resolve(dataFilter);
+
+    return d.promise();
+}
 

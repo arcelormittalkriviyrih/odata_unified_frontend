@@ -306,12 +306,11 @@
 
             var grid = this._grid;
 
-            return this._filterPicker = $("<input type='text' class='form-control'>").datetimepicker(
+            return this._filterPicker = $("<input type='text' class='form-control'>").datepicker(
                 {
                     defaultDate: new Date(),
                     dateFormat: 'yy-mm-dd',
-                    timeFormat: 'HH:mm:ss',
-                    controlType: dateTimePickerControl,
+
                     onClose: function () {
 
                         grid.search();

@@ -439,7 +439,60 @@
         });
 
         return request;
-    }
+    };
+
+    this.getDateChartFormat = function (date, toUTC) {
+
+        var dateItem = getTimeToUpdate(date, toUTC);
+
+        var dateBlock = dateItem.year + '-' + dateItem.month + '-' + dateItem.day;
+        var timeBlock = dateItem.hour + ':' + dateItem.minute + ':' + dateItem.second;
+
+        return dateBlock + ' ' + timeBlock;
+    };
+
+    this.getOdataDate = function (date) {
+
+        date = date.split(' ');
+        date = date[0] + 'T' + date[1] + '.000Z';
+
+        return date;
+    };
+
+    this.countParam = countParam;
+
+    this.getGrouppedData = function (data, groupRaramName) {
+
+        var grouping = groupBy(data, function (item) {
+            return [item[groupRaramName]];
+        });
+
+        var grouppedData = [];
+
+        grouping = grouping.forEach(function (group) {
+
+            var groupParamValue = group[0][groupRaramName];
+
+            var countedWeight = countParam(group, 'Quantity');
+
+            grouppedData.push({
+
+                groupParamValue: groupParamValue,
+                countedWeight: countedWeight
+            });
+
+        });
+
+        return grouppedData;
+    };
+
+    function countParam(data, param) {
+
+        return data.reduce(function (sum, obj) {
+
+            return sum + obj[param]
+        }, 0);
+    };
 
 }])
 
