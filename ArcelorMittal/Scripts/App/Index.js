@@ -412,7 +412,7 @@
 
 }])
 
-.service('indexService', ['$http', 'serviceUrl', 'withCredentials', function ($http, serviceUrl, withCredentials) {
+.service('indexService', ['$http', 'serviceUrl', 'withCredentials', '$translate', function ($http, serviceUrl, withCredentials, $translate) {
 
     this.getInfo = function (url) {
 
@@ -460,8 +460,47 @@
     };
 
     this.countParam = countParam;
+    this.getGrouppedData = getGrouppedData;
 
-    this.getGrouppedData = function (data, groupRaramName) {
+    this.buildStatisticsGrid = function (container, groupParam, data, translate) {
+
+        var data = getGrouppedData(data, groupParam);
+
+        container.jsGrid({
+            width: "940px",
+
+            filtering: true,
+            editing: false,
+            sorting: false,
+            paging: true,
+            autoload: true,
+
+            pageSize: 10,
+            data: data,
+
+            controller: {
+                loadData: function (filter) {
+
+                    return vmLoadStaticData(filter, data);
+                }
+            },
+
+            fields: [
+                { name: "groupParamValue", title: $translate.instant(translate), type: "text", width: 150 },
+                { name: "countedWeight", title: $translate.instant('marker.statistics.weight'), type: "text", width: 150 },
+            ]
+        });
+    };
+
+    function countParam(data, param) {
+
+        return data.reduce(function (sum, obj) {
+
+            return sum + obj[param]
+        }, 0);
+    };
+
+    function getGrouppedData(data, groupRaramName) {
 
         var grouping = groupBy(data, function (item) {
             return [item[groupRaramName]];
@@ -484,15 +523,7 @@
         });
 
         return grouppedData;
-    };
-
-    function countParam(data, param) {
-
-        return data.reduce(function (sum, obj) {
-
-            return sum + obj[param]
-        }, 0);
-    };
+    };    
 
 }])
 

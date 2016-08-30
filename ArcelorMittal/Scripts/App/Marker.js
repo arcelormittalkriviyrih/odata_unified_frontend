@@ -2360,8 +2360,10 @@
 .controller('markerStatisticsLabelsCountCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
 
     var data = $state.params.data;
-
-    $scope.labelCount = [{length: data.length}];
+    if (!data)
+        $state.go('app.Marker.Statistics');
+    else
+        $scope.labelCount = [{ length: data.length }];
 }])
 
 .controller('markerStatisticsWeightOverallCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
@@ -2371,199 +2373,96 @@
     $scope.weightOverall = [{ weightOverall: data }];
 }])
 
-.controller('markerStatisticsByChangesCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+.controller('markerStatisticsByChangesCtrl', ['$scope', '$state', 'indexService', function ($scope, $state, indexService) {
 
-    var data = indexService.getGrouppedData($state.params.data, 'CHANGE_NO');
-
-    $('#byChangeGrid').jsGrid({
-        width: "940px",
-
-        filtering: true,
-        editing: false,
-        sorting: false,
-        paging: true,
-        autoload: true,
-
-        pageSize: 10,
-        data: data,
-
-        controller: {
-            loadData: function (filter) {
-
-                return vmLoadStaticData(filter, data)
-            }
-        },
-
-        fields: [
-            { name: "groupParamValue", title: $translate.instant('marker.statistics.change'), type: "text", width: 150 },
-            { name: "countedWeight", title: $translate.instant('marker.statistics.weight'), type: "text", width: 150 },
-        ]
-    });
+    if (!$state.params.data)
+        $state.go('app.Marker.Statistics');
+    else 
+        indexService.buildStatisticsGrid($('#byChangeGrid'), 'CHANGE_NO', $state.params.data, 'marker.statistics.change');
+      
 }])
 
-.controller('markerStatisticsByBrigadesCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+.controller('markerStatisticsByBrigadesCtrl', ['$scope', '$state', 'indexService', function ($scope, $state, indexService) {
 
-    var data = indexService.getGrouppedData($state.params.data, 'BRIGADE_NO');
-
-    $('#byBrigadeGrid').jsGrid({
-        width: "940px",
-
-        filtering: true,
-        editing: false,
-        sorting: false,
-        paging: true,
-        autoload: true,
-
-        pageSize: 10,
-        data: data,
-
-        controller: {
-            loadData: function (filter) {
-
-                return vmLoadStaticData(filter, data)
-            }
-        },
-
-        fields: [
-            { name: "groupParamValue", title: $translate.instant('marker.statistics.brigade'), type: "text", width: 150 },
-            { name: "countedWeight", title: $translate.instant('marker.statistics.weight'), type: "text", width: 150 },
-        ]
-    });
+    if (!$state.params.data)
+        $state.go('app.Marker.Statistics');
+    else 
+        indexService.buildStatisticsGrid($('#byBrigadeGrid'), 'BRIGADE_NO', $state.params.data, 'marker.statistics.brigade');
+       
 }])
 
-.controller('markerStatisticsByMeltCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+.controller('markerStatisticsByMeltCtrl', ['$scope', '$state', 'indexService', function ($scope, $state, indexService) {
 
-    var data = indexService.getGrouppedData($state.params.data, 'MELT_NO');
-
-    $('#byMeltGrid').jsGrid({
-        width: "940px",
-
-        filtering: true,
-        editing: false,
-        sorting: false,
-        paging: true,
-        autoload: true,
-
-        pageSize: 10,
-        data: data,
-
-        controller: {
-            loadData: function (filter) {
-
-                return vmLoadStaticData(filter, data)
-            }
-        },
-
-        fields: [
-            { name: "groupParamValue", title: $translate.instant('marker.statistics.melt'), type: "text", width: 150 },
-            { name: "countedWeight", title: $translate.instant('marker.statistics.weight'), type: "text", width: 150 },
-        ]
-    });
+    if (!$state.params.data)
+        $state.go('app.Marker.Statistics');
+    else 
+        indexService.buildStatisticsGrid($('#byMeltGrid'), 'MELT_NO', $state.params.data, 'marker.statistics.melt');
+      
 }])
 
-.controller('markerStatisticsByOrderCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+.controller('markerStatisticsByOrderCtrl', ['$scope', '$state', 'indexService', function ($scope, $state, indexService) {
 
-    var data = indexService.getGrouppedData($state.params.data, 'PROD_ORDER');
+    if (!$state.params.data)
+        $state.go('app.Marker.Statistics');
+    else 
+        indexService.buildStatisticsGrid($('#byOrderGrid'), 'PROD_ORDER', $state.params.data, 'marker.statistics.prodOrder');
 
-    $('#byOrderGrid').jsGrid({
-        width: "940px",
-
-        filtering: true,
-        editing: false,
-        sorting: false,
-        paging: true,
-        autoload: true,
-
-        pageSize: 10,
-        data: data,
-
-        controller: {
-            loadData: function (filter) {
-
-                return vmLoadStaticData(filter, data)
-            }
-        },
-
-        fields: [
-            { name: "groupParamValue", title: $translate.instant('marker.statistics.prodOrder'), type: "text", width: 150 },
-            { name: "countedWeight", title: $translate.instant('marker.statistics.weight'), type: "text", width: 150 },
-        ]
-    });
 }])
 
-.controller('markerStatisticsByPartyCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
+.controller('markerStatisticsByPartyCtrl', ['$scope', '$state', 'indexService', function ($scope, $state, indexService) {
 
-    var data = indexService.getGrouppedData($state.params.data, 'PART_NO');
-
-    $('#byPartyGrid').jsGrid({
-        width: "940px",
-
-        filtering: true,
-        editing: false,
-        sorting: false,
-        paging: true,
-        autoload: true,
-
-        pageSize: 10,
-        data: data,
-
-        controller: {
-            loadData: function (filter) {
-
-                return vmLoadStaticData(filter, data)
-            }
-        },
-
-        fields: [
-            { name: "groupParamValue", title: $translate.instant('marker.statistics.party'), type: "text", width: 150 },
-            { name: "countedWeight", title: $translate.instant('marker.statistics.weight'), type: "text", width: 150 },
-        ]
-    });
+    if (!$state.params.data)
+        $state.go('app.Marker.Statistics');
+    else
+        indexService.buildStatisticsGrid($('#byPartyGrid'), 'PART_NO', $state.params.data, 'marker.statistics.party');
+      
 }])
 
 .controller('markerStatisticsHandModeCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
 
-    var data = $state.params.data;
+    if (!$state.params.data)
+        $state.go('app.Marker.Statistics');
+    else {
 
-    data = data.filter(function (item) {
+        var data = $state.params.data;
 
-        return item.CREATE_MODE == 'Печать с ручным вводом веса';
-    });
+        data = data.filter(function (item) {
 
-    
+            return item.CREATE_MODE == 'Печать с ручным вводом веса';
+        });
 
-    $('#handModeGrid').jsGrid({
-        width: "940px",
- 
-        filtering: true,
-        editing: false,
-        sorting: false,
-        paging: true,
-        autoload: true,
- 
-        pageSize: 10,
-        data: data,
+        $('#handModeGrid').jsGrid({
+            width: "940px",
 
-        controller: {
-            loadData: function (filter) {
+            filtering: true,
+            editing: false,
+            sorting: false,
+            paging: true,
+            autoload: true,
 
-                return vmLoadStaticData(filter, data)
-            }
-        },
+            pageSize: 10,
+            data: data,
 
+            controller: {
+                loadData: function (filter) {
 
-        fields: [
-            { name: "FactoryNumber", title: $translate.instant('marker.statistics.labelNumder'), type: "text", width: 150 },
-            { name: "Quantity", title: $translate.instant('marker.statistics.mass'), type: "text", width: 150 },
-            { name: "BRIGADE_NO", title: $translate.instant('marker.statistics.brigade'), type: "text", width: 150 },
-            { name: "MEASURE_TIME", title: $translate.instant('marker.statistics.dateTimeMeasure'), type: "dateTime", width: 150 },
-            { name: "PART_NO", title: $translate.instant('marker.statistics.party'), type: "text", width: 150 },
-            { name: "MELT_NO", title: $translate.instant('marker.statistics.melt'), type: "text", width: 150 },
-            { name: "PROD_ORDER", title: $translate.instant('marker.statistics.prodOrder'), type: "text", width: 150 },
-            { name: "MATERIAL_NO", title: $translate.instant('marker.statistics.materialNo'), type: "text", width: 150 },
+                    return vmLoadStaticData(filter, data)
+                }
+            },
 
-        ]
-    });
+            fields: [
+                { name: "FactoryNumber", title: $translate.instant('marker.statistics.labelNumder'), type: "text", width: 150 },
+                { name: "Quantity", title: $translate.instant('marker.statistics.mass'), type: "text", align: "center", width: 50 },
+                { name: "BRIGADE_NO", title: $translate.instant('marker.statistics.brigade'), type: "text", align: "center", width: 55 },
+                { name: "MEASURE_TIME", title: $translate.instant('marker.statistics.dateTimeMeasure'), align: "center", type: "dateTime", width: 150 },
+                { name: "PART_NO", title: $translate.instant('marker.statistics.party'), type: "text", align: "center", width: 50 },
+                { name: "MELT_NO", title: $translate.instant('marker.statistics.melt'), type: "text", align: "center", width: 50 },
+                { name: "PROD_ORDER", title: $translate.instant('marker.statistics.prodOrder'), type: "text", align: "center", width: 150 },
+                { name: "MATERIAL_NO", title: $translate.instant('marker.statistics.materialNo'), type: "text", align: "center", width: 70 },
+
+            ]
+        });
+    };
 
 }])
 

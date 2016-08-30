@@ -1,5 +1,7 @@
-﻿<label>{{ 'pa.diagnostics.changeSide' | translate }}:</label>
-<div class="dropdown form-control changeSideDiagnostics" ng-hide="side">
+﻿<label ng-hide="side">{{ 'pa.diagnostics.changeSide' | translate }}:</label>
+
+<div class="dropdown form-control changeSideDiagnostics" ng-hide="side">    
+
     <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         
         <input type="text"

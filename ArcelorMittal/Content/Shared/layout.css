@@ -1085,6 +1085,13 @@ table.jqplot-table-legend input[type=checkbox]{
     margin-top:4px;
 }
 
+/*statistics*/
+
+#handModeGrid .jsgrid-grid-header.jsgrid-header-scrollbar,
+#handModeGrid .jsgrid-grid-body{
+    overflow-y:auto;
+}
+
 
 
 
