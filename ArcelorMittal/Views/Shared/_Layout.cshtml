@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9;" />
+    <title>@ViewBag.Title</title>
+
+    <script src="~/scripts/vendor/jquery-2.2.3.min.js"></script>
+    <script src="~/scripts/vendor/jquery-ui.min.js"></script>
+    <script src="~/scripts/vendor/jquery-ui-timepicker-addon.js"></script>
+    <script src="~/scripts/shared/common.js"></script>
+    <script src="~/scripts/shared/util.js"></script>
+
+    <link rel="stylesheet" href="~/Content/shared/layout.css" />
+    <link rel="stylesheet" href="~/Content/shared/bootstrap/css/bootstrap3.css" />
+
+    <link rel="icon" href="~/Content/shared/favicon.ico" />
+</head>
+<body>
+    <div>
+        <a href="~/table/index" class="lead">Tables</a>
+        <a href="~/action/index" class="lead">Actions</a>
+        <a href="~/form/index" class="lead">Forms</a>
+        <a href="~/treegrid/index" class="lead">TreeGrids</a>
+        <a href="~/chart/index" class="lead">Charts</a>
+        <a href="~/calendar/index" class="lead">Calendar</a>
+        <a href="~/diagramm/index" class="lead">Diagramm</a>
+    </div>
+    @RenderBody()
+</body>
+</html>
