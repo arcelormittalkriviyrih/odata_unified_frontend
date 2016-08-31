@@ -2314,9 +2314,9 @@
         $scope.reportDataLoading = true;
 
         dateStart = dateStart + 'T00:00:00.000Z';
-        dateEnd = dateEnd + 'T23:59:59.000Z';
+        dateEnd = dateEnd + 'T23:59:59.999Z';
 
-        var url = 'v_MaterialLotReport?$filter=SideID eq {0} and PROD_DATE gt {1} and PROD_DATE lt {2}'
+        var url = 'v_MaterialLotReport?$filter=SideID eq {0} and PROD_DATE ge {1} and PROD_DATE le {2}'
                             .format($state.params.side, dateStart, dateEnd);
 
         indexService.getInfo(url).then(function (responce) {
