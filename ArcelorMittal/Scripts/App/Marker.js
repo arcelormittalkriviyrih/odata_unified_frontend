@@ -2316,7 +2316,7 @@
         dateStart = dateStart + 'T00:00:00.000Z';
         dateEnd = dateEnd + 'T23:59:59.000Z';
 
-        var url = 'v_MaterialLotReport?$filter=SideID eq {0} and MEASURE_TIME gt {1} and MEASURE_TIME lt {2}'
+        var url = 'v_MaterialLotReport?$filter=SideID eq {0} and PROD_DATE gt {1} and PROD_DATE lt {2}'
                             .format($state.params.side, dateStart, dateEnd);
 
         indexService.getInfo(url).then(function (responce) {
