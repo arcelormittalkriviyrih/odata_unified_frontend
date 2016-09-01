@@ -2093,14 +2093,14 @@
 
     $('#chart-date-start').datetimepicker({
         defaultDate: new Date($scope.dateStart),
-        dateFormat: 'yy-mm-dd',
+        dateFormat: 'dd.mm.yy',
         timeFormat: 'HH:mm:ss',
         controlType: dateTimePickerControl
     });
 
     $('#chart-date-end').datetimepicker({
         defaultDate: new Date($scope.dateEnd),
-        dateFormat: 'yy-mm-dd',
+        dateFormat: 'dd.mm.yy',
         timeFormat: 'HH:mm:ss',
         controlType: dateTimePickerControl
     });
@@ -2182,7 +2182,7 @@
                                         renderer: $.jqplot.DateAxisRenderer,
                                         tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                                         tickOptions: {
-                                            formatString: '%Y-%m-%d %H:%M:%S',
+                                            formatString: '%d.%m.%Y %H:%M:%S',
                                             angle: -30,
                                         },
                                         min: $scope.dateStart,
@@ -2256,7 +2256,7 @@
 
     var date = getTimeToUpdate();
 
-    $scope.dateStart = $scope.dateEnd = '{0}-{1}-{2}'.format(date.year, date.month, date.day);   
+    $scope.dateStart = $scope.dateEnd = '{0}.{1}.{2}'.format(date.day, date.month, date.year);   
     $scope.groupParams = [{
 
                             ID: 'labelsCount',
@@ -2299,13 +2299,13 @@
 
     $('#statistics-date-start').datepicker({
         defaultDate: new Date($scope.dateStart),
-        dateFormat: 'yy-mm-dd',
+        dateFormat: 'dd.mm.yy',
         controlType: dateTimePickerControl
     });
 
     $('#statistics-date-end').datepicker({
         defaultDate: new Date($scope.dateEnd),
-        dateFormat: 'yy-mm-dd',
+        dateFormat: 'dd.mm.yy',
         controlType: dateTimePickerControl
     });
 
@@ -2313,23 +2313,23 @@
 
         $scope.reportDataLoading = true;
 
-        dateStart = dateStart + 'T00:00:00.000Z';
-        dateEnd = dateEnd + 'T23:59:59.999Z';
+        dateStart = dateStart.split('.').reverse().join('-') + 'T00:00:00.000Z';
+        dateEnd = dateEnd.split('.').reverse().join('-') + 'T23:59:59.999Z';
 
         var url = 'v_MaterialLotReport?$filter=SideID eq {0} and PROD_DATE ge {1} and PROD_DATE le {2}'
                             .format($state.params.side, dateStart, dateEnd);
 
         indexService.getInfo(url).then(function (responce) {
 
-                                $scope.reportDataLoading = false;
-                                $scope.reportData = responce.data.value;
+            $scope.reportDataLoading = false;
+            $scope.reportData = responce.data.value;
 
-                                if ($scope.groupBy) {
+            if ($scope.groupBy) {
 
-                                    vmGroupByParam();
-                                };
+                vmGroupByParam();
+            };
 
-                        });
+        });
     };
 
     function vmClearData() {

@@ -445,7 +445,7 @@
 
         var dateItem = getTimeToUpdate(date, toUTC);
 
-        var dateBlock = dateItem.year + '-' + dateItem.month + '-' + dateItem.day;
+        var dateBlock = dateItem.day + '.' + dateItem.month + '.' + dateItem.year;
         var timeBlock = dateItem.hour + ':' + dateItem.minute + ':' + dateItem.second;
 
         return dateBlock + ' ' + timeBlock;
@@ -454,7 +454,8 @@
     this.getOdataDate = function (date) {
 
         date = date.split(' ');
-        date = date[0] + 'T' + date[1] + '.000Z';
+        var dateFormat = date[0].split('.').reverse().join('-');
+        date = dateFormat + 'T' + date[1] + '.000Z';
 
         return date;
     };

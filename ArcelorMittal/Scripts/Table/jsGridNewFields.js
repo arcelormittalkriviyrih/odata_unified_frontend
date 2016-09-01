@@ -212,7 +212,9 @@
         },
 
         itemTemplate: function (value) {
-            return new Date(value).toDateString();
+            //return new Date(value).toDateString();
+            var dateVal = getTimeToUpdate(value, true);
+            return dateVal.day + '.' + dateVal.month + '.' + dateVal.year
         },
 
         insertTemplate: function (value) {
@@ -220,7 +222,7 @@
                                             .addClass('form-control')
                                             .datepicker({
                                                 defaultDate: new Date(),
-                                                dateFormat: 'yy-mm-dd'
+                                                dateFormat: 'dd.mm.yy'
                                             });
         },
 
@@ -232,7 +234,7 @@
                                             .addClass('form-control')
                                             .datepicker({
                                                 defaultDate: new Date(),
-                                                dateFormat: 'yy-mm-dd',
+                                                dateFormat: 'dd.mm.yy',
                                                 onSelect: function (dateText, inst) {
 
                                                     grid.search();
@@ -249,7 +251,7 @@
         editTemplate: function (value) {
             return this._editPicker = $("<input type='text'>")
                                             .addClass('form-control')
-                                            .datepicker({ dateFormat: 'yy-mm-dd' })
+                                            .datepicker({ dateFormat: 'dd.mm.yy' })
                                             .datepicker("setDate", new Date(value));
         },
 
@@ -290,13 +292,13 @@
 
             var dateVal = getTimeToUpdate(value, true);
 
-            return dateVal.day + '-' + dateVal.month + '-' + dateVal.year + ' ' + dateVal.hour + ':' + dateVal.minute + ':' + dateVal.second;
+            return dateVal.day + '.' + dateVal.month + '.' + dateVal.year + ' ' + dateVal.hour + ':' + dateVal.minute + ':' + dateVal.second;
         },
 
         insertTemplate: function (value) {
             return this._insertPicker = $("<input type='text' class='form-control'>").datetimepicker({
                 defaultDate: new Date(),
-                dateFormat: 'yy-mm-dd',
+                dateFormat: 'dd.mm.yy',
                 timeFormat: 'HH:mm:ss',
                 controlType: dateTimePickerControl,
             });
@@ -309,7 +311,7 @@
             return this._filterPicker = $("<input type='text' class='form-control'>").datepicker(
                 {
                     defaultDate: new Date(),
-                    dateFormat: 'yy-mm-dd',
+                    dateFormat: 'dd.mm.yy',
 
                     onClose: function () {
 
@@ -321,7 +323,7 @@
         editTemplate: function (value) {
             return this._editPicker = $("<input type='text' class='form-control'>").datetimepicker({
                 timeFormat: 'HH:mm:ss',
-                dateFormat: 'yy-mm-dd',
+                dateFormat: 'dd.mm.yy',
                 controlType: dateTimePickerControl,
             }).datetimepicker("setDate", new Date(value));
         },

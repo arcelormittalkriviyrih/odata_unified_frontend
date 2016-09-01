@@ -426,7 +426,12 @@
 
                     } else if (field.type == 'date' || field.type == 'dateTime') {
 
-                        getDateFilterParams(['year', 'month', 'day'], filter, field, new Date(condition));
+                        var date = condition.split('.').reverse().join('-');
+                        
+                        var dateStart = date + 'T00:00:00.000Z';
+                        var dateEnd = date + 'T23:59:59.999Z';
+
+                        filter.push('{0} ge {1} and {0} le {2}'.format(field.name, dateStart, dateEnd));
 
                     }
 
@@ -564,19 +569,6 @@
             if (fieldProperties.length > 0 && fieldProperties[0].readOnly)
                 return true;
             else return false;
-        }
-
-        function getDateFilterParams(timeProperties, filter, field, time) {
-
-            var date = getTimeToUpdate(time, true);
-
-            for (var i in date) {
-
-                if (timeProperties.indexOf(i) > -1) {
-
-                    filter.push("{0}({1}) eq {2}".format(i, field.name, date[i].toString()));
-                }
-            }
         }
 
     }
