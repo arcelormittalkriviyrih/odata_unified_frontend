@@ -1,16 +1,15 @@
 ﻿<div class="row chart-control-wrapper">
 
     <div class="date-control-wrapper">
-        {{ 'marker.chartStartDate' | translate }}
+        {{ 'marker.period' | translate }}
         <input type="text"
                id="statistics-date-start"
                class="form-control"
                ng-model="dateStart"
                ng-change="clearData()" />
     </div>
-
+    &ndash;
     <div class="date-control-wrapper">
-        {{ 'marker.chartEndDate' | translate }}
         <input type="text"
                id="statistics-date-end"
                class="form-control"

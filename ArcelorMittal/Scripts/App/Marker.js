@@ -146,6 +146,16 @@
         }
     })
 
+    .state('app.Marker.Statistics.allLabels', {
+
+        url: '/alllabels',
+        templateUrl: 'Static/marker/statistics/handmode.html',
+        controller: 'markerStatisticsHandModeCtrl',
+        params: {
+            data: null
+        }
+    })
+
 }])
 
 .controller('markerCtrl', ['$scope', '$state', function ($scope, $state) {
@@ -2290,6 +2300,10 @@
 
                             ID: 'handMode',
                             Description: $translate.instant('marker.statistics.handMode')
+                        }, {
+
+                            ID: 'allLabels',
+                            Description: $translate.instant('marker.statistics.allLabels')
                         }];
     $scope.groupBy = null;
 
@@ -2426,10 +2440,14 @@
 
         var data = $state.params.data;
 
-        data = data.filter(function (item) {
+        if ($state.current.name == 'app.Marker.Statistics.handMode') {
 
-            return item.CREATE_MODE == 'Печать с ручным вводом веса';
-        });
+            data = data.filter(function (item) {
+
+                return item.CREATE_MODE == 'Печать с ручным вводом веса';
+            });
+        }
+        
 
         $('#handModeGrid').jsGrid({
             width: "940px",

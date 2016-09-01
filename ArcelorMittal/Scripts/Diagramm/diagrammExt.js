@@ -10,11 +10,37 @@
                                     .appendTo(self).change(vmBuildDiagramm),
             diagrammRoot = $('<div />').attr('id', 'paper')
                                     .appendTo(self),
-            updateBtn = $('<button />').addClass('btn btn-default').text('update')
-                                    .click(vmUpdateDiagramm),
-            removeBtn = $('<button />').addClass('btn btn-default').text('remove')
-                                    .click(vmRemoveNode),
-            graph = null, diagramItems = [], diagrammVertices = [],
+            controlsRoot = $('<div />').addClass('controls')
+                                    .appendTo(self).hide(),
+            createNodeBtn = $('<button />').addClass('btn btn-default')
+                                    .text('create node')
+                                    .click(vmCreateDiagrammNode)
+                                    .appendTo(controlsRoot),
+            createLinkBtn = $('<button />').addClass('btn btn-default')
+                                    .text('create link')
+                                    .click(vmCreateDiagrammLink)
+                                    .appendTo(controlsRoot),
+            updateBtn = $('<button />').addClass('btn btn-default')
+                                    .text('update')
+                                    .click(vmUpdateDiagramm)
+                                    .appendTo(controlsRoot),
+            removeBtn = $('<button />').addClass('btn btn-default')
+                                    .text('remove')
+                                    .click(vmRemoveNode)
+                                    .appendTo(controlsRoot),
+            blackWrapper = $('<div />').addClass('black-wrapper').appendTo(self).hide();
+            controlsRootModal = $('<div />').addClass('modal treeControls')
+                                          .appendTo(blackWrapper),
+            createNodeRoot = $('<div />').attr('id', 'createNode')
+                                        .appendTo(controlsRootModal),
+            createLinkRoot = $('<div />').attr('id', 'createLink')
+                                        .appendTo(controlsRootModal),
+            cancelBtn = $('<button />').attr({ 'id': 'cancel' })
+                                    .addClass('btn')
+                                    .append('<span class="glyphicon glyphicon-remove"></span>')
+                                    .appendTo(controlsRootModal)
+                                    .on('click', vmCancel),
+            graph = null, paper = null, diagramItems = [], diagrammVertices = [],
             nodeChangeCoordinates = [], arrowChangeCoordinates = [];
 
         $.ajax({
@@ -40,7 +66,27 @@
 
             diagrammRoot.empty();
 
-            graph = new joint.dia.Graph();           
+            graph = new joint.dia.Graph();                       
+
+            paper = new joint.dia.Paper({
+                el: diagrammRoot,
+                width: 800,
+                height: 600,
+                gridSize: 1,
+                model: graph
+            });
+
+            controlsRoot.show()            
+
+            $.ajax({
+
+                url: urlDiagrammNodes,
+                method: 'get'
+            }).then(function (response) {
+
+                vmBuildStates(response.value);
+                
+            })
 
             graph.on('change:position', function (node, coordinates) {
 
@@ -61,7 +107,7 @@
                         y: coordinates.y
                     });
                 };
-               
+
             });
 
             graph.on('change:vertices', function (arrow, coordinates) {
@@ -85,38 +131,9 @@
 
             });
 
-            //graph.on('batch:stop', function () {
-
-            //    console.log(nodeChangeCoordinates);
-            //    console.log(arrowChangeCoordinates);
-            //});
-
-            var paper = new joint.dia.Paper({
-                el: diagrammRoot,
-                width: 800,
-                height: 600,
-                gridSize: 1,
-                model: graph
+            paper.on('cell:pointerdown', function (cellView, evt, x, y) {
+                console.log('cell view ' + cellView.model.id + ' was clicked');
             });
-
-            self.append(updateBtn);
-            self.append(removeBtn);
-            
-            
-
-            //paper.on('cell:pointerdown', function (cellView, evt, x, y) {
-            //        alert('cell view ' + cellView.model.id + ' was clicked');
-            //    });
-
-            $.ajax({
-
-                url: urlDiagrammNodes,
-                method: 'get'
-            }).then(function (response) {
-
-                vmBuildStates(response.value);
-                
-            })
         }
 
         function vmBuildStates(data) {
@@ -143,6 +160,7 @@
                 diagramItems.push({
                     item: diagramItem,
                     ID: item.ID,
+                    properties: item,
                     coordinates: { x: x, y: y }
                 });
             });
@@ -229,6 +247,16 @@
             return cell;
         };
 
+        function vmCreateDiagrammNode() {
+
+
+        }
+
+        function vmCreateDiagrammLink() {
+
+
+        }
+
         function vmUpdateDiagramm() {
 
             nodeChangeCoordinates.forEach(function (item) {
@@ -245,16 +273,21 @@
                 };
 
                 var data = {
-                    json: JSON.stringify(nodeNewCoordinates)
+                    DiagramID: nodeChanged.ID,
+                    //NodeType: 1,
+                    //WorkflowSpecification: 1,
+                    json: JSON.stringify(nodeNewCoordinates),
+                    //WorkDefinition: 1,
+                    //Description: ''
                 };
 
                 $.ajax({
 
-                    url: options.serviceUrl + 'v_DiagramNode(' + nodeChanged.ID + ')',
+                    url: urlDiagrammNodes + '(' + nodeChanged.ID + ')',
+                    type: 'PATCH',
                     contentType: "application/json",
-                    data: JSON.stringify(data),
-                    type: 'PATCH'
-
+                    data: JSON.stringify(data)
+                    
                 }).then(function () {
 
                     alert('uraaa1');
@@ -276,7 +309,7 @@
 
                 $.ajax({
 
-                    url: options.serviceUrl + 'v_DiagramConnection(' + arrowChanged.id + ')',
+                    url: urlDiagrammConnections + '(' + arrowChanged.id + ')',
                     contentType: "application/json",
                     data: JSON.stringify(data),
                     type: 'PATCH'
@@ -292,6 +325,11 @@
         function vmRemoveNode() {
 
         }
+
+        function vmCancel() {
+
+            blackWrapper.hide()
+        }        
 
     }
 

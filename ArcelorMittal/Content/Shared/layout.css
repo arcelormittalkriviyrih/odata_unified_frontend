@@ -3,6 +3,14 @@ html, body, section.container{
     height:100%;
 }
 
+body{
+    padding: 0;
+}
+
+.navbar-fixed-top{
+    position: relative;
+}
+
 /*modified grid*/
 
 .jsgrid-filter-row input, .jsgrid-filter-row textarea, .jsgrid-filter-row select, .jsgrid-edit-row input, .jsgrid-edit-row textarea, .jsgrid-edit-row select, .jsgrid-insert-row input, .jsgrid-insert-row textarea, .jsgrid-insert-row select {
@@ -1043,13 +1051,12 @@ div.versionData table{
 
 .date-control-wrapper{
     display: inline-block;
-    min-width: 25%;
-    margin-right:10px;
 }
 
 .date-control-wrapper input{
     display: inline-block;
     width: 180px;
+    margin: 0 8px;
 }
 
 .chart-container{

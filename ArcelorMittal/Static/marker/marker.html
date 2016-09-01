@@ -359,7 +359,8 @@
         </div>        
 
         <div class="controls">
-            <button class="btn btn-default"
+            <button type="button"
+                    class="btn btn-default"
                     ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
                     ng-disabled="disableButtonOKTask"
                     ng-click="workRequest()">
@@ -429,7 +430,8 @@
         
         <div class="controls">
 
-            <button class="btn btn-default"
+            <button type="button"
+                    class="btn btn-default"
                     ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
                     ng-disabled="!(
                     (!sandwichModeAccepted && (!scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')
@@ -439,20 +441,23 @@
                 {{takeWeightLabel}}
             </button>
 
-            <button class="btn btn-default"
+            <button type="button"
+                    class="btn btn-default"
                     ng-show="sandwichModeAccepted && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
                     ng-disabled="!((scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH) && (!scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB)"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeTara','takeTaraLabel', 'marker.takeTaraButton')">
                 {{takeTaraLabel}}
             </button>
 
-            <button class="btn btn-default"
+            <button type="button"
+                    class="btn btn-default"
                     ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
                     ng-click="doAction('ins_MaterialLotByEquipment', 'testPrintLabel', 'marker.testPrintButton')">
                 {{testPrintLabel}}
             </button>
 
-            <button class="btn btn-default specialLabelMode"
+            <button type="button"
+                    class="btn btn-default specialLabelMode"
                     ng-show="userMetadata.indexOf('ins_ManualWeightEntry') > -1"
                     ng-click="showBuildFormWindow('toggleModalHandMode', 'handMode')">
                 {{ 'marker.handModeButton' | translate }}
@@ -465,56 +470,65 @@
 
         
 
-        <button class="btn btn-default specialLabelMode"
+        <button type="button"
+                class="btn btn-default specialLabelMode"
                 ng-click="showBuildFormWindow('toggleModalMarker', 'reMarkerMode')"
                 ng-class="{'active': reMarkerMode}"
                 ng-disabled="!standard">
             {{ 'marker.remarkingButton' | translate }}
         </button>
 
-        <button class="btn btn-default specialLabelMode"
+        <button type="button"
+                class="btn btn-default specialLabelMode"
                 ng-click="showBuildFormWindow('toggleModalSort', 'sortingMode')"
                 ng-class="{'active': sortingMode}"
                 ng-disabled="!standard && !sortingMode">
             {{ 'marker.sortingButton' | translate }}
         </button>
 
-        <button class="btn btn-default specialLabelMode"
+        <button type="button"
+                class="btn btn-default specialLabelMode"
                 ng-click="showBuildFormWindow('toggleModalReject', 'rejectMode')"
                 ng-class="{'active': rejectMode}"
                 ng-disabled="!standard && !rejectMode">
             {{ 'marker.rejectButton' | translate }}
         </button>
 
-        <button class="btn btn-default specialLabelMode"
+        <button type="button"
+                class="btn btn-default specialLabelMode"
                 ng-click="showBuildFormWindow('toggleModalSeparate', 'separateMode')"
                 ng-class="{'active': separateMode}"
                 ng-disabled="!standard && !separateMode">
             {{ 'marker.separateButton' | translate }}
         </button>
 
-        <button class="btn btn-default specialLabelMode"
+        <button type="button"
+                class="btn btn-default specialLabelMode"
                 ng-click="showOrderChangeModal()"
                 ng-disabled="!standard">
             {{ 'marker.changeOrderButton' | translate }}
         </button>
 
-        <button class="btn btn-default specialLabelMode"
+        <button type="button"
+                class="btn btn-default specialLabelMode"
                 ng-click="showOuterPage('app.Marker.Monitor')">
             {{'marker.monitor' | translate}}
         </button>
 
-        <button class="btn btn-default specialLabelMode"
+        <button type="button"
+                class="btn btn-default specialLabelMode"
                 ng-click="showOuterPage('app.Marker.Diagnostics')">
             {{'pa.Diagnostics' | translate}}
         </button>
 
-        <button class="btn btn-default specialLabelMode"
+        <button type="button"
+                class="btn btn-default specialLabelMode"
                 ng-click="showOuterPage('app.Marker.Charts')">
             {{'marker.charts' | translate}}
         </button>
 
-        <button class="btn btn-default specialLabelMode"
+        <button type="button"
+                class="btn btn-default specialLabelMode"
                 ng-click="showOuterPage('app.Marker.Statistics')">
             {{'marker.statisticsButton' | translate}}
         </button>
@@ -537,7 +551,8 @@
 
 <div class="black-wrapper" ng-show="toggleModalMarker">
     <div class="modal additional">
-        <button ng-click="closeModal('toggleModalMarker');
+        <button type="button"
+                ng-click="closeModal('toggleModalMarker');
                 actionsOnExit('remarkerForm', 'isShowReMarkForm');"
                 class="btn btn-circle pull-right">
             <span class="glyphicon glyphicon-remove"></span>
@@ -561,7 +576,8 @@
 
 <div class="black-wrapper" ng-show="toggleModalSort">
     <div class="modal additional">
-        <button ng-click="closeModal('toggleModalSort');
+        <button type="button"
+                ng-click="closeModal('toggleModalSort');
                 actionsOnExit('sortingForm', 'isShowSortingForm');"
                 class="btn btn-circle pull-right">
             <span class="glyphicon glyphicon-remove"></span>
@@ -585,7 +601,8 @@
 
 <div class="black-wrapper" ng-show="toggleModalReject">
     <div class="modal additional">
-        <button ng-click="closeModal('toggleModalReject');
+        <button type="button"
+                ng-click="closeModal('toggleModalReject');
                 actionsOnExit('rejectForm', 'isShowRejectForm');"
                 class="btn btn-circle pull-right">
             <span class="glyphicon glyphicon-remove"></span>
@@ -609,7 +626,8 @@
 
 <div class="black-wrapper" ng-show="toggleModalSeparate">
     <div class="modal additional">
-        <button ng-click="closeModal('toggleModalSeparate');
+        <button type="button"
+                ng-click="closeModal('toggleModalSeparate');
                 actionsOnExit('separateForm', 'isShowSeparateForm');"
                 class="btn btn-circle pull-right">
             <span class="glyphicon glyphicon-remove"></span>
@@ -646,7 +664,8 @@
 
 <div class="black-wrapper" ng-show="toggleModalHandMode">
     <div class="modal additional">
-        <button ng-click="toggleModalHandMode = false"
+        <button type="button"
+                ng-click="toggleModalHandMode = false"
                 class="btn btn-circle pull-right">
             <span class="glyphicon glyphicon-remove"></span>
         </button>
@@ -666,11 +685,15 @@
 
         <div class="control-row">
 
-            <button class="btn btn-default" ng-click="acceptHandMode()">
+            <button type="button"
+                    class="btn btn-default" 
+                    ng-click="acceptHandMode()">
                 OK
             </button>
 
-            <button class="btn btn-default" ng-click="cancelHandMode()">
+            <button type="button"
+                    class="btn btn-default" 
+                    ng-click="cancelHandMode()">
                 {{ 'buttonCancel' | translate }}
             </button>
         </div>
@@ -702,8 +725,12 @@
         </div>
 
         <div class="control-row">
-            <button class="btn btn-default" ng-click="acceptOrderChange()">OK</button>
-            <button class="btn btn-default" ng-click="cancelOrderChange()">{{ 'marker.buttonExit' | translate }}</button>
+            <button type="button"
+                    class="btn btn-default" 
+                    ng-click="acceptOrderChange()">OK</button>
+            <button type="button"
+                    class="btn btn-default" 
+                    ng-click="cancelOrderChange()">{{ 'marker.buttonExit' | translate }}</button>
         </div>
 
     </div>
