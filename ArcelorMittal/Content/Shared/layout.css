@@ -1053,7 +1053,7 @@ div.versionData table{
     display: inline-block;
 }
 
-.date-control-wrapper input{
+.date-control-wrapper > input{
     display: inline-block;
     width: 180px;
     margin: 0 8px;
