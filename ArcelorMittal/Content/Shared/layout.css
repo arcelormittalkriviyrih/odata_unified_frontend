@@ -7,6 +7,21 @@ body{
     padding: 0;
 }
 
+.height100{
+    height: 100%;
+}
+
+@media screen\0{
+
+    .height100{
+    height: 97%;
+}
+}
+
+.container.main{
+    height:92%;
+}
+
 .navbar-fixed-top{
     position: relative;
 }

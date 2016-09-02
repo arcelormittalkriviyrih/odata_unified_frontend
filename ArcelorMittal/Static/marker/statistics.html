@@ -1,7 +1,7 @@
 ﻿<div class="row chart-control-wrapper">
 
     <div class="date-control-wrapper">
-        {{ 'marker.period' | translate }}
+        {{ 'marker.period' | translate }}:
         <input type="text"
                id="statistics-date-start"
                class="form-control"
@@ -31,6 +31,7 @@
         <div class="date-control-wrapper">
             <dropdown iterator="groupParams"
                       method-on-click="groupByParam"
+                      description="comboValue"
                       show-disable-div="false">
 
             </dropdown>
@@ -38,17 +39,21 @@
         
 </div>
 
-<div class="container">
+<div class="container height100" ng-show="reportDataLoading">
 
-    <div ng-show="reportDataLoading">
+    <div class="height100">
         <div class="state-data-inside loading">
             <span class="loading-msg">loading...</span>
         </div>
     </div>
+    
+</div>
+
+<div class="container">
 
     <div style="margin-top: 20px;" ng-show="reportData">
         <ui-view></ui-view>
     </div>
-    
-    
+
+
 </div>

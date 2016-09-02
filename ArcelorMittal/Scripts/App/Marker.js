@@ -2306,6 +2306,7 @@
                             Description: $translate.instant('marker.statistics.allLabels')
                         }];
     $scope.groupBy = null;
+    $scope.comboValue = '';
 
     $scope.getReportData = vmGetReportData;
     $scope.clearData = vmClearData;
@@ -2349,6 +2350,9 @@
     function vmClearData() {
 
         $scope.reportData = null;
+        $scope.groupBy = null;
+        $scope.comboValue = '';
+        $state.go('app.Marker.Statistics');
     };
 
     function vmGroupByParam(groupBy) {
@@ -2382,9 +2386,14 @@
 
 .controller('markerStatisticsWeightOverallCtrl', ['$scope', '$state', 'indexService', '$translate', function ($scope, $state, indexService, $translate) {
 
-    var data = indexService.countParam($state.params.data, 'Quantity');
-
-    $scope.weightOverall = [{ weightOverall: data }];
+    var data = $state.params.data;
+    if (!data)
+        $state.go('app.Marker.Statistics');
+    else {
+        indexService.countParam(data, 'Quantity');
+        $scope.weightOverall = [{ weightOverall: data }];
+    }
+        
 }])
 
 .controller('markerStatisticsByChangesCtrl', ['$scope', '$state', 'indexService', function ($scope, $state, indexService) {
