@@ -1059,6 +1059,10 @@ div.versionData table{
     margin: 0 8px;
 }
 
+.date-control-wrapper input.dropdown-input{
+    width: 91%!important
+}
+
 .chart-container{
     height: 500px;
 }

@@ -1,14 +1,13 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
-    <ProjectFile Condition=" '$(ProjectFile)' == '' ">ArcelorMittal\ArcelorMittal.csproj</ProjectFile>
-    <DeployServiceUrl Condition=" '$(DeployServiceUrl)' == '' ">localhost</DeployServiceUrl>
-	<DeployIisAppPath Condition=" '$(DeployIisAppPath)' == '' ">Default Web Site/odata_unified_frontend</DeployIisAppPath>
-  </PropertyGroup>
-
   <Target Name="VerifyProperties">
     <!-- Verify that we have values for all required properties -->
     <Error Condition=" '$(ProjectName)' == '' " Text="ProjectName is required." />
+    <Error Condition=" '$(Configuration)' == '' " Text="Configuration is required." />
+    <Error Condition=" '$(ProjectFile)' == '' " Text="ProjectFile is required." />
+    <Error Condition=" '$(DeployServiceUrl)' == '' " Text="DeployServiceUrl is required." />
+    <Error Condition=" '$(DeployIisAppPath)' == '' " Text="DeployIisAppPath is required." />
+    <Error Condition=" '$(UserName)' == '' " Text="UserName is required." />
+    <Error Condition=" '$(Password)' == '' " Text="Password is required." />
   </Target>
 
   <Target Name="Build" DependsOnTargets="VerifyProperties">
@@ -20,9 +19,11 @@
                              DeployTarget=MSDeployPublish;
                              CreatePackageOnPublish=True;
                              AllowUntrustedCertificate=True;
-                             MSDeployPublishMethod=MsDepSvc;
-							 DeployIisAppPath=$(DeployIisAppPath);
-                             MSDeployServiceUrl=$(DeployServiceUrl);
+                             MSDeployPublishMethod=WMSvc;
+							              DeployIisAppPath=$(DeployIisAppPath);
+                             MSDeployServiceUrl=$(DeployServiceUrl):8172/msdeploy.axd;
+							 UserName=$(UserName);
+							 Password=$(Password);
                              SkipExtraFilesOnServer=False;"
              ContinueOnError="false" />
   </Target>
