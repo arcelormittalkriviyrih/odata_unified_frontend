@@ -347,7 +347,7 @@
 
             }).then(function () {
 
-                alert('uraaa');
+                //alert('uraaa');
             });
         }
 
