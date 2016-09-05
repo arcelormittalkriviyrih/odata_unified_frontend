@@ -491,7 +491,7 @@
                                      name: 'PROD_DATE',
                                      properties: {
                                          control: 'date',
-                                         required: false,
+                                         required: true,
                                          show: true,
                                          disable: false,
                                          send: true,
@@ -2390,7 +2390,7 @@
     if (!data)
         $state.go('app.Marker.Statistics');
     else {
-        indexService.countParam(data, 'Quantity');
+        data = indexService.countParam(data, 'Quantity');
         $scope.weightOverall = [{ weightOverall: data }];
     }
         
