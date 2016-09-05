@@ -110,6 +110,18 @@ caption{
     font-weight: bold;
 }
 
+.table-diagnostics caption{
+    font-size: 18px;
+}
+
+.table-diagnostics th{
+    font-size: 16px;
+}
+
+.table-diagnostics td{
+    font-weight: bold
+}
+
 ul#item_list.pre-scrollable{
     max-height:500px;
 }
@@ -138,11 +150,11 @@ span.state{
     padding-left: 5px;
 }
 
-span.state.success{
+span.state.success, .statusOK{
     color: green;
 }
 
-span.state.failed{
+span.state.failed, .statusWrong{
     color: red;
 }
 
