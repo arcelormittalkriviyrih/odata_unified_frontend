@@ -12,36 +12,30 @@
                                     .appendTo(self),
             controlsRoot = $('<div />').addClass('controls')
                                     .appendTo(self).hide(),
-            createNodeBtn = $('<button />').addClass('btn btn-default')
-                                    .text('create node')
-                                    .click(vmCreateDiagrammNode)
-                                    .appendTo(controlsRoot),
-            createLinkBtn = $('<button />').addClass('btn btn-default')
-                                    .text('create link')
-                                    .click(vmCreateDiagrammLink)
-                                    .appendTo(controlsRoot),
+            nodeInputRoot = $('<div />').addClass('col-md-2').appendTo(controlsRoot).hide(),
+            changeNodeName = $('<input />').attr({
+                                                'type': 'text',
+                                                'placeholder': 'change node name'
+                                            })
+                                           .addClass('form-control')
+                                           .appendTo(nodeInputRoot),
+
+            arrowInputRoot = $('<div />').addClass('col-md-2').appendTo(controlsRoot).hide(),
+            changeArrowName = $('<input />').attr({
+                                                'type': 'text',
+                                                'placeholder': 'change arrow name'
+                                            })
+                                           .addClass('form-control')
+                                           .appendTo(arrowInputRoot),
+
             updateBtn = $('<button />').addClass('btn btn-default')
-                                    .text('update')
+                                    .text('save changes')
                                     .click(vmUpdateDiagramm)
                                     .appendTo(controlsRoot),
-            removeBtn = $('<button />').addClass('btn btn-default')
-                                    .text('remove')
-                                    .click(vmRemoveNode)
-                                    .appendTo(controlsRoot),
-            blackWrapper = $('<div />').addClass('black-wrapper').appendTo(self).hide();
-            controlsRootModal = $('<div />').addClass('modal treeControls')
-                                          .appendTo(blackWrapper),
-            createNodeRoot = $('<div />').attr('id', 'createNode')
-                                        .appendTo(controlsRootModal),
-            createLinkRoot = $('<div />').attr('id', 'createLink')
-                                        .appendTo(controlsRootModal),
-            cancelBtn = $('<button />').attr({ 'id': 'cancel' })
-                                    .addClass('btn')
-                                    .append('<span class="glyphicon glyphicon-remove"></span>')
-                                    .appendTo(controlsRootModal)
-                                    .on('click', vmCancel),
+
+
             graph = null, paper = null, diagramItems = [], diagrammVertices = [],
-            nodeChangeCoordinates = [], arrowChangeCoordinates = [];
+            changedNodesArray = [], changedArrowsArray = [];
 
         $.ajax({
 
@@ -76,7 +70,7 @@
                 model: graph
             });
 
-            controlsRoot.show()            
+            controlsRoot.show();
 
             $.ajax({
 
@@ -90,31 +84,37 @@
 
             graph.on('change:position', function (node, coordinates) {
 
-                var isNodeChanged = nodeChangeCoordinates.find(function (item) {
+                var isNodeChanged = changedNodesArray.find(function (x) {
 
-                    return item.node == node
+                    return x.item == node
                 });
+
                 if (isNodeChanged) {
 
-                    isNodeChanged.x = coordinates.x;
-                    isNodeChanged.y = coordinates.y
-                } else {
-
-                    nodeChangeCoordinates.push({
-
-                        node: node,
+                    isNodeChanged.coordinates = {
                         x: coordinates.x,
                         y: coordinates.y
+                    }
+                } else {
+
+                    changedNodesArray.push({
+
+                        item: node,
+                        coordinates: {
+                            x: coordinates.x,
+                            y: coordinates.y
+                        }
+                        
                     });
                 };
-
+                                               
             });
 
             graph.on('change:vertices', function (arrow, coordinates) {
 
-                var isArrowChanged = arrowChangeCoordinates.find(function (item) {
+                var isArrowChanged = changedArrowsArray.find(function (x) {
 
-                    return item.arrow == arrow
+                    return x.item == arrow
                 })
 
                 if (isArrowChanged) {
@@ -122,9 +122,9 @@
                     isArrowChanged.coordinates = coordinates;
                 } else {
 
-                    arrowChangeCoordinates.push({
+                    changedArrowsArray.push({
 
-                        arrow: arrow,
+                        item: arrow,
                         coordinates: coordinates
                     });
                 };
@@ -132,14 +132,16 @@
             });
 
             paper.on('cell:pointerdown', function (cellView, evt, x, y) {
-                console.log('cell view ' + cellView.model.id + ' was clicked');
+
+                vmChangeDiagrammItemName(cellView.model.id, changeNodeName, diagramItems, changedNodesArray);
+                vmChangeDiagrammItemName(cellView.model.id, changeArrowName, diagrammVertices, changedArrowsArray);
+               
             });
+
         }
 
         function vmBuildStates(data) {
-
-            
-
+           
             var x = 0, y = 100;
 
             data.forEach(function (item) {
@@ -160,14 +162,13 @@
                 diagramItems.push({
                     item: diagramItem,
                     ID: item.ID,
-                    properties: item,
-                    coordinates: { x: x, y: y }
+                    DiagramID: item.DiagramID
                 });
             });
 
             $.ajax({
 
-                url: serviceUrl + 'WorkflowSpecificationConnection',
+                url: urlDiagrammConnections,
                 method: 'get'
             }).then(function (response) {
 
@@ -210,8 +211,9 @@
 
                 diagrammVertices.push({
 
-                    id: item.ID,
-                    vertice: vertice
+                    ID: item.ID,
+                    description: item.Description,
+                    item: vertice
                 })
 
             });
@@ -247,89 +249,107 @@
             return cell;
         };
 
-        function vmCreateDiagrammNode() {
-
-
-        }
-
-        function vmCreateDiagrammLink() {
-
-
-        }
 
         function vmUpdateDiagramm() {
 
-            nodeChangeCoordinates.forEach(function (item) {
+            vmUpdateDiagramItems(changedNodesArray, diagramItems, 'node', urlDiagrammNodes);
+            vmUpdateDiagramItems(changedArrowsArray, diagrammVertices, 'arrow', urlDiagrammConnections);
+        };
 
-                var nodeChanged = diagramItems.find(function (diagramItem) {
+        function vmChangeDiagrammItemName(id, changeNameCtrl, itemStructure, changedItemsArray) {
 
-                    return diagramItem.item == item.node;
+            //get html elemend for caption (change it in realtime by control value change)
+            var changedElem = $('[model-id=' + id + '] tspan');
+
+            //hide container of control value element
+            changeNameCtrl.parent().hide();
+
+            //unbind keyup event to escape data duplicating 
+            changeNameCtrl.off('keyup');
+
+            //change element from array of items (it can be array of nodes or array of arrows)
+            //by unique id we can select at current time just node or just arrow
+            var isStructured = itemStructure.find(function (x) {
+                return x.item.id == id
+            });
+
+
+            //if element is selected
+            if (isStructured) {                
+
+                //show control for this type
+                changeNameCtrl.parent().show();
+
+                //bind keyup event and change in realtime html caption 
+                //and description value for dynamic array structure
+                changeNameCtrl.val(isStructured.description).on('keyup', function () {
+
+                    changedElem.text($(this).val());
+                    isStructured.description = $(this).val();
                 });
 
-                var nodeNewCoordinates = {
+                //and finally fill array of items where we changed description
+                //(this array will be used for update, it creates dynamically)
+                var isItemChangeLabelChanged = changedItemsArray.find(function (x) {
 
-                    x: item.x,
-                    y: item.y
-                };
-
-                var data = {
-                    DiagramID: nodeChanged.ID,
-                    //NodeType: 1,
-                    //WorkflowSpecification: 1,
-                    json: JSON.stringify(nodeNewCoordinates),
-                    //WorkDefinition: 1,
-                    //Description: ''
-                };
-
-                $.ajax({
-
-                    url: urlDiagrammNodes + '(' + nodeChanged.ID + ')',
-                    type: 'PATCH',
-                    contentType: "application/json",
-                    data: JSON.stringify(data)
-                    
-                }).then(function () {
-
-                    alert('uraaa1');
+                    return x.item.id == id;
                 });
+
+                if (!isItemChangeLabelChanged)
+                    changedItemsArray.push(isStructured);
+                else {
+                    changedItemsArray.description = isStructured.description;
+                }
+
+
+            }
+        }
+
+        function vmUpdateDiagramItems(changedItemArray, structureArray, itemType, url) {
+
+            changedItemArray.forEach(function (x) {
+
+                var data = {};
+
+                if (x.coordinates) 
+                    data.json = JSON.stringify(x.coordinates);
+                
+
+                if (x.description)
+                    data.Description = x.description;
+
+                if (itemType == 'node') {
+
+                    var itemChanged = structureArray.find(function (node) {
+
+                        return node.item == x.node;
+                    })
+
+                    if (itemChanged)
+                        data.DiagramID = itemChanged.DiagramID;
+
+                };
+
+                vmPatchSave(url + '(' + x.ID + ')', data);
 
             });
 
-            arrowChangeCoordinates.forEach(function (item) {
+        };
 
-                var arrowChanged = diagrammVertices.find(function (vertice) {
+        function vmPatchSave(url, data) {
 
-                    return vertice.vertice = item.arrow;
-                })
+            $.ajax({
 
-                var data = {
+                url: url,
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                type: 'PATCH'
 
-                    json: JSON.stringify(item.coordinates)
-                };
+            }).then(function () {
 
-                $.ajax({
-
-                    url: urlDiagrammConnections + '(' + arrowChanged.id + ')',
-                    contentType: "application/json",
-                    data: JSON.stringify(data),
-                    type: 'PATCH'
-
-                }).then(function () {
-
-                    alert('uraaa2');
-                });
-
+                alert('uraaa');
             });
         }
-
-        function vmRemoveNode() {
-
-        }
-
-        function vmCancel() {
-
-            blackWrapper.hide()
-        }        
 
     }
 
