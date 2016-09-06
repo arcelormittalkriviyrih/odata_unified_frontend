@@ -1,4 +1,5 @@
-﻿var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ngSanitize'])
+﻿
+var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ngSanitize'])
 
 .factory('globalAJAXErrorHandling', ['$q', '$injector', function ($q, $injector) {
 
@@ -132,6 +133,18 @@
                         $state.go('app.error', { code: 'unauthorized' });
                 }
             })
+			
+			.state('app.WeightAnalytics', {
+
+                url: '/weightanalytics',
+                templateUrl: 'Static/weightanalytics/index.html',
+                controller: 'WeightAnalyticsCtrl',
+                onEnter: function ($state, roles) {
+
+                    if (!vmIsAuthorized('WeightAnalytics', roles))
+                        $state.go('app.error', { code: 'unauthorized' });
+                }
+            })
 
             .state('accessError', {
 
@@ -251,6 +264,9 @@
                 role.order = 4;
                 break;
 
+			case 'WeightAnalytics':
+                role.order = 5;
+                break;
         };
     });
 

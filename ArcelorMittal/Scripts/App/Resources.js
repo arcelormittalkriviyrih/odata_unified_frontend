@@ -6,7 +6,8 @@
             Market: 'Market',
             WorkshopSpecs: 'WorkshopSpecs',
             Marker: 'Marker',
-            PA: 'PA'
+            PA: 'PA',
+            WeightAnalytics: 'WeightAnalytics'
         },
         welcome: {
             Welcome: 'Welcome',
@@ -257,6 +258,10 @@
             }
             
         },
+		weightanalytics: {
+            Kopr4: 'ScrapYard 4',
+            Link2: 'Link2'
+        },
         error: {
             Unauthorized: 'This role is unavailable for you!'
         },
@@ -297,11 +302,12 @@
             Market: 'Маркетолог',
             WorkshopSpecs: 'Специалист Цеха',
             Marker: 'Маркировщик',
-            PA: 'Специалист АСУТП'
+            PA: 'Специалист АСУТП',
+            WeightAnalytics: 'Аналитик'
         },
         welcome: {
             Welcome: 'Привет',
-            UseRoles: 'Виберите одну из доступних ролей',
+            UseRoles: 'Выберите одну из доступных ролей',
             NoRoles: 'Нет доступных ролей'
         },
         market: {
@@ -543,6 +549,12 @@
                 mass: 'Масса'
             }
         },
+		
+		weightanalytics: {
+		    Kopr4: 'Копровой 4',
+            Link2: 'Ссылка2'
+        },
+		
         error: {
             Unauthorized: 'Эта роль Вам недоступна'
         },
@@ -587,7 +599,8 @@
             Market: 'Маркетолог',
             WorkshopSpecs: 'Спеціаліст Цеху',
             Marker: 'Маркувальник',
-            PA: 'Спеціаліст АСУТП'
+            PA: 'Спеціаліст АСУТП',
+            WeightAnalytics: 'Аналітик'
         },
         welcome: {
             Welcome: 'Привiт',
@@ -832,6 +845,12 @@
                 mass: 'Маса'
             }
         },
+		
+		weightanalytics: {
+		    Kopr4: 'Копровий 4',
+            Link2: 'Посилання2'
+        },
+				
         error: {
             Unauthorized: 'У доступі відмовлено'
         },

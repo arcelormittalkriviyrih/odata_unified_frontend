@@ -18,9 +18,9 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -191,6 +191,7 @@
     <Content Include="Scripts\App\Market.js" />
     <Content Include="Scripts\App\PA.js" />
     <Content Include="Scripts\App\WorkshopSpecs.js" />
+    <Content Include="Scripts\App\WeightAnalytics.js" />
     <Content Include="Scripts\Shared\common.js" />
     <Content Include="Scripts\Shared\util.js" />
     <Content Include="Scripts\Table\index.js" />
@@ -268,6 +269,9 @@
     <Content Include="Static\pa\diagnostics.html" />
     <Content Include="Static\pa\version.html" />
     <Content Include="Static\pa\sapcommunication.html" />
+    <Content Include="Static\weightanalytics\index.html" />
+    <Content Include="Static\weightanalytics\kopr_4.html" />
+    <Content Include="Static\weightanalytics\link2.html" />
     <Content Include="Static\root.html" />
     <Content Include="Static\templates\dropdown.html" />
     <Content Include="Static\workshopspecs.html" />

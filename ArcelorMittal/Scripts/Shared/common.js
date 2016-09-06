@@ -1,4 +1,5 @@
 ﻿var domainURL = '../../odata_unified_svc';
+//var domainURL = 'http://krr-tst-palbp01/odata_unified_svc';
 //var domainURL = 'http://mssql2014srv/odata_unified_svc';
 var serviceUrl = domainURL + '/api/Dynamic/';
 var sapUrl = '../../odata_sap_svc/GetSAPInfo?orderNo=';
