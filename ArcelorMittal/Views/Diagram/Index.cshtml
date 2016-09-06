@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Diagram";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        
+        <title>index</title>
+
+        <link rel="stylesheet" href="~/Content/Diagramm/joint.min.css" />
+
+        <script src="~/Scripts/Diagram/lodash.js"></script>
+        <script src="~/Scripts/Diagram/backbone.js"></script>
+        <script src="~/Scripts/Diagram/joint.min.js"></script>
+        <script src="~/Scripts/Diagram/diagramExt.js"></script>
+        <script src="~/Scripts/Diagram/index.js"></script>
+        
+    </head>
+    <body>
+
+        <select id="diagramList">
+            <option></option>
+        </select>
+
+        <div id="paper"> 
+            
+        </div>
+        <div class="odataDiagram">
+
+        </div>
+    </body>
+</html>

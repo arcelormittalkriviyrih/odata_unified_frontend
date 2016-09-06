@@ -1141,6 +1141,14 @@ table.jqplot-table-legend input[type=checkbox]{
     overflow-y:auto;
 }
 
+div.odataDiagram{
+    text-align: center;
+}
+
+div.odataDiagram .controls{
+    text-align: left;
+}
+
 
 
 

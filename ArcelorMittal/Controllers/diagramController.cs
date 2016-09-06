@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace ArcelorMittal.Controllers
 {
-    public class diagrammController : Controller
+    public class diagramController : Controller
     {
         // GET: Diagramm
         public ActionResult Index()

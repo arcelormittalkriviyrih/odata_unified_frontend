@@ -1,14 +1,15 @@
 ﻿(function ($) {
 
-    jQuery.fn.odataDiagramm = function (options) {
+    jQuery.fn.odataDiagram = function (options) {
 
         var self = this,
-            urlDiagrammsList = options.serviceUrl + options.diagrammsList,
-            urlDiagrammNodes = options.serviceUrl + options.diagramNodes,
-            urlDiagrammConnections = options.serviceUrl + options.diagrammConnections,
-            select = $('<select />').attr('id', 'diagrammList')
-                                    .appendTo(self).change(vmBuildDiagramm),
-            diagrammRoot = $('<div />').attr('id', 'paper')
+            translates = options.translates,
+            filterByDiagram = '?$filter=DiagramID eq {0}'.format(options.diagramID),
+            urlDiagramNodes = options.serviceUrl + options.diagramNodes,
+            urlDiagramConnections = options.serviceUrl + options.diagramConnections,
+            paperWidth = options.paperWidth,
+            paperHeight = options.paperHeight,
+            diagramRoot = $('<div />').attr('id', 'paper')
                                     .appendTo(self),
             controlsRoot = $('<div />').addClass('controls')
                                     .appendTo(self).hide(),
@@ -19,7 +20,6 @@
                                             })
                                            .addClass('form-control')
                                            .appendTo(nodeInputRoot),
-
             arrowInputRoot = $('<div />').addClass('col-md-2').appendTo(controlsRoot).hide(),
             changeArrowName = $('<input />').attr({
                                                 'type': 'text',
@@ -27,45 +27,63 @@
                                             })
                                            .addClass('form-control')
                                            .appendTo(arrowInputRoot),
+            showChangePaperSizeFormBtn = $('<button />').addClass('btn btn-default')
+                                           .text('change paper size')
+                                           .click(vmShowChangePaperSizeForm)
+                                           .appendTo(controlsRoot),
+            showChangePaperSizeForm = $('<div />').addClass('changePaperSizeForm col-md-4')
+                                          .appendTo(controlsRoot).hide(),
+            changeWidthRoot = $('<div />').addClass('col-md-6').appendTo(showChangePaperSizeForm),
+            changeHeightRoot = $('<div />').addClass('col-md-6').appendTo(showChangePaperSizeForm),
+
+            changeWidthCtrl = $('<input />').attr({
+                                                'type': 'text',
+                                                'placeholder': 'change paper width'
+                                           })
+                                           .val(paperWidth)
+                                           .addClass('form-control')
+                                           .appendTo(changeWidthRoot),
+
+            changeHeightCtrl = $('<input />').attr({
+                                                'type': 'text',
+                                                'placeholder': 'change paper height'
+                                           })
+                                           .val(paperHeight)
+                                           .addClass('form-control')
+                                           .appendTo(changeHeightRoot),
+
+            changeSizeButtonsRoot = $('<div />').addClass('col-md-12')
+                                            .appendTo(showChangePaperSizeForm),
+
+            acceptChangePaperSizeBtn = $('<button />').addClass('btn btn-default')
+                                           .text(translates.acceptChangeSize)
+                                           .click(vmAcceptChangePaperSize)
+                                           .appendTo(changeSizeButtonsRoot),
+
+            declineChangePaperSizeBtn = $('<button />').addClass('btn btn-default')
+                                           .text(translates.declineChangeSize)
+                                           .click(vmDeclineChangePaperSize)
+                                           .appendTo(changeSizeButtonsRoot),
 
             updateBtn = $('<button />').addClass('btn btn-default')
-                                    .text('save changes')
-                                    .click(vmUpdateDiagramm)
+                                    .text(translates.saveBtn)
+                                    .click(vmUpdateDiagram)
                                     .appendTo(controlsRoot),
+            graph = null, paper = null, diagramItems = [], diagramVertices = [],
+            changedNodesArray = [], changedArrowsArray = []
 
+        vmBuildDiagram(paperWidth, paperHeight);
 
-            graph = null, paper = null, diagramItems = [], diagrammVertices = [],
-            changedNodesArray = [], changedArrowsArray = [];
+        function vmBuildDiagram(width, height) {
 
-        $.ajax({
-
-            url: urlDiagrammsList,
-            method: 'get'
-        }).then(function (response) {
-
-            var data = response.value;
-
-            select.append('<option />');
-
-            for (var i = 0; i < data.length; i++) {
-
-                var option = $('<option />')
-                    .attr('value', data[i].ID).text(data[i].Description)
-                    .appendTo(select);
-            }
-
-        });
-
-        function vmBuildDiagramm() {
-
-            diagrammRoot.empty();
+            diagramRoot.empty();
 
             graph = new joint.dia.Graph();                       
 
             paper = new joint.dia.Paper({
-                el: diagrammRoot,
-                width: 800,
-                height: 600,
+                el: diagramRoot,
+                width: width || 800,
+                height: height || 600,
                 gridSize: 1,
                 model: graph
             });
@@ -74,7 +92,7 @@
 
             $.ajax({
 
-                url: urlDiagrammNodes,
+                url: urlDiagramNodes + filterByDiagram,
                 method: 'get'
             }).then(function (response) {
 
@@ -133,9 +151,8 @@
 
             paper.on('cell:pointerdown', function (cellView, evt, x, y) {
 
-                vmChangeDiagrammItemName(cellView.model.id, changeNodeName, diagramItems, changedNodesArray);
-                vmChangeDiagrammItemName(cellView.model.id, changeArrowName, diagrammVertices, changedArrowsArray);
-               
+                vmChangeDiagramItemName(cellView.model.id, changeNodeName, diagramItems, changedNodesArray);
+                vmChangeDiagramItemName(cellView.model.id, changeArrowName, diagramVertices, changedArrowsArray);
             });
 
         }
@@ -162,13 +179,14 @@
                 diagramItems.push({
                     item: diagramItem,
                     ID: item.ID,
-                    DiagramID: item.DiagramID
+                    DiagramID: item.DiagramID,
+                    description: item.Description,
                 });
             });
 
             $.ajax({
 
-                url: urlDiagrammConnections,
+                url: urlDiagramConnections + filterByDiagram,
                 method: 'get'
             }).then(function (response) {
 
@@ -209,7 +227,7 @@
                     vertice = vmLink(fromNode.item, toNode.item, item.Description, coordinates);
                 }         
 
-                diagrammVertices.push({
+                diagramVertices.push({
 
                     ID: item.ID,
                     description: item.Description,
@@ -244,19 +262,100 @@
                 target: { id: target.id },
                 labels: [{ position: 0.5, attrs: { text: { text: label || '', 'font-weight': 'bold' } } }],
                 vertices: vertices || []
+            }).on('change:source', function (arrow, newSourse) {
+
+                if (newSourse.id) {
+
+                    vmChangeArrowEnd(arrow, newSourse, 'FromNodeID');
+                };
+                    
+            }).on('change:target', function (arrow, newTarget) {
+
+                 if (newTarget.id) {
+
+                     vmChangeArrowEnd(arrow, newTarget, 'ToNodeID');
+                 };
+                 
             });
             graph.addCell(cell);
             return cell;
         };
 
+        function vmChangeArrowEnd(arrow, newEnd, reConnectionType) {
 
-        function vmUpdateDiagramm() {
+            var isarrowChangedItem = changedArrowsArray.find(function (x) {
 
-            vmUpdateDiagramItems(changedNodesArray, diagramItems, 'node', urlDiagrammNodes);
-            vmUpdateDiagramItems(changedArrowsArray, diagrammVertices, 'arrow', urlDiagrammConnections);
+                return x.item.id == arrow.id;
+            });
+
+            var newEndItem = diagramItems.find(function (x) {
+
+                return x.item.id == newEnd.id;
+            });
+
+            if (isarrowChangedItem) {
+
+                isarrowChangedItem[reConnectionType] = newEndItem.ID;
+            } else {
+
+                changedArrowsArray.push({
+
+                    item: cell,
+                    [reConnectionType]: newEndItem.ID
+                });
+            }
+
+        }
+
+        function vmShowChangePaperSizeForm() {
+
+            showChangePaperSizeForm.show();
+            showChangePaperSizeFormBtn.hide();
+        }
+
+        function vmAcceptChangePaperSize() {
+
+            var newWidth = parseInt(changeWidthCtrl.val());
+            var newHeight = parseInt(changeHeightCtrl.val());
+
+            if (newWidth && newHeight) {
+                
+                var data = {
+
+                    json: {
+
+                        width: newWidth,
+                        height: newHeight
+                    }
+                };
+
+                data.json = JSON.stringify(data.json);
+
+                vmPatchSave(options.serviceUrl + 'v_Diagram(' + options.diagramID + ')', data, {
+
+                    btn: acceptChangePaperSizeBtn,
+                    defaultText: translates.acceptChangeSize,
+                    textOnSaving: translates.saving
+                }, function () {
+
+                    location.reload();
+                });
+            }
+        }
+
+        function vmDeclineChangePaperSize() {
+
+            showChangePaperSizeForm.hide();
+            showChangePaperSizeFormBtn.show();
+        }
+
+        function vmUpdateDiagram() {
+
+            vmUpdateDiagramItems(changedNodesArray, diagramItems, 'node', urlDiagramNodes);
+            vmUpdateDiagramItems(changedArrowsArray, diagramVertices, 'arrow', urlDiagramConnections);
         };
 
-        function vmChangeDiagrammItemName(id, changeNameCtrl, itemStructure, changedItemsArray) {
+        function vmChangeDiagramItemName(id, changeNameCtrl, itemStructure, changedItemsArray) {
 
             //get html elemend for caption (change it in realtime by control value change)
             var changedElem = $('[model-id=' + id + '] tspan');
@@ -318,6 +417,12 @@
                 if (x.description)
                     data.Description = x.description;
 
+                if (x.FromNodeID)
+                    data.FromNodeID = parseInt(x.FromNodeID);
+
+                if (x.ToNodeID)
+                    data.ToNodeID = parseInt(x.ToNodeID);
+
                 if (itemType == 'node') {
 
                     var itemChanged = structureArray.find(function (node) {
@@ -330,13 +435,20 @@
 
                 };
 
-                vmPatchSave(url + '(' + x.ID + ')', data);
+                vmPatchSave(url + '(' + x.ID + ')', data, {
+
+                    btn: updateBtn,
+                    defaultText: translates.saveBtn,
+                    textOnSaving: translates.saving
+                });
 
             });
 
         };
 
-        function vmPatchSave(url, data) {
+        function vmPatchSave(url, data, btnOptions, callBack) {
+
+            btnOptions.btn.text(btnOptions.textOnSaving);
 
             $.ajax({
 
@@ -347,7 +459,10 @@
 
             }).then(function () {
 
-                //alert('uraaa');
+                btnOptions.btn.text(btnOptions.defaultText);
+
+                if (callBack)
+                    callBack();
             });
         }
 

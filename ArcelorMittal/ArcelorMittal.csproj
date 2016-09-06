@@ -174,11 +174,11 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
     <Content Include="Scripts\App\Resources.js" />
-    <Content Include="Scripts\Diagramm\backbone.js" />
-    <Content Include="Scripts\Diagramm\diagrammExt.js" />
-    <Content Include="Scripts\Diagramm\index.js" />
-    <Content Include="Scripts\Diagramm\joint.min.js" />
-    <Content Include="Scripts\Diagramm\lodash.js" />
+    <Content Include="Scripts\Diagram\backbone.js" />
+    <Content Include="Scripts\Diagram\diagramExt.js" />
+    <Content Include="Scripts\Diagram\index.js" />
+    <Content Include="Scripts\Diagram\joint.min.js" />
+    <Content Include="Scripts\Diagram\lodash.js" />
     <Content Include="Scripts\Vendor\dhtmlxscheduler.js" />
     <Content Include="Scripts\Vendor\dhtmlxscheduler_year_view.js" />
     <Content Include="Scripts\Calendar\index.js" />
@@ -288,7 +288,7 @@
     <Compile Include="Controllers\calendarController.cs" />
     <Compile Include="Controllers\chartController.cs" />
     <Compile Include="Controllers\appController.cs" />
-    <Compile Include="Controllers\diagrammController.cs" />
+    <Compile Include="Controllers\diagramController.cs" />
     <Compile Include="Controllers\treeGridController.cs" />
     <Compile Include="Controllers\formController.cs" />
     <Compile Include="Controllers\tableController.cs" />
@@ -314,7 +314,7 @@
     <Content Include="Views\Chart\Index.cshtml" />
     <Content Include="Views\App\Index.cshtml" />
     <Content Include="Views\calendar\Index.cshtml" />
-    <Content Include="Views\Diagramm\Index.cshtml" />
+    <Content Include="Views\Diagram\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
