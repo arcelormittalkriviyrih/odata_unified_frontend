@@ -149,6 +149,25 @@
 
             });
 
+            //graph.on('remove', function (cell) {
+                
+            //    if (cell.isLink()) {
+            //        var removedLink = diagramVertices.find(function (x) {
+
+            //            return x.item.id = cell.id
+            //        });
+
+                      
+            //        if (removedLink) {
+
+            //            if (confirm('Do you really want remove this link?'))
+            //                vmDeleteItem(urlDiagramConnections + '(' + removedLink.ID + ')');
+            //        }
+                        
+            //    }
+                
+            //})
+
             paper.on('cell:pointerdown', function (cellView, evt, x, y) {
 
                 vmChangeDiagramItemName(cellView.model.id, changeNodeName, diagramItems, changedNodesArray);
@@ -298,11 +317,12 @@
                 isarrowChangedItem[reConnectionType] = newEndItem.ID;
             } else {
 
-                changedArrowsArray.push({
+                var changedArrow = {};
 
-                    item: cell,
-                    [reConnectionType]: newEndItem.ID
-                });
+                changedArrow.item = cell;
+                changedArrow[reConnectionType] = newEndItem.ID;
+
+                changedArrowsArray.push(changedArrow);
             }
 
         }
@@ -464,6 +484,15 @@
                 if (callBack)
                     callBack();
             });
+        }
+
+        function vmDeleteItem(url) {
+
+            $.ajax({
+
+                url: url,
+                type: 'DELETE'
+            })
         }
 
     }
