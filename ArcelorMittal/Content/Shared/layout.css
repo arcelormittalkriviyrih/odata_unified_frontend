@@ -1149,6 +1149,31 @@ div.odataDiagram .controls{
     text-align: left;
 }
 
+.changePaperSizeForm input, .showCreateLinkForm select{
+    margin-bottom: 10px;
+}
+
+.changeSizeButtonsRoot{
+    text-align:right;
+}
+
+.odataDiagram .controls, .odataDiagram .forms{
+    margin:auto;
+    width: 1000px;
+}
+
+.odataDiagram .forms{
+    margin-top: 10px;
+}
+
+.odataDiagram .controls button, .odataDiagram .forms button{
+    margin-left: 10px;
+}
+
+.joint-theme-default svg{
+    border: 1px solid #ccc;
+}
+
 
 
 

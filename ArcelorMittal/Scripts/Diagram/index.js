@@ -18,8 +18,8 @@
 
                 saveBtn: 'save changes',
                 saving: 'saving...',
-                acceptChangeSize: 'accept',
-                declineChangeSize: 'decline'
+                acceptChangeSize: 'apply',
+                declineChangeSize: 'cancel'
             }
         });
     });

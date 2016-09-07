@@ -11,35 +11,44 @@
             paperHeight = options.paperHeight,
             diagramRoot = $('<div />').attr('id', 'paper')
                                     .appendTo(self),
+
             controlsRoot = $('<div />').addClass('controls')
                                     .appendTo(self).hide(),
-            nodeInputRoot = $('<div />').addClass('col-md-2').appendTo(controlsRoot).hide(),
-            changeNodeName = $('<input />').attr({
+
+            formsRoot = $('<div />').addClass('forms')
+                                    .appendTo(self).hide(),
+
+            renameInputRoot = $('<div />').addClass('col-md-2').appendTo(formsRoot).hide(),
+
+            changeNameCtrl = $('<input />').attr({
                                                 'type': 'text',
-                                                'placeholder': 'change node name'
+                                                'placeholder': 'change item name'
                                             })
                                            .addClass('form-control')
-                                           .appendTo(nodeInputRoot),
-            arrowInputRoot = $('<div />').addClass('col-md-2').appendTo(controlsRoot).hide(),
-            changeArrowName = $('<input />').attr({
-                                                'type': 'text',
-                                                'placeholder': 'change arrow name'
-                                            })
-                                           .addClass('form-control')
-                                           .appendTo(arrowInputRoot),
+                                           .appendTo(renameInputRoot),
+            
             showChangePaperSizeFormBtn = $('<button />').addClass('btn btn-default')
                                            .text('change paper size')
-                                           .click(vmShowChangePaperSizeForm)
+                                           .click(function(){
+                                               vmShowForm(changePaperSizeForm, showChangePaperSizeFormBtn);
+                                           })
                                            .appendTo(controlsRoot),
-            showChangePaperSizeForm = $('<div />').addClass('changePaperSizeForm col-md-4')
-                                          .appendTo(controlsRoot).hide(),
-            changeWidthRoot = $('<div />').addClass('col-md-6').appendTo(showChangePaperSizeForm),
-            changeHeightRoot = $('<div />').addClass('col-md-6').appendTo(showChangePaperSizeForm),
+
+            changePaperSizeForm = $('<div />').addClass('changePaperSizeForm col-md-4')
+                                          .appendTo(formsRoot).hide(),
+
+            changeWidthRoot = $('<div />').addClass('col-md-6').appendTo(changePaperSizeForm),
+
+            changeHeightRoot = $('<div />').addClass('col-md-6').appendTo(changePaperSizeForm),
+
+            widthLabel = $('<label />').text('Width:').appendTo(changeWidthRoot),
+
+            heightLabel = $('<label />').text('Height:').appendTo(changeHeightRoot),
 
             changeWidthCtrl = $('<input />').attr({
                                                 'type': 'text',
                                                 'placeholder': 'change paper width'
-                                           })
+                                            })
                                            .val(paperWidth)
                                            .addClass('form-control')
                                            .appendTo(changeWidthRoot),
@@ -47,13 +56,13 @@
             changeHeightCtrl = $('<input />').attr({
                                                 'type': 'text',
                                                 'placeholder': 'change paper height'
-                                           })
+                                            })
                                            .val(paperHeight)
                                            .addClass('form-control')
                                            .appendTo(changeHeightRoot),
 
-            changeSizeButtonsRoot = $('<div />').addClass('col-md-12')
-                                            .appendTo(showChangePaperSizeForm),
+            changeSizeButtonsRoot = $('<div />').addClass('changeSizeButtonsRoot col-md-12')
+                                            .appendTo(changePaperSizeForm),
 
             acceptChangePaperSizeBtn = $('<button />').addClass('btn btn-default')
                                            .text(translates.acceptChangeSize)
@@ -62,15 +71,69 @@
 
             declineChangePaperSizeBtn = $('<button />').addClass('btn btn-default')
                                            .text(translates.declineChangeSize)
-                                           .click(vmDeclineChangePaperSize)
+                                           .click(function(){
+                                               vmDecline(changePaperSizeForm, showChangePaperSizeFormBtn);
+                                           })
                                            .appendTo(changeSizeButtonsRoot),
 
-            updateBtn = $('<button />').addClass('btn btn-default')
-                                    .text(translates.saveBtn)
-                                    .click(vmUpdateDiagram)
-                                    .appendTo(controlsRoot),
-            graph = null, paper = null, diagramItems = [], diagramVertices = [],
-            changedNodesArray = [], changedArrowsArray = []
+            showCreateLinkFormBtn = $('<button />').addClass('btn btn-default')
+                                           .text('create link')
+                                           .click(function () {
+                                               vmShowForm(showCreateLinkForm, showCreateLinkFormBtn);
+                                           })
+                                           .appendTo(controlsRoot),
+
+            showCreateLinkForm = $('<div />').addClass('showCreateLinkForm col-md-4')
+                                          .appendTo(formsRoot).hide(),
+
+            fromNodeRoot = $('<div />').addClass('col-md-6').appendTo(showCreateLinkForm),
+
+            toNodeRoot = $('<div />').addClass('col-md-6').appendTo(showCreateLinkForm),
+
+            fromNodeLabel = $('<label />').text('From:').appendTo(fromNodeRoot),
+
+            toNodeLabel = $('<label />').text('To:').appendTo(toNodeRoot),
+
+            fromNodeCtrl = $('<select></select>').addClass('form-control')
+                                        .appendTo(fromNodeRoot),
+
+            toNodeCtrl = $('<select></select>').addClass('form-control')
+                                        .appendTo(toNodeRoot),
+          
+            createLinkButtonsRoot = $('<div />').addClass('changeSizeButtonsRoot col-md-12')
+                                            .appendTo(showCreateLinkForm),
+
+            acceptCreateLinkBtn = $('<button />').addClass('btn btn-default')
+                                           .text(translates.acceptChangeSize)
+                                           .click(vmAcceptCreateLink)
+                                           .appendTo(createLinkButtonsRoot),
+
+            declineCreateLinkBtn = $('<button />').addClass('btn btn-default')
+                                           .text(translates.declineChangeSize)
+                                           .click(function(){
+                                               vmDecline(showCreateLinkForm, showCreateLinkFormBtn);
+                                           })
+                                           .appendTo(createLinkButtonsRoot),
+
+            createNodeBtn = $('<button />').addClass('btn btn-default')
+                                           .text('create node')
+                                           .click(vmCreateNode)
+                                           .appendTo(controlsRoot),
+
+            updateBtn = $('<button />').addClass('btn btn-default pull-right')
+                                           .text(translates.saveBtn)
+                                           .click(vmUpdateDiagram)
+                                           .appendTo(controlsRoot)
+                                           .hide(),
+
+            removeNodeBtn = $('<button />').addClass('btn btn-default')
+                                           .text('remove node')
+                                           .click(vmRemoveNode)
+                                           .appendTo(controlsRoot)
+                                           .hide(),
+
+            graph = null, paper = null, diagramNodes = [], diagramArrows = [],
+            changedNodesArray = [], changedArrowsArray = [], _selectedNode;
 
         vmBuildDiagram(paperWidth, paperHeight);
 
@@ -89,6 +152,7 @@
             });
 
             controlsRoot.show();
+            formsRoot.show();
 
             $.ajax({
 
@@ -97,10 +161,14 @@
             }).then(function (response) {
 
                 vmBuildStates(response.value);
-                
-            })
 
-            graph.on('change:position', function (node, coordinates) {
+            });
+
+            graph.on('change:position', function (node, coordinates) {               
+
+                updateBtn.show();
+                vmHideForms();
+                vmRemoveActiveClassFromControls();
 
                 var isNodeChanged = changedNodesArray.find(function (x) {
 
@@ -130,6 +198,10 @@
 
             graph.on('change:vertices', function (arrow, coordinates) {
 
+                updateBtn.show();
+                vmHideForms();
+                vmRemoveActiveClassFromControls();
+
                 var isArrowChanged = changedArrowsArray.find(function (x) {
 
                     return x.item == arrow
@@ -149,29 +221,43 @@
 
             });
 
-            //graph.on('remove', function (cell) {
-                
-            //    if (cell.isLink()) {
-            //        var removedLink = diagramVertices.find(function (x) {
+            graph.on('remove', function (cell) {
 
-            //            return x.item.id = cell.id
-            //        });
+                if (cell.isLink()) {
+                    var removedLink = diagramArrows.find(function (x) {
 
-                      
-            //        if (removedLink) {
+                        return x.item.id == cell.id
+                    });
 
-            //            if (confirm('Do you really want remove this link?'))
-            //                vmDeleteItem(urlDiagramConnections + '(' + removedLink.ID + ')');
-            //        }
-                        
-            //    }
-                
-            //})
+                    if (removedLink) {
+
+                        vmDeleteItem(urlDiagramConnections + '(' + removedLink.ID + ')').then(function () {
+
+                            vmRefreshDiagram(paperWidth, paperHeight);
+                        });
+                    };
+                };
+            });
 
             paper.on('cell:pointerdown', function (cellView, evt, x, y) {
 
-                vmChangeDiagramItemName(cellView.model.id, changeNodeName, diagramItems, changedNodesArray);
-                vmChangeDiagramItemName(cellView.model.id, changeArrowName, diagramVertices, changedArrowsArray);
+                vmHideForms();
+                vmRemoveActiveClassFromControls();
+
+                renameInputRoot.show();
+
+                if (cellView.model.isLink()) {
+
+                    vmChangeDiagramItemName(cellView.model.id, changeNameCtrl, diagramArrows, changedArrowsArray);
+                } else {
+
+                    removeNodeBtn.show();
+
+                    //$(V(paper.findViewByModel(cellView.model).el)).find('circle').attr('fill', '#000000');
+                    
+                    _selectedNode = vmChangeDiagramItemName(cellView.model.id, changeNameCtrl, diagramNodes, changedNodesArray);
+                }
+                                
             });
 
         }
@@ -179,6 +265,9 @@
         function vmBuildStates(data) {
            
             var x = 0, y = 100;
+
+            fromNodeCtrl.empty().append('<option />');
+            toNodeCtrl.empty().append('<option />');
 
             data.forEach(function (item) {
 
@@ -195,12 +284,23 @@
                 }
                 var diagramItem = vmState(x, y, item.Description);
 
-                diagramItems.push({
+                var optionFrom = $('<option />').attr('value', item.ID).text(item.Description);
+                var optionTo = optionFrom.clone();
+                fromNodeCtrl.append(optionFrom);
+                toNodeCtrl.append(optionTo);
+
+                diagramNodes.push({
                     item: diagramItem,
                     ID: item.ID,
                     DiagramID: item.DiagramID,
                     description: item.Description,
+                    coordinates: {
+                        x: x,
+                        y: y
+                    }
                 });
+
+                
             });
 
             $.ajax({
@@ -209,22 +309,22 @@
                 method: 'get'
             }).then(function (response) {
 
-                vmBuildLinks(response.value, diagramItems);
+                vmBuildLinks(response.value, diagramNodes);
             })
         }
 
-        function vmBuildLinks(data, diagramItems) {
+        function vmBuildLinks(data, diagramNodes) {
 
             var vertice = null;
 
             data.forEach(function (item) {
 
-                var fromNode = diagramItems.find(function (diagramItem) {
+                var fromNode = diagramNodes.find(function (diagramItem) {
 
                     return diagramItem.ID == item.FromNodeID;
                 });
 
-                var toNode = diagramItems.find(function (diagramItem) {
+                var toNode = diagramNodes.find(function (diagramItem) {
 
                     return diagramItem.ID == item.ToNodeID;
                 });
@@ -234,6 +334,7 @@
                     if (fromNode.ID == toNode.ID) {
 
                         var coordinates = fromNode.coordinates;
+
                         vertice = vmLink(fromNode.item, toNode.item, item.Description, [{ x: coordinates.x - 50, y: coordinates.y }, { x: coordinates.x + 50, y: coordinates.y - 50 }]);
 
                     }
@@ -246,15 +347,69 @@
                     vertice = vmLink(fromNode.item, toNode.item, item.Description, coordinates);
                 }         
 
-                diagramVertices.push({
+                diagramArrows.push({
 
                     ID: item.ID,
                     description: item.Description,
+                    fromNode: fromNode.ID,
+                    toNode: toNode.ID,
                     item: vertice
                 })
 
             });
         }
+
+        function vmCreateNode() {
+
+            vmCreateItem(options.serviceUrl + 'v_DiagramNode_insert', {
+
+                Description: 'New',
+                json: JSON.stringify({
+
+                    x: 10,
+                    y: 10
+                }),
+                DiagramID: options.diagramID
+            }).then(function (response) {
+
+                vmRefreshDiagram(paperWidth, paperHeight);
+            });
+            
+        };
+
+        function vmAcceptCreateLink() {
+
+            var fromNodeVal = fromNodeCtrl.val();
+            var toNodeVal = toNodeCtrl.val();
+
+            var fromNode = diagramNodes.find(function (diagramItem) {
+
+                return diagramItem.ID == fromNodeVal;
+            });
+
+            var toNode = diagramNodes.find(function (diagramItem) {
+
+                return diagramItem.ID == toNodeVal;
+            });
+
+            if (fromNode && toNode) {
+
+                vmCreateItem(serviceUrl + 'v_DiagramConnection_insert', {
+
+                    FromNodeID: fromNodeVal,
+                    ToNodeID: toNodeVal,
+                    DiagramID: options.diagramID,
+                    json: null,
+                    Description: 'New'
+                }).then(function () {
+
+                    vmDecline(showCreateLinkForm, showCreateLinkFormBtn);
+                    vmRefreshDiagram(paperWidth, paperHeight);
+                });
+            };
+                
+
+        };
 
         function vmState(x, y, label) {
 
@@ -307,7 +462,7 @@
                 return x.item.id == arrow.id;
             });
 
-            var newEndItem = diagramItems.find(function (x) {
+            var newEndItem = diagramNodes.find(function (x) {
 
                 return x.item.id == newEnd.id;
             });
@@ -325,13 +480,7 @@
                 changedArrowsArray.push(changedArrow);
             }
 
-        }
-
-        function vmShowChangePaperSizeForm() {
-
-            showChangePaperSizeForm.show();
-            showChangePaperSizeFormBtn.hide();
-        }
+        }        
 
         function vmAcceptChangePaperSize() {
 
@@ -358,21 +507,42 @@
                     textOnSaving: translates.saving
                 }, function () {
 
-                    location.reload();
+                    vmDecline(changePaperSizeForm, showChangePaperSizeFormBtn);
+                    vmRefreshDiagram(newWidth, newHeight);
                 });
             }
-        }
+        }       
 
-        function vmDeclineChangePaperSize() {
+        function vmRemoveNode() {
 
-            showChangePaperSizeForm.hide();
-            showChangePaperSizeFormBtn.show();
-        }
+            var isUsedNode = diagramArrows.find(function (x) {
+
+                return x.toNode == _selectedNode.ID || x.fromNode == _selectedNode.ID
+            });
+
+            if (isUsedNode)
+                alert('You cannot remove this node!');
+            else {
+                if (confirm('Do you really want remove this node?')) {
+
+                    vmDeleteItem(urlDiagramNodes + '(' + _selectedNode.ID + ')').then(function () {
+
+                        _selectedNode.item.remove();
+                        removeNodeBtn.hide();
+                        vmHideForms();
+                        diagramNodes.splice(diagramNodes.indexOf(_selectedNode), 1);
+
+                        
+                        vmFindNodeInCombo(_selectedNode.ID, 'remove');
+                    });
+                };
+            };
+        };
 
         function vmUpdateDiagram() {
 
-            vmUpdateDiagramItems(changedNodesArray, diagramItems, 'node', urlDiagramNodes);
-            vmUpdateDiagramItems(changedArrowsArray, diagramVertices, 'arrow', urlDiagramConnections);
+            vmUpdateDiagramItems(changedNodesArray, diagramNodes, 'node', urlDiagramNodes);
+            vmUpdateDiagramItems(changedArrowsArray, diagramArrows, 'arrow', urlDiagramConnections);
         };
 
         function vmChangeDiagramItemName(id, changeNameCtrl, itemStructure, changedItemsArray) {
@@ -391,8 +561,7 @@
             var isStructured = itemStructure.find(function (x) {
                 return x.item.id == id
             });
-
-
+            
             //if element is selected
             if (isStructured) {                
 
@@ -403,8 +572,14 @@
                 //and description value for dynamic array structure
                 changeNameCtrl.val(isStructured.description).on('keyup', function () {
 
-                    changedElem.text($(this).val());
-                    isStructured.description = $(this).val();
+                    var text = $(this).val();
+
+                    updateBtn.show();
+
+                    changedElem.text(text);
+                    isStructured.description = text;
+
+                    vmFindNodeInCombo(_selectedNode.ID, 'rename', text);
                 });
 
                 //and finally fill array of items where we changed description
@@ -422,6 +597,8 @@
 
 
             }
+
+            return isStructured;
         }
 
         function vmUpdateDiagramItems(changedItemArray, structureArray, itemType, url) {
@@ -466,6 +643,17 @@
 
         };
 
+        function vmCreateItem(url, data) {
+
+            return $.ajax({
+
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: "application/json"
+            })
+        }
+
         function vmPatchSave(url, data, btnOptions, callBack) {
 
             btnOptions.btn.text(btnOptions.textOnSaving);
@@ -488,12 +676,77 @@
 
         function vmDeleteItem(url) {
 
-            $.ajax({
+            return $.ajax({
 
                 url: url,
                 type: 'DELETE'
             })
         }
+
+        function vmShowForm(form, showBtn) {
+
+            vmHideForms();
+            vmRemoveActiveClassFromControls();
+
+            form.show();
+            showBtn.addClass('active');
+        }
+
+        function vmDecline(form, showBtn) {
+
+            form.hide();
+            showBtn.removeClass('active');
+        }
+
+        function vmRemoveActiveClassFromControls() {
+
+            showChangePaperSizeFormBtn.removeClass('active');
+            showCreateLinkFormBtn.removeClass('active');
+        };
+
+        function vmHideForms() {
+
+            renameInputRoot.hide();
+            showCreateLinkForm.hide();
+            changePaperSizeForm.hide();
+        };
+
+        function vmFindNodeInCombo(id, action, newName) {
+
+            var optionFrom = fromNodeCtrl.find('[value="' + id + '"]');
+            var optionTo = toNodeCtrl.find('[value="' + id + '"]');
+
+            switch (action) {
+
+                case 'rename':
+                    optionFrom.text(newName);
+                    optionTo.text(newName);
+                    break;
+
+                case 'remove':
+
+                    optionFrom.remove();
+                    optionTo.remove();
+                    break;
+            };
+
+        };
+
+        function vmRefreshDiagram(width, height) {
+
+            graph = null;
+            paper = null;
+            diagramNodes = [];
+            diagramArrows = [];
+            changedNodesArray = [];
+            changedArrowsArray = [];
+            _selectedNode = null;
+
+            vmHideForms();
+            vmRemoveActiveClassFromControls();
+
+            vmBuildDiagram(width, height);
+        };
 
     }
 
