@@ -1149,7 +1149,7 @@ div.odataDiagram .controls{
     text-align: left;
 }
 
-.changePaperSizeForm input, .showCreateLinkForm select{
+.changePaperSizeForm input, .showCreateLinkForm div.dropdown{
     margin-bottom: 10px;
 }
 
@@ -1172,6 +1172,10 @@ div.odataDiagram .controls{
 
 .joint-theme-default svg{
     border: 1px solid #ccc;
+}
+
+.activeNode{
+    fill: lightgreen;
 }
 
 

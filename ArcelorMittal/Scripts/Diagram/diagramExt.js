@@ -15,39 +15,53 @@
             controlsRoot = $('<div />').addClass('controls')
                                     .appendTo(self).hide(),
 
+            leftGroup = $('<div />').addClass('pull-left').appendTo(controlsRoot),
+            rightGroup = $('<div />').addClass('pull-right').appendTo(controlsRoot),
+
             formsRoot = $('<div />').addClass('forms')
                                     .appendTo(self).hide(),
 
-            renameInputRoot = $('<div />').addClass('col-md-2').appendTo(formsRoot).hide(),
+            renameInputRoot = $('<div />').addClass('col-md-4').appendTo(formsRoot).hide(),
 
             changeNameCtrl = $('<input />').attr({
                                                 'type': 'text',
-                                                'placeholder': 'change item name'
+                                                'placeholder': translates.changeItemName
                                             })
                                            .addClass('form-control')
                                            .appendTo(renameInputRoot),
+            changeNameAcceptBtn = $('<button />').addClass('btn btn-default')
+                                           .text(translates.accept)
+                                           .click()
+                                           .appendTo(renameInputRoot),
+
+            declineNameAcceptBtn = $('<button />').addClass('btn btn-default')
+                                           .text(translates.decline)
+                                           .click(function () {
+                                               vmDecline(renameInputRoot);
+                                           })
+                                           .appendTo(renameInputRoot),
             
             showChangePaperSizeFormBtn = $('<button />').addClass('btn btn-default')
-                                           .text('change paper size')
+                                           .text(translates.changePaperSize)
                                            .click(function(){
                                                vmShowForm(changePaperSizeForm, showChangePaperSizeFormBtn);
                                            })
-                                           .appendTo(controlsRoot),
+                                           .appendTo(leftGroup),
 
-            changePaperSizeForm = $('<div />').addClass('changePaperSizeForm col-md-4')
+            changePaperSizeForm = $('<div />').addClass('changePaperSizeForm col-md-6')
                                           .appendTo(formsRoot).hide(),
 
             changeWidthRoot = $('<div />').addClass('col-md-6').appendTo(changePaperSizeForm),
 
             changeHeightRoot = $('<div />').addClass('col-md-6').appendTo(changePaperSizeForm),
 
-            widthLabel = $('<label />').text('Width:').appendTo(changeWidthRoot),
+            widthLabel = $('<label />').text(translates.width + ':').appendTo(changeWidthRoot),
 
-            heightLabel = $('<label />').text('Height:').appendTo(changeHeightRoot),
+            heightLabel = $('<label />').text(translates.height + ':').appendTo(changeHeightRoot),
 
             changeWidthCtrl = $('<input />').attr({
                                                 'type': 'text',
-                                                'placeholder': 'change paper width'
+                                                'placeholder': translates.changePaperWidth
                                             })
                                            .val(paperWidth)
                                            .addClass('form-control')
@@ -55,7 +69,7 @@
 
             changeHeightCtrl = $('<input />').attr({
                                                 'type': 'text',
-                                                'placeholder': 'change paper height'
+                                                'placeholder': translates.changePaperHeight
                                             })
                                            .val(paperHeight)
                                            .addClass('form-control')
@@ -65,71 +79,76 @@
                                             .appendTo(changePaperSizeForm),
 
             acceptChangePaperSizeBtn = $('<button />').addClass('btn btn-default')
-                                           .text(translates.acceptChangeSize)
+                                           .text(translates.accept)
                                            .click(vmAcceptChangePaperSize)
                                            .appendTo(changeSizeButtonsRoot),
 
             declineChangePaperSizeBtn = $('<button />').addClass('btn btn-default')
-                                           .text(translates.declineChangeSize)
+                                           .text(translates.decline)
                                            .click(function(){
                                                vmDecline(changePaperSizeForm, showChangePaperSizeFormBtn);
                                            })
                                            .appendTo(changeSizeButtonsRoot),
 
             showCreateLinkFormBtn = $('<button />').addClass('btn btn-default')
-                                           .text('create link')
+                                           .text(translates.createLink)
                                            .click(function () {
                                                vmShowForm(showCreateLinkForm, showCreateLinkFormBtn);
                                            })
-                                           .appendTo(controlsRoot),
+                                           .appendTo(leftGroup),
 
-            showCreateLinkForm = $('<div />').addClass('showCreateLinkForm col-md-4')
+            showCreateLinkForm = $('<div />').addClass('showCreateLinkForm col-md-6')
                                           .appendTo(formsRoot).hide(),
 
             fromNodeRoot = $('<div />').addClass('col-md-6').appendTo(showCreateLinkForm),
 
             toNodeRoot = $('<div />').addClass('col-md-6').appendTo(showCreateLinkForm),
 
-            fromNodeLabel = $('<label />').text('From:').appendTo(fromNodeRoot),
+            fromNodeLabel = $('<label />').text(translates.from + ':').appendTo(fromNodeRoot),
 
-            toNodeLabel = $('<label />').text('To:').appendTo(toNodeRoot),
+            toNodeLabel = $('<label />').text(translates.to + ':').appendTo(toNodeRoot),
 
-            fromNodeCtrl = $('<select></select>').addClass('form-control')
-                                        .appendTo(fromNodeRoot),
-
-            toNodeCtrl = $('<select></select>').addClass('form-control')
-                                        .appendTo(toNodeRoot),
+            fromNodeCtrl = $(dropBoxTmpl.format('fromNodeVal', 'fromNodeKey', 'fromNode'))
+                                      .appendTo(fromNodeRoot),
+            toNodeCtrl = $(dropBoxTmpl.format('toNodeVal', 'toNodeKey', 'toNode'))
+                                    .appendTo(toNodeRoot),
           
             createLinkButtonsRoot = $('<div />').addClass('changeSizeButtonsRoot col-md-12')
                                             .appendTo(showCreateLinkForm),
 
             acceptCreateLinkBtn = $('<button />').addClass('btn btn-default')
-                                           .text(translates.acceptChangeSize)
+                                           .text(translates.accept)
                                            .click(vmAcceptCreateLink)
                                            .appendTo(createLinkButtonsRoot),
 
             declineCreateLinkBtn = $('<button />').addClass('btn btn-default')
-                                           .text(translates.declineChangeSize)
+                                           .text(translates.decline)
                                            .click(function(){
                                                vmDecline(showCreateLinkForm, showCreateLinkFormBtn);
                                            })
                                            .appendTo(createLinkButtonsRoot),
 
             createNodeBtn = $('<button />').addClass('btn btn-default')
-                                           .text('create node')
+                                           .text(translates.createNode)
                                            .click(vmCreateNode)
-                                           .appendTo(controlsRoot),
+                                           .appendTo(leftGroup),
 
-            updateBtn = $('<button />').addClass('btn btn-default pull-right')
+            updateBtn = $('<button />').addClass('btn btn-default')
                                            .text(translates.saveBtn)
                                            .click(vmUpdateDiagram)
-                                           .appendTo(controlsRoot)
-                                           .hide(),
+                                           .appendTo(rightGroup),
+
+            undoBtn = $('<button />').addClass('btn btn-default')
+                                           .text(translates.undoBtn)
+                                           .click(function () {
+                                               vmRefreshDiagram(paperWidth, paperHeight)
+                                           })
+                                           .appendTo(rightGroup),
 
             removeNodeBtn = $('<button />').addClass('btn btn-default')
-                                           .text('remove node')
+                                           .text(translates.removeNode)
                                            .click(vmRemoveNode)
-                                           .appendTo(controlsRoot)
+                                           .appendTo(leftGroup)
                                            .hide(),
 
             graph = null, paper = null, diagramNodes = [], diagramArrows = [],
@@ -165,10 +184,12 @@
             });
 
             graph.on('change:position', function (node, coordinates) {               
-
-                updateBtn.show();
+                
+                vmHideControls();
                 vmHideForms();
                 vmRemoveActiveClassFromControls();
+
+                rightGroup.show();
 
                 var isNodeChanged = changedNodesArray.find(function (x) {
 
@@ -198,9 +219,11 @@
 
             graph.on('change:vertices', function (arrow, coordinates) {
 
-                updateBtn.show();
+                vmHideControls();
                 vmHideForms();
                 vmRemoveActiveClassFromControls();
+
+                rightGroup.show();
 
                 var isArrowChanged = changedArrowsArray.find(function (x) {
 
@@ -252,9 +275,14 @@
                 } else {
 
                     removeNodeBtn.show();
-
-                    //$(V(paper.findViewByModel(cellView.model).el)).find('circle').attr('fill', '#000000');
                     
+                    var htmlElement = V(paper.findViewByModel(cellView.model).el).node;
+                    $(htmlElement).find('circle').addClass('activeNode');
+                    $(htmlElement).siblings().each(function (i, item) {
+
+                        $(item).find('circle').removeClass('activeNode');
+                    })
+
                     _selectedNode = vmChangeDiagramItemName(cellView.model.id, changeNameCtrl, diagramNodes, changedNodesArray);
                 }
                                 
@@ -266,8 +294,11 @@
            
             var x = 0, y = 100;
 
-            fromNodeCtrl.empty().append('<option />');
-            toNodeCtrl.empty().append('<option />');
+            var fromNodeCombo = $(fromNodeCtrl).find('ul');
+            var toNodeCombo = $(toNodeCtrl).find('ul');
+
+            fromNodeCombo.empty();
+            toNodeCombo.empty();
 
             data.forEach(function (item) {
 
@@ -284,10 +315,34 @@
                 }
                 var diagramItem = vmState(x, y, item.Description);
 
-                var optionFrom = $('<option />').attr('value', item.ID).text(item.Description);
-                var optionTo = optionFrom.clone();
-                fromNodeCtrl.append(optionFrom);
-                toNodeCtrl.append(optionTo);
+                var optionWrapperFrom = $('<li />');
+                var optionWrapperTo = $('<li />');
+
+                var optionFrom = $('<a />').attr({
+                    'href': '',
+                    'data-id': item.ID
+                }).text(item.Description).appendTo(optionWrapperFrom)
+                
+                var optionTo = optionFrom.clone().appendTo(optionWrapperTo);
+
+                optionFrom.on('click', function (e) {
+
+                    e.preventDefault();
+
+                    $('#fromNodeVal').val($(this).text());
+                    $('#fromNodeKey').val($(this).attr('data-id'));
+                });
+
+                optionTo.on('click', function (e) {
+
+                    e.preventDefault();
+
+                    $('#toNodeVal').val($(this).text());
+                    $('#toNodeKey').val($(this).attr('data-id'));
+                });
+
+                fromNodeCombo.append(optionWrapperFrom);
+                toNodeCombo.append(optionWrapperTo);
 
                 diagramNodes.push({
                     item: diagramItem,
@@ -379,8 +434,8 @@
 
         function vmAcceptCreateLink() {
 
-            var fromNodeVal = fromNodeCtrl.val();
-            var toNodeVal = toNodeCtrl.val();
+            var fromNodeVal = $('#fromNodeKey').val();
+            var toNodeVal = $('#toNodeKey').val();
 
             var fromNode = diagramNodes.find(function (diagramItem) {
 
@@ -503,7 +558,7 @@
                 vmPatchSave(options.serviceUrl + 'v_Diagram(' + options.diagramID + ')', data, {
 
                     btn: acceptChangePaperSizeBtn,
-                    defaultText: translates.acceptChangeSize,
+                    defaultText: translates.accept,
                     textOnSaving: translates.saving
                 }, function () {
 
@@ -521,9 +576,9 @@
             });
 
             if (isUsedNode)
-                alert('You cannot remove this node!');
+                alert(translates.cannotRemoveNode);
             else {
-                if (confirm('Do you really want remove this node?')) {
+                if (confirm(translates.confirmRemoveNode)) {
 
                     vmDeleteItem(urlDiagramNodes + '(' + _selectedNode.ID + ')').then(function () {
 
@@ -540,6 +595,8 @@
         };
 
         function vmUpdateDiagram() {
+
+            leftGroup.show();
 
             vmUpdateDiagramItems(changedNodesArray, diagramNodes, 'node', urlDiagramNodes);
             vmUpdateDiagramItems(changedArrowsArray, diagramArrows, 'arrow', urlDiagramConnections);
@@ -574,7 +631,7 @@
 
                     var text = $(this).val();
 
-                    updateBtn.show();
+                    //updateBtn.show();
 
                     changedElem.text(text);
                     isStructured.description = text;
@@ -695,7 +752,10 @@
         function vmDecline(form, showBtn) {
 
             form.hide();
-            showBtn.removeClass('active');
+
+            if (showBtn)
+                showBtn.removeClass('active');
+
         }
 
         function vmRemoveActiveClassFromControls() {
@@ -709,6 +769,12 @@
             renameInputRoot.hide();
             showCreateLinkForm.hide();
             changePaperSizeForm.hide();
+        };
+
+        function vmHideControls() {
+
+            leftGroup.hide();
+            rightGroup.hide();
         };
 
         function vmFindNodeInCombo(id, action, newName) {
