@@ -381,7 +381,7 @@
             {{ 'marker.byAccept' | translate }}
         </span>
 
-        <p class="msgRed" ng-show="scalesDetailsInfo.weightCurrent > scalesDetailsInfo.MaxWeight">
+        <p class="msgRed" ng-show="scalesDetailsInfo.weightCurrent > scalesDetailsInfo.MaxWeight && scalesDetailsInfo.MaxWeight > 0">
             {{'marker.weightOver' | translate}}
         </p>
 
