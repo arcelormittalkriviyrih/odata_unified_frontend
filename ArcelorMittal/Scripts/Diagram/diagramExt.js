@@ -16,12 +16,14 @@
                                     .appendTo(self).hide(),
 
             leftGroup = $('<div />').addClass('pull-left').appendTo(controlsRoot),
-            rightGroup = $('<div />').addClass('pull-right').appendTo(controlsRoot),
+            rightGroup = $('<div />').addClass('pull-right').appendTo(controlsRoot).hide(),
 
             formsRoot = $('<div />').addClass('forms')
                                     .appendTo(self).hide(),
 
-            renameInputRoot = $('<div />').addClass('col-md-4').appendTo(formsRoot).hide(),
+            renameInputRoot = $('<div />').addClass('renameInputRoot col-md-7').appendTo(formsRoot).hide(),
+
+            renameLabel = $('<label />').appendTo(renameInputRoot),
 
             changeNameCtrl = $('<input />').attr({
                                                 'type': 'text',
@@ -31,7 +33,6 @@
                                            .appendTo(renameInputRoot),
             changeNameAcceptBtn = $('<button />').addClass('btn btn-default')
                                            .text(translates.accept)
-                                           .click()
                                            .appendTo(renameInputRoot),
 
             declineNameAcceptBtn = $('<button />').addClass('btn btn-default')
@@ -43,7 +44,8 @@
             
             showChangePaperSizeFormBtn = $('<button />').addClass('btn btn-default')
                                            .text(translates.changePaperSize)
-                                           .click(function(){
+                                           .click(function () {
+
                                                vmShowForm(changePaperSizeForm, showChangePaperSizeFormBtn);
                                            })
                                            .appendTo(leftGroup),
@@ -85,7 +87,9 @@
 
             declineChangePaperSizeBtn = $('<button />').addClass('btn btn-default')
                                            .text(translates.decline)
-                                           .click(function(){
+                                           .click(function () {
+                                               changeWidthCtrl.val(paperWidth);
+                                               changeHeightCtrl.val(paperHeight);
                                                vmDecline(changePaperSizeForm, showChangePaperSizeFormBtn);
                                            })
                                            .appendTo(changeSizeButtonsRoot),
@@ -93,6 +97,7 @@
             showCreateLinkFormBtn = $('<button />').addClass('btn btn-default')
                                            .text(translates.createLink)
                                            .click(function () {
+
                                                vmShowForm(showCreateLinkForm, showCreateLinkFormBtn);
                                            })
                                            .appendTo(leftGroup),
@@ -141,6 +146,10 @@
             undoBtn = $('<button />').addClass('btn btn-default')
                                            .text(translates.undoBtn)
                                            .click(function () {
+
+                                               leftGroup.show();
+                                               rightGroup.hide();
+
                                                vmRefreshDiagram(paperWidth, paperHeight)
                                            })
                                            .appendTo(rightGroup),
@@ -148,11 +157,17 @@
             removeNodeBtn = $('<button />').addClass('btn btn-default')
                                            .text(translates.removeNode)
                                            .click(vmRemoveNode)
-                                           .appendTo(leftGroup)
+                                           .appendTo(renameInputRoot)
+                                           .hide(),
+
+            removeArrowBtn = $('<button />').addClass('btn btn-default')
+                                           .text(translates.removeLink)
+                                           .click(vmRemoveArrow)
+                                           .appendTo(renameInputRoot)
                                            .hide(),
 
             graph = null, paper = null, diagramNodes = [], diagramArrows = [],
-            changedNodesArray = [], changedArrowsArray = [], _selectedNode;
+            changedNodesArray = [], changedArrowsArray = [], _selectedNode, _newWidth, _newHeight;
 
         vmBuildDiagram(paperWidth, paperHeight);
 
@@ -160,12 +175,12 @@
 
             diagramRoot.empty();
 
-            graph = new joint.dia.Graph();                       
+            graph = new joint.dia.Graph();
 
             paper = new joint.dia.Paper({
                 el: diagramRoot,
-                width: width || 800,
-                height: height || 600,
+                width: _newWidth || width || 800,
+                height:_newHeight || height || 600,
                 gridSize: 1,
                 model: graph
             });
@@ -183,8 +198,8 @@
 
             });
 
-            graph.on('change:position', function (node, coordinates) {               
-                
+            graph.on('change:position', function (node, coordinates) {
+
                 vmHideControls();
                 vmHideForms();
                 vmRemoveActiveClassFromControls();
@@ -211,10 +226,10 @@
                             x: coordinates.x,
                             y: coordinates.y
                         }
-                        
+
                     });
                 };
-                                               
+
             });
 
             graph.on('change:vertices', function (arrow, coordinates) {
@@ -247,18 +262,8 @@
             graph.on('remove', function (cell) {
 
                 if (cell.isLink()) {
-                    var removedLink = diagramArrows.find(function (x) {
 
-                        return x.item.id == cell.id
-                    });
-
-                    if (removedLink) {
-
-                        vmDeleteItem(urlDiagramConnections + '(' + removedLink.ID + ')').then(function () {
-
-                            vmRefreshDiagram(paperWidth, paperHeight);
-                        });
-                    };
+                    vmRemoveArrow();
                 };
             });
 
@@ -266,29 +271,55 @@
 
                 vmHideForms();
                 vmRemoveActiveClassFromControls();
-
                 renameInputRoot.show();
+                changeNameAcceptBtn.off('click');
+
+                var caption = $('[model-id=' + cellView.model.id + '] tspan');
+                changeNameCtrl.val(caption.text());
+
+                var htmlElement = V(paper.findViewByModel(cellView.model).el).node;
+
+                vmClearActiveElements();
 
                 if (cellView.model.isLink()) {
 
-                    vmChangeDiagramItemName(cellView.model.id, changeNameCtrl, diagramArrows, changedArrowsArray);
+                    removeNodeBtn.hide();
+                    removeArrowBtn.show();
+                    renameLabel.text(translates.renameLink + ': ');
+
+                    _selectedArrow = diagramArrows.find(function (x) {
+                        return x.item.id == cellView.model.id
+                    });
+
+                    $(htmlElement).find('path.connection').addClass('activeArrow');
+
+                    changeNameAcceptBtn.on('click', function () {
+
+                        vmChangeDiagramItemName(cellView.model.id, _selectedArrow, caption, changeNameCtrl, diagramArrows, changedArrowsArray, 'arrow', urlDiagramConnections, $(htmlElement));
+                    });
+
                 } else {
 
                     removeNodeBtn.show();
-                    
-                    var htmlElement = V(paper.findViewByModel(cellView.model).el).node;
+                    removeArrowBtn.hide();
+                    renameLabel.text(translates.renameNode + ': ');
+
+                    _selectedNode = diagramNodes.find(function (x) {
+                        return x.item.id == cellView.model.id
+                    });
+
                     $(htmlElement).find('circle').addClass('activeNode');
-                    $(htmlElement).siblings().each(function (i, item) {
 
-                        $(item).find('circle').removeClass('activeNode');
-                    })
+                    changeNameAcceptBtn.on('click', function () {
 
-                    _selectedNode = vmChangeDiagramItemName(cellView.model.id, changeNameCtrl, diagramNodes, changedNodesArray);
+                        vmChangeDiagramItemName(cellView.model.id, _selectedNode, caption, changeNameCtrl, diagramNodes, changedNodesArray, 'node', urlDiagramNodes, $(htmlElement));
+                    });
+
                 }
-                                
+
             });
 
-        }
+        };
 
         function vmBuildStates(data) {
            
@@ -427,6 +458,7 @@
                 DiagramID: options.diagramID
             }).then(function (response) {
 
+                alert(translates.nodeCreated);
                 vmRefreshDiagram(paperWidth, paperHeight);
             });
             
@@ -457,6 +489,8 @@
                     json: null,
                     Description: 'New'
                 }).then(function () {
+
+                    alert(translates.linkCreated);
 
                     vmDecline(showCreateLinkForm, showCreateLinkFormBtn);
                     vmRefreshDiagram(paperWidth, paperHeight);
@@ -512,6 +546,8 @@
 
         function vmChangeArrowEnd(arrow, newEnd, reConnectionType) {
 
+            rightGroup.show();
+
             var isarrowChangedItem = changedArrowsArray.find(function (x) {
 
                 return x.item.id == arrow.id;
@@ -529,7 +565,7 @@
 
                 var changedArrow = {};
 
-                changedArrow.item = cell;
+                changedArrow.item = arrow;
                 changedArrow[reConnectionType] = newEndItem.ID;
 
                 changedArrowsArray.push(changedArrow);
@@ -543,6 +579,9 @@
             var newHeight = parseInt(changeHeightCtrl.val());
 
             if (newWidth && newHeight) {
+
+                _newWidth = newWidth;
+                _newHeight = newHeight;
                 
                 var data = {
 
@@ -594,71 +633,59 @@
             };
         };
 
-        function vmUpdateDiagram() {
+        function vmRemoveArrow() {
 
-            leftGroup.show();
+            vmDeleteItem(urlDiagramConnections + '(' + _selectedArrow.ID + ')').then(function () {
 
-            vmUpdateDiagramItems(changedNodesArray, diagramNodes, 'node', urlDiagramNodes);
-            vmUpdateDiagramItems(changedArrowsArray, diagramArrows, 'arrow', urlDiagramConnections);
+                vmRefreshDiagram(paperWidth, paperHeight);
+            });
         };
 
-        function vmChangeDiagramItemName(id, changeNameCtrl, itemStructure, changedItemsArray) {
+        function vmUpdateDiagram() {
+           
+            var callBack = function () {
 
-            //get html elemend for caption (change it in realtime by control value change)
-            var changedElem = $('[model-id=' + id + '] tspan');
+                leftGroup.show();
+                rightGroup.hide();
 
-            //hide container of control value element
-            changeNameCtrl.parent().hide();
+                vmClearActiveElements();
+            };
 
-            //unbind keyup event to escape data duplicating 
-            changeNameCtrl.off('keyup');
+            vmUpdateDiagramItems(changedNodesArray, diagramNodes, 'node', urlDiagramNodes, callBack);
+            vmUpdateDiagramItems(changedArrowsArray, diagramArrows, 'arrow', urlDiagramConnections, callBack);
+        };
 
-            //change element from array of items (it can be array of nodes or array of arrows)
-            //by unique id we can select at current time just node or just arrow
-            var isStructured = itemStructure.find(function (x) {
-                return x.item.id == id
+        function vmChangeDiagramItemName(id, selected, caption, changeNameCtrl, itemStructure, changedItemsArray, itemType, url, $htmlElement) {
+
+            var text = changeNameCtrl.val();
+
+            caption.text(text);
+            selected.description = text;
+
+            vmFindNodeInCombo(selected.ID, 'rename', text);
+
+            //and finally fill array of items where we changed description
+            //(this array will be used for update, it creates dynamically)
+            var isItemChangeLabelChanged = changedItemsArray.find(function (x) {
+
+                return x.item.id == id;
             });
-            
-            //if element is selected
-            if (isStructured) {                
 
-                //show control for this type
-                changeNameCtrl.parent().show();
-
-                //bind keyup event and change in realtime html caption 
-                //and description value for dynamic array structure
-                changeNameCtrl.val(isStructured.description).on('keyup', function () {
-
-                    var text = $(this).val();
-
-                    //updateBtn.show();
-
-                    changedElem.text(text);
-                    isStructured.description = text;
-
-                    vmFindNodeInCombo(_selectedNode.ID, 'rename', text);
-                });
-
-                //and finally fill array of items where we changed description
-                //(this array will be used for update, it creates dynamically)
-                var isItemChangeLabelChanged = changedItemsArray.find(function (x) {
-
-                    return x.item.id == id;
-                });
-
-                if (!isItemChangeLabelChanged)
-                    changedItemsArray.push(isStructured);
-                else {
-                    changedItemsArray.description = isStructured.description;
-                }
-
-
+            if (!isItemChangeLabelChanged)
+                changedItemsArray.push(selected);
+            else {
+                changedItemsArray.description = selected.description;
             }
 
-            return isStructured;
-        }
+            vmUpdateDiagramItems(changedItemsArray, itemStructure, itemType, url, function () {
 
-        function vmUpdateDiagramItems(changedItemArray, structureArray, itemType, url) {
+                vmClearActiveElements();
+                vmHideForms();
+            });
+
+        };
+
+        function vmUpdateDiagramItems(changedItemArray, structureArray, itemType, url, callback) {
 
             changedItemArray.forEach(function (x) {
 
@@ -677,24 +704,24 @@
                 if (x.ToNodeID)
                     data.ToNodeID = parseInt(x.ToNodeID);
 
-                if (itemType == 'node') {
 
-                    var itemChanged = structureArray.find(function (node) {
+                var itemChanged = structureArray.find(function (node) {
 
-                        return node.item == x.node;
-                    })
+                    return node.item == x.item;
+                })
 
-                    if (itemChanged)
-                        data.DiagramID = itemChanged.DiagramID;
+                if (itemChanged) {
 
+                    data.DiagramID = itemChanged.DiagramID;
                 };
+                        
 
-                vmPatchSave(url + '(' + x.ID + ')', data, {
+                vmPatchSave(url + '(' + itemChanged.ID + ')', data, {
 
                     btn: updateBtn,
                     defaultText: translates.saveBtn,
                     textOnSaving: translates.saving
-                });
+                }, callback);
 
             });
 
@@ -744,6 +771,7 @@
 
             vmHideForms();
             vmRemoveActiveClassFromControls();
+            vmClearActiveElements();
 
             form.show();
             showBtn.addClass('active');
@@ -752,6 +780,7 @@
         function vmDecline(form, showBtn) {
 
             form.hide();
+            vmClearActiveElements();
 
             if (showBtn)
                 showBtn.removeClass('active');
@@ -777,10 +806,18 @@
             rightGroup.hide();
         };
 
+        function vmClearActiveElements() {
+
+            self.find('svg').find('circle.activeNode, path.connection.activeArrow').each(function (i, item) {
+                $(item).removeClass('activeNode');
+                $(item).removeClass('activeArrow');
+            });
+        };
+
         function vmFindNodeInCombo(id, action, newName) {
 
-            var optionFrom = fromNodeCtrl.find('[value="' + id + '"]');
-            var optionTo = toNodeCtrl.find('[value="' + id + '"]');
+            var optionFrom = fromNodeCtrl.find('[data-id="' + id + '"]');
+            var optionTo = toNodeCtrl.find('[data-id="' + id + '"]');
 
             switch (action) {
 

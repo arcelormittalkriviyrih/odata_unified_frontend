@@ -1160,6 +1160,7 @@ div.odataDiagram .controls{
 .odataDiagram .controls, .odataDiagram .forms{
     margin:auto;
     width: 1000px;
+    min-height: 35px;
 }
 
 .odataDiagram .forms{
@@ -1176,6 +1177,23 @@ div.odataDiagram .controls{
 
 .activeNode{
     fill: lightgreen;
+}
+
+.activeArrow{
+    stroke: green;
+}
+
+.renameInputRoot{
+    text-align: left;
+}
+
+.renameInputRoot label{
+    display:inline-block;
+}
+
+.renameInputRoot input[type="text"]{
+    width: 150px;
+    display: inline-block;
 }
 
 
