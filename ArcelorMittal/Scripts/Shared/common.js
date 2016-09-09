@@ -70,6 +70,13 @@ var dateTimePickerControl = {
     }
 };
 
+//set real current date in datetimepicker
+$.datepicker._gotoTodayOriginal = $.datepicker._gotoToday;
+$.datepicker._gotoToday = function (id) {
+
+    this._curInst.input.datepicker('setDate', new Date());
+};
+
 jQuery.ajaxSetup({
     global: true,
     error: function (xhr, status, statusText) {
