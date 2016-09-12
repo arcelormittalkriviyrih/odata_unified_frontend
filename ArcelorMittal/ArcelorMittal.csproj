@@ -174,11 +174,11 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
     <Content Include="Scripts\App\Resources.js" />
-    <Content Include="Scripts\Diagram\backbone.js" />
+    <Content Include="Scripts\Vendor\backbone.js" />
     <Content Include="Scripts\Diagram\diagramExt.js" />
     <Content Include="Scripts\Diagram\index.js" />
-    <Content Include="Scripts\Diagram\joint.min.js" />
-    <Content Include="Scripts\Diagram\lodash.js" />
+    <Content Include="Scripts\Vendor\joint.min.js" />
+    <Content Include="Scripts\Vendor\lodash.js" />
     <Content Include="Scripts\Vendor\dhtmlxscheduler.js" />
     <Content Include="Scripts\Vendor\dhtmlxscheduler_year_view.js" />
     <Content Include="Scripts\Calendar\index.js" />
