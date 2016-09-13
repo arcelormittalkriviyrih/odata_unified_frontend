@@ -2099,7 +2099,7 @@
     $scope.dateStart = indexService.getDateChartFormat(new Date(date.setHours(date.getHours() - 1)));
     $scope.chartDataLoaded = false;
 
-    $scope.getChartData = vmGetChartData;
+    $scope.getChartData = vmGetChartData;    
 
     $('#chart-date-start').datetimepicker({
         defaultDate: new Date($scope.dateStart),

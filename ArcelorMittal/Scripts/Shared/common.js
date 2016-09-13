@@ -1,5 +1,4 @@
 ﻿var domainURL = '../../odata_unified_svc';
-//var domainURL = 'http://krr-tst-palbp01/odata_unified_svc';
 //var domainURL = 'http://mssql2014srv/odata_unified_svc';
 var serviceUrl = domainURL + '/api/Dynamic/';
 var sapUrl = '../../odata_sap_svc/GetSAPInfo?orderNo=';
@@ -13,7 +12,8 @@ var dropBoxTmpl = '<div class="dropdown form-control">' +
                                        '<input type="hidden" id="{1}" data-parent="dropDown"/>' +
                                        '<span class="caret"></span>' +
                                        '</div>' +
-                                       '<ul class="dropdown-menu" id="{2}" aria-labelledby="dropdownMenu1">' +
+                                       '<ul class="dropdown-menu scrollable-menu" id="{2}" aria-labelledby="dropdownMenu1 data-filter data-filter-label="Filtrar por:"">' +
+                                       '<input type="text" class="form-control" id="filter" />' +
                                        '</ul>' +
                                        '</div>';
 var dateTimePickerControl = {
@@ -69,6 +69,13 @@ var dateTimePickerControl = {
 
         return obj.find('.ui-timepicker-input').spinner('value');
     }
+};
+
+//set real current date in datetimepicker
+$.datepicker._gotoTodayOriginal = $.datepicker._gotoToday;
+$.datepicker._gotoToday = function (id) {
+
+    this._curInst.input.datepicker('setDate', new Date());
 };
 
 jQuery.ajaxSetup({
@@ -130,6 +137,12 @@ $(function () {
     $("body").bind("DOMNodeInserted", function () {
         $(this).find('.ui-datepicker-current, .ui-datepicker-close').addClass('btn btn-default');
     });
+
+    //$('.scrollable-menu').enscroll({
+    //    showOnHover: false,
+    //    verticalTrackClass: 'track3',
+    //    verticalHandleClass: 'handle3'
+    //});
 });
 
 function vmGetMetadata() {

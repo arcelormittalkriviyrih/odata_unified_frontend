@@ -22,8 +22,11 @@ public class BundleConfig
             "~/scripts/vendor/jqplot/plugins/jqplot.enhancedLegendRenderer.js",
             "~/scripts/vendor/jqplot/plugins/jqplot.highlighter.js",
             "~/scripts/vendor/dhtmlxscheduler.js",
-            "~/scripts/vendor/dhtmlxscheduler_year_view.js"
-            
+            "~/scripts/vendor/dhtmlxscheduler_year_view.js",
+            "~/scripts/vendor/backbone.js",
+            "~/scripts/vendor/joint.min.js",
+            "~/scripts/vendor/lodash.js"
+
         ));
 
         bundles.Add(new Bundle("~/bundles/js/app").Include(
@@ -34,12 +37,12 @@ public class BundleConfig
             "~/scripts/app/marker.js",
             "~/scripts/app/market.js",
             "~/scripts/app/pa.js",
-            "~/scripts/app/workshopspecs.js",
-            "~/scripts/app/weightanalytics.js",            
+            "~/scripts/app/workshopspecs.js",            
             "~/scripts/treeGrid/treeExt.js",
             "~/scripts/table/jsGridExt.js",
             "~/scripts/table/jsGridNewFields.js",
-            "~/scripts/action/index.js"
+            "~/scripts/action/index.js",
+            "~/scripts/diagram/diagramExt.js"
         ));
 
         bundles.Add(new StyleBundle("~/bundles/css/app").Include(

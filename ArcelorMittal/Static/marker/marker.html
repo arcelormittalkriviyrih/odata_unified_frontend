@@ -69,7 +69,9 @@
                         </h4>
                     </div>
 
-                    <i class="circle" ng-class="{'red': scale.POCKET_LOC, 'green': !scale.POCKET_LOC}"></i>
+                    <i class="circle"
+                       ng-hide="scale.KEY_MANU == false" 
+                       ng-class="{'red': scale.POCKET_LOC, 'green': !scale.POCKET_LOC}"></i>
                 </div>
 
             </div>
@@ -164,8 +166,8 @@
 
                     <input type="checkbox"
                            ng-model="autoMode"
-                           ng-checked="autoMode"
-                           ng-disabled="!standard"
+                           ng-checked="autoMode || scalesDetailsInfo.KEY_MANU == false"
+                           ng-disabled="!standard || scalesDetailsInfo.KEY_MANU == false"
                            ng-change="enableControlOK()" />
                     {{ 'marker.byAccept' | translate }}
                 </div>
@@ -377,11 +379,11 @@
             {{ 'marker.autoMode' | translate }}
         </span>
 
-        <span class="autoManuMsg" ng-show="scalesDetailsInfo && !scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
+        <span class="autoManuMsg" ng-show="(scalesDetailsInfo && !scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.SCALES_TYPE != 'MANUAL') || scalesDetailsInfo.KEY_MANU == false">
             {{ 'marker.byAccept' | translate }}
         </span>
 
-        <p class="msgRed" ng-show="scalesDetailsInfo.weightCurrent > scalesDetailsInfo.MaxWeight">
+        <p class="msgRed" ng-show="scalesDetailsInfo.weightCurrent > scalesDetailsInfo.MaxWeight && scalesDetailsInfo.MaxWeight > 0">
             {{'marker.weightOver' | translate}}
         </p>
 
@@ -434,9 +436,9 @@
                     class="btn btn-default"
                     ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
                     ng-disabled="!(
-                    (!sandwichModeAccepted && (!scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')
+                    (!sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')
                     ||
-                    (sandwichModeAccepted && scalesDetailsInfo.PACK_SANDWICH && (!scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='0'))"
+                    (sandwichModeAccepted && scalesDetailsInfo.PACK_SANDWICH && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='0'))"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeWeight','takeWeightLabel', 'marker.takeWeightButton')">
                 {{takeWeightLabel}}
             </button>
@@ -444,7 +446,7 @@
             <button type="button"
                     class="btn btn-default"
                     ng-show="sandwichModeAccepted && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
-                    ng-disabled="!((scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH) && (!scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB)"
+                    ng-disabled="!((scalesDetailsInfo && scalesDetailsInfo.PACK_SANDWICH) && scalesDetailsInfo.WEIGHT_STAB)"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeTara','takeTaraLabel', 'marker.takeTaraButton')">
                 {{takeTaraLabel}}
             </button>
@@ -745,6 +747,8 @@
     </div>
 
 </div>
+
+
 
 
 
