@@ -12,7 +12,7 @@
         <input type="hidden" ng-model="model" />
         <span class="caret"></span>
     </div>
-    <ul class="dropdown-menu" id="status" aria-labelledby="dropdownMenu1">
+    <ul class="dropdown-menu scrollable-menu" id="status" aria-labelledby="dropdownMenu1">
         <li ng-repeat="item in iterator">
             <a href="#"
                ng-click="changeDropBoxValue(item); methodOnClick(item); $event.preventDefault();">

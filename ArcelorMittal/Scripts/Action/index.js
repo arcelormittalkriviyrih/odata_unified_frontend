@@ -121,6 +121,35 @@
                                                     .appendTo(li);
                         });
 
+                        $('#filter').keyup(function () {
+
+                            var comboList = ul.find('li a');
+                            var val = $(this).val();
+                            
+                            if (val.length > 0) {
+
+                                comboList.each(function (i, item) {
+
+                                    $(item).parent().show();
+                                });
+
+                                comboList.each(function (i, item) {
+
+                                    if ($(item).text().indexOf(val) == -1)
+                                        $(item).parent().hide();
+                                })
+                            } else {
+
+                                comboList.each(function (i, item) {
+
+                                    $(item).parent().show();
+                                })
+                            }
+                            
+                        })
+
+                        
+
                         field.input = selectedComboDataValue;
 
                         break;

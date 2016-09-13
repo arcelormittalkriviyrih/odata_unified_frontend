@@ -12,7 +12,8 @@ var dropBoxTmpl = '<div class="dropdown form-control">' +
                                        '<input type="hidden" id="{1}" data-parent="dropDown"/>' +
                                        '<span class="caret"></span>' +
                                        '</div>' +
-                                       '<ul class="dropdown-menu" id="{2}" aria-labelledby="dropdownMenu1">' +
+                                       '<ul class="dropdown-menu scrollable-menu" id="{2}" aria-labelledby="dropdownMenu1 data-filter data-filter-label="Filtrar por:"">' +
+                                       '<input type="text" class="form-control" id="filter" />' +
                                        '</ul>' +
                                        '</div>';
 var dateTimePickerControl = {
@@ -136,6 +137,12 @@ $(function () {
     $("body").bind("DOMNodeInserted", function () {
         $(this).find('.ui-datepicker-current, .ui-datepicker-close').addClass('btn btn-default');
     });
+
+    //$('.scrollable-menu').enscroll({
+    //    showOnHover: false,
+    //    verticalTrackClass: 'track3',
+    //    verticalHandleClass: 'handle3'
+    //});
 });
 
 function vmGetMetadata() {

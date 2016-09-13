@@ -18,6 +18,12 @@ body{
 }
 }
 
+.scrollable-menu {
+    height: auto;
+    max-height: 150px;
+    overflow-x: hidden;
+}
+
 .container.main{
     height:92%;
 }
@@ -429,6 +435,12 @@ button.add{
 
 .control-group input, .control-group .dropdown.form-control{
     width: 220px;
+}
+
+input#filter{
+
+    width: 130px!important;
+    margin:auto;
 }
 
 .control-group select{
