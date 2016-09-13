@@ -96,6 +96,12 @@
                                 key: item[properties.keyField],
                                 value: item[properties.valueField]
                             };
+                        }).sort(function (a, b) {
+                            if (a.value < b.value)
+                                return -1;
+                            if (a.value > b.value)
+                                return 1;
+                            return 0;
                         }).forEach(function (item) {
                                 
                             if (item.value == '')
