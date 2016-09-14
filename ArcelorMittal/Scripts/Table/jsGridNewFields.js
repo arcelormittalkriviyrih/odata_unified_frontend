@@ -212,9 +212,12 @@
         },
 
         itemTemplate: function (value) {
-            //return new Date(value).toDateString();
-            var dateVal = getTimeToUpdate(value, true);
-            return dateVal.day + '.' + dateVal.month + '.' + dateVal.year
+
+            if (value) {
+                var dateVal = getTimeToUpdate(value, true);
+                return dateVal.day + '.' + dateVal.month + '.' + dateVal.year
+            } else return null;
+           
         },
 
         insertTemplate: function (value) {
@@ -290,9 +293,13 @@
 
         itemTemplate: function (value) {
 
-            var dateVal = getTimeToUpdate(value, true);
+            if (value) {
 
-            return dateVal.day + '.' + dateVal.month + '.' + dateVal.year + ' ' + dateVal.hour + ':' + dateVal.minute + ':' + dateVal.second;
+                var dateVal = getTimeToUpdate(value, true);
+
+                return dateVal.day + '.' + dateVal.month + '.' + dateVal.year + ' ' + dateVal.hour + ':' + dateVal.minute + ':' + dateVal.second;
+            } else return null;
+            
         },
 
         insertTemplate: function (value) {
