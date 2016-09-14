@@ -1827,6 +1827,7 @@
 
         }).jsGrid('loadOdata', {
 
+            defaultFilter: 'SideID eq {0}'.format($scope.sideIsSelected),
             order: 'ID desc'
         });
     }
