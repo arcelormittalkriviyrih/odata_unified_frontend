@@ -2457,8 +2457,12 @@
                 return item.CREATE_MODE == 'Печать с ручным вводом веса';
             });
         }
-        
 
+        data = data.sort(function (a, b) {
+
+            return b.ID - a.ID
+        });
+        
         $('#handModeGrid').jsGrid({
             width: "940px",
 
@@ -2513,14 +2517,22 @@
 
         element.bind("keydown keypress", function (event) {
 
-            if (!((event.which >= 48 && event.which <= 57) || (event.which >= 96 && event.which <= 105))
-                && event.which != 8 && event.which != 46 && event.which != 13 && event.which != 37
-                && event.which != 38 && event.which != 39 && event.which != 40 && event.which != 9) {
+            var val = element.val();
+
+            var permittedSymbols = [8, 46, 13, 37, 38, 39, 40, 9];
+
+            if (attrs.myNumberCheck != 'number') 
+                permittedSymbols.push(190);
+                                      
+            if ((!((event.which >= 48 && event.which <= 57) || (event.which >= 96 && event.which <= 105))
+                && permittedSymbols.indexOf(event.which) == -1) || 
+                (attrs.myNumberCheck != 'number' && event.which == 190 && element.val().indexOf('.') > -1)) {
 
                 return false;
             };
         });
-    };
+    }
+        
 });
 
 
