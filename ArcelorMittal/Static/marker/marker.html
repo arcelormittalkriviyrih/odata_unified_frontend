@@ -239,7 +239,7 @@
                                ng-model="minMass"
                                ng-disabled="!standard"
                                ng-class="{'wrong': !minMass && standard}"
-                               my-number-check
+                               my-number-check="number"
                                ng-change="enableControlOK(); calculateMaxMass()" />
                     </div>
                 </div>
@@ -289,7 +289,7 @@
                                ng-model="maxMass"
                                ng-class="{'wrong': !maxMass && standard}"
                                ng-disabled="!standard"
-                               my-number-check
+                               my-number-check="number"
                                ng-change="enableControlOK();" />
                     </div>
                 </div>
@@ -469,10 +469,12 @@
             <button type="button"
                     class="btn btn-default"
                     ng-show="sandwichModeAccepted && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
-                    ng-disabled="!((scalesDetailsInfo && scalesDetailsInfo.PACK_SANDWICH) && scalesDetailsInfo.WEIGHT_STAB)"
+                    ng-disabled="!(scalesDetailsInfo && scalesDetailsInfo.EN_BUTTON_TARA)"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeTara','takeTaraLabel', 'marker.takeTaraButton')">
                 {{takeTaraLabel}}
             </button>
+
+            
 
             <button type="button"
                     class="btn btn-default specialLabelMode"
@@ -700,7 +702,7 @@
             <label>{{ 'marker.modalCaptions.enterQuantity' | translate }}:</label>
             <input type="text"
                    class="labelNumber form-control"
-                   my-number-check
+                   my-number-check="number"
                    ng-class="{'wrong': noHandModeQuantity}"
                    ng-model="handModeQuantity"
                    ng-change="noHandModeQuantity = false" />
