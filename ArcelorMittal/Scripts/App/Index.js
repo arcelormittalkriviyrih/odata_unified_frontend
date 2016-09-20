@@ -541,6 +541,7 @@
             $scope.model = item.ID || item;
             if ($scope.side)
                 item.side = $scope.side;
+            
         };
     };
 
@@ -557,7 +558,8 @@
             methodOnClick: '=?',            
             standard: '=?',
             showDisableDiv: '=?',
-            side: '=?'
+            side: '=?',
+            showFilter: '=?'
         }
     };
 });

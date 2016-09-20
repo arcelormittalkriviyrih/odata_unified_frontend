@@ -122,30 +122,36 @@
 
         </div>
 
+        <div class="controlsWrapper" 
+             ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' || scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
+            <div class="controlsRow">
+                <div class="captionTask profile">
+                    {{ 'marker.profile' | translate }}
+                </div>
+                <div class="controlTask profile">
+
+                    <dropdown iterator="profiles"
+                              model="selectedProfile"
+                              description="selectedProfileDescription"
+                              wrong-expr="!selectedProfile && standard"
+                              method-on-click="actionsProfileChanged"
+                              show-disable-div="true"
+                              show-filter="true"
+                              standard="standard">
+
+                    </dropdown>
+                </div>
+            </div>
+        </div>
+
         <div class="controlsWrapper">
             <div class="controlsGroup"
                  ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' || scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
-
-                <div class="controlsRow">
+                <div class="controlsRow" style="margin-bottom:0">
                     <div class="captionTask">
-                        {{ 'marker.profile' | translate }}
+                        {{ 'marker.size' | translate }}
                     </div>
-                    <div class="controlTask">
-
-                        <dropdown iterator="profiles"
-                                  model="selectedProfile"
-                                  description="selectedProfileDescription"
-                                  wrong-expr="!selectedProfile && standard"
-                                  method-on-click="actionsProfileChanged"
-                                  show-disable-div="true"
-                                  standard="standard">
-
-                        </dropdown>
-                    </div>
-                </div>
-
-                <div class="controlsRow">
-                    <div class="captionTask">{{ 'marker.size' | translate }}</div>
+                    
                     <div class="controlTask">
                         <input type="text"
                                class="form-control"
@@ -155,43 +161,58 @@
                                ng-change="calculate()" />
                     </div>
                 </div>
-
-
-
-
-
-
             </div>
-
-            <div class="controlsGroup" style="padding:0 0 0 10px;"
-                 ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET'">
-
-                <div>
-                    <input type="checkbox"
-                           ng-model="sandwichMode"
-                           ng-disabled="!standard"
-                           ng-change="enableControlOK();" />
-                    {{ 'marker.sandwich' | translate }}
-                </div>
-                <div>
-
-                    <input type="checkbox"
-                           ng-model="autoMode"
-                           ng-checked="autoMode || scalesDetailsInfo.KEY_MANU == false"
-                           ng-disabled="!standard || scalesDetailsInfo.KEY_MANU == false"
-                           ng-change="enableControlOK()" />
-                    {{ 'marker.byAccept' | translate }}
-                </div>
-                <div>
-                    <input type="checkbox"
-                           ng-model="nemera"
-                           ng-disabled="!standard"
-                           ng-change="enableControlOK()" />
-                    {{ 'marker.nemera' | translate }}
+            <div class="controlsGroup" ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET'">
+                <div class="controlsRow" style="margin-bottom:0">
+                    <div class="controlTask" style="width:100%; text-align: left;">
+                        <input type="checkbox"
+                               ng-model="sandwichMode"
+                               ng-disabled="!standard"
+                               ng-change="enableControlOK();" />
+                        {{ 'marker.sandwich' | translate }}
+                    </div>
                 </div>
             </div>
-
         </div>
+
+        <div class="controlsWrapper" ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET'">
+            <div class="controlsGroup">
+                <div class="controlsRow" style="margin-bottom:0">
+                    <div class="controlTask" style="width:98%;">
+                        <input type="checkbox"
+                               ng-model="autoMode"
+                               ng-checked="autoMode || scalesDetailsInfo.KEY_MANU == false"
+                               ng-disabled="!standard || scalesDetailsInfo.KEY_MANU == false"
+                               ng-change="enableControlOK()" />
+                        {{ 'marker.byAccept' | translate }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="controlsGroup">
+                <div class="controlsRow" style="margin-bottom:0">
+                    <div class="controlTask" style="width:100%; text-align: left;">
+                        <input type="checkbox"
+                               ng-model="nemera"
+                               ng-disabled="!standard"
+                               ng-change="enableControlOK()" />
+                        {{ 'marker.nemera' | translate }}
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+
+
+
+
+
+
+
+
+
 
         <div class="controlsWrapper"
              ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' ||

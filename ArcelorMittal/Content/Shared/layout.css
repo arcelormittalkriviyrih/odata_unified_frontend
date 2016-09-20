@@ -745,7 +745,7 @@ div.controlsRow{
     font-size: 0;
     position: relative;
     height: 30px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     display: table;
     width: 100%;
 }
@@ -768,11 +768,19 @@ div.captionTask{
     vertical-align: middle;
 } 
 
+div.captionTask.profile{
+    width: 28%;
+}
+
 div.controlTask{
     width: 40%;
     text-align: right;
     line-height: 12px;
     font-size: 12px;
+}
+
+div.controlTask.profile .dropdown.form-control{
+    width:220px;
 }
 
 div.controlTask div.disableDropDown{
@@ -784,7 +792,7 @@ div.controlTask div.disableDropDown{
     z-index: 11;
 }
 
-div.controlTask input, div.controlTask .dropdown{
+div.controlTask input[type="text"], div.controlTask .dropdown{
     width: 66px;
     padding: 3px 5px;
     margin-bottom: 0;

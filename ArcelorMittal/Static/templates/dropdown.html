@@ -4,7 +4,6 @@
 
 <div class="dropdown form-control"
      ng-class="{'wrong': wrongExpr, 'disabled': showDisableDiv && !standard}">
-
     <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         <input type="text"
                class="dropdown-input"
@@ -13,7 +12,13 @@
         <span class="caret"></span>
     </div>
     <ul class="dropdown-menu scrollable-menu" id="status" aria-labelledby="dropdownMenu1">
-        <li ng-repeat="item in iterator">
+
+        <input type="text"
+               class="form-control" id="filter"
+               ng-show="showFilter" 
+               ng-model="filterCombo">
+
+        <li ng-repeat="item in iterator | filter: filterCombo">
             <a href="#"
                ng-click="changeDropBoxValue(item); methodOnClick(item); $event.preventDefault();">
                 {{item.Description || item.Value || item}}
