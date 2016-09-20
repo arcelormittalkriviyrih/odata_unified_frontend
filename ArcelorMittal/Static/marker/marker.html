@@ -102,7 +102,7 @@
                 <input type="text" class="input-small form-control"
                        ng-change="checkIsAcceptedOrder()"
                        ng-model="commOrder"
-                       ng-disabled="!standard"
+                       ng-readonly="!standard"
                        my-enter="buildForm()" />
             </div>
 
@@ -164,12 +164,12 @@
             </div>
             <div class="controlsGroup" ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET'">
                 <div class="controlsRow" style="margin-bottom:0">
-                    <div class="controlTask" style="width:100%; text-align: left;">
+                    <div class="controlTask singleRight checkbox-inline">
                         <input type="checkbox"
                                ng-model="sandwichMode"
                                ng-disabled="!standard"
                                ng-change="enableControlOK();" />
-                        {{ 'marker.sandwich' | translate }}
+                        <span>{{ 'marker.sandwich' | translate }}</span>
                     </div>
                 </div>
             </div>
@@ -177,42 +177,36 @@
 
         <div class="controlsWrapper" ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET'">
             <div class="controlsGroup">
-                <div class="controlsRow" style="margin-bottom:0">
-                    <div class="controlTask" style="width:98%;">
+                <div class="controlsRow" style="margin-bottom:0;">
+
+                    <div class="captionTask">
+
+                    </div>
+                    <div class="controlTask singleLeft checkbox-inline" style="width:40%">
                         <input type="checkbox"
-                               ng-model="autoMode"
-                               ng-checked="autoMode || scalesDetailsInfo.KEY_MANU == false"
-                               ng-disabled="!standard || scalesDetailsInfo.KEY_MANU == false"
+                               ng-model="nemera"
+                               ng-disabled="!standard"
                                ng-change="enableControlOK()" />
-                        {{ 'marker.byAccept' | translate }}
+                        <span>{{ 'marker.nemera' | translate }}</span>
                     </div>
                 </div>
             </div>
 
             <div class="controlsGroup">
-                <div class="controlsRow" style="margin-bottom:0">
-                    <div class="controlTask" style="width:100%; text-align: left;">
+                <div class="controlsRow" style="margin-bottom:0;">
+                    
+                    <div class="controlTask singleRight checkbox-inline">
                         <input type="checkbox"
-                               ng-model="nemera"
-                               ng-disabled="!standard"
+                               ng-model="autoMode"
+                               ng-checked="autoMode || scalesDetailsInfo.KEY_MANU == false"
+                               ng-disabled="!standard || scalesDetailsInfo.KEY_MANU == false"
                                ng-change="enableControlOK()" />
-                        {{ 'marker.nemera' | translate }}
+                        <span>{{ 'marker.byAccept' | translate }}</span>
                     </div>
                 </div>
             </div>
             
         </div>
-
-
-
-
-
-
-
-
-
-
-
 
         <div class="controlsWrapper"
              ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' ||

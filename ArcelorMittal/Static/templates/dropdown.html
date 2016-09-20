@@ -7,9 +7,9 @@
     <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         <input type="text"
                class="dropdown-input"
-               ng-model="description" disabled/>
+               ng-model="description" readonly/>
         <input type="hidden" ng-model="model" />
-        <span class="caret"></span>
+        <span class="caret" ng-hide="showDisableDiv && !standard"></span>
     </div>
     <ul class="dropdown-menu scrollable-menu" id="status" aria-labelledby="dropdownMenu1">
 

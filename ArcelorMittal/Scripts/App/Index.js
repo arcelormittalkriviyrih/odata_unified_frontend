@@ -535,6 +535,20 @@
 
         $scope.changeDropBoxValue = vmChangeDropBoxValue;
 
+        if ($scope.iterator) {
+            $scope.iterator = $scope.iterator.sort(function (a, b) {
+
+                if (a.Description)
+                    return a.Description - b.Description
+
+                else if (a.Value)
+                    return a.Value - b.Value
+                else
+                    return a - b
+
+            });
+        }
+              
         function vmChangeDropBoxValue(item) {
 
             $scope.description = item.Description || item.Value || item;
