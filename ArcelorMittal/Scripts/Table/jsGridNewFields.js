@@ -792,10 +792,11 @@
 
         itemTemplate: function (value, item) {
 
-            if (value)
+            if (value == true)
                 return '<span class="glyphicon glyphicon-ok"></span>';
-            else
+            else if (value == false)
                 return '<span class="glyphicon glyphicon-remove"></span>';
+            else return null;
         },
 
         filterTemplate: function () {
