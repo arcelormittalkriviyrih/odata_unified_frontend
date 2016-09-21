@@ -13,17 +13,27 @@
     </div>
     <ul class="dropdown-menu scrollable-menu" id="status" aria-labelledby="dropdownMenu1">
 
-        <input type="text"
-               class="form-control" id="filter"
-               ng-show="showFilter" 
-               ng-model="filterCombo">
+        <li>
+            <input type="text"
+                   class="form-control" id="filter"
+                   ng-show="showFilter"
+                   ng-model="filterCombo">
+        </li>
 
-        <li ng-repeat="item in iterator | filter: filterCombo">
+        <li ng-if="showFilter" ng-show="filterCombo == null || filterCombo == '' || item.Description.indexOf(filterCombo) > -1" ng-repeat="item in iterator | orderBy: 'Description'">
             <a href="#"
                ng-click="changeDropBoxValue(item); methodOnClick(item); $event.preventDefault();">
                 {{item.Description || item.Value || item}}
             </a>
             
+        </li>
+
+        <li ng-if="!showFilter" ng-repeat="item in iterator">
+            <a href="#"
+               ng-click="changeDropBoxValue(item); methodOnClick(item); $event.preventDefault();">
+                {{item.Description || item.Value || item}}
+            </a>
+
         </li>
     </ul>
 

@@ -838,9 +838,13 @@ div.controlTask .dropdown-toggle .dropdown-input {
     left: -1px;
     top: -1px;
     height: 28px;
-    width: 200px!important;
+    width: 45px!important;
     color: #555;
     text-align: left;
+}
+
+div.controlTask.profile .dropdown-toggle .dropdown-input{
+    width: 200px!important;
 }
 
 .dropdown-toggle .dropdown-input[readonly]{

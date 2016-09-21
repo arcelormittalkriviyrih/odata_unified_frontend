@@ -472,11 +472,11 @@
 
             <button type="button"
                     class="btn btn-default"
-                    ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
+                    ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'&& (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU)"
                     ng-disabled="!(
                     (!sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')
                     ||
-                    (sandwichModeAccepted && scalesDetailsInfo.PACK_SANDWICH && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='0'))"
+                    (sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1'))"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeWeight','takeWeightLabel', 'marker.takeWeightButton')">
                 {{takeWeightLabel}}
             </button>

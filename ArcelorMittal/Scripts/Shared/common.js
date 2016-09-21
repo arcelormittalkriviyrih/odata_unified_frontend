@@ -138,11 +138,6 @@ $(function () {
         $(this).find('.ui-datepicker-current, .ui-datepicker-close').addClass('btn btn-default');
     });
 
-    //$('.scrollable-menu').enscroll({
-    //    showOnHover: false,
-    //    verticalTrackClass: 'track3',
-    //    verticalHandleClass: 'handle3'
-    //});
 });
 
 function vmGetMetadata() {
