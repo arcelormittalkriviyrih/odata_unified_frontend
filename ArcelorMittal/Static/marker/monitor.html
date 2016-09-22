@@ -30,10 +30,7 @@
         </div>
         <div class="monitorSide control">
             {{'marker.monitorCaptions.scales' | translate}}:
-            <!--<select class="form-control input-medium"
-                    ng-model="scaleRight"
-                    ng-change="getScalesInfo()"
-                    ng-options="o.Description for o in scalesList track by o.ID"></select>-->
+
             <dropdown iterator="scalesList"
                       model="scaleRight"
                       description=""
@@ -46,10 +43,7 @@
             </dropdown>
 
             {{'marker.monitorCaptions.weightRods' | translate}}:
-                <!--<select class="form-control input-medium"
-                        ng-model="shownTypeRight"
-                        ng-change="changeParamTypeRightSide()"
-                        ng-options="o.Name for o in shownParamsList"></select>-->
+
             <dropdown iterator="shownParamsList"
                       model="shownTypeRight"
                       description=""
@@ -82,13 +76,16 @@
                     <span class="paramCaption">
                         {{'marker.monitorCaptions.packWeight' | translate}}:
                     </span>
-                    <span class="paramValue">
+                    <span class="paramValue" 
+                          ng-class="{'blink': scalesLeftSideInfo.POCKET_LOC == true && scalesLeftSideInfo.WEIGHT_STAB== false}">
                         {{scalesLeftSideInfo.WEIGHT_CURRENT}}
                     </span>
                 </p>
                 <p ng-show="shownTypeLeft.id == 1">
                     <span class="paramCaption">{{'marker.monitorCaptions.rodsQuantity' | translate}}:</span>
-                    <span class="paramValue">{{scalesLeftSideInfo.RodsQuantity}}</span>
+                    <span class="paramValue"
+                          ng-class="{'blink': scalesLeftSideInfo.POCKET_LOC == true && scalesLeftSideInfo.WEIGHT_STAB== false}">
+                    {{scalesLeftSideInfo.RodsQuantity}}</span>
 
                 </p>
             </div>
@@ -100,6 +97,7 @@
                     {{'marker.monitorCaptions.rodsLeft' | translate}}:
                 </span>
                 <span class="paramValue"
+                      ng-class="{'blink': scalesLeftSideInfo.POCKET_LOC == true && scalesLeftSideInfo.WEIGHT_STAB== false}"
                       ng-show="scalesLeftSideInfo.rodsLeftCounted != null">
                     <span ng-show="scalesLeftSideInfo.rodsLeftCounted > 0">+</span>
                     {{scalesLeftSideInfo.rodsLeftCounted}}
@@ -114,12 +112,16 @@
                             'green': scalesRightSideInfo && scalesRightSideInfo.KEY_MANU && shownTypeRight && !scalesRightSideInfo.POCKET_LOC}">
                 <p ng-show="shownTypeRight.id == 0">
                     <span class="paramCaption">{{'marker.monitorCaptions.packWeight' | translate}}:</span>
-                    <span class="paramValue">{{scalesRightSideInfo.WEIGHT_CURRENT}}</span>
+                    <span class="paramValue"
+                          ng-class="{'blink': scalesRightSideInfo.POCKET_LOC == true && scalesRightSideInfo.WEIGHT_STAB== false}">
+                    {{scalesRightSideInfo.WEIGHT_CURRENT}}</span>
 
                 </p>
                 <p ng-show="shownTypeRight.id == 1">
                     <span class="paramCaption">{{'marker.monitorCaptions.rodsQuantity' | translate}}:</span>
-                    <span class="paramValue">{{scalesRightSideInfo.RodsQuantity}}</span>
+                    <span class="paramValue"
+                          ng-class="{'blink': scalesRightSideInfo.POCKET_LOC == true && scalesRightSideInfo.WEIGHT_STAB== false}">
+                    {{scalesRightSideInfo.RodsQuantity}}</span>
 
                 </p>
             </div>
@@ -129,6 +131,7 @@
                 <span class="paramCaption">{{'marker.monitorCaptions.rodsLeft' | translate}}:</span>
 
                 <span class="paramValue"
+                      ng-class="{'blink': scalesRightSideInfo.POCKET_LOC == true && scalesRightSideInfo.WEIGHT_STAB== false}"
                       ng-show="scalesRightSideInfo.rodsLeftCounted != null">
                     <span ng-show="scalesRightSideInfo.rodsLeftCounted > 0">+</span>
                     {{scalesRightSideInfo.rodsLeftCounted}}
