@@ -140,14 +140,30 @@ $(function () {
 
     setInterval(function () {
 
-        $('.blink').animate({
-            opacity: 0.0
-        }, 100, function () {
-
+        if ($('.blink').hasClass('red')) {
             $('.blink').animate({
-                opacity: 1.0
-            }, 100);
-        })
+
+                backgroundColor: 'white'
+            }, 100, function () {
+
+                $('.blink').animate({
+
+                    backgroundColor: 'tomato'
+                }, 100);
+            })
+        } else if ($('.blink').hasClass('green')) {
+            $('.blink').animate({
+
+                backgroundColor: 'white'
+            }, 100, function () {
+
+                $('.blink').animate({
+
+                    backgroundColor: 'lightgreen'
+                }, 100);
+            })
+        }
+        
 
     }, 1000);
 
