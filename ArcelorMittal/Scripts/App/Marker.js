@@ -1169,6 +1169,9 @@
                 $scope.standard = true;
                 $scope[mode] = false;
 
+                $scope.sandwichMode = false;
+                $scope.sandwichModeAccepted = false;
+
                 vmGetLatestWorkRequest($scope.currentScaleID);
             });
         };

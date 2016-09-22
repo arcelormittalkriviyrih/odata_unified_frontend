@@ -164,7 +164,8 @@
             </div>
             <div class="controlsGroup" ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET'">
                 <div class="controlsRow" style="margin-bottom:0">
-                    <div class="controlTask singleRight checkbox-inline">
+                    <div class="controlTask singleRight checkbox-inline"
+                         ng-show="standard">
                         <input type="checkbox"
                                ng-model="sandwichMode"
                                ng-disabled="!standard"
@@ -429,7 +430,7 @@
             {{ 'marker.byAccept' | translate }}
         </span>
 
-        <p class="msgRed" ng-show="scalesDetailsInfo.weightCurrent > scalesDetailsInfo.MaxWeight && scalesDetailsInfo.MaxWeight > 0">
+        <p class="msgRed" ng-show="scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.weightCurrent > scalesDetailsInfo.MaxWeight && scalesDetailsInfo.MaxWeight > 0">
             {{'marker.weightOver' | translate}}
         </p>
 
