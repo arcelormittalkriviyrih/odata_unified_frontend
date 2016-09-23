@@ -827,6 +827,130 @@
 
                     $scope.workRequestID = data[0].WorkRequestID;
                     $scope.selectedProfile = data[0].ProfileID;
+
+                    $('#changeOrderGrid').jsGrid({
+                        width: "750px",
+
+                        sorting: false,
+                        paging: true,
+                        editing: false,
+                        filtering: true,
+                        autoload: true,
+                        pageLoading: true,
+                        inserting: false,
+                        pageIndex: 1,
+                        pageSize: 14,
+
+                        onDataLoaded: function (args) {
+
+                            var rows = vmShowSelectedRows(args, $scope.materialLotProdorderIDs, 'ID', 'FactoryNumber');
+
+                            if (rows)
+                                rows.forEach(function (row) {
+
+                                    var checkbox = row.find('input[type=checkbox]');
+                                    $(checkbox).prop('checked', true);
+                                });
+                        },
+
+                        rowClick: function (args) {
+
+                            var $tr = $(args.event.currentTarget);
+                            $tr.toggleClass('selected-row');
+
+                            var elem = $(args.event.target);
+                            var checkbox = $(args.event.currentTarget).find('input[type=checkbox]');
+
+                            var materialLotProdorderID = args.item.ID;
+                            var index = $scope.materialLotProdorderIDs.indexOf(materialLotProdorderID);
+
+
+                            if (index == -1) {
+
+                                if (!elem.is('input'))
+                                    $(checkbox).prop('checked', true);
+
+                                $scope.materialLotProdorderIDs.push(materialLotProdorderID);
+                            }
+
+                            else {
+
+                                if (!elem.is('input'))
+                                    $(checkbox).prop('checked', false);
+
+                                $scope.materialLotProdorderIDs = $scope.materialLotProdorderIDs.filter(function (item) {
+                                    return item != materialLotProdorderID;
+                                });
+                            };
+
+                            $scope.$apply();
+
+
+
+                        }
+
+                    }).jsGrid('initOdata', {
+                        serviceUrl: serviceUrl,
+                        table: 'v_MaterialLotChange',
+
+                        fields: [{
+                            id: 'PROD_ORDER',
+                            name: 'PROD_ORDER',
+                            title: $translate.instant('marker.grid.PROD_ORDER'),
+                            width: 120,
+                            order: 1
+                        },
+                        {
+                            id: 'PART_NO',
+                            name: 'PART_NO',
+                            title: $translate.instant('marker.grid.PART_NO'),
+                            width: 100,
+                            order: 2
+                        },
+                        {
+                            id: 'FactoryNumber',
+                            name: 'FactoryNumber',
+                            title: $translate.instant('marker.grid.FactoryNumber'),
+                            width: 120,
+                            order: 3
+                        },
+                        {
+                            id: 'BUNT_NO',
+                            name: 'BUNT_NO',
+                            title: $translate.instant('marker.grid.BUNT_NO'),
+                            width: 145,
+                            order: 4
+                        },
+                        {
+                            id: 'CreateTime',
+                            name: 'CreateTime',
+                            title: $translate.instant('marker.grid.CreateTime'),
+                            width: 150,
+                            order: 5
+                        },
+
+                        {
+                            id: 'Quantity',
+                            name: 'Quantity',
+                            title: $translate.instant('marker.grid.Quantity'),
+                            width: 50,
+                            order: 6
+                        },
+                        {
+                            id: 'selected',
+                            name: 'selected',
+                            title: ' ',
+                            type: 'myCheckbox',
+                            width: 25,
+                            order: 7
+                        }]
+
+                    })
+
+
+
+
+
                     var selectedProfileInfo = $scope.profiles.find(function (profile) {
 
                         return profile.ID == $scope.selectedProfile;
@@ -1710,125 +1834,8 @@
 
         $scope.toggleModalOrderChange = true;
         $scope.materialLotProdorderIDs = [];
-
-        $('#changeOrderGrid').jsGrid({
-            width: "750px",
-
-            sorting: false,
-            paging: true,
-            editing: false,
-            filtering: true,
-            autoload: true,
-            pageLoading: true,
-            inserting: false,
-            pageIndex: 1,
-            pageSize: 14,
-
-            onDataLoaded: function(args){
-
-                var rows = vmShowSelectedRows(args, $scope.materialLotProdorderIDs, 'ID', 'FactoryNumber');
-
-                if (rows)
-                    rows.forEach(function (row) {
-
-                        var checkbox = row.find('input[type=checkbox]');
-                        $(checkbox).prop('checked', true);
-                    });
-            },
-            
-            rowClick: function (args) {
-
-                var $tr = $(args.event.currentTarget);
-                $tr.toggleClass('selected-row');
-                
-                var elem = $(args.event.target);
-                var checkbox = $(args.event.currentTarget).find('input[type=checkbox]');
-
-                var materialLotProdorderID = args.item.ID;
-                var index = $scope.materialLotProdorderIDs.indexOf(materialLotProdorderID);
-               
-
-                if (index == -1) {
-
-                    if (!elem.is('input')) 
-                        $(checkbox).prop('checked', true);
-                                        
-                    $scope.materialLotProdorderIDs.push(materialLotProdorderID);
-                }
-
-                else {
-
-                    if (!elem.is('input'))
-                        $(checkbox).prop('checked', false);
-
-                    $scope.materialLotProdorderIDs = $scope.materialLotProdorderIDs.filter(function (item) {
-                        return item != materialLotProdorderID;
-                    });
-                };
-
-                $scope.$apply();
-                
-
-                
-            }
-
-        }).jsGrid('initOdata', {
-            serviceUrl: serviceUrl,
-            table: 'v_MaterialLotChange',
-
-            fields: [{
-                id: 'PROD_ORDER',
-                name: 'PROD_ORDER',
-                title: $translate.instant('marker.grid.PROD_ORDER'),
-                width: 120,
-                order: 1
-            },
-            {
-                id: 'PART_NO',
-                name: 'PART_NO',
-                title: $translate.instant('marker.grid.PART_NO'),
-                width: 100,
-                order: 2
-            },
-            {
-                id: 'FactoryNumber',
-                name: 'FactoryNumber',
-                title: $translate.instant('marker.grid.FactoryNumber'),
-                width: 120,
-                order: 3
-            },
-            {
-                id: 'BUNT_NO',
-                name: 'BUNT_NO',
-                title: $translate.instant('marker.grid.BUNT_NO'),
-                width: 145,
-                order: 4
-            },
-            {
-                id: 'CreateTime',
-                name: 'CreateTime',
-                title: $translate.instant('marker.grid.CreateTime'),
-                width: 150,
-                order: 5
-            },
-
-            {
-                id: 'Quantity',
-                name: 'Quantity',
-                title: $translate.instant('marker.grid.Quantity'),
-                width: 50,
-                order: 6
-            },
-            {
-                id: 'selected',
-                name: 'selected',
-                title: ' ',
-                type: 'myCheckbox',
-                width: 25,
-                order: 7
-            }]
-
-        }).jsGrid('loadOdata', {
+       
+        $('#changeOrderGrid').jsGrid('loadOdata', {
 
             defaultFilter: 'SideID eq {0}'.format($scope.sideIsSelected),
             order: 'ID desc'
@@ -2064,6 +2071,7 @@
 
                        return item.ID == $scope.scaleLeft.ID
                    });
+                   
 
                    vmCalculateRods($scope.scalesLeftSideInfo);
                };
@@ -2077,6 +2085,15 @@
 
                    vmCalculateRods($scope.scalesRightSideInfo);
                };
+
+               if (($scope.scalesLeftSideInfo && $scope.scalesLeftSideInfo.POCKET_LOC == true && $scope.scalesLeftSideInfo.WEIGHT_STAB == false) ||
+                   ($scope.scalesRightSideInfo && $scope.scalesRightSideInfo.POCKET_LOC == true && $scope.scalesRightSideInfo.WEIGHT_STAB == false)) {
+
+                   vmSetBlinking();
+               } else {
+
+                   vmClearStyle($('.monitorSideItem'));
+               }
                               
             });
     }

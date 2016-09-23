@@ -137,38 +137,7 @@ $(function () {
     $("body").bind("DOMNodeInserted", function () {
         $(this).find('.ui-datepicker-current, .ui-datepicker-close').addClass('btn btn-default');
     });
-
-    setInterval(function () {
-
-        if ($('.blink').hasClass('red')) {
-            $('.blink').animate({
-
-                backgroundColor: 'white'
-            }, 100, function () {
-
-                $('.blink').animate({
-
-                    backgroundColor: 'tomato'
-                }, 100);
-            })
-        } else if ($('.blink').hasClass('green')) {
-            $('.blink').animate({
-
-                backgroundColor: 'white'
-            }, 100, function () {
-
-                $('.blink').animate({
-
-                    backgroundColor: 'lightgreen'
-                }, 100);
-            })
-        }
-        
-
-    }, 1000);
-
     
-
 });
 
 function vmGetMetadata() {
@@ -525,4 +494,36 @@ function vmLoadStaticData(filter, data) {
 
     return d.promise();
 }
+
+function vmSetBlinking() {
+
+    if ($('.blink').hasClass('red')) {
+        $('.blink').animate({
+
+            backgroundColor: 'white'
+        }, 100, function () {
+
+            $('.blink').animate({
+
+                backgroundColor: 'tomato'
+            }, 100);
+        })
+    } else if ($('.blink').hasClass('green')) {
+        $('.blink').animate({
+
+            backgroundColor: 'white'
+        }, 100, function () {
+
+            $('.blink').animate({
+
+                backgroundColor: 'lightgreen'
+            }, 100);
+        })
+    }
+};
+
+function vmClearStyle(elem) {
+
+    elem.removeAttr('style');
+};
 

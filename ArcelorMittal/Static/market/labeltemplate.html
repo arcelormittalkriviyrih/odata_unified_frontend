@@ -133,7 +133,9 @@
                     <div class="col-md-6">
 
                         <label>&nbsp;</label>
+
                         <button type="submit"
+                                ng-disabled="!showSubmitButtonUpload"
                                 ng-class="{'btn-small upload-button-small': locale == 'ua' }"
                                 class="btn btn-default pull-right">
                             {{ 'market.grid.labelTemplate.upload' | translate }}

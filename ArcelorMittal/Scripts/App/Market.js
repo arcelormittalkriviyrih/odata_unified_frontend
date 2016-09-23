@@ -17,17 +17,37 @@
             params: {
 
                 fileType: 'Excel label'
+            },
+            onExit: function ($state, $injector) {
+
+                $("#files").jsGrid({
+
+                    onDataLoading: function (args) {
+
+                        args.grid.table = null;
+                    }
+                });
             }
         })
-    .state('app.Market.Logotypes', {
+        .state('app.Market.Logotypes', {
 
-        url: '/logotypes',
-        templateUrl: 'Static/market/labeltemplate.html',
-        controller: 'marketLabelTemplateCtrl',
-        params: {
-            fileType: 'Image'
-        }
-    })
+            url: '/logotypes',
+            templateUrl: 'Static/market/labeltemplate.html',
+            controller: 'marketLabelTemplateCtrl',
+            params: {
+                fileType: 'Image'
+            },
+            onExit: function ($state, $injector) {
+
+                $("#files").jsGrid({
+
+                    onDataLoading: function (args) {
+
+                        args.grid.table = null;
+                    }
+                });
+            }
+        })
 }])
 
 .value('sapUrl', sapUrl)
@@ -523,6 +543,10 @@
 
         $inputCreate.val(filenameCreate);
         $inputEdit.val(filenameEdit);
+
+        $scope.showSubmitButtonUpload = true;
+
+        $scope.$apply();
     }
 
     function vmResetForm(formObj) {
