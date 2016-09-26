@@ -250,7 +250,7 @@
         vmGetProfiles();
 
         //init form fields list
-        indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq 'Использование'")
+        indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")
                             .then(function (response) {
 
                                 var templateData = response.data.value;
