@@ -12,9 +12,13 @@ var dropBoxTmpl = '<div class="dropdown form-control">' +
                                        '<input type="hidden" id="{1}" data-parent="dropDown"/>' +
                                        '<span class="caret"></span>' +
                                        '</div>' +
-                                       '<ul class="dropdown-menu scrollable-menu" id="{2}" aria-labelledby="dropdownMenu1 data-filter data-filter-label="Filtrar por:"">' +
+                                       '<div class="dropdown-menu">' +
+                                       '<div class="filter-field">' +
                                        '<input type="text" class="form-control" id="filter" />' +
+                                       '</div>' +
+                                       '<ul class="scrollable-menu menu-list" id="{2}" aria-labelledby="dropdownMenu1 data-filter data-filter-label="Filtrar por:"">' +
                                        '</ul>' +
+                                       '</div>' +
                                        '</div>';
 var dateTimePickerControl = {
     create: function (tp_inst, obj, unit, val, min, max, step) {
