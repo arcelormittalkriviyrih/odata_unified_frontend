@@ -250,7 +250,7 @@
         vmGetProfiles();
 
         //init form fields list
-        indexService.getInfo("Files?$filter=FileType eq 'Excel label'")
+        indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq 'Использование'")
                             .then(function (response) {
 
                                 var templateData = response.data.value;
@@ -546,7 +546,7 @@
                                          data: templateData,
                                          keyField: 'ID',
                                          valueField: 'Name',
-                                         order: 24
+                                         order: 99
                                      }
                                  }];
                                                                 

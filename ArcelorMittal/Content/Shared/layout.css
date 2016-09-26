@@ -45,6 +45,10 @@ body{
     height: auto;
 }
 
+.jsgrid-row td{
+    word-break: break-all;
+}
+
 .logo .jsgrid-table img{
     width: 100px;
 }
@@ -438,10 +442,27 @@ button.add{
     width: 220px;
 }
 
+.control-group.large{
+    width: 93%;
+}
+
+.control-group.large .dropdown.form-control{
+    width: 100%;
+}
+
+.control-group.large .dropdown.form-control input.dropdown-input{
+
+    width: 98%!important;
+}
+
 input#filter{
 
     width: 130px!important;
     margin:auto;
+}
+
+.control-group.large .dropdown.form-control input#filter{
+    width:98%!important
 }
 
 .control-group select{
@@ -1284,6 +1305,7 @@ div.odataDiagram .controls{
     width: 150px;
     display: inline-block;
 }
+
 
 
 

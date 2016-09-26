@@ -163,7 +163,7 @@
         $scope.loadingModalData = true;
         $scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
 
-        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label'")];
+        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq 'Использование'")];
 
         if (id) {
 
@@ -309,12 +309,14 @@
         name: 'Status',
         title: $translate.instant('market.grid.labelTemplate.status'),
         order: 3
-    }, {
-        id: 'FileType',
-        name: 'FileType',
-        title: $translate.instant('market.grid.labelTemplate.fileType'),
-        order: 5
-    }, {
+    },
+    //{
+    //    id: 'FileType',
+    //    name: 'FileType',
+    //    title: $translate.instant('market.grid.labelTemplate.fileType'),
+    //    order: 5
+    //},
+    {
         id: 'Data',
         name: 'Data',
         title: $translate.instant('market.grid.labelTemplate.file'),
@@ -602,7 +604,7 @@
         $scope.loadingModalData = true;
         $scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
 
-        indexService.getInfo("Files?$filter=FileType eq 'Excel label'")
+        indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq 'Использование'")
             .then(function (responce) {
 
                 $scope.loadingModalData = false;
@@ -1007,7 +1009,7 @@
                 data: templateData,
                 keyField: 'ID',
                 valueField: 'Name',
-                order: 23
+                order: 99
             }
         }];
 
