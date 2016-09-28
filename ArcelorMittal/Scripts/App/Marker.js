@@ -1285,6 +1285,8 @@
             if ($rootScope.intervalWorkRequest)
                 $interval.cancel($rootScope.intervalWorkRequest);
 
+            $scope.isLoading = true;
+
             indexService.sendInfo('set_StandardMode', {
 
                 EquipmentID: parseInt($scope.currentScaleID) || null
@@ -1295,6 +1297,8 @@
 
                 $scope.sandwichMode = false;
                 $scope.sandwichModeAccepted = false;
+
+                $scope.isLoading = false;
 
                 vmGetLatestWorkRequest($scope.currentScaleID);
             });
@@ -1641,6 +1645,7 @@
             }
 
             $scope.OKLabel = $translate.instant('loadingMsg');
+            $scope.isLoading = true;
 
             indexService.sendInfo('ins_WorkRequestStandart', data)
                         .then(function (response) {
@@ -1648,6 +1653,7 @@
                             $scope.OKLabel = $translate.instant('marker.acceptOrderTask');
                             $scope.disableButtonOKTask = true;
                             $scope.sandwichModeAccepted = $scope.sandwichMode;
+                            $scope.isLoading = false;
                         });
         } else {
 
@@ -1682,12 +1688,14 @@
 
             $scope[label] = $translate.instant('loadingMsg');
 
+            $scope.isLoading = true;
             indexService.sendInfo(url, {
 
                 EquipmentID: parseInt($scope.currentScaleID) || null
             }).then(function (response) {
 
-                $scope[label] = $translate.instant(text)
+                $scope[label] = $translate.instant(text);
+                $scope.isLoading = false;
             });
 
             //if (!$scope.standard && label == 'takeWeightLabel') {
@@ -1723,12 +1731,14 @@
 
     function vmSetStandardMode() {
 
+        $scope.isLoading = true;
         indexService.sendInfo('set_StandardMode', {
 
             EquipmentID: parseInt($scope.currentScaleID) || null
         }).then(function (response) {
 
             $scope.standard = true;
+            $scope.isLoading = false;
 
             if ($scope.sortingMode)
                 $scope.sortingMode = false;
@@ -1816,6 +1826,8 @@
 
             $scope.noHandModeQuantity = false;
 
+            $scope.isLoading = true;
+
             indexService.sendInfo('ins_ManualWeightEntry', {
                 EquipmentID: parseInt($scope.currentScaleID) || null,
                 Quantity: $scope.handModeQuantity
@@ -1828,6 +1840,7 @@
         $scope.toggleModalHandMode = false;
         $scope.noHandModeQuantity = false;
         $scope.handModeQuantity = null;
+        $scope.isLoading = false;
     };
 
     function vmShowOrderChangeModal() {
@@ -1864,11 +1877,15 @@
         } else {
 
             $scope.noNewOrderNumber = false;
+            $scope.isLoading = true;
+
             indexService.sendInfo('upd_MaterialLotProdOrder', {
 
                 PROD_ORDER: $scope.NewOrderNumber,
                 MaterialLotIDs: $scope.MaterialLotIDs
             }).then(function () {
+
+                $scope.isLoading = false;
 
                 $scope.NewOrderNumber = null;
                 $('#changeOrderGrid').jsGrid('loadData', {});
@@ -1893,9 +1910,17 @@
         window.open(url, '_blank');
     };
 
+    $('.oDataForm').on('oDataForm.processing', function () {
+
+        $scope.isLoading = true;
+
+        $scope.$apply();
+    });
+
     //there are events triggered on success and cancel button click in order modal form
     $('#orderForm').on('oDataForm.success', function (e, data) {
 
+        $scope.isLoading = false;
         $scope.disableButtonOKTask = true;
         $scope.isAcceptedOrder = true;
         vmToggleModal(false);
@@ -1908,6 +1933,7 @@
 
     $('#orderForm').on('oDataForm.cancel', function (e) {
 
+        $scope.isLoading = false;
         vmToggleModal(false);
         vmShowLastCommOrderValue();
 
@@ -1916,6 +1942,7 @@
 
     $('#remarkerForm').on('oDataForm.success', function (e) {
 
+        $scope.isLoading = false;
         vmActionsOnExit('remarkerForm', 'isShowReMarkForm');
 
         $scope.$apply();
@@ -1931,6 +1958,8 @@
 
     $('#sortingForm').on('oDataForm.success', function (e) {
 
+        $scope.isLoading = false;
+
         vmCloseModal('toggleModalSort');
         vmActionsOnExit('sortingForm', 'isShowSortingForm');
 
@@ -1942,6 +1971,8 @@
 
     $('#sortingForm').on('oDataForm.cancel', function (e) {
 
+        $scope.isLoading = false;
+
         vmCloseModal('toggleModalSort');
         vmActionsOnExit('sortingForm', 'isShowSortingForm');
 
@@ -1949,6 +1980,8 @@
     });
 
     $('#rejectForm').on('oDataForm.success', function (e) {
+
+        $scope.isLoading = false;
 
         vmCloseModal('toggleModalReject');
         vmActionsOnExit('rejectForm', 'isShowRejectForm');
@@ -1961,6 +1994,8 @@
 
     $('#rejectForm').on('oDataForm.cancel', function (e) {
 
+        $scope.isLoading = false;
+
         vmCloseModal('toggleModalReject');
         vmActionsOnExit('rejectForm', 'isShowRejectForm');
 
@@ -1968,6 +2003,8 @@
     });
 
     $('#separateForm').on('oDataForm.success', function (e) {
+
+        $scope.isLoading = false;
 
         vmCloseModal('toggleModalSeparate');
         vmActionsOnExit('separateForm', 'isShowSeparateForm');
@@ -1979,6 +2016,8 @@
     })
 
     $('#separateForm').on('oDataForm.cancel', function (e) {
+
+        $scope.isLoading = false;
 
         vmCloseModal('toggleModalSeparate');
         vmActionsOnExit('separateForm', 'isShowSeparateForm');
@@ -2354,6 +2393,7 @@
 
         var url = 'v_MaterialLotReport?$filter=SideID eq {0} and PROD_DATE ge {1} and PROD_DATE le {2}'
                             .format($state.params.side, dateStart, dateEnd);
+
 
         indexService.getInfo(url).then(function (responce) {
 

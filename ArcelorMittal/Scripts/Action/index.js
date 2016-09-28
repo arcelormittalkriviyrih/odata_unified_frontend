@@ -255,6 +255,9 @@
                         alert(translates.fillRequired);
                         return false;
                     }
+
+                    self.trigger('oDataForm.processing');
+
                     
                     vmCallAction(procedureName)
 

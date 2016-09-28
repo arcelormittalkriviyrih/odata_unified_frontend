@@ -20,13 +20,7 @@
             },
             onExit: function ($state, $injector) {
 
-                $("#files").jsGrid({
-
-                    onDataLoading: function (args) {
-
-                        args.grid.table = null;
-                    }
-                });
+                vmClearGridFilter($("#files"));
             }
         })
         .state('app.Market.Logotypes', {
@@ -39,13 +33,7 @@
             },
             onExit: function ($state, $injector) {
 
-                $("#files").jsGrid({
-
-                    onDataLoading: function (args) {
-
-                        args.grid.table = null;
-                    }
-                });
+                vmClearGridFilter($("#files"));
             }
         })
 }])
@@ -214,7 +202,16 @@
         $scope.isShowModal = expr;
     }
 
+    $('#orderForm').on('oDataForm.processing', function () {
+
+        $scope.isLoading = true;
+
+        $scope.$apply();
+    });
+
     $('#orderForm').on('oDataForm.success', function (e, data) {
+
+        $scope.isLoading = false;
 
         vmToggleModal(false);
 
@@ -237,36 +234,42 @@
 
     $('#orderForm').on('oDataForm.procedureProcessing', function (e) {
 
+        $scope.isLoading = true;
         $scope.processingTestPrint = true;
         $scope.$apply();
     });
 
     $('#orderForm').on('oDataForm.procedureProcessed', function (e) {
 
+        $scope.isLoading = false;
         $scope.processingTestPrint = false;
         $scope.$apply();
     });
 
     $('#orderForm').on('oDataForm.procedureFailed', function (e) {
 
+        $scope.isLoading = false;
         $scope.processingTestPrint = false;
         $scope.$apply();
     });
 
     $('#orderForm').on('oDataForm.outerDataReceipt', function (e) {
 
+        $scope.isLoading = true;
         $scope.processingOuterDataReceipt = true;
         $scope.$apply();
     });
 
     $('#orderForm').on('oDataForm.OuterDataReceived', function (e) {
 
+        $scope.isLoading = false;
         $scope.processingOuterDataReceipt = false;
         $scope.$apply();
     });
 
     $('#orderForm').on('oDataForm.OuterDataReceiptFailed', function (e) {
 
+        $scope.isLoading = false;
         $scope.processingOuterDataReceipt = false;
         $scope.$apply();
     });
@@ -566,18 +569,31 @@
 
     $formCreate.on('submit', function (e) {
 
+        $scope.isLoading = true;
+
         vmSubmitForm(e, this, vmLocationReload);
+
+        $scope.$apply();
     });
 
     $fileUploadForm.on('submit', function (e) {
-       
+        
+        $scope.isLoading = true;
+
         vmSubmitForm(e, this, vmLocationReload);
+
+        $scope.$apply();
     });
 
     $filePropertiesForm.find('button[type=submit]').click(function (e) {
 
         e.preventDefault();
+
+        $scope.isLoading = true;
+
         vmSubmitForm(e, $filePropertiesForm, vmUpdateFileProperties);
+
+        $scope.$apply();
     });
 
     function vmUpdateFileProperties(){
@@ -585,7 +601,7 @@
         var data = {
             Status: $filePropertiesForm.find('[name="Status"]').val(),
             Name: $filePropertiesForm.find('[name="Name"]').val()
-        };
+        };       
         
         $.ajax({
 

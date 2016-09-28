@@ -531,3 +531,15 @@ function vmClearStyle(elem) {
     elem.removeAttr('style');
 };
 
+function vmClearGridFilter(gridContainer) {
+
+    gridContainer.jsGrid({
+
+        onDataLoading: function (args) {
+
+            args.grid.table = null;
+        }
+    })
+
+};
+
