@@ -17,17 +17,37 @@
             params: {
 
                 fileType: 'Excel label'
+            },
+            onExit: function ($state, $injector) {
+
+                $("#files").jsGrid({
+
+                    onDataLoading: function (args) {
+
+                        args.grid.table = null;
+                    }
+                });
             }
         })
-    .state('app.Market.Logotypes', {
+        .state('app.Market.Logotypes', {
 
-        url: '/logotypes',
-        templateUrl: 'Static/market/labeltemplate.html',
-        controller: 'marketLabelTemplateCtrl',
-        params: {
-            fileType: 'Image'
-        }
-    })
+            url: '/logotypes',
+            templateUrl: 'Static/market/labeltemplate.html',
+            controller: 'marketLabelTemplateCtrl',
+            params: {
+                fileType: 'Image'
+            },
+            onExit: function ($state, $injector) {
+
+                $("#files").jsGrid({
+
+                    onDataLoading: function (args) {
+
+                        args.grid.table = null;
+                    }
+                });
+            }
+        })
 }])
 
 .value('sapUrl', sapUrl)
@@ -143,7 +163,7 @@
         $scope.loadingModalData = true;
         $scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
 
-        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label'")];
+        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")];
 
         if (id) {
 
@@ -289,12 +309,14 @@
         name: 'Status',
         title: $translate.instant('market.grid.labelTemplate.status'),
         order: 3
-    }, {
-        id: 'FileType',
-        name: 'FileType',
-        title: $translate.instant('market.grid.labelTemplate.fileType'),
-        order: 5
-    }, {
+    },
+    //{
+    //    id: 'FileType',
+    //    name: 'FileType',
+    //    title: $translate.instant('market.grid.labelTemplate.fileType'),
+    //    order: 5
+    //},
+    {
         id: 'Data',
         name: 'Data',
         title: $translate.instant('market.grid.labelTemplate.file'),
@@ -523,6 +545,10 @@
 
         $inputCreate.val(filenameCreate);
         $inputEdit.val(filenameEdit);
+
+        $scope.showSubmitButtonUpload = true;
+
+        $scope.$apply();
     }
 
     function vmResetForm(formObj) {
@@ -578,7 +604,7 @@
         $scope.loadingModalData = true;
         $scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
 
-        indexService.getInfo("Files?$filter=FileType eq 'Excel label'")
+        indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")
             .then(function (responce) {
 
                 $scope.loadingModalData = false;
@@ -983,7 +1009,7 @@
                 data: templateData,
                 keyField: 'ID',
                 valueField: 'Name',
-                order: 23
+                order: 99
             }
         }];
 

@@ -83,12 +83,12 @@
                     case 'combo':
 
 
-                        controlsControlGroup.append(dropBoxTmpl.format('selectedComboTextValue', 'selectedComboDataValue', 'oDataFormCombo'));
+                        controlsControlGroup.addClass('large').append(dropBoxTmpl.format('selectedComboTextValue', 'selectedComboDataValue', 'oDataFormCombo'));
 
                         var selectedComboTextValue = $('#selectedComboTextValue');
                         var selectedComboDataValue = $('#selectedComboDataValue');
 
-                        var ul = $('#oDataFormCombo');
+                        var ul = controlsControlGroup.find('#oDataFormCombo');
 
                         var data = properties.data.map(function (item) {
 
@@ -96,6 +96,12 @@
                                 key: item[properties.keyField],
                                 value: item[properties.valueField]
                             };
+                        }).sort(function (a, b) {
+                            if (a.value < b.value)
+                                return -1;
+                            if (a.value > b.value)
+                                return 1;
+                            return 0;
                         }).forEach(function (item) {
                                 
                             if (item.value == '')
@@ -180,7 +186,8 @@
                             return item.ID == field.properties.defaultValue;
                         });
                         
-                        field.input.siblings('.dropdown-input').val(defaultValue.Name);
+                        if (defaultValue)
+                            field.input.siblings('.dropdown-input').val(defaultValue.Name);
                     }
 
                     field.input.val(field.properties.defaultValue);

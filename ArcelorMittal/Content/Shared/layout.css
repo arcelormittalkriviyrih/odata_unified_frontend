@@ -45,6 +45,10 @@ body{
     height: auto;
 }
 
+.jsgrid-row td{
+    word-break: break-all;
+}
+
 .logo .jsgrid-table img{
     width: 100px;
 }
@@ -174,6 +178,7 @@ input.dropdown-input{
     width: 92%!important;
     height: 25px;
     margin-top: -2px;
+    background: #fff;
 }
 
 .inputfile {
@@ -437,10 +442,27 @@ button.add{
     width: 220px;
 }
 
+.control-group.large{
+    width: 93%;
+}
+
+.control-group.large .dropdown.form-control{
+    width: 100%;
+}
+
+.control-group.large .dropdown.form-control input.dropdown-input{
+
+    width: 98%!important;
+}
+
 input#filter{
 
     width: 130px!important;
     margin:auto;
+}
+
+.control-group.large .dropdown.form-control input#filter{
+    width:98%!important
 }
 
 .control-group select{
@@ -588,7 +610,8 @@ div.errorHandle label{
 .scaleContainer.active{
     color: #555555;
     text-decoration: none;
-    background: #e5e5e5;
+    /*background: #e5e5e5;*/
+    background: #b3b0b0;
     -webkit-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
     -moz-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
     box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
@@ -642,12 +665,10 @@ h4.scalesName{
 
 .isStableScalesIndicator{
 
-    position:relative;
+    position:absolute;
+    top:40px;
     width:0;
     height:0;
-    display:inline-block;
-    vertical-align: top;
-    margin-left: 0;
     border-left: 15px solid #000;
     border-right: 15px solid #000;
     border-bottom: 15px solid #000;
@@ -662,6 +683,12 @@ h4.scalesName{
     background: #eee;
     top: 0px;
     left: -15px;
+}
+
+.weightZeroIndicator{
+    position:absolute;
+    top:38px;
+    left: 50px;
 }
 
 .scaleInfoContainer{
@@ -694,18 +721,24 @@ h4.scalesName{
 
 .scaleInfo .controls{
     position: absolute;
-    bottom: 10px;
-    width: 94%;
+    bottom: 10px;   
     text-align: center;
+}
+
+.scaleInfo .controls button{
+    margin-bottom: 5px;
+}
+
+.scaleInfo:nth-child(1) .controls{
+    width: 100%;
+}
+
+.scaleInfo:nth-child(2) .controls{
+width: 94%;
 }
 
 .scaleInfo:nth-child(2) .controls button{
     width: 49%;
-    margin-bottom: 5px;
-}
-
-.scaleInfo:nth-child(2) .controls button:last-child{
-    margin-bottom: 0;
 }
 
 .section{
@@ -738,7 +771,7 @@ div.controlsRow{
     font-size: 0;
     position: relative;
     height: 30px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     display: table;
     width: 100%;
 }
@@ -761,11 +794,42 @@ div.captionTask{
     vertical-align: middle;
 } 
 
+div.captionTask.profile{
+    width: 27%;
+}
+
 div.controlTask{
     width: 40%;
     text-align: right;
     line-height: 12px;
     font-size: 12px;
+}
+
+div.controlTask.profile{
+    margin-left: 1px;
+}
+
+div.controlTask.profile .dropdown.form-control{
+    width:222px;
+}
+
+.dropdown.form-control.disabled .dropdown-input{
+    background: #eee;
+}
+
+div.controlTask.singleRight{
+    width: 100%;
+    text-align: left;
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 10px;
+}
+
+div.controlTask.singleLeft{
+    width: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right; 
 }
 
 div.controlTask div.disableDropDown{
@@ -777,7 +841,7 @@ div.controlTask div.disableDropDown{
     z-index: 11;
 }
 
-div.controlTask input, div.controlTask .dropdown{
+div.controlTask input[type="text"], div.controlTask .dropdown{
     width: 66px;
     padding: 3px 5px;
     margin-bottom: 0;
@@ -799,18 +863,34 @@ div.controlTask .dropdown-toggle .dropdown-input {
     left: -1px;
     top: -1px;
     height: 28px;
-    width: 46px!important;
+    width: 45px!important;
+    color: #555;
+    text-align: left;
 }
 
-.dropdown-toggle .dropdown-input[disabled]{
+div.controlTask.profile .dropdown-toggle .dropdown-input{
+    width: 200px!important;
+}
+
+.dropdown-toggle .dropdown-input[readonly]{
     background: #fff;
+    color: #555;
 }
 
 .dropdown.form-control.disabled,
-
-.dropdown.form-control.disabled .dropdown-toggle .dropdown-input[disabled]
+.dropdown.form-control.disabled .dropdown-toggle .dropdown-input[readonly]
 {
     background: #eee;
+}
+
+.controlTask.singleRight.checkbox-inline input,
+.controlTask.singleLeft.checkbox-inline input{
+    margin:-1px 0 0 0;
+}
+
+.controlTask.singleRight.checkbox-inline span,
+.controlTask.singleLeft.checkbox-inline span{
+    margin-left: 15px;
 }
 
 /* task (right part)*/
@@ -899,11 +979,29 @@ div.controlTask .dropdown-toggle .dropdown-input {
 }
 
 .scaleContainer.active .jqplot-series-shadowCanvas{
-    background: #e5e5e5;
+    /*background: #e5e5e5;*/
+    background: #b3b0b0;
 }
 
 .scaleContainer .jqplot-series-shadowCanvas{
     background: #f2f2f2;
+}
+
+.scaleContainer .autoManuMsg{
+    top:6px!important
+}
+
+.buttonsGroup{
+    position:absolute;
+    width: 94%;
+}
+
+.buttonsGroup.top{
+    top:10px;
+}
+
+.buttonsGroup.bottom{
+    bottom:10px;
 }
 
 /*monitor*/
@@ -1208,6 +1306,16 @@ div.odataDiagram .controls{
     display: inline-block;
 }
 
+.dropdown-menu .filter-field{
+    z-index:2000;
+    min-width: 200px;
+}
+
+.dropdown-menu .filter-field + .menu-list{
+    min-width: 200px;
+    list-style: none;
+    padding: 0;
+}
 
 
 

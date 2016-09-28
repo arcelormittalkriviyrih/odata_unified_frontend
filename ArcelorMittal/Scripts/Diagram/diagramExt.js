@@ -346,34 +346,7 @@
                 }
                 var diagramItem = vmState(x, y, item.Description);
 
-                var optionWrapperFrom = $('<li />');
-                var optionWrapperTo = $('<li />');
-
-                var optionFrom = $('<a />').attr({
-                    'href': '',
-                    'data-id': item.ID
-                }).text(item.Description).appendTo(optionWrapperFrom)
-                
-                var optionTo = optionFrom.clone().appendTo(optionWrapperTo);
-
-                optionFrom.on('click', function (e) {
-
-                    e.preventDefault();
-
-                    $('#fromNodeVal').val($(this).text());
-                    $('#fromNodeKey').val($(this).attr('data-id'));
-                });
-
-                optionTo.on('click', function (e) {
-
-                    e.preventDefault();
-
-                    $('#toNodeVal').val($(this).text());
-                    $('#toNodeKey').val($(this).attr('data-id'));
-                });
-
-                fromNodeCombo.append(optionWrapperFrom);
-                toNodeCombo.append(optionWrapperTo);
+                vmBuildNodeListCombo(item);
 
                 diagramNodes.push({
                     item: diagramItem,
@@ -401,7 +374,7 @@
 
         function vmBuildLinks(data, diagramNodes) {
 
-            var vertice = null;
+            var arrow = null;
 
             data.forEach(function (item) {
 
@@ -421,16 +394,16 @@
 
                         var coordinates = fromNode.coordinates;
 
-                        vertice = vmLink(fromNode.item, toNode.item, item.Description, [{ x: coordinates.x - 50, y: coordinates.y }, { x: coordinates.x + 50, y: coordinates.y - 50 }]);
+                        arrow = vmLink(fromNode.item, toNode.item, item.Description, [{ x: coordinates.x - 50, y: coordinates.y }, { x: coordinates.x + 50, y: coordinates.y - 50 }]);
 
                     }
                     else 
-                        vertice = vmLink(fromNode.item, toNode.item, item.Description);
+                        arrow = vmLink(fromNode.item, toNode.item, item.Description);
                     
                 } else {
 
                     var coordinates = JSON.parse(item.json);
-                    vertice = vmLink(fromNode.item, toNode.item, item.Description, coordinates);
+                    arrow = vmLink(fromNode.item, toNode.item, item.Description, coordinates);
                 }         
 
                 diagramArrows.push({
@@ -439,7 +412,7 @@
                     description: item.Description,
                     fromNode: fromNode.ID,
                     toNode: toNode.ID,
-                    item: vertice
+                    item: arrow
                 })
 
             });
@@ -447,8 +420,8 @@
 
         function vmCreateNode() {
 
-            vmCreateItem(options.serviceUrl + 'v_DiagramNode_insert', {
-
+            vmCreateItem(urlDiagramNodes, {
+ 
                 Description: 'New',
                 json: JSON.stringify({
 
@@ -458,8 +431,22 @@
                 DiagramID: options.diagramID
             }).then(function (response) {
 
-                alert(translates.nodeCreated);
-                vmRefreshDiagram(paperWidth, paperHeight);
+                var newNodeCoordinates = JSON.parse(response.json);
+
+                var newItem = vmState(newNodeCoordinates.x, newNodeCoordinates.y, response.Description);
+
+                diagramNodes.push({
+                    item: newItem,
+                    ID: response.ID,
+                    DiagramID: response.DiagramID,
+                    description: response.Description,
+                    coordinates: {
+                        x: newNodeCoordinates.x,
+                        y: newNodeCoordinates.y
+                    }
+                });
+
+                vmBuildNodeListCombo(response)
             });
             
         };
@@ -481,19 +468,38 @@
 
             if (fromNode && toNode) {
 
-                vmCreateItem(serviceUrl + 'v_DiagramConnection_insert', {
+                vmCreateItem(urlDiagramConnections, {
 
                     FromNodeID: fromNodeVal,
                     ToNodeID: toNodeVal,
                     DiagramID: options.diagramID,
                     json: null,
                     Description: 'New'
-                }).then(function () {
-
-                    alert(translates.linkCreated);
+                }).then(function (response) {
 
                     vmDecline(showCreateLinkForm, showCreateLinkFormBtn);
-                    vmRefreshDiagram(paperWidth, paperHeight);
+
+                    var fromNode = diagramNodes.find(function (x) {
+
+                        return x.ID == response.FromNodeID;
+                    });
+
+                    var toNode = diagramNodes.find(function (x) {
+
+                        return x.ID == response.ToNodeID;
+                    });
+
+                    var newArrow = vmLink(fromNode.item, toNode.item, response.Description);
+
+                    diagramArrows.push({
+
+                        ID: response.ID,
+                        description: response.Description,
+                        fromNode: response.FromNodeID,
+                        toNode: response.ToNodeID,
+                        item: newArrow
+                    })
+
                 });
             };
                 
@@ -543,6 +549,41 @@
             graph.addCell(cell);
             return cell;
         };
+
+        function vmBuildNodeListCombo(data) {
+
+            var fromNodeCombo = $(fromNodeCtrl).find('ul');
+            var toNodeCombo = $(toNodeCtrl).find('ul');
+
+            var optionWrapperFrom = $('<li />');
+            var optionWrapperTo = $('<li />');
+
+            var optionFrom = $('<a />').attr({
+                'href': '',
+                'data-id': data.ID
+            }).text(data.Description).appendTo(optionWrapperFrom);
+
+            var optionTo = optionFrom.clone().appendTo(optionWrapperTo);
+
+            optionFrom.on('click', function (e) {
+
+                e.preventDefault();
+
+                $('#fromNodeVal').val($(this).text());
+                $('#fromNodeKey').val($(this).attr('data-id'));
+            });
+
+            optionTo.on('click', function (e) {
+
+                e.preventDefault();
+
+                $('#toNodeVal').val($(this).text());
+                $('#toNodeKey').val($(this).attr('data-id'));
+            });
+
+            fromNodeCombo.append(optionWrapperFrom);
+            toNodeCombo.append(optionWrapperTo);
+        }
 
         function vmChangeArrowEnd(arrow, newEnd, reConnectionType) {
 

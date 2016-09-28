@@ -4,21 +4,36 @@
 
 <div class="dropdown form-control"
      ng-class="{'wrong': wrongExpr, 'disabled': showDisableDiv && !standard}">
-
     <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         <input type="text"
                class="dropdown-input"
-               ng-model="description" disabled/>
+               ng-model="description" readonly/>
         <input type="hidden" ng-model="model" />
-        <span class="caret"></span>
+        <span class="caret" ng-hide="showDisableDiv && !standard"></span>
     </div>
     <ul class="dropdown-menu scrollable-menu" id="status" aria-labelledby="dropdownMenu1">
-        <li ng-repeat="item in iterator">
+
+        <li>
+            <input type="text"
+                   class="form-control" id="filter"
+                   ng-show="showFilter"
+                   ng-model="filterCombo">
+        </li>
+
+        <li ng-if="showFilter" ng-show="filterCombo == null || filterCombo == '' || item.Description.indexOf(filterCombo) > -1" ng-repeat="item in iterator | orderBy: 'Description'">
             <a href="#"
                ng-click="changeDropBoxValue(item); methodOnClick(item); $event.preventDefault();">
                 {{item.Description || item.Value || item}}
             </a>
             
+        </li>
+
+        <li ng-if="!showFilter" ng-repeat="item in iterator">
+            <a href="#"
+               ng-click="changeDropBoxValue(item); methodOnClick(item); $event.preventDefault();">
+                {{item.Description || item.Value || item}}
+            </a>
+
         </li>
     </ul>
 
