@@ -173,6 +173,7 @@
     <Content Include="Content\Tree\tree.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
+    <Content Include="Scripts\App\Automationlab.js" />
     <Content Include="Scripts\App\Resources.js" />
     <Content Include="Scripts\Vendor\backbone.js" />
     <Content Include="Scripts\Diagram\diagramExt.js" />
@@ -246,6 +247,9 @@
     <Content Include="Scripts\Vendor\jsgrid.min.js" />
     <Content Include="Scripts\TreeGrid\treeExt.js" />
     <Content Include="Scripts\Vendor\jstree.js" />
+    <Content Include="Static\automationlab\acceptance.html" />
+    <Content Include="Static\automationlab\index.html" />
+    <Content Include="Static\automationlab\repair.html" />
     <Content Include="Static\error.html" />
     <Content Include="Static\access_error.html" />
     <Content Include="Static\errorlog.html" />

@@ -121,6 +121,18 @@
                 }
             })
 
+            .state('app.AutomationLab', {
+
+                 url: '/AutomationLab',
+                 templateUrl: 'Static/automationlab/index.html',
+                 controller: 'AutomationlabCtrl',
+                onEnter: function ($state, roles) {
+
+                    if (!vmIsAuthorized('AutomationLab', roles))
+                     $state.go('app.error', { code: 'unauthorized' });
+                 }   
+             })
+
             .state('app.WorkshopSpecs', {
 
                 url: '/workshopspecs',
