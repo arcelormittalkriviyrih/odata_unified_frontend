@@ -278,6 +278,7 @@
         loadingMsg: 'Loading...',
         processing: 'Processing...',
         calculatingMsg: 'Calculating...',
+        errorConnection: 'There is no internet connection!',
         grid: {
             common: {
 
@@ -567,6 +568,7 @@
         loadingMsg: 'Загрузка...',
         processing: 'Выполнение...',
         calculatingMsg: 'Подсчет...',
+        errorConnection: 'Нет интернет-соединения!',
         grid: {
             common: {
 
@@ -859,6 +861,7 @@
         loadingMsg: 'Завантаження...',
         processing: 'Виконання...',
         calculatingMsg: 'Підрахунок...',
+        errorConnection: "Немає інтернет-з'єднання!",
         grid: {
             common: {
 

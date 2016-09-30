@@ -6,26 +6,37 @@
 
         'requestError': function (rejection) {
 
-            $injector.get('$state').go('errorLog', {
+            if (rejection.status <= 0 || rejection.status >= 12000)
+                window.location.reload();
+            else {
 
-                error: rejection,
-                code: rejection.status,
-                back: $injector.get('$state').current.name,
-                responseText: rejection.data
-            }, { reload: true });
-            return $q.reject(rejection);
+                $injector.get('$state').go('errorLog', {
+
+                    error: rejection,
+                    code: rejection.status,
+                    back: $injector.get('$state').current.name,
+                    responseText: rejection.data
+                }, { reload: true });
+
+                return $q.reject(rejection);
+            }                        
         },
 
         'responseError': function (rejection) {
 
-            $injector.get('$state').go('errorLog', {
+            if (rejection.status <= 0 || rejection.status >= 12000)
+                window.location.reload();
+            else {
 
-                error: rejection,
-                code: rejection.status,
-                back: $injector.get('$state').current.name,
-                responseText: rejection.data
-            }, { reload: true });
-            return $q.reject(rejection);
+                $injector.get('$state').go('errorLog', {
+
+                    error: rejection,
+                    code: rejection.status,
+                    back: $injector.get('$state').current.name,
+                    responseText: rejection.data
+                }, { reload: true });
+                return $q.reject(rejection);
+            }
         }
     }
 }])
@@ -434,7 +445,8 @@
             method: 'post',
             url: serviceUrl + url,
             data: data,
-            withCredentials: withCredentials
+            withCredentials: withCredentials,
+            timeout: 15000
 
         });
 

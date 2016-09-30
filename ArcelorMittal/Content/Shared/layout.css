@@ -40,6 +40,10 @@ body{
     margin-bottom: 0;
 }
 
+.jsgrid-table{
+    word-break:break-all;
+}
+
 .jsgrid-table img{
     width: 130px;
     height: auto;

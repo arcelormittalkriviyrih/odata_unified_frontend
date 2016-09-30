@@ -370,7 +370,7 @@
 
                 var data = response.value;
 
-                $(self._container).trigger('oDataGrid.dataLoadedSuccessfull');
+                $(self._container).trigger('oDataGrid.dataLoadedSuccessfull', {data: data});
 
                 return {
                     itemsCount: response['@odata.count'],

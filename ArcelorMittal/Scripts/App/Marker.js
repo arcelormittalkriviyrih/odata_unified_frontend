@@ -1467,6 +1467,7 @@
             },
             translates: {
 
+                errorConnection: $translate.instant('errorConnection'),
                 fillRequired: $translate.instant('marker.errorMessages.fillRequired')
             },
             fields: fields
@@ -1913,6 +1914,13 @@
     $('.oDataForm').on('oDataForm.processing', function () {
 
         $scope.isLoading = true;
+
+        $scope.$apply();
+    });
+
+    $('.oDataForm').on('oDataForm.failed', function () {
+
+        $scope.isLoading = false;
 
         $scope.$apply();
     });

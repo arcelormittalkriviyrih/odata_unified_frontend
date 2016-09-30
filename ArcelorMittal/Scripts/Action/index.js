@@ -274,7 +274,11 @@
                                 fields: _fields
                             })
                         })
-                        .fail(handleError);
+                        .fail(function(data){
+                        
+                            handleError(data, options.translates);
+                            self.trigger('oDataForm.failed');
+                        });
 
                    
                     // prevent default action
@@ -317,7 +321,7 @@
                                                                         }).fail(function(err){
                                                                         
                                                                             self.trigger('oDataForm.procedureFailed');
-                                                                            handleError(err);
+                                                                            handleError(err, options.translates);
 
                                                                         });
                                                                });
@@ -376,7 +380,7 @@
 
                 self.trigger('oDataForm.OuterDataReceiptFailed');
 
-                handleError(err);
+                handleError(err, options.translates);
             })
         }
 
@@ -407,7 +411,8 @@
                 url: url + procedure,
                 type: 'POST',
                 data: JSON.stringify(data),
-                contentType: "application/json"
+                contentType: "application/json",
+                timeout: 15000
             })
         };
         
