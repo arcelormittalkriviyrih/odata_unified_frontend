@@ -1,0 +1,50 @@
+﻿<div class="container loading" ng-show="$root.showLoadingState">
+
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
+    </div>
+
+</div>
+
+
+
+<div class="row col-md-12" ng-show="!$root.showLoadingState">
+     <div class="col-md-12">
+         <button class="add btn btn-default"
+            ng-click="vmToggleModal(true)">
+        Add
+         </button>
+     </div>
+     <div class="treeContainer col-md-4">
+        <div id="hierarchy_material_class">
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="gridWrapper">
+            <div class="disable" id="materialDefinitionDisable">
+
+            </div>
+
+            <div id="material_definition"></div>
+        </div>
+        <div class="gridWrapper">
+            <div class="disable" id="materialDefinitionPropertyDisable">
+
+            </div>
+
+            <div id="material_definition_property"></div>
+        </div>
+    </div>
+    
+
+</div>
+
+ <div class="black-wrapper" ng-class="{'show': isShowModal}" ng-show="isShowModal">
+        <div class="modal additional">
+
+            
+
+        </div>
+    </div>
+
