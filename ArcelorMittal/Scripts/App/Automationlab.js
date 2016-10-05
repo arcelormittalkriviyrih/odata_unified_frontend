@@ -33,163 +33,193 @@
 
 .controller('AutomationLabacceptanceCtrl', ['$scope', '$translate', 'indexService', '$q', function ($scope, $translate, indexService, $q) {
 
-   
+    $materialDefinitionDisable = $('#materialDefinitionDisable').show();
+    //$materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
+
+    //$hierarchyMaterialClass = $('#hierarchy_material_class').empty();
+
+    $('div#material_definition').jsGrid({
+        height: "500px",
+        width: "100%",
+
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 10,
+        rowClick: function (args) {
+
+            //vmActiveRow(args);
+
+            //$materialDefinitionPropertyDisable.hide();
+
+            
+        },
+
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'v_AcceptanceMaterial',
+
+        fields: [{
+            //id: 'FactoryNumber',
+            name: 'FactoryNumber',
+            title: 'Factory Number',
+            order: 1
+        }, {
+            //id: 'Description',
+            name: 'Description',
+            title: 'Description',
+            order: 2
+        }, {
+           // id: 'Status',
+            name: 'Status',
+            title: 'Status',
+            order: 3
+        },{    
+           // id: 'Location',
+            name: 'Location',
+            title: 'Location',
+            order: 4
+        }],
+
+        controlProperties: {
+            type: 'control',
+            editButton: false,
+            deleteButton: false,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1',
+        order: 'Description'
+    });
 }])
+
+
+
 
 .controller('AutomationLabmaterialCtrl', ['$scope', '$translate', 'indexService', '$q', 'marketService', '$rootScope', function ($scope, $translate, indexService, $q, marketService, $rootScope) {
 
- 
-    $scope.orderDetails = [];
+     $scope.orderDetails = [];
 
-    $scope.isShowModal = false;
-    $scope.toggleModal = vmToggleModal;
+     $scope.isShowModal = false;
+     $scope.toggleModal = vmToggleModal;
 
-    $scope.createForm = vmCreateForm;
-    $scope.deleteRow = vmDeleteRow;
+     $scope.createForm = vmCreateForm;
+     $scope.deleteRow = vmDeleteRow;
 
-    $scope.loadingModalData = false;
+     $scope.loadingModalData = false;
+    
 
-  
+     function vmCreateForm(type, procedure, id, keyField) {
 
-    function vmCreateForm(type, procedure, id, keyField) {
+         vmToggleModal(true);
 
-        vmToggleModal(true);
+         //$scope.loadingModalData = true;
+         //$scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
 
-        $scope.loadingModalData = true;
-        $scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
+         //var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")];
 
-        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")];
+         //if (id) {
 
-        
-       
-        //if (id) {
+         //    oDataAPI.push(indexService.getInfo('v_OrderPropertiesAll?$filter=OperationsRequest eq ({0})'.format(id)))
+         //}
 
-        //    oDataAPI.push(indexService.getInfo('v_OrderPropertiesAll?$filter=OperationsRequest eq ({0})'.format(id)))
-        //}
+         //$q.all(oDataAPI)
+         //    .then(function (responce) {
 
-        $q.all(oDataAPI)
-            .then(function (responce) {
-                alert(JSON.stringify(responce));
-                $scope.loadingModalData = false;
+         //        $scope.loadingModalData = false;
 
-                var rowData;
+         //        var rowData;
 
-                var templateData = responce[0].data.value;
+         //        var templateData = responce[0].data.value;
 
-                if (id)
-                    rowData = responce[1].data.value;
+         //        if (id)
+         //            rowData = responce[1].data.value;
 
-                marketService.createForm(type, procedure, id, keyField, templateData, rowData);
+         //        marketService.createForm(type, procedure, id, keyField, templateData, rowData);
 
-            });
-    }
+         //    });
+     }
 
 
-    function vmDeleteRow(order) {
+     function vmDeleteRow(order) {
 
-        if (confirm('Are you sure?')) {
+         //if (confirm('Are you sure?')) {
 
-            $.ajax({
-                url: serviceUrl + 'del_Order',
-                type: 'POST',
-                data: JSON.stringify({ COMM_ORDER: order }),
-                contentType: "application/json"
-            }).done(function (result) {
+         //    $.ajax({
+         //        url: serviceUrl + 'del_Order',
+         //        type: 'POST',
+         //        data: JSON.stringify({ COMM_ORDER: order }),
+         //        contentType: "application/json"
+         //    }).done(function (result) {
 
-                $('#orders').jsGrid('loadOdata', {});
-                $("#orderDetails").jsGrid('loadOdata', {
-                    defaultFilter: 'OperationsRequest eq (-1)',
-                });
+         //        $('#orders').jsGrid('loadOdata', {});
+         //        $("#orderDetails").jsGrid('loadOdata', {
+         //            defaultFilter: 'OperationsRequest eq (-1)',
+         //        });
 
-            }).fail(handleError);
-        }
+         //    }).fail(handleError);
+         //}
 
-    }
+     }
 
-    function vmToggleModal(expr) {
+     function vmToggleModal(expr) {
 
-        $scope.isShowModal = expr;
-    }
+         $scope.isShowModal = expr;
+     }
 
-    $('#orderForm').on('oDataForm.processing', function () {
+    
+     //$('#orderForm').on('oDataForm.success', function (e, data) {
 
-        $scope.isLoading = true;
+     //    $scope.isLoading = false;
 
-        $scope.$apply();
-    });
+     //    vmToggleModal(false);
 
-    $('#orderForm').on('oDataForm.success', function (e, data) {
+     //    $('#orders').jsGrid('loadOdata', {
+     //        order: 'id desc'
+     //    });
 
-        $scope.isLoading = false;
+     //    $("#orderDetails").jsGrid('loadOdata', {
+     //        defaultFilter: 'OperationsRequest eq (-1)',
+     //    });
 
-        vmToggleModal(false);
+     //    $scope.$apply();
+     //});
 
-        $('#orders').jsGrid('loadOdata', {
-            order: 'id desc'
-        });
+     $('#orderForm').on('oDataForm.cancel', function (e) { // button Cancel
 
-        $("#orderDetails").jsGrid('loadOdata', {
-            defaultFilter: 'OperationsRequest eq (-1)',
-        });
+         vmToggleModal(false);
+         $scope.$apply();
+     });
 
-        $scope.$apply();
-    });
+    
+     $('#orderForm').on('oDataForm.outerDataReceipt', function (e) {
 
-    $('#orderForm').on('oDataForm.cancel', function (e) {
+         $scope.isLoading = true;
+         $scope.processingOuterDataReceipt = true;
+         $scope.$apply();
+     });
 
-        vmToggleModal(false);
-        $scope.$apply();
-    });
+     $('#orderForm').on('oDataForm.OuterDataReceived', function (e) {
 
-    $('#orderForm').on('oDataForm.procedureProcessing', function (e) {
+         $scope.isLoading = false;
+         $scope.processingOuterDataReceipt = false;
+         $scope.$apply();
+     });
 
-        $scope.isLoading = true;
-        $scope.processingTestPrint = true;
-        $scope.$apply();
-    });
+     $('#orderForm').on('oDataForm.OuterDataReceiptFailed', function (e) {
 
-    $('#orderForm').on('oDataForm.procedureProcessed', function (e) {
+         $scope.isLoading = false;
+         $scope.processingOuterDataReceipt = false;
+         $scope.$apply();
+     });
 
-        $scope.isLoading = false;
-        $scope.processingTestPrint = false;
-        $scope.$apply();
-    });
-
-    $('#orderForm').on('oDataForm.procedureFailed', function (e) {
-
-        $scope.isLoading = false;
-        $scope.processingTestPrint = false;
-        $scope.$apply();
-    });
-
-    $('#orderForm').on('oDataForm.outerDataReceipt', function (e) {
-
-        $scope.isLoading = true;
-        $scope.processingOuterDataReceipt = true;
-        $scope.$apply();
-    });
-
-    $('#orderForm').on('oDataForm.OuterDataReceived', function (e) {
-
-        $scope.isLoading = false;
-        $scope.processingOuterDataReceipt = false;
-        $scope.$apply();
-    });
-
-    $('#orderForm').on('oDataForm.OuterDataReceiptFailed', function (e) {
-
-        $scope.isLoading = false;
-        $scope.processingOuterDataReceipt = false;
-        $scope.$apply();
-    });
-
-
-
-
-
-
-
-
+   
 
     //-----------------------------------------------------------------------------------
     $materialDefinitionDisable = $('#materialDefinitionDisable').show();

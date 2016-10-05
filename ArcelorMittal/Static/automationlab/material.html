@@ -11,10 +11,11 @@
 <div class="row col-md-12" ng-show="!$root.showLoadingState">
      <div class="col-md-12">
          <button class="add btn btn-default"
-            ng-click="vmToggleModal(true)">
-        Add
+         ng-click="createForm('create', 'ins_Order')">
+        {{ 'buttonCreate' | translate }}
          </button>
      </div>
+
      <div class="treeContainer col-md-4">
         <div id="hierarchy_material_class">
         </div>
@@ -42,8 +43,11 @@
 
  <div class="black-wrapper" ng-class="{'show': isShowModal}" ng-show="isShowModal">
         <div class="modal additional">
-
-            
+             <button>
+                
+             </button>
+            </div>    
+           
 
         </div>
     </div>
