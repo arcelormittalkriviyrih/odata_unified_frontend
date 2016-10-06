@@ -125,7 +125,8 @@
                 },
                 translates: {
                     nodeName: $translate.instant('tree.nodeName'),
-                    parentID: $translate.instant('tree.parentID')
+                    parentID: $translate.instant('tree.parentID'),
+                    search: $translate.instant('tree.search')
                 },
                 parentID: {
                     keyField: 'ID',
@@ -292,7 +293,8 @@
             },
             translates: {
                 nodeName: $translate.instant('tree.nodeName'),
-                parentID: $translate.instant('tree.parentID')
+                parentID: $translate.instant('tree.parentID'),
+                search: $translate.instant('tree.search')
             },
             disableControls: true
         });
@@ -487,7 +489,8 @@
             },
             translates: {
                 nodeName: $translate.instant('tree.nodeName'),
-                parentID: $translate.instant('tree.parentID')
+                parentID: $translate.instant('tree.parentID'),
+                search: $translate.instant('tree.search')
             },
             disableControls: true
         });

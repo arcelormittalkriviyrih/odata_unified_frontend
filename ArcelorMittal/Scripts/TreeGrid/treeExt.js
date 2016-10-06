@@ -3,6 +3,7 @@
     jQuery.fn.odataTree = function (options) {
 
         var self = this,
+            to = false, // variable for timeout search
             _data = options.data,
             serviceUrl = options.serviceUrl,
             tableName = options.table,
@@ -21,14 +22,15 @@
             mainButtonsRoot = $('<div />').addClass('mainButtonsControls').appendTo(navigationBar),
             blackWrapper = $('<div />').attr('id', 'modal-' + options.table).addClass('black-wrapper').hide();
             controlsRootModal = $('<div />').addClass('modal treeControls'),
-            createBtn = $('<button />').attr('id', 'createTreeItem')
+            createBtn = $('<button />').attr({'id': 'createTreeItem', 'type': 'button'})
                                         .addClass('btn')
                                         .append('<span class="glyphicon glyphicon-plus"></span>')
                                         .appendTo(mainButtonsRoot)
                                         .on('click', vmShowModal),
             renameBtn = $('<button />').attr({
                                             'id': 'renameNode',
-                                            'disabled': true
+                                            'disabled': true,
+                                            'type': 'button'
                                         })
                                         .addClass('btn')
                                         .append('<span class="glyphicon glyphicon-pencil"></span>')
@@ -36,12 +38,26 @@
                                         .on('click', vmShowModal),
             removeBtn = $('<button />').attr({
                                             'id': 'removeNode',
-                                            'disabled': true
+                                            'disabled': true,
+                                            'type': 'button'
                                         })
                                         .addClass('btn')
                                         .append('<span class="glyphicon glyphicon-remove"></span>')
                                         .appendTo(mainButtonsRoot)
                                         .on('click', vmRemove),
+            searchInputRoot = $('<div />').addClass('col-md-6 pull-right')
+                                          .appendTo(mainButtonsRoot),
+
+            searchInput = $('<input />').addClass('form-control')
+                                        .attr('placeholder', translates.search)
+                                        .keyup(function (e) {
+
+                                            vmSearch(to);
+                                        }).on('cleared', function () {
+
+                                            vmSearch(to);
+                                        })
+                                        .appendTo(searchInputRoot),
 
             nodeNameLabel = $('<label />').text(translates.nodeName)
                                         .appendTo(controlsRootModal),
@@ -58,20 +74,24 @@
                                                     .appendTo(controlsRootModal),
 
             parentNodeTree = $('<div />').attr({
-                'id': 'parentID'
-            }).focus(vmClear)
-                                              .appendTo(controlsRootModal),
+                                            'id': 'parentID'
+                                        }).focus(vmClear)
+                                        .appendTo(controlsRootModal),
 
             additionalFieldsRoot = $('<div />').addClass('additionalFields')
                                         .appendTo(controlsRootModal),
 
             acceptBtn = $('<button />').attr({
-                'id': 'accept'
-            })
+                                            'id': 'accept',
+                                            'type': 'button'
+                                        })
                                         .addClass('btn')
                                         .append('<span class="glyphicon glyphicon-ok"></span>')
                                         .appendTo(controlsRootModal),
-            cancelBtn = $('<button />').attr({ 'id': 'cancel' })
+            cancelBtn = $('<button />').attr({
+                                            'id': 'cancel',
+                                            'type': 'button'
+                                        })
                                         .addClass('btn')
                                         .append('<span class="glyphicon glyphicon-remove"></span>')
                                         .appendTo(controlsRootModal)
@@ -106,10 +126,15 @@
             });
 
             treeRoot.jstree({
-                'core': {
+                "core": {
 
                     'data': treeData,
                     'check_callback': true
+                },
+                "plugins": ["search"],
+                "search" : {
+                    'case_sensitive' : false,
+                    'show_only_matches' : false
                 },
                 check_callback: true
             }).on('changed.jstree', function (e, data) {
@@ -470,6 +495,15 @@
                     break;
             };
         };
+
+        function vmSearch(to) {
+
+            if (to) { clearTimeout(to); }
+            to = setTimeout(function () {
+                var v = searchInput.val();
+                treeRoot.jstree(true).search(v);
+            }, 250);
+        }
 
     };
 
