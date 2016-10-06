@@ -31,13 +31,7 @@
             controller: 'PAlabelCtrl',
             onExit: function ($state, $injector) {
 
-                $("#material_lot").jsGrid({
-
-                    onDataLoading: function (args) {
-
-                        args.grid.table = null;
-                    }
-                });
+                vmClearGridFilter($("#material_lot"));
             }
         })
 
@@ -669,9 +663,12 @@
     $scope.intervalLabelNumbers = [];
     $scope.intervalSelectedRows = [];
     $scope.showGrid = true;
+
     var _data, _filter, _gridObj;
 
     function vmLabelPrintAction(action) {
+
+        $scope.isLoading = true;
 
         var labelList = $scope.labelList.join(',');
 
@@ -679,6 +676,9 @@
 
             MaterialLotIDs: labelList
         }).then(function () {
+
+            $scope.isLoading = false;
+
             vmRefreshInfo();
         });
 
@@ -943,6 +943,8 @@
 
         if ($scope.sapUrl && $scope.login.length > 0 && $scope.password.length > 0) {
 
+            $scope.isLoading = true;
+
             indexService.sendInfo('upd_JobOrderSAPOrderRequest', {
 
                 ServiceURL: $scope.sapUrl,
@@ -950,6 +952,7 @@
                 Password: $scope.password
             }).then(function () {
 
+                $scope.isLoading = false;
                 alert($translate.instant('pa.sap.communicationSuccess'));
             })
         }

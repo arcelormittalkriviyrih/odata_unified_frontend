@@ -86,12 +86,16 @@ jQuery.ajaxSetup({
     global: true,
     error: function (xhr, status, statusText) {
 
+        if (xhr.status <= 0 || xhr.status >=12000)
+            window.location.reload();
+        else {
             $(document).trigger('ajaxError', {
 
                 status: xhr.status,
                 statusText: statusText,
                 responseText: xhr.responseText
-            });      
+            });
+        }                 
     }
 });
 
@@ -262,11 +266,20 @@ function getLastChild(obj, parents, child) {
 };
 
 //method for handling AJAX errors
-function handleError(err) {
+function handleError(err, localization) {
 
-    err = JSON.parse(err.responseText);
-    var msg = getLastChild(err, ['error', 'innererror', 'internalexception'], 'message');
-    alert(msg);
+    if (err.responseText) {
+        err = JSON.parse(err.responseText);
+        var msg = getLastChild(err, ['error', 'innererror', 'internalexception'], 'message');
+        alert(msg);
+    }
+    else {
+        if (localization && localization.errorConnection)
+            alert(localization.errorConnection);
+         else
+            alert('unknown http error');
+    }
+    
 }
 
 function getTimeToUpdate(time, toUTC) {
@@ -529,5 +542,17 @@ function vmSetBlinking() {
 function vmClearStyle(elem) {
 
     elem.removeAttr('style');
+};
+
+function vmClearGridFilter(gridContainer) {
+
+    gridContainer.jsGrid({
+
+        onDataLoading: function (args) {
+
+            args.grid.table = null;
+        }
+    })
+
 };
 

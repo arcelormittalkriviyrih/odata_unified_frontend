@@ -276,7 +276,9 @@
         buttonUpload: 'Select File',
         buttonCancel: 'Cancel',
         loadingMsg: 'Loading...',
+        processing: 'Processing...',
         calculatingMsg: 'Calculating...',
+        errorConnection: 'There is no internet connection!',
         grid: {
             common: {
 
@@ -564,7 +566,9 @@
         buttonUpload: 'Выбрать файл',
         buttonCancel: 'Отмена',
         loadingMsg: 'Загрузка...',
+        processing: 'Выполнение...',
         calculatingMsg: 'Подсчет...',
+        errorConnection: 'Нет интернет-соединения!',
         grid: {
             common: {
 
@@ -855,7 +859,9 @@
         buttonUpload: 'Вибрати файл',
         buttonCancel: 'Відміна',
         loadingMsg: 'Завантаження...',
+        processing: 'Виконання...',
         calculatingMsg: 'Підрахунок...',
+        errorConnection: "Немає інтернет-з'єднання!",
         grid: {
             common: {
 

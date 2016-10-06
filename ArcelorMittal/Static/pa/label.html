@@ -10,11 +10,11 @@
 
     <button class="btn add btn-default"
             ng-click="labelPrintAction('upd_JobOrderPrintLabelReprint')">
-        {{ 'pa.LabelButtons.print' | translate }}
+        {{'pa.LabelButtons.print' | translate}}
     </button>
     <button class="btn add btn-default"
             ng-click="labelPrintAction('upd_JobOrderPrintLabelCancel')">
-        {{ 'pa.LabelButtons.cancelPrint' | translate }}
+        {{'pa.LabelButtons.cancelPrint' | translate}}
     </button>
     <button class="btn add btn-default"
             ng-click="refreshInfo()">
@@ -45,5 +45,15 @@
             </div>
         </div>
     </div>
+</div>
+
+<div style="position:fixed; top:0; left:0; width: 100%; height: 100%; z-index:2000;"
+     class="container loading"
+     ng-show="isLoading">
+
+    <div class="loading-msg">
+        <h3>{{'processing' | translate}}</h3>
+    </div>
+
 </div>
 

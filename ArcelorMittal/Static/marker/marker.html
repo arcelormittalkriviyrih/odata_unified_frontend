@@ -587,7 +587,7 @@
         <h4>{{ 'marker.modalCaptions.order' | translate }}</h4>
 
         <div class="formWrapper">
-            <form id="orderForm" novalidate></form>
+            <form id="orderForm" class="oDataForm" novalidate></form>
         </div>
 
     </div>
@@ -613,7 +613,7 @@
 
 
         <div class="formWrapper" ng-show="isShowReMarkForm">
-            <form id="remarkerForm" novalidate></form>
+            <form id="remarkerForm" class="oDataForm" novalidate></form>
         </div>
     </div>
 </div>
@@ -638,7 +638,7 @@
 
 
         <div class="formWrapper" ng-show="isShowSortingForm">
-            <form id="sortingForm" novalidate></form>
+            <form id="sortingForm" class="oDataForm" novalidate></form>
         </div>
     </div>
 </div>
@@ -663,7 +663,7 @@
 
 
         <div class="formWrapper" ng-show="isShowRejectForm">
-            <form id="rejectForm" novalidate></form>
+            <form id="rejectForm" class="oDataForm" novalidate></form>
         </div>
     </div>
 </div>
@@ -700,7 +700,7 @@
 
 
         <div class="formWrapper" ng-show="isShowSeparateForm">
-            <form id="separateForm" novalidate></form>
+            <form id="separateForm" class="oDataForm" novalidate></form>
         </div>
     </div>
 </div>
@@ -783,12 +783,13 @@
     </div>
 </div>
 
-<div style="position:fixed; top:0; left:0; width: 100%; height: 100%; z-index:10;"
+<div style="position:fixed; top:0; left:0; width: 100%; height: 100%; z-index:2000;"
      class="container loading"
-     ng-show="definitionPropertiesLoading">
+     ng-show="definitionPropertiesLoading || isLoading">
 
     <div class="loading-msg">
-        <h3>{{ 'loadingMsg' | translate }}</h3>
+        <h3 ng-show="definitionPropertiesLoading">{{ 'loadingMsg' | translate }}</h3>
+        <h3 ng-show="isLoading">{{'processing' | translate}}</h3>
     </div>
 
 </div>
