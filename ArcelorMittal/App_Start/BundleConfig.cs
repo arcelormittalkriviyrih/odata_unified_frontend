@@ -23,10 +23,10 @@ public class BundleConfig
             "~/scripts/vendor/jqplot/plugins/jqplot.enhancedLegendRenderer.js",
             "~/scripts/vendor/jqplot/plugins/jqplot.highlighter.js",
             "~/scripts/vendor/dhtmlxscheduler.js",
-            "~/scripts/vendor/dhtmlxscheduler_year_view.js",
-            "~/scripts/vendor/backbone.js",
-            "~/scripts/vendor/joint.min.js",
-            "~/scripts/vendor/lodash.js"
+            "~/scripts/vendor/dhtmlxscheduler_year_view.js"
+            //"~/scripts/vendor/backbone.js",
+            //"~/scripts/vendor/joint.min.js",
+            //"~/scripts/vendor/lodash.js"
 
         ));
 
