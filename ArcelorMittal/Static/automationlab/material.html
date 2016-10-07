@@ -43,12 +43,38 @@
 
  <div class="black-wrapper" ng-class="{'show': isShowModal}" ng-show="isShowModal">
         <div class="modal additional">
-             <button>
+           <div class="col-md-12 col-sm-12 clearfix"> 
+                <div class="toggle-content text-center">
+                    <h3>Внесение нового оборудования </h3>
+                </div>
                 
-             </button>
-            </div>    
-           
-
-        </div>
-    </div>
-
+                    <div style="width:400px;" class="clearfix">
+                        Класс СИТ:<input type="text" name="class" style="float:right">
+                    </div>
+                    <div class="clearfix" style="width:400px; margin-top: 5px;" >Название СИТ:<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Идентификационный номер СИТ :<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Цех-владелец:<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Статус<input type="text" name="class" style="float:right"></div>
+                
+           </div>
+            <div class="col-md-12 col-sm-12 clearfix"> 
+                <div class="toggle-content text-center">
+                    <h5>Свойства</h5>
+                </div>
+                
+                    <div style="width:400px;" class="clearfix">
+                        Свойство 1:<input type="text" name="class" style="float:right">
+                    </div>
+                    <div class="clearfix" style="width:400px; margin-top: 5px;" >Свойство 2:<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Свойство 3 :<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Свойство 4:<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Свойство 5<input type="text" name="class" style="float:right"></div>
+                
+           </div>
+         <div class="toggle-content text-right" style="padding:20px"> 
+            <button class="add btn btn-default"  >Добавить</button>
+            <button class="add btn btn-default" id="cancel">Отмена</button>   
+         </div>
+         </div>
+ </div>
+   

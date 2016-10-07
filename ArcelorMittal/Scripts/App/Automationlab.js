@@ -62,28 +62,28 @@
 
     }).jsGrid('initOdata', {
         serviceUrl: serviceUrl,
-        table: 'v_AcceptanceMaterial',
+        table: 'MaterialDefinition',
 
         fields: [{
-            //id: 'FactoryNumber',
-            name: 'FactoryNumber',
-            title: 'Factory Number',
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
             order: 1
         }, {
-            //id: 'Description',
+            id: 'Description',
             name: 'Description',
             title: 'Description',
             order: 2
-        }, {
-           // id: 'Status',
-            name: 'Status',
-            title: 'Status',
-            order: 3
-        },{    
-           // id: 'Location',
-            name: 'Location',
-            title: 'Location',
-            order: 4
+        //}, {
+        //   // id: 'Status',
+        //    name: 'Status',
+        //    title: 'Status',
+        //    order: 3
+        //},{    
+        //   // id: 'Location',
+        //    name: 'Location',
+        //    title: 'Location',
+        //    order: 4
         }],
 
         controlProperties: {
@@ -97,6 +97,12 @@
         defaultFilter: 'ID eq -1',
         order: 'Description'
     });
+
+    
+
+    
+
+
 }])
 
 
@@ -111,7 +117,7 @@
 
      $scope.createForm = vmCreateForm;
      $scope.deleteRow = vmDeleteRow;
-
+     
      $scope.loadingModalData = false;
     
 
@@ -173,6 +179,8 @@
          $scope.isShowModal = expr;
      }
 
+
+    
     
      //$('#orderForm').on('oDataForm.success', function (e, data) {
 
@@ -219,7 +227,11 @@
          $scope.$apply();
      });
 
-   
+     $('#cancel').click(function () {
+         vmToggleModal(false);
+         $scope.$apply();
+
+     });
 
     //-----------------------------------------------------------------------------------
     $materialDefinitionDisable = $('#materialDefinitionDisable').show();
@@ -422,6 +434,7 @@
     });
 
 
+   
 
 }])
 
