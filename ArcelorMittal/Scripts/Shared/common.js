@@ -1,6 +1,6 @@
-﻿var domainURL = '../../odata_unified_svc';
+﻿//var domainURL = '../../odata_unified_svc';
 //var domainURL = 'http://krr-tst-palbp01/odata_unified_svc';
-//var domainURL = 'http://mssql2014srv/odata_unified_svc';
+var domainURL = 'http://localhost:30371';
 var serviceUrl = domainURL + '/api/Dynamic/';
 var sapUrl = '../../odata_sap_svc/GetSAPInfo?orderNo=';
 var interval = 5000; //grid auto refresh interval (5 sec)

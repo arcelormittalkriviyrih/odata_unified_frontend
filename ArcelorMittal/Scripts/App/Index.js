@@ -1,5 +1,5 @@
 ﻿
-var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ngSanitize'])
+var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ngSanitize', 'ui.select'])
 
 .factory('globalAJAXErrorHandling', ['$q', '$injector', function ($q, $injector) {
 
@@ -143,6 +143,14 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
 
                     if (!vmIsAuthorized('WeightAnalytics', roles))
                         $state.go('app.error', { code: 'unauthorized' });
+                },
+                onExit: function ($state, $injector) {
+
+                    var $interval = $injector.get('$interval');
+                    var $rootScope = $injector.get('$rootScope');
+
+                    $interval.cancel($rootScope.intervalScales);
+                    $interval.cancel($rootScope.intervalWorkRequest);
                 }
             })
 

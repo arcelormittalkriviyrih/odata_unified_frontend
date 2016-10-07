@@ -165,6 +165,7 @@
     <Content Include="Content\Shared\jquery-ui.css" />
     <Content Include="Content\Shared\layout.css" />
     <Content Include="Content\Shared\datetimepicker.css" />
+    <Content Include="Content\Shared\select.css" />
     <Content Include="Content\Table\jsgrid-theme.css" />
     <Content Include="Content\Table\jsgrid.css" />
     <Content Include="Content\Table\style.css" />
@@ -247,6 +248,7 @@
     <Content Include="Scripts\Vendor\jsgrid.min.js" />
     <Content Include="Scripts\TreeGrid\treeExt.js" />
     <Content Include="Scripts\Vendor\jstree.js" />
+    <Content Include="Scripts\Vendor\select.js" />
     <Content Include="Static\error.html" />
     <Content Include="Static\access_error.html" />
     <Content Include="Static\errorlog.html" />

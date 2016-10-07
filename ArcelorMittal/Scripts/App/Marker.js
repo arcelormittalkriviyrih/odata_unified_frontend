@@ -654,6 +654,7 @@
                     vmShowScaleInfo($scope.currentScaleID);
             }, scalesRefresh);
         })
+
     }
 
     //get detail info for every scale
@@ -1688,11 +1689,12 @@
         else {
 
             $scope.noHandModeQuantity = false;
-
+            
             indexService.sendInfo('ins_ManualWeightEntry', {
                 EquipmentID: parseInt($scope.currentScaleID) || null,
                 Quantity: $scope.handModeQuantity
             }).then(vmCancelHandMode);
+            
         };
     };
 

@@ -22,7 +22,8 @@ public class BundleConfig
             "~/scripts/vendor/jqplot/plugins/jqplot.enhancedLegendRenderer.js",
             "~/scripts/vendor/jqplot/plugins/jqplot.highlighter.js",
             "~/scripts/vendor/dhtmlxscheduler.js",
-            "~/scripts/vendor/dhtmlxscheduler_year_view.js"
+            "~/scripts/vendor/dhtmlxscheduler_year_view.js",
+            "~/scripts/vendor/select.js"
             
         ));
 
@@ -47,7 +48,8 @@ public class BundleConfig
             "~/content/table/jsgrid-theme.css",
             "~/content/shared/datetimepicker.css",
             "~/content/shared/layout.css",
-            "~/content/chart/jquery.jqplot.css"
+            "~/content/chart/jquery.jqplot.css",
+            "~/content/shared/select.css"
         ));
     }
 }

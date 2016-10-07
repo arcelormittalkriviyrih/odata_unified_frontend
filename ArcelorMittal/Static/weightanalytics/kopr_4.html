@@ -1,4 +1,5 @@
-﻿<div class="container loading" ng-show="$root.showLoadingState">
+﻿<!--когда еще грузится страница-->
+<div class="container loading" ng-show="$root.showLoadingState">
 
     <div class="loading-msg">
         <h1>Loading ...</h1>
@@ -6,10 +7,178 @@
 
 </div>
 
+<!--основная часть, когда страница прогрузилась-->
 <div ng-show="!$root.showLoadingState">
 
-    Scrap Yard 4
-    <br />
+    <!--    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="Button1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Создать отвесную
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li ng-repeat="WeightType in WeightTypes"
+                ng-click="changeWeighingType(WeightType)">{{WeightType.Description}}
+            </li>
+        </ul>
+    </div>-->
+
+
+
+
+
+
+
+    <div class="scaleDetailInfo">
+
+        <!--LEFT SIDE-->
+        <div class="scaleInfo">
+
+            <h4>Отвесная № {{WSheetNumber}} </h4>
+
+            <div>
+
+                <div class="dropdown" ng-show="!WSheetNumberEntered">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="Button2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Создать отвесную
+                <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li ng-repeat="WeightType in WeightTypes"
+                            ng-click="changeWeighingType(WeightType)">{{WeightType.Description}}
+                        </li>
+                    </ul>
+                </div>
+
+
+                <!--                <div class="controlTask" style="display:inline">
+                    <input type="text"
+                        class="form-control"
+                        ng-model="WSheet"
+                        ng-class="{'wrong': !WSheet}"
+                        ng-disabled="false"
+                        ng-hide="!WTypeSelected"
+                        my-number-check
+                        ng-change="changeWeighingType" />
+                </div>-->
+
+
+            </div>
+
+            <div>WeightType: {{WeightType}}</div>
+            <div>WTypeSelected: {{WeightType}}</div>
+            <div>WSheetNumberEntered: {{WSheetNumberEntered}}</div>
+
+
+            <button type="button" class="btn btn-default" ng-click="CloseWSheet()">
+                Закрыть отвесную
+            </button>
+
+
+
+
+        </div>
+
+
+        <!--CENTER SIDE-->
+        <div class="scaleInfo">
+            <h4 class="scalesName">{{scalesDetailsInfo.ScalesName}}</h4>
+
+            <button type="button" class="btn btn-default" ng-click="Test()">
+                {{takeWeightLabel}}
+            </button>
+
+            <div>
+                {{response}}
+            </div>
+
+        </div>
+
+
+
+        <!--RIGHT SIDE-->
+        <div class="scaleInfo">
+
+            <div class="dropdown" ng-show="true">
+                <button class="btn btn-default dropdown-toggle" type="button" id="Button3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Создать отвесную
+                <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li ng-repeat="WeightType in WeightTypes"
+                        ng-click="changeWeighingType(WeightType)">{{WeightType.Description}}
+                    </li>
+                </ul>
+            </div>
+
+
+
+            <button type="button"
+                class="btn btn-default specialLabelMode">
+                {{ 'marker.remarkingButton' | translate }}
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <!--Manual weight input modal form-->
+    <div class="black-wrapper" ng-show="ShowWSheetNumberModalWindow">
+        <div class="modal additional">
+            <button type="button"
+                ng-click="CancelEnteringWSheetNumber()"
+                class="btn btn-circle pull-right">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+
+            <h4>Enter number</h4>
+
+            <div class="enterLabelWrapper">
+                <label>Enter weightsheet number:</label>
+                <input type="text"
+                    class="labelNumber form-control"
+                    my-number-check
+                    ng-class="{'wrong': noHandModeQuantity}"
+                    ng-model="WSheetNumber"
+                    ng-change="noHandModeQuantity = false" />
+
+            </div>
+
+            <div class="control-row">
+
+                <button type="button"
+                    class="btn btn-default"
+                    ng-click="EnterWSheetNumber()"
+                    ng-disabled="!WSheetNumber.length">
+                    OK
+           
+                </button>
+
+                <button type="button"
+                    class="btn btn-default"
+                    ng-click="CancelEnteringWSheetNumber()">
+                    {{ 'buttonCancel' | translate }}
+           
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
 
 </div>
+
+
+
+
+
+
+
 

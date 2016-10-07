@@ -63,6 +63,9 @@
                                     //2. id shown field has not property type - get this property from _table.fields
                                     //3. else set type as property
 
+                                    if (filteredFields.css)
+                                        field.css = filteredFields.css;
+
                                     if (filteredFields.title)
                                         field.title = filteredFields.title;
 
@@ -536,6 +539,7 @@
                 //xhrFields: {
                 //    withCredentials: true
                 //}
+
             })
             .success(function () {
                 $(self._container).trigger('oDataGrid.removed');
