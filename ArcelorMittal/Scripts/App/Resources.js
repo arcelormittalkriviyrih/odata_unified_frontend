@@ -291,7 +291,8 @@
         tree:{
             nodeName: 'Node name',
             parentID: 'Parent ID',
-            equipmentClass: 'Equipment class'
+            equipmentClass: 'Equipment class',
+            search: 'Search...'
         }
     },
 
@@ -584,7 +585,8 @@
         tree: {
             nodeName: 'Имя узла',
             parentID: 'ID родителя',
-            equipmentClass: 'Класc оборудования'
+            equipmentClass: 'Класc оборудования',
+            search: 'Поиск...'
         }
 
     },
@@ -875,7 +877,8 @@
         tree: {
             nodeName: 'Ім\'я вузла',
             parentID: 'Батьківський ID',
-            equipmentClass: 'Клас обладнання'
+            equipmentClass: 'Клас обладнання',
+            search: 'Пошук...'
         }
 
     }

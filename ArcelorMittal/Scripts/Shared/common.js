@@ -145,6 +145,26 @@ $(function () {
     $("body").bind("DOMNodeInserted", function () {
         $(this).find('.ui-datepicker-current, .ui-datepicker-close').addClass('btn btn-default');
     });
+
+    // There are 2 events fired on input element when clicking on the clear button:
+    // mousedown and mouseup.
+    $(document).delegate("input", "mouseup", function (e) {
+        var $input = $(this),
+            oldValue = $input.val();
+
+        if (oldValue == "") return;
+
+        // When this event is fired after clicking on the clear button
+        // the value is not cleared yet. We have to wait for it.
+        setTimeout(function () {
+            var newValue = $input.val();
+
+            if (newValue == "") {
+                // Gotcha
+                $input.trigger("cleared");
+            }
+        }, 1);
+    });
     
 });
 

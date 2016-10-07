@@ -15,6 +15,7 @@ public class BundleConfig
             "~/scripts/vendor/jquery-ui-timepicker-addon.js",
             "~/scripts/vendor/jsgrid.js",
             "~/scripts/vendor/jstree.js",
+            "~/scripts/vendor/jstree.search.js",
             "~/scripts/vendor/jqplot/jquery.jqplot.min.js",
             "~/scripts/vendor/jqplot/plugins/jqplot.meterGaugeRenderer.js",
             "~/scripts/vendor/jqplot/plugins/jqplot.barRenderer.js",
