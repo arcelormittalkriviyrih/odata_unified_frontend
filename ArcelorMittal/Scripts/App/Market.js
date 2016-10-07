@@ -17,17 +17,25 @@
             params: {
 
                 fileType: 'Excel label'
+            },
+            onExit: function ($state, $injector) {
+
+                vmClearGridFilter($("#files"));
             }
         })
-    .state('app.Market.Logotypes', {
+        .state('app.Market.Logotypes', {
 
-        url: '/logotypes',
-        templateUrl: 'Static/market/labeltemplate.html',
-        controller: 'marketLabelTemplateCtrl',
-        params: {
-            fileType: 'Image'
-        }
-    })
+            url: '/logotypes',
+            templateUrl: 'Static/market/labeltemplate.html',
+            controller: 'marketLabelTemplateCtrl',
+            params: {
+                fileType: 'Image'
+            },
+            onExit: function ($state, $injector) {
+
+                vmClearGridFilter($("#files"));
+            }
+        })
 }])
 
 .value('sapUrl', sapUrl)
@@ -143,7 +151,7 @@
         $scope.loadingModalData = true;
         $scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
 
-        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label'")];
+        var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")];
 
         if (id) {
 
@@ -194,7 +202,16 @@
         $scope.isShowModal = expr;
     }
 
+    $('#orderForm').on('oDataForm.processing', function () {
+
+        $scope.isLoading = true;
+
+        $scope.$apply();
+    });
+
     $('#orderForm').on('oDataForm.success', function (e, data) {
+
+        $scope.isLoading = false;
 
         vmToggleModal(false);
 
@@ -209,6 +226,13 @@
         $scope.$apply();
     });
 
+    $('#orderForm').on('oDataForm.failed', function () {
+
+        $scope.isLoading = false;
+
+        $scope.$apply();
+    });
+
     $('#orderForm').on('oDataForm.cancel', function (e) {
 
         vmToggleModal(false);
@@ -217,36 +241,42 @@
 
     $('#orderForm').on('oDataForm.procedureProcessing', function (e) {
 
+        $scope.isLoading = true;
         $scope.processingTestPrint = true;
         $scope.$apply();
     });
 
     $('#orderForm').on('oDataForm.procedureProcessed', function (e) {
 
+        $scope.isLoading = false;
         $scope.processingTestPrint = false;
         $scope.$apply();
     });
 
     $('#orderForm').on('oDataForm.procedureFailed', function (e) {
 
+        $scope.isLoading = false;
         $scope.processingTestPrint = false;
         $scope.$apply();
     });
 
     $('#orderForm').on('oDataForm.outerDataReceipt', function (e) {
 
+        $scope.isLoading = true;
         $scope.processingOuterDataReceipt = true;
         $scope.$apply();
     });
 
     $('#orderForm').on('oDataForm.OuterDataReceived', function (e) {
 
+        $scope.isLoading = false;
         $scope.processingOuterDataReceipt = false;
         $scope.$apply();
     });
 
     $('#orderForm').on('oDataForm.OuterDataReceiptFailed', function (e) {
 
+        $scope.isLoading = false;
         $scope.processingOuterDataReceipt = false;
         $scope.$apply();
     });
@@ -268,6 +298,7 @@
     $scope.toggleModal = false;
     $scope.createForm = vmCreateForm;
     $scope.locale = $state.params.locale;
+    $scope.showSubmitButtonUpload = false;
 
     var fields = [{
         id: 'ID',
@@ -289,12 +320,8 @@
         name: 'Status',
         title: $translate.instant('market.grid.labelTemplate.status'),
         order: 3
-    }, {
-        id: 'FileType',
-        name: 'FileType',
-        title: $translate.instant('market.grid.labelTemplate.fileType'),
-        order: 5
-    }, {
+    },
+    {
         id: 'Data',
         name: 'Data',
         title: $translate.instant('market.grid.labelTemplate.file'),
@@ -321,15 +348,32 @@
     //handle required fields for IE 9 browser
     if ($("<input />").prop("required") === undefined) {
 
+        $('ul#status li a').click(function () {
+
+            $(this).closest('.dropdown').removeClass('wrong');
+        })
+
         $('input, select').click(function () {
 
             if ($(this).attr('type') == 'file') {
                 $(this).parent().removeClass('wrong');
-            } else
+            }
+            else
                 $(this).removeClass('wrong');
         })
 
     }
+
+    indexService.getInfo("Files?$filter = FileType eq '{0}'".format($state.params.fileType))
+                .then(function (response) {
+
+                    $scope.files = response.data.value;
+
+                    $scope.fileNames = $scope.files.map(function (x) {
+
+                        return x.Name;
+                    })
+                });
 
     $('div#files').jsGrid({
         height: "550px",
@@ -344,12 +388,14 @@
         inserting: false,
         pageIndex: 1,
         pageSize: 4,
+        data: $scope.files,
 
         rowClick: function (args) {
 
             vmActiveRow(args);
             vmPopulateFormEdit(args.item);
             $scope.selectedTemplateID = args.item.ID;
+            $scope.showSubmitButtonUpload = false;
 
             $fileUploadForm.find('input[type=file]').prop('required', false);
             $fileUploadForm.find('input[type=file]').attr('required', false);
@@ -362,6 +408,7 @@
             // hide edit form
             // on successfull delete
             $formCreateWrapper.hide();
+            $formEditWrapper.hide();
         }
     })
     .jsGrid('initOdata', {
@@ -382,16 +429,17 @@
         defaultFilter: "FileType eq '{0}'".format($state.params.fileType),
         order: 'ID desc'
     });
+    
 
-    // get form element
+        // get form element
     var $formCreate = $('#fileForm');
     var $formCreateWrapper = $('#createForm');
     var $formEditWrapper = $('#editForm');
     var $fileUploadForm = $('#fileUploadForm');
     var $filePropertiesForm = $('#filePropertiesForm');
 
-    // add new record
-    $('#addFile').click(vmAddRecord);    
+        // add new record
+    $('#addFile').click(vmAddRecord);
     $('#fileDataCreate').change(vmFileSelected);
     $('#fileDataEdit').change(vmFileSelected);
 
@@ -400,8 +448,8 @@
         e.preventDefault();
 
         vmResetForm({
-            forms: [$formCreate],
-            container: $formCreateWrapper
+                forms: [$formCreate],
+                container: $formCreateWrapper
         });
     });
 
@@ -410,16 +458,16 @@
         e.preventDefault();
 
         vmResetForm({
-            forms: [$filePropertiesForm, $fileUploadForm],
-            container: $formEditWrapper
+                forms: [$filePropertiesForm, $fileUploadForm],
+                container: $formEditWrapper
         });
     });
 
-    function vmPopulateFormCreate(item) {
+        function vmPopulateFormCreate(item) {
 
-        // create service URL
-        // to create / update file by ID
-        // and assign it as form action
+            // create service URL
+            // to create / update file by ID
+            // and assign it as form action
         var action = serviceUrl + 'Files(' + item.ID + ')/$value';
 
         $formCreate.attr('action', action);
@@ -439,17 +487,17 @@
 
         $formCreate.find('[name="FileType"]').val(item.FileType);
 
-        // show form
+            // show form
         $formCreateWrapper.show();
         $formEditWrapper.hide();
 
     };
 
-    function vmPopulateFormEdit(item) {
+        function vmPopulateFormEdit(item) {
 
-        // create service URL
-        // to create / update file by ID
-        // and assign it as form action
+            // create service URL
+            // to create / update file by ID
+            // and assign it as form action
         var action = serviceUrl + 'Files(' + item.ID + ')';
         _actionEdit = action;
 
@@ -482,18 +530,18 @@
         $formEditWrapper.show();
     }
 
-    function vmAddRecord() {
+        function vmAddRecord() {
 
         _isReset = false; //hack for IE
 
-        // prepare form for INSERT
-        // set ID to -1
-        // set File type to default value
+            // prepare form for INSERT
+            // set ID to -1
+            // set File type to default value
         vmPopulateFormCreate({
-            ID: -1,
-            FileName: '',
-            Name: '',
-            FileType: $state.params.fileType
+                ID: -1,
+                FileName: '',
+                Name: '',
+                FileType: $state.params.fileType
         });
 
         $formCreate.find('input[type=file]').prop('required', true);
@@ -502,10 +550,10 @@
         return false;
     }
 
-    // on file selected
-    function vmFileSelected() {
+        // on file selected
+        function vmFileSelected() {
 
-        // get filename
+            // get filename
         var filenameCreate = $formCreate.find('[name="Data"]')
                             .val()
                             .split('\\')
@@ -516,16 +564,20 @@
                                     .split('\\')
                                     .pop();
 
-        // get "file name" control
-        // update with name of file selected
+            // get "file name" control
+            // update with name of file selected
         var $inputCreate = $formCreate.find('[name="FileName"]');
         var $inputEdit = $fileUploadForm.find('[name="FileName"]');
 
         $inputCreate.val(filenameCreate);
         $inputEdit.val(filenameEdit);
+
+        $scope.showSubmitButtonUpload = true;
+
+        $scope.$apply();
     }
 
-    function vmResetForm(formObj) {
+        function vmResetForm(formObj) {
 
         formObj.forms.forEach(function ($form) {
             //reset form entered data
@@ -540,45 +592,58 @@
 
     $formCreate.on('submit', function (e) {
 
-        vmSubmitForm(e, this, vmLocationReload);
+        $scope.isLoading = true;
+
+        vmSubmitForm(e, this, vmLocationReload, 'create');
+
+        $scope.$apply();
     });
 
     $fileUploadForm.on('submit', function (e) {
-       
-        vmSubmitForm(e, this, vmLocationReload);
+
+        $scope.isLoading = true;
+
+        vmSubmitForm(e, this, vmLocationReload, 'edit');
+
+        $scope.$apply();
     });
 
     $filePropertiesForm.find('button[type=submit]').click(function (e) {
 
         e.preventDefault();
-        vmSubmitForm(e, $filePropertiesForm, vmUpdateFileProperties);
+
+        $scope.isLoading = true;
+
+        vmSubmitForm(e, $filePropertiesForm, vmUpdateFileProperties, 'edit');
+
+        $scope.$apply();
     });
 
-    function vmUpdateFileProperties(){
+        function vmUpdateFileProperties() {
 
         var data = {
-            Status: $filePropertiesForm.find('[name="Status"]').val(),
-            Name: $filePropertiesForm.find('[name="Name"]').val()
+                Status: $filePropertiesForm.find('[name="Status"]').val(),
+                Name: $filePropertiesForm.find('[name="Name"]').val()
         };
-        
+
         $.ajax({
 
-            url: _actionEdit,
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            type: 'PATCH'
+                url: _actionEdit,
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                type: 'PATCH'
 
         }).then(vmLocationReload);
     };
 
-    function vmCreateForm(type, procedure, id, keyField) {
+        function vmCreateForm(type, procedure, id, keyField) {
 
         vmToggleModal(true);
 
         $scope.loadingModalData = true;
         $scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
 
-        indexService.getInfo("Files?$filter=FileType eq 'Excel label'")
+        indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")
             .then(function (responce) {
 
                 $scope.loadingModalData = false;
@@ -586,48 +651,71 @@
 
                 var rowData = [{
 
-                    Property: 'TEMPLATE',
-                    Value: id.toString()
+                        Property: 'TEMPLATE',
+                        Value: id.toString()
                 }];
 
                 marketService.createForm(type, procedure, id, keyField, templateData, rowData, true);
 
-            });
+        });
     };
 
-    function vmSubmitForm(e, self, handler) {
+        function vmSubmitForm(e, self, handler, type) {
 
         var unFilledFields = $(self)
                     .find("input, select")
                     .filter("[required]")
                     .filter(function () { return this.value == ''; });
 
-        if (unFilledFields.length > 0) {
+        var enteredName = $formCreate.find('[name="Name"]').val();
 
-            unFilledFields.each(function () {
-                e.preventDefault();
 
-                if ($('input#fileName').val() == '')
-                    $(this).parent().addClass('wrong');
-                
-                if (!_isReset) //hack for IE
-                    alert($('label[for=' + $(this).attr('id') + ']').html() + " is required!");
+        if (unFilledFields.length > 0 || $scope.fileNames.indexOf(enteredName) > -1) {
 
-            });
+            e.preventDefault();
+
+            if (unFilledFields.length > 0) {
+
+                unFilledFields.each(function () {
+                    
+                    $(this).addClass('wrong');
+
+
+                    if ($('input#fileName').val() == '')
+                        $(this).parent().addClass('wrong');
+
+                    if ($(this).hasClass('dropdown-input'))
+                        $(this).closest('.dropdown').addClass('wrong');
+
+                    if (!_isReset) //hack for IE
+                        alert($('label[for=' + $(this).attr('id') + ']').html() + " is required!");
+                   
+                });
+            }
+
+            if ($scope.fileNames.indexOf(enteredName) > -1) {
+
+                alert('this name is already exists!')
+            }
+
+            $scope.isLoading = false;
+
+            $scope.$apply();
+            
         } else {
 
-            handler(); 
+            handler();
         }
     };
 
-    function vmLocationReload(){
+        function vmLocationReload() {
 
         setTimeout(function () {
             window.location.reload();
         }, 1000);
     };
 
-    function vmToggleModal(expr) {
+        function vmToggleModal(expr) {
 
         $scope.isShowModal = expr;
     };
@@ -983,7 +1071,7 @@
                 data: templateData,
                 keyField: 'ID',
                 valueField: 'Name',
-                order: 23
+                order: 99
             }
         }];
 
@@ -1017,6 +1105,7 @@
             },
             translates: {
 
+                errorConnection: $translate.instant('errorConnection'),
                 fillRequired: $translate.instant('marker.errorMessages.fillRequired')
             },
             fields: fields,

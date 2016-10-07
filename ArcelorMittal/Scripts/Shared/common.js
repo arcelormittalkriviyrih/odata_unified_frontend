@@ -1,6 +1,6 @@
-﻿//var domainURL = '../../odata_unified_svc';
 //var domainURL = 'http://krr-tst-palbp01/odata_unified_svc';
 var domainURL = 'http://localhost:30371';
+﻿//var domainURL = '../../odata_unified_svc';
 var serviceUrl = domainURL + '/api/Dynamic/';
 var sapUrl = '../../odata_sap_svc/GetSAPInfo?orderNo=';
 var interval = 5000; //grid auto refresh interval (5 sec)
@@ -13,8 +13,13 @@ var dropBoxTmpl = '<div class="dropdown form-control">' +
                                        '<input type="hidden" id="{1}" data-parent="dropDown"/>' +
                                        '<span class="caret"></span>' +
                                        '</div>' +
-                                       '<ul class="dropdown-menu" id="{2}" aria-labelledby="dropdownMenu1">' +
+                                       '<div class="dropdown-menu">' +
+                                       '<div class="filter-field">' +
+                                       '<input type="text" class="form-control" id="filter" />' +
+                                       '</div>' +
+                                       '<ul class="scrollable-menu menu-list" id="{2}" aria-labelledby="dropdownMenu1 data-filter data-filter-label="Filtrar por:"">' +
                                        '</ul>' +
+                                       '</div>' +
                                        '</div>';
 var dateTimePickerControl = {
     create: function (tp_inst, obj, unit, val, min, max, step) {
@@ -71,16 +76,27 @@ var dateTimePickerControl = {
     }
 };
 
+//set real current date in datetimepicker
+$.datepicker._gotoTodayOriginal = $.datepicker._gotoToday;
+$.datepicker._gotoToday = function (id) {
+
+    this._curInst.input.datepicker('setDate', new Date());
+};
+
 jQuery.ajaxSetup({
     global: true,
     error: function (xhr, status, statusText) {
 
+        if (xhr.status <= 0 || xhr.status >=12000)
+            window.location.reload();
+        else {
             $(document).trigger('ajaxError', {
 
                 status: xhr.status,
                 statusText: statusText,
                 responseText: xhr.responseText
-            });      
+            });
+        }                 
     }
 });
 
@@ -130,6 +146,27 @@ $(function () {
     $("body").bind("DOMNodeInserted", function () {
         $(this).find('.ui-datepicker-current, .ui-datepicker-close').addClass('btn btn-default');
     });
+
+    // There are 2 events fired on input element when clicking on the clear button:
+    // mousedown and mouseup.
+    $(document).delegate("input", "mouseup", function (e) {
+        var $input = $(this),
+            oldValue = $input.val();
+
+        if (oldValue == "") return;
+
+        // When this event is fired after clicking on the clear button
+        // the value is not cleared yet. We have to wait for it.
+        setTimeout(function () {
+            var newValue = $input.val();
+
+            if (newValue == "") {
+                // Gotcha
+                $input.trigger("cleared");
+            }
+        }, 1);
+    });
+    
 });
 
 function vmGetMetadata() {
@@ -250,11 +287,20 @@ function getLastChild(obj, parents, child) {
 };
 
 //method for handling AJAX errors
-function handleError(err) {
+function handleError(err, localization) {
 
-    err = JSON.parse(err.responseText);
-    var msg = getLastChild(err, ['error', 'innererror', 'internalexception'], 'message');
-    alert(msg);
+    if (err.responseText) {
+        err = JSON.parse(err.responseText);
+        var msg = getLastChild(err, ['error', 'innererror', 'internalexception'], 'message');
+        alert(msg);
+    }
+    else {
+        if (localization && localization.errorConnection)
+            alert(localization.errorConnection);
+         else
+            alert('unknown http error');
+    }
+    
 }
 
 function getTimeToUpdate(time, toUTC) {
@@ -486,4 +532,48 @@ function vmLoadStaticData(filter, data) {
 
     return d.promise();
 }
+
+function vmSetBlinking() {
+
+    if ($('.blink').hasClass('red')) {
+        $('.blink').animate({
+
+            backgroundColor: 'white'
+        }, 100, function () {
+
+            $('.blink').animate({
+
+                backgroundColor: 'tomato'
+            }, 100);
+        })
+    } else if ($('.blink').hasClass('green')) {
+        $('.blink').animate({
+
+            backgroundColor: 'white'
+        }, 100, function () {
+
+            $('.blink').animate({
+
+                backgroundColor: 'lightgreen'
+            }, 100);
+        })
+    }
+};
+
+function vmClearStyle(elem) {
+
+    elem.removeAttr('style');
+};
+
+function vmClearGridFilter(gridContainer) {
+
+    gridContainer.jsGrid({
+
+        onDataLoading: function (args) {
+
+            args.grid.table = null;
+        }
+    })
+
+};
 

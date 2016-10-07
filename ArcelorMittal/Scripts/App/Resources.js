@@ -6,8 +6,7 @@
             Market: 'Market',
             WorkshopSpecs: 'WorkshopSpecs',
             Marker: 'Marker',
-            PA: 'PA',
-            WeightAnalytics: 'WeightAnalytics'
+            PA: 'PA'
         },
         welcome: {
             Welcome: 'Welcome',
@@ -137,6 +136,8 @@
             rodsQuantityPcs: 'Rods quantity (pcs)',
             sandwich: 'Sandwich Mode',
             byAccept: '"By accept" Mode',
+            autoModeShort: 'Auto',
+            byAcceptShort: 'By acc',
             nemera: 'Nemera',
             minMassRec: 'Min weight rec. (kg)',
             maxMass: 'Max weight(kg)',
@@ -150,7 +151,7 @@
             rodsQuantity: 'Rods quantity',
             rodsLeft: 'Rods left',
             scalesBlocked: 'Scales blocked',
-            weightOver: 'Specified rods quantity weight is over then maximum permissible weight',           
+            weightOver: 'Weight is over then maximum permissible weight',           
             firstPack: 'First pack',
             secondPack: 'Second pack',
             bindingDia: 'Bindind diameter',
@@ -172,7 +173,7 @@
                 FactoryNumber: 'Factory number',
                 mass: 'Mass'
             },
-            acceptOrderTask: 'Accept order/task',
+            acceptOrderTask: 'Accept task',
             takeWeightButton: 'Take weight',
             takeTaraButton: 'Take tara',
             testPrintButton: 'Test print',
@@ -258,10 +259,6 @@
             }
             
         },
-		weightanalytics: {
-            Kopr4: 'ScrapYard 4',
-            Link2: 'Link2'
-        },
         error: {
             Unauthorized: 'This role is unavailable for you!'
         },
@@ -279,7 +276,9 @@
         buttonUpload: 'Select File',
         buttonCancel: 'Cancel',
         loadingMsg: 'Loading...',
+        processing: 'Processing...',
         calculatingMsg: 'Calculating...',
+        errorConnection: 'There is no internet connection!',
         grid: {
             common: {
 
@@ -292,7 +291,8 @@
         tree:{
             nodeName: 'Node name',
             parentID: 'Parent ID',
-            equipmentClass: 'Equipment class'
+            equipmentClass: 'Equipment class',
+            search: 'Search...'
         }
     },
 
@@ -302,12 +302,11 @@
             Market: 'Маркетолог',
             WorkshopSpecs: 'Специалист Цеха',
             Marker: 'Маркировщик',
-            PA: 'Специалист АСУТП',
-            WeightAnalytics: 'Аналитик'
+            PA: 'Специалист АСУТП'
         },
         welcome: {
             Welcome: 'Привет',
-            UseRoles: 'Выберите одну из доступных ролей',
+            UseRoles: 'Виберите одну из доступних ролей',
             NoRoles: 'Нет доступных ролей'
         },
         market: {
@@ -430,6 +429,8 @@
             rodsQuantityPcs: 'Количество прутков(шт.)',
             sandwich: 'Бутерброд',
             byAccept: 'По подтверждению',
+            autoModeShort: 'Авт',
+            byAcceptShort: 'По подт',
             nemera: 'Немера',
             minMassRec: 'Рек. масса минимум (кг)',
             maxMass: 'Масса максимум(кг.)',
@@ -443,7 +444,7 @@
             rodsQuantity: 'Количество прутков',
             rodsLeft: 'Осталось прутков',
             scalesBlocked: 'Весы заблокированы',
-            weightOver: 'Масса заданного количества прутков превышает максимально допустимую',
+            weightOver: 'Масса превышает максимально допустимую',
             firstPack: 'Первая пачка',
             secondPack: 'Вторая пачка',
             bindingDia: 'Диаметр увязки',
@@ -464,10 +465,10 @@
                 FactoryNumber: 'Номер бирки',
                 mass: 'Масса'
             },
-            acceptOrderTask: 'Подтвердить заказ/задание',
+            acceptOrderTask: 'Подтвердить задание',
             takeWeightButton: 'Взять вес',
             takeTaraButton: 'Взять тару',
-            testPrintButton: 'Тестовая печать',
+            testPrintButton: 'Тест печать',
             buttonExit: 'Выход',
             remarkingButton: 'Перемаркировка',
             sortingButton: 'Сортировка',
@@ -549,12 +550,6 @@
                 mass: 'Масса'
             }
         },
-		
-		weightanalytics: {
-		    Kopr4: 'Копровой 4',
-            Link2: 'Ссылка2'
-        },
-		
         error: {
             Unauthorized: 'Эта роль Вам недоступна'
         },
@@ -572,7 +567,9 @@
         buttonUpload: 'Выбрать файл',
         buttonCancel: 'Отмена',
         loadingMsg: 'Загрузка...',
+        processing: 'Выполнение...',
         calculatingMsg: 'Подсчет...',
+        errorConnection: 'Нет интернет-соединения!',
         grid: {
             common: {
 
@@ -588,7 +585,8 @@
         tree: {
             nodeName: 'Имя узла',
             parentID: 'ID родителя',
-            equipmentClass: 'Класc оборудования'
+            equipmentClass: 'Класc оборудования',
+            search: 'Поиск...'
         }
 
     },
@@ -599,8 +597,7 @@
             Market: 'Маркетолог',
             WorkshopSpecs: 'Спеціаліст Цеху',
             Marker: 'Маркувальник',
-            PA: 'Спеціаліст АСУТП',
-            WeightAnalytics: 'Аналітик'
+            PA: 'Спеціаліст АСУТП'
         },
         welcome: {
             Welcome: 'Привiт',
@@ -726,6 +723,8 @@
             rodsQuantityPcs: 'Кількість прутків(шт.)',
             sandwich: 'Бутерброд',
             byAccept: 'за підтвердженням',
+            autoModeShort: 'Авт',
+            byAcceptShort: 'По підт',
             nemera: 'Немера',
             minMassRec: 'Рек. маса мінімум (кг)',
             maxMass: 'Маса максимум(кг.)',
@@ -739,7 +738,7 @@
             rodsQuantity: 'Кількість прутків',
             rodsLeft: 'Залишилось прутків',
             scalesBlocked: 'Ваги заблоковані',
-            weightOver: 'Маса заданої кількості прутків перевищує максимально допустиму',
+            weightOver: 'Маса перевищує максимально допустиму',
             firstPack: 'Перша пачка',
             secondPack: 'Друга пачка',
             bindingDia: 'Діаметр ув\'язки',
@@ -760,17 +759,17 @@
                 CHANGE_NO: 'Зміна',
                 mass: 'Маса'
             },
-            acceptOrderTask: 'підтвердити замовлення/завдання',
+            acceptOrderTask: 'Підтвердити завдання',
             takeWeightButton: 'Взяти вагу',
             takeTaraButton: 'Взяти тару',
-            testPrintButton: 'Тестовий друк',
+            testPrintButton: 'Тест друк',
             buttonExit: 'Вихід',
             remarkingButton: 'Перемаркування',
             sortingButton: 'Сортування',
             rejectButton: 'Відбракування',
             separateButton: 'Розділення пачки',
             handModeButton: 'Ручне введення',
-            changeOrderButton: 'Змінити замовлення',
+            changeOrderButton: 'Змінити замовл.',
             statisticsButton: 'Статистика',
             errorMessages: {
 
@@ -845,12 +844,6 @@
                 mass: 'Маса'
             }
         },
-		
-		weightanalytics: {
-		    Kopr4: 'Копровий 4',
-            Link2: 'Посилання2'
-        },
-				
         error: {
             Unauthorized: 'У доступі відмовлено'
         },
@@ -868,7 +861,9 @@
         buttonUpload: 'Вибрати файл',
         buttonCancel: 'Відміна',
         loadingMsg: 'Завантаження...',
+        processing: 'Виконання...',
         calculatingMsg: 'Підрахунок...',
+        errorConnection: "Немає інтернет-з'єднання!",
         grid: {
             common: {
 
@@ -882,7 +877,8 @@
         tree: {
             nodeName: 'Ім\'я вузла',
             parentID: 'Батьківський ID',
-            equipmentClass: 'Клас обладнання'
+            equipmentClass: 'Клас обладнання',
+            search: 'Пошук...'
         }
 
     }

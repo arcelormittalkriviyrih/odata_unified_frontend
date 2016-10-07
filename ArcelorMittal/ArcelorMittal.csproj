@@ -18,9 +18,9 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -175,11 +175,12 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
     <Content Include="Scripts\App\Resources.js" />
-    <Content Include="Scripts\Diagram\backbone.js" />
+    <Content Include="Scripts\Vendor\backbone.js" />
     <Content Include="Scripts\Diagram\diagramExt.js" />
     <Content Include="Scripts\Diagram\index.js" />
-    <Content Include="Scripts\Diagram\joint.min.js" />
-    <Content Include="Scripts\Diagram\lodash.js" />
+    <Content Include="Scripts\Vendor\joint.min.js" />
+    <Content Include="Scripts\Vendor\jstree.search.js" />
+    <Content Include="Scripts\Vendor\lodash.js" />
     <Content Include="Scripts\Vendor\dhtmlxscheduler.js" />
     <Content Include="Scripts\Vendor\dhtmlxscheduler_year_view.js" />
     <Content Include="Scripts\Calendar\index.js" />
@@ -192,7 +193,6 @@
     <Content Include="Scripts\App\Market.js" />
     <Content Include="Scripts\App\PA.js" />
     <Content Include="Scripts\App\WorkshopSpecs.js" />
-    <Content Include="Scripts\App\WeightAnalytics.js" />
     <Content Include="Scripts\Shared\common.js" />
     <Content Include="Scripts\Shared\util.js" />
     <Content Include="Scripts\Table\index.js" />
@@ -271,9 +271,6 @@
     <Content Include="Static\pa\diagnostics.html" />
     <Content Include="Static\pa\version.html" />
     <Content Include="Static\pa\sapcommunication.html" />
-    <Content Include="Static\weightanalytics\index.html" />
-    <Content Include="Static\weightanalytics\kopr_4.html" />
-    <Content Include="Static\weightanalytics\link2.html" />
     <Content Include="Static\root.html" />
     <Content Include="Static\templates\dropdown.html" />
     <Content Include="Static\workshopspecs.html" />

@@ -1,4 +1,4 @@
-﻿
+
 var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ngSanitize', 'ui.select'])
 
 .factory('globalAJAXErrorHandling', ['$q', '$injector', function ($q, $injector) {
@@ -7,26 +7,37 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
 
         'requestError': function (rejection) {
 
-            $injector.get('$state').go('errorLog', {
+            if (rejection.status <= 0 || rejection.status >= 12000)
+                window.location.reload();
+            else {
 
-                error: rejection,
-                code: rejection.status,
-                back: $injector.get('$state').current.name,
-                responseText: rejection.data
-            }, { reload: true });
-            return $q.reject(rejection);
+                $injector.get('$state').go('errorLog', {
+
+                    error: rejection,
+                    code: rejection.status,
+                    back: $injector.get('$state').current.name,
+                    responseText: rejection.data
+                }, { reload: true });
+
+                return $q.reject(rejection);
+            }                        
         },
 
         'responseError': function (rejection) {
 
-            $injector.get('$state').go('errorLog', {
+            if (rejection.status <= 0 || rejection.status >= 12000)
+                window.location.reload();
+            else {
 
-                error: rejection,
-                code: rejection.status,
-                back: $injector.get('$state').current.name,
-                responseText: rejection.data
-            }, { reload: true });
-            return $q.reject(rejection);
+                $injector.get('$state').go('errorLog', {
+
+                    error: rejection,
+                    code: rejection.status,
+                    back: $injector.get('$state').current.name,
+                    responseText: rejection.data
+                }, { reload: true });
+                return $q.reject(rejection);
+            }
         }
     }
 }])
@@ -272,9 +283,6 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
                 role.order = 4;
                 break;
 
-			case 'WeightAnalytics':
-                role.order = 5;
-                break;
         };
     });
 
@@ -458,7 +466,8 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
             method: 'post',
             url: serviceUrl + url,
             data: data,
-            withCredentials: withCredentials
+            withCredentials: withCredentials,
+            timeout: 15000
 
         });
 
@@ -559,12 +568,27 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
 
         $scope.changeDropBoxValue = vmChangeDropBoxValue;
 
+        if ($scope.iterator) {
+            $scope.iterator = $scope.iterator.sort(function (a, b) {
+
+                if (a.Description)
+                    return a.Description - b.Description
+
+                else if (a.Value)
+                    return a.Value - b.Value
+                else
+                    return a - b
+
+            });
+        }
+              
         function vmChangeDropBoxValue(item) {
 
             $scope.description = item.Description || item.Value || item;
             $scope.model = item.ID || item;
             if ($scope.side)
                 item.side = $scope.side;
+            
         };
     };
 
@@ -581,7 +605,24 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
             methodOnClick: '=?',            
             standard: '=?',
             showDisableDiv: '=?',
-            side: '=?'
+            side: '=?',
+            showFilter: '=?'
         }
     };
+})
+
+.filter('myFilter', function () {
+
+    // In the return function, we must pass in a single parameter which will be the data we will work on.
+    // We have the ability to support multiple other parameters that can be passed into the filter optionally
+    return function (input, optional1, optional2) {
+
+        var output;
+
+        // Do filter work here
+
+        return output;
+
+    }
+
 });

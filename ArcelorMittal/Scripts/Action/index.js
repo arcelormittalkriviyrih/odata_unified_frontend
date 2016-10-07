@@ -83,12 +83,12 @@
                     case 'combo':
 
 
-                        controlsControlGroup.append(dropBoxTmpl.format('selectedComboTextValue', 'selectedComboDataValue', 'oDataFormCombo'));
+                        controlsControlGroup.addClass('large').append(dropBoxTmpl.format('selectedComboTextValue', 'selectedComboDataValue', 'oDataFormCombo'));
 
                         var selectedComboTextValue = $('#selectedComboTextValue');
                         var selectedComboDataValue = $('#selectedComboDataValue');
 
-                        var ul = $('#oDataFormCombo');
+                        var ul = controlsControlGroup.find('#oDataFormCombo');
 
                         var data = properties.data.map(function (item) {
 
@@ -96,6 +96,12 @@
                                 key: item[properties.keyField],
                                 value: item[properties.valueField]
                             };
+                        }).sort(function (a, b) {
+                            if (a.value < b.value)
+                                return -1;
+                            if (a.value > b.value)
+                                return 1;
+                            return 0;
                         }).forEach(function (item) {
                                 
                             if (item.value == '')
@@ -120,6 +126,35 @@
                                                     })
                                                     .appendTo(li);
                         });
+
+                        $('#filter').keyup(function () {
+
+                            var comboList = ul.find('li a');
+                            var val = $(this).val();
+                            
+                            if (val.length > 0) {
+
+                                comboList.each(function (i, item) {
+
+                                    $(item).parent().show();
+                                });
+
+                                comboList.each(function (i, item) {
+
+                                    if ($(item).text().indexOf(val) == -1)
+                                        $(item).parent().hide();
+                                })
+                            } else {
+
+                                comboList.each(function (i, item) {
+
+                                    $(item).parent().show();
+                                })
+                            }
+                            
+                        })
+
+                        
 
                         field.input = selectedComboDataValue;
 
@@ -151,7 +186,8 @@
                             return item.ID == field.properties.defaultValue;
                         });
                         
-                        field.input.siblings('.dropdown-input').val(defaultValue.Name);
+                        if (defaultValue)
+                            field.input.siblings('.dropdown-input').val(defaultValue.Name);
                     }
 
                     field.input.val(field.properties.defaultValue);
@@ -219,6 +255,9 @@
                         alert(translates.fillRequired);
                         return false;
                     }
+
+                    self.trigger('oDataForm.processing');
+
                     
                     vmCallAction(procedureName)
 
@@ -235,7 +274,11 @@
                                 fields: _fields
                             })
                         })
-                        .fail(handleError);
+                        .fail(function(data){
+                        
+                            handleError(data, options.translates);
+                            self.trigger('oDataForm.failed');
+                        });
 
                    
                     // prevent default action
@@ -278,7 +321,7 @@
                                                                         }).fail(function(err){
                                                                         
                                                                             self.trigger('oDataForm.procedureFailed');
-                                                                            handleError(err);
+                                                                            handleError(err, options.translates);
 
                                                                         });
                                                                });
@@ -337,7 +380,7 @@
 
                 self.trigger('oDataForm.OuterDataReceiptFailed');
 
-                handleError(err);
+                handleError(err, options.translates);
             })
         }
 
@@ -368,7 +411,8 @@
                 url: url + procedure,
                 type: 'POST',
                 data: JSON.stringify(data),
-                contentType: "application/json"
+                contentType: "application/json",
+                timeout: 15000
             })
         };
         

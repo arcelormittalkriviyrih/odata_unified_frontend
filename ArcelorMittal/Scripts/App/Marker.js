@@ -250,7 +250,7 @@
         vmGetProfiles();
 
         //init form fields list
-        indexService.getInfo("Files?$filter=FileType eq 'Excel label'")
+        indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")
                             .then(function (response) {
 
                                 var templateData = response.data.value;
@@ -546,7 +546,7 @@
                                          data: templateData,
                                          keyField: 'ID',
                                          valueField: 'Name',
-                                         order: 24
+                                         order: 99
                                      }
                                  }];
                                                                 
@@ -828,6 +828,130 @@
 
                     $scope.workRequestID = data[0].WorkRequestID;
                     $scope.selectedProfile = data[0].ProfileID;
+
+                    $('#changeOrderGrid').jsGrid({
+                        width: "750px",
+
+                        sorting: false,
+                        paging: true,
+                        editing: false,
+                        filtering: true,
+                        autoload: true,
+                        pageLoading: true,
+                        inserting: false,
+                        pageIndex: 1,
+                        pageSize: 14,
+
+                        onDataLoaded: function (args) {
+
+                            var rows = vmShowSelectedRows(args, $scope.materialLotProdorderIDs, 'ID', 'FactoryNumber');
+
+                            if (rows)
+                                rows.forEach(function (row) {
+
+                                    var checkbox = row.find('input[type=checkbox]');
+                                    $(checkbox).prop('checked', true);
+                                });
+                        },
+
+                        rowClick: function (args) {
+
+                            var $tr = $(args.event.currentTarget);
+                            $tr.toggleClass('selected-row');
+
+                            var elem = $(args.event.target);
+                            var checkbox = $(args.event.currentTarget).find('input[type=checkbox]');
+
+                            var materialLotProdorderID = args.item.ID;
+                            var index = $scope.materialLotProdorderIDs.indexOf(materialLotProdorderID);
+
+
+                            if (index == -1) {
+
+                                if (!elem.is('input'))
+                                    $(checkbox).prop('checked', true);
+
+                                $scope.materialLotProdorderIDs.push(materialLotProdorderID);
+                            }
+
+                            else {
+
+                                if (!elem.is('input'))
+                                    $(checkbox).prop('checked', false);
+
+                                $scope.materialLotProdorderIDs = $scope.materialLotProdorderIDs.filter(function (item) {
+                                    return item != materialLotProdorderID;
+                                });
+                            };
+
+                            $scope.$apply();
+
+
+
+                        }
+
+                    }).jsGrid('initOdata', {
+                        serviceUrl: serviceUrl,
+                        table: 'v_MaterialLotChange',
+
+                        fields: [{
+                            id: 'PROD_ORDER',
+                            name: 'PROD_ORDER',
+                            title: $translate.instant('marker.grid.PROD_ORDER'),
+                            width: 120,
+                            order: 1
+                        },
+                        {
+                            id: 'PART_NO',
+                            name: 'PART_NO',
+                            title: $translate.instant('marker.grid.PART_NO'),
+                            width: 100,
+                            order: 2
+                        },
+                        {
+                            id: 'FactoryNumber',
+                            name: 'FactoryNumber',
+                            title: $translate.instant('marker.grid.FactoryNumber'),
+                            width: 120,
+                            order: 3
+                        },
+                        {
+                            id: 'BUNT_NO',
+                            name: 'BUNT_NO',
+                            title: $translate.instant('marker.grid.BUNT_NO'),
+                            width: 145,
+                            order: 4
+                        },
+                        {
+                            id: 'CreateTime',
+                            name: 'CreateTime',
+                            title: $translate.instant('marker.grid.CreateTime'),
+                            width: 150,
+                            order: 5
+                        },
+
+                        {
+                            id: 'Quantity',
+                            name: 'Quantity',
+                            title: $translate.instant('marker.grid.Quantity'),
+                            width: 50,
+                            order: 6
+                        },
+                        {
+                            id: 'selected',
+                            name: 'selected',
+                            title: ' ',
+                            type: 'myCheckbox',
+                            width: 25,
+                            order: 7
+                        }]
+
+                    })
+
+
+
+
+
                     var selectedProfileInfo = $scope.profiles.find(function (profile) {
 
                         return profile.ID == $scope.selectedProfile;
@@ -1162,6 +1286,8 @@
             if ($rootScope.intervalWorkRequest)
                 $interval.cancel($rootScope.intervalWorkRequest);
 
+            $scope.isLoading = true;
+
             indexService.sendInfo('set_StandardMode', {
 
                 EquipmentID: parseInt($scope.currentScaleID) || null
@@ -1169,6 +1295,11 @@
 
                 $scope.standard = true;
                 $scope[mode] = false;
+
+                $scope.sandwichMode = false;
+                $scope.sandwichModeAccepted = false;
+
+                $scope.isLoading = false;
 
                 vmGetLatestWorkRequest($scope.currentScaleID);
             });
@@ -1337,6 +1468,7 @@
             },
             translates: {
 
+                errorConnection: $translate.instant('errorConnection'),
                 fillRequired: $translate.instant('marker.errorMessages.fillRequired')
             },
             fields: fields
@@ -1515,6 +1647,7 @@
             }
 
             $scope.OKLabel = $translate.instant('loadingMsg');
+            $scope.isLoading = true;
 
             indexService.sendInfo('ins_WorkRequestStandart', data)
                         .then(function (response) {
@@ -1522,6 +1655,7 @@
                             $scope.OKLabel = $translate.instant('marker.acceptOrderTask');
                             $scope.disableButtonOKTask = true;
                             $scope.sandwichModeAccepted = $scope.sandwichMode;
+                            $scope.isLoading = false;
                         });
         } else {
 
@@ -1556,12 +1690,14 @@
 
             $scope[label] = $translate.instant('loadingMsg');
 
+            $scope.isLoading = true;
             indexService.sendInfo(url, {
 
                 EquipmentID: parseInt($scope.currentScaleID) || null
             }).then(function (response) {
 
-                $scope[label] = $translate.instant(text)
+                $scope[label] = $translate.instant(text);
+                $scope.isLoading = false;
             });
 
             //if (!$scope.standard && label == 'takeWeightLabel') {
@@ -1597,12 +1733,14 @@
 
     function vmSetStandardMode() {
 
+        $scope.isLoading = true;
         indexService.sendInfo('set_StandardMode', {
 
             EquipmentID: parseInt($scope.currentScaleID) || null
         }).then(function (response) {
 
             $scope.standard = true;
+            $scope.isLoading = false;
 
             if ($scope.sortingMode)
                 $scope.sortingMode = false;
@@ -1689,7 +1827,9 @@
         else {
 
             $scope.noHandModeQuantity = false;
-            
+
+            $scope.isLoading = true;
+
             indexService.sendInfo('ins_ManualWeightEntry', {
                 EquipmentID: parseInt($scope.currentScaleID) || null,
                 Quantity: $scope.handModeQuantity
@@ -1703,132 +1843,17 @@
         $scope.toggleModalHandMode = false;
         $scope.noHandModeQuantity = false;
         $scope.handModeQuantity = null;
+        $scope.isLoading = false;
     };
 
     function vmShowOrderChangeModal() {
 
         $scope.toggleModalOrderChange = true;
         $scope.materialLotProdorderIDs = [];
+       
+        $('#changeOrderGrid').jsGrid('loadOdata', {
 
-        $('#changeOrderGrid').jsGrid({
-            width: "750px",
-
-            sorting: false,
-            paging: true,
-            editing: false,
-            filtering: true,
-            autoload: true,
-            pageLoading: true,
-            inserting: false,
-            pageIndex: 1,
-            pageSize: 14,
-
-            onDataLoaded: function(args){
-
-                var rows = vmShowSelectedRows(args, $scope.materialLotProdorderIDs, 'ID', 'FactoryNumber');
-
-                if (rows)
-                    rows.forEach(function (row) {
-
-                        var checkbox = row.find('input[type=checkbox]');
-                        $(checkbox).prop('checked', true);
-                    });
-            },
-            
-            rowClick: function (args) {
-
-                var $tr = $(args.event.currentTarget);
-                $tr.toggleClass('selected-row');
-                
-                var elem = $(args.event.target);
-                var checkbox = $(args.event.currentTarget).find('input[type=checkbox]');
-
-                var materialLotProdorderID = args.item.ID;
-                var index = $scope.materialLotProdorderIDs.indexOf(materialLotProdorderID);
-               
-
-                if (index == -1) {
-
-                    if (!elem.is('input')) 
-                        $(checkbox).prop('checked', true);
-                                        
-                    $scope.materialLotProdorderIDs.push(materialLotProdorderID);
-                }
-
-                else {
-
-                    if (!elem.is('input'))
-                        $(checkbox).prop('checked', false);
-
-                    $scope.materialLotProdorderIDs = $scope.materialLotProdorderIDs.filter(function (item) {
-                        return item != materialLotProdorderID;
-                    });
-                };
-
-                $scope.$apply();
-                
-
-                
-            }
-
-        }).jsGrid('initOdata', {
-            serviceUrl: serviceUrl,
-            table: 'v_MaterialLotChange',
-
-            fields: [{
-                id: 'PROD_ORDER',
-                name: 'PROD_ORDER',
-                title: $translate.instant('marker.grid.PROD_ORDER'),
-                width: 120,
-                order: 1
-            },
-            {
-                id: 'PART_NO',
-                name: 'PART_NO',
-                title: $translate.instant('marker.grid.PART_NO'),
-                width: 100,
-                order: 2
-            },
-            {
-                id: 'FactoryNumber',
-                name: 'FactoryNumber',
-                title: $translate.instant('marker.grid.FactoryNumber'),
-                width: 120,
-                order: 3
-            },
-            {
-                id: 'BUNT_NO',
-                name: 'BUNT_NO',
-                title: $translate.instant('marker.grid.BUNT_NO'),
-                width: 145,
-                order: 4
-            },
-            {
-                id: 'CreateTime',
-                name: 'CreateTime',
-                title: $translate.instant('marker.grid.CreateTime'),
-                width: 150,
-                order: 5
-            },
-
-            {
-                id: 'Quantity',
-                name: 'Quantity',
-                title: $translate.instant('marker.grid.Quantity'),
-                width: 50,
-                order: 6
-            },
-            {
-                id: 'selected',
-                name: 'selected',
-                title: ' ',
-                type: 'myCheckbox',
-                width: 25,
-                order: 7
-            }]
-
-        }).jsGrid('loadOdata', {
-
+            defaultFilter: 'SideID eq {0}'.format($scope.sideIsSelected),
             order: 'ID desc'
         });
     }
@@ -1855,11 +1880,15 @@
         } else {
 
             $scope.noNewOrderNumber = false;
+            $scope.isLoading = true;
+
             indexService.sendInfo('upd_MaterialLotProdOrder', {
 
                 PROD_ORDER: $scope.NewOrderNumber,
                 MaterialLotIDs: $scope.MaterialLotIDs
             }).then(function () {
+
+                $scope.isLoading = false;
 
                 $scope.NewOrderNumber = null;
                 $('#changeOrderGrid').jsGrid('loadData', {});
@@ -1884,9 +1913,24 @@
         window.open(url, '_blank');
     };
 
+    $('.oDataForm').on('oDataForm.processing', function () {
+
+        $scope.isLoading = true;
+
+        $scope.$apply();
+    });
+
+    $('.oDataForm').on('oDataForm.failed', function () {
+
+        $scope.isLoading = false;
+
+        $scope.$apply();
+    });
+
     //there are events triggered on success and cancel button click in order modal form
     $('#orderForm').on('oDataForm.success', function (e, data) {
 
+        $scope.isLoading = false;
         $scope.disableButtonOKTask = true;
         $scope.isAcceptedOrder = true;
         vmToggleModal(false);
@@ -1899,6 +1943,7 @@
 
     $('#orderForm').on('oDataForm.cancel', function (e) {
 
+        $scope.isLoading = false;
         vmToggleModal(false);
         vmShowLastCommOrderValue();
 
@@ -1907,6 +1952,7 @@
 
     $('#remarkerForm').on('oDataForm.success', function (e) {
 
+        $scope.isLoading = false;
         vmActionsOnExit('remarkerForm', 'isShowReMarkForm');
 
         $scope.$apply();
@@ -1922,6 +1968,8 @@
 
     $('#sortingForm').on('oDataForm.success', function (e) {
 
+        $scope.isLoading = false;
+
         vmCloseModal('toggleModalSort');
         vmActionsOnExit('sortingForm', 'isShowSortingForm');
 
@@ -1933,6 +1981,8 @@
 
     $('#sortingForm').on('oDataForm.cancel', function (e) {
 
+        $scope.isLoading = false;
+
         vmCloseModal('toggleModalSort');
         vmActionsOnExit('sortingForm', 'isShowSortingForm');
 
@@ -1940,6 +1990,8 @@
     });
 
     $('#rejectForm').on('oDataForm.success', function (e) {
+
+        $scope.isLoading = false;
 
         vmCloseModal('toggleModalReject');
         vmActionsOnExit('rejectForm', 'isShowRejectForm');
@@ -1952,6 +2004,8 @@
 
     $('#rejectForm').on('oDataForm.cancel', function (e) {
 
+        $scope.isLoading = false;
+
         vmCloseModal('toggleModalReject');
         vmActionsOnExit('rejectForm', 'isShowRejectForm');
 
@@ -1959,6 +2013,8 @@
     });
 
     $('#separateForm').on('oDataForm.success', function (e) {
+
+        $scope.isLoading = false;
 
         vmCloseModal('toggleModalSeparate');
         vmActionsOnExit('separateForm', 'isShowSeparateForm');
@@ -1970,6 +2026,8 @@
     })
 
     $('#separateForm').on('oDataForm.cancel', function (e) {
+
+        $scope.isLoading = false;
 
         vmCloseModal('toggleModalSeparate');
         vmActionsOnExit('separateForm', 'isShowSeparateForm');
@@ -2062,6 +2120,7 @@
 
                        return item.ID == $scope.scaleLeft.ID
                    });
+                   
 
                    vmCalculateRods($scope.scalesLeftSideInfo);
                };
@@ -2075,6 +2134,15 @@
 
                    vmCalculateRods($scope.scalesRightSideInfo);
                };
+
+               if (($scope.scalesLeftSideInfo && $scope.scalesLeftSideInfo.POCKET_LOC == true && $scope.scalesLeftSideInfo.WEIGHT_STAB == false) ||
+                   ($scope.scalesRightSideInfo && $scope.scalesRightSideInfo.POCKET_LOC == true && $scope.scalesRightSideInfo.WEIGHT_STAB == false)) {
+
+                   vmSetBlinking();
+               } else {
+
+                   vmClearStyle($('.monitorSideItem'));
+               }
                               
             });
     }
@@ -2101,7 +2169,7 @@
     $scope.dateStart = indexService.getDateChartFormat(new Date(date.setHours(date.getHours() - 1)));
     $scope.chartDataLoaded = false;
 
-    $scope.getChartData = vmGetChartData;
+    $scope.getChartData = vmGetChartData;    
 
     $('#chart-date-start').datetimepicker({
         defaultDate: new Date($scope.dateStart),
@@ -2336,6 +2404,7 @@
         var url = 'v_MaterialLotReport?$filter=SideID eq {0} and PROD_DATE ge {1} and PROD_DATE le {2}'
                             .format($state.params.side, dateStart, dateEnd);
 
+
         indexService.getInfo(url).then(function (responce) {
 
             $scope.reportDataLoading = false;
@@ -2458,8 +2527,12 @@
                 return item.CREATE_MODE == 'Печать с ручным вводом веса';
             });
         }
-        
 
+        data = data.sort(function (a, b) {
+
+            return b.ID - a.ID
+        });
+        
         $('#handModeGrid').jsGrid({
             width: "940px",
 
@@ -2514,14 +2587,22 @@
 
         element.bind("keydown keypress", function (event) {
 
-            if (!((event.which >= 48 && event.which <= 57) || (event.which >= 96 && event.which <= 105))
-                && event.which != 8 && event.which != 46 && event.which != 13 && event.which != 37
-                && event.which != 38 && event.which != 39 && event.which != 40 && event.which != 9) {
+            var val = element.val();
+
+            var permittedSymbols = [8, 46, 13, 37, 38, 39, 40, 9];
+
+            if (attrs.myNumberCheck != 'number') 
+                permittedSymbols.push(190);
+                                      
+            if ((!((event.which >= 48 && event.which <= 57) || (event.which >= 96 && event.which <= 105))
+                && permittedSymbols.indexOf(event.which) == -1) || 
+                (attrs.myNumberCheck != 'number' && event.which == 190 && element.val().indexOf('.') > -1)) {
 
                 return false;
             };
         });
-    };
+    }
+        
 });
 
 

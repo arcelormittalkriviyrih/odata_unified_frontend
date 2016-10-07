@@ -43,7 +43,7 @@
 
                     <div class="dropdown form-control">
                         <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <input type="text" class="dropdown-input" name="Status" required />
+                            <input type="text" class="dropdown-input" id="status" name="Status" required />
                             <span class="caret"></span>
                         </div>
                         <ul class="dropdown-menu" id="status" aria-labelledby="dropdownMenu1">
@@ -82,7 +82,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label for="fileData">{{ 'market.grid.labelTemplate.file' | translate }}</label>
+                    <label for="fileDataCreate">{{ 'market.grid.labelTemplate.file' | translate }}</label>
                     <span class="btn btn-default btn-file">
                         {{ 'buttonUpload' | translate }}
                         <input type="file" class="form-control" id="fileDataCreate" name="Data" required />
@@ -92,7 +92,7 @@
                 <div class="col-md-3">
 
                     <label>&nbsp;</label>
-                    <button type="submit" class="btn btn-default">OK</button>
+                    <button id="createLabelTemplate" type="submit" class="btn btn-default">OK</button>
                     <button id="cancelCreate" class="btn btn-default pull-right">{{ 'buttonCancel' | translate }}</button>
                 </div>
             </div>
@@ -133,10 +133,12 @@
                     <div class="col-md-6">
 
                         <label>&nbsp;</label>
+
                         <button type="submit"
+                                ng-disabled="!showSubmitButtonUpload"
                                 ng-class="{'btn-small upload-button-small': locale == 'ua' }"
                                 class="btn btn-default pull-right">
-                            {{ 'market.grid.labelTemplate.upload' | translate }}
+                            {{'market.grid.labelTemplate.upload' | translate}}
                         </button>
                     </div>
                 </form>
@@ -166,7 +168,7 @@
 
                             <div class="dropdown form-control">
                                 <div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <input type="text" class="dropdown-input" name="Status" required />
+                                    <input type="text" class="dropdown-input" id="status" name="Status" required />
                                     <span class="caret"></span>
                                 </div>
                                 <ul class="dropdown-menu" id="status" aria-labelledby="dropdownMenu1">
@@ -202,7 +204,7 @@
                         <div class="col-md-6">
 
                             <label>&nbsp;</label>
-                            <button type="submit" class="btn btn-default pull-right">{{ 'market.grid.labelTemplate.update' | translate }}</button>
+                            <button type="submit" class="btn btn-default pull-right">{{'market.grid.labelTemplate.update' | translate}}</button>
                         </div>
                     </div>
 
@@ -234,6 +236,16 @@
         </div>
 
     </div>
+</div>
+
+<div style="position:fixed; top:0; left:0; width: 100%; height: 100%; z-index:2000;"
+     class="container loading"
+     ng-show="isLoading">
+
+    <div class="loading-msg">
+        <h3>{{'processing' | translate}}</h3>
+    </div>
+
 </div>
 
 

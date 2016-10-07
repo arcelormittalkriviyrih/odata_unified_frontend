@@ -16,10 +16,33 @@
             paperHeight: _height,
             translates: {
 
-                saveBtn: 'save changes',
-                saving: 'saving...',
-                acceptChangeSize: 'accept',
-                declineChangeSize: 'decline'
+                saveBtn: 'Save changes',
+                undoBtn: 'Undo',
+                saving: 'Saving...',
+                accept: 'Apply',
+                decline: 'Cancel',
+                changeItemName: 'Change item name',
+                changePaperSize: 'Change paper size',
+                changePaperWidth: 'Change paper width',
+                changePaperHeight: 'Change paper height',
+                width: 'Width',
+                height: 'Height',
+                createLink: 'Create link',
+                nodeCreated: 'Node is created!',
+                linkCreated: 'Link is created!',
+                nodeRemoved: 'Node is removed!',
+                linkIsRemoved: 'Link is removed!',
+                nodeRenamed: 'Node is renamed!',
+                linkRenamed: 'Link is renamed!',
+                from: 'From',
+                to: 'To',
+                createNode: 'Create node',
+                removeNode: 'Remove node',
+                removeLink: 'Remove link',
+                renameNode: 'Rename node',
+                renameLink: 'Rename link',
+                cannotRemoveNode: 'You cannot remove this node!',
+                confirmRemoveNode: 'Do you really want remove this node?'
             }
         });
     });
