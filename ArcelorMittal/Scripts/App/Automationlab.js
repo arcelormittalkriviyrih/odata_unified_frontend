@@ -37,10 +37,11 @@
     //$materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
 
     //$hierarchyMaterialClass = $('#hierarchy_material_class').empty();
-
-    $('div#material_definition').jsGrid({
-        height: "500px",
-        width: "100%",
+    $scope.count = "";
+   
+    $("#material_definition").jsGrid({
+        height: "400px",
+        width: "940px",
 
         sorting: false,
         paging: true,
@@ -50,19 +51,35 @@
         pageLoading: true,
         inserting: true,
         pageIndex: 1,
-        pageSize: 10,
-        rowClick: function (args) {
+        pageSize: 30,
 
-            //vmActiveRow(args);
-
-            //$materialDefinitionPropertyDisable.hide();
-
-            
+        onDataLoaded: function (args) {
+                
         },
+
+        rowClick: function (args) {
+        },
+
+        rowClass: function (item, itemIndex) {
+            //// чередование цвета строк для разных вагонов
+            //var rowclass = "";
+            //if (item.WagonIndex % 2 == 1) {
+            //    rowclass = "jsgrid-weight-odd-row td";
+            //}
+            //else {
+            //    rowclass = "jsgrid-weight-even-row td";
+            //};
+            //if (item.WeightingIndex == 1) {
+            //    rowclass += " jsgrid-weight-border-row td";
+            //};
+
+            //return rowclass;
+                
+        }
 
     }).jsGrid('initOdata', {
         serviceUrl: serviceUrl,
-        table: 'MaterialDefinition',
+        table: 'v_AcceptanceMaterial',
 
         fields: [{
             id: 'ID',
@@ -70,20 +87,26 @@
             title: 'ID',
             order: 1
         }, {
+            id: 'FactoryNumber',
+            name: 'FactoryNumber',
+            title: 'Factory Number',
+            order: 2
+        }, {
+
             id: 'Description',
             name: 'Description',
             title: 'Description',
-            order: 2
-        //}, {
-        //   // id: 'Status',
-        //    name: 'Status',
-        //    title: 'Status',
-        //    order: 3
-        //},{    
-        //   // id: 'Location',
-        //    name: 'Location',
-        //    title: 'Location',
-        //    order: 4
+            order: 3
+        }, {
+            id: 'Status',
+            name: 'Status',
+            title: 'Status',
+            order: 4
+        }, {
+            id: 'Location',
+            name: 'Location',
+            title: 'Location',
+            order: 5
         }],
 
         controlProperties: {
@@ -94,11 +117,97 @@
             modeSwitchButton: true
         }
     }).jsGrid('loadOdata', {
-        defaultFilter: 'ID eq -1',
-        order: 'Description'
+        defaultFilter: 'FactoryNumber eq \'{0}\''.format(-1)
     });
 
-    
+
+
+    $scope.vmCreateMaterialTable = function () {
+        $materialDefinitionDisable.hide();
+        var Facnum = $scope.count;
+        $("#material_definition").jsGrid({
+            //height: "400px",
+            width: "940px",
+
+            sorting: true,
+            paging: true,
+            editing: false,
+            filtering: true,
+            autoload: true,
+            pageLoading: true,
+            inserting: false,
+            pageIndex: 1,
+            pageSize: 30,
+
+            onDataLoaded: function (args) {
+                
+            },
+
+            rowClick: function (args) {
+            },
+
+            rowClass: function (item, itemIndex) {
+                //// чередование цвета строк для разных вагонов
+                //var rowclass = "";
+                //if (item.WagonIndex % 2 == 1) {
+                //    rowclass = "jsgrid-weight-odd-row td";
+                //}
+                //else {
+                //    rowclass = "jsgrid-weight-even-row td";
+                //};
+                //if (item.WeightingIndex == 1) {
+                //    rowclass += " jsgrid-weight-border-row td";
+                //};
+
+                //return rowclass;
+                
+            }
+
+        }).jsGrid('initOdata', {
+            serviceUrl: serviceUrl,
+            table: 'v_AcceptanceMaterial',
+
+            fields: [{
+                id: 'ID',
+                name: 'ID',
+                title: 'ID',
+                order: 1
+            }, {
+                id: 'FactoryNumber',
+                name: 'FactoryNumber',
+                title: 'Factory Number',
+                order: 2
+            }, {
+
+                id: 'Description',
+                name: 'Description',
+                title: 'Description',
+                order: 3
+            }, {
+                id: 'Status',
+                name: 'Status',
+                title: 'Status',
+                order: 4
+            }, {
+                id: 'Location',
+                name: 'Location',
+                title: 'Location',
+                order: 5
+            }],
+
+            controlProperties: {
+                type: 'control',
+                editButton: false,
+                deleteButton: false,
+                clearFilterButton: true,
+                modeSwitchButton: true
+            
+            }
+        }).jsGrid('loadOdata', {
+            defaultFilter: 'FactoryNumber eq \'{0}\''.format(Facnum)
+        });
+
+    }
 
     
 
