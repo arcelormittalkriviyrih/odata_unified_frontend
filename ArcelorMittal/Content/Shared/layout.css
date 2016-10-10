@@ -1260,82 +1260,6 @@ div.odataDiagram {
     }
 
 
-
-/*weightanalytics*/
-
-.weightanalytics {
-    width: 180px;
-}
-
-    .weightanalytics .dropdown-toggle {
-        width: 160px;
-    }
-
-.controlsRowWeightanalytics {
-    font-size: 0;
-    position: relative;
-    height: 30px;
-    margin-bottom: 5px;
-    display: table;
-    width: 100%;
-}
-
-div.captionWeightanalytics {
-    width: 40%;
-    height: 100%;
-    text-align: left;
-    line-height: 12px;
-    font-size: 14px;
-    box-sizing: border-box;
-    padding-right: 3px;
-    position: relative;
-    display: table-cell;
-    vertical-align: middle;
-}
-
-div.controlWeightanalytics {
-    width: 56%;
-    text-align: right;
-    line-height: 12px;
-    font-size: 12px;
-}
-
-    div.controlWeightanalytics .dropdown-toggle .dropdown-input {
-        outline: none;
-        border: none;
-        width: 90%!important;
-        height: 25px;
-        margin-top: -2px;
-    }
-
-    div.controlWeightanalytics .input-small {
-        width: 180px;
-    }
-
-.scaleInfo .takeWeight {
-    width: 60%;
-}
-
-.scaleDetailInfo .leftpanel {
-    padding: 10px;
-    height:335px;
-}
-
-.leftpanel .controls button {
-    width: 49%;
-    margin-bottom: 5px;
-}
-
-.plotAreaWeightanalytics {
-    margin: 0px;
-}
-
-.indicatorsWeightanalytics {
-    margin-top: -25px;
-    margin-bottom: 5px;
-    left: 10px;
-}
-
 .changePaperSizeForm input, .showCreateLinkForm div.dropdown{
     margin-bottom: 10px;
 }
@@ -1392,6 +1316,89 @@ div.controlWeightanalytics {
     min-width: 200px;
     list-style: none;
     padding: 0;
+}
+
+
+/*weightanalytics*/
+
+.weightanalytics {
+    width: 180px;
+}
+
+.weightanalytics .dropdown-toggle {
+    width: 160px;
+}
+
+.scaleInfo .controlsWeightanalytics {
+    position: absolute;
+    bottom: 10px;
+    width: 94%;
+    text-align: center;
+}
+
+.controlsRowWeightanalytics {
+    font-size: 0;
+    position: relative;
+    height: 30px;
+    margin-bottom: 5px;
+    display: table;
+    width: 100%;
+}
+
+div.captionWeightanalytics {
+    width: 40%;
+    height: 100%;
+    text-align: left;
+    line-height: 12px;
+    font-size: 14px;
+    box-sizing: border-box;
+    padding-right: 3px;
+    position: relative;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+div.controlWeightanalytics {
+    width: 56%;
+    text-align: right;
+    line-height: 12px;
+    font-size: 12px;
+}
+
+div.controlWeightanalytics .dropdown-toggle .dropdown-input {
+    outline: none;
+    border: none;
+    width: 90%!important;
+    height: 25px;
+    margin-top: -2px;
+}
+
+div.controlWeightanalytics .input-small {
+    width: 180px;
+}
+
+.scaleInfo .takeWeight {
+    width: 49%;
+}
+
+.scaleDetailInfo .leftpanel {
+    padding: 10px;
+    height:335px;
+}
+
+.leftpanel .controls button {
+    width: 49%;
+    margin-bottom: 5px;
+}
+
+.plotAreaWeightanalytics {
+    margin: 0px;
+}
+
+.indicatorsWeightanalytics {
+    margin-top: -25px;
+    margin-bottom: 5px;
+    left: 10px;
 }
 
 .infoLabelWeightanalytics {
@@ -1457,7 +1464,7 @@ div.controlWeightanalytics {
 .treeContainerWeightanalytics {
     padding: 0px;
     overflow: auto;
-    height:205px;
+    height:210px;
 }
 
 .plusWeightanalytics {
@@ -1479,4 +1486,14 @@ div.controlWeightanalytics {
     min-width: auto;
     padding-left: 5px;
     padding-right: 20px;
+}
+
+.disableWeightanalytics {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    background: rgba(238, 238, 238, 0.5);
+    top:0; 
+    left:0;
 }

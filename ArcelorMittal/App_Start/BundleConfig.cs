@@ -24,10 +24,10 @@ public class BundleConfig
             "~/scripts/vendor/jqplot/plugins/jqplot.highlighter.js",
             "~/scripts/vendor/dhtmlxscheduler.js",
             "~/scripts/vendor/dhtmlxscheduler_year_view.js",
-            "~/scripts/vendor/select.js",
-            "~/scripts/vendor/backbone.js",
-            "~/scripts/vendor/joint.min.js",
-            "~/scripts/vendor/lodash.js"
+            "~/scripts/vendor/select.js"
+            //"~/scripts/vendor/backbone.js",
+            //"~/scripts/vendor/joint.min.js",
+            //"~/scripts/vendor/lodash.js"
         ));
 
         bundles.Add(new Bundle("~/bundles/js/app").Include(

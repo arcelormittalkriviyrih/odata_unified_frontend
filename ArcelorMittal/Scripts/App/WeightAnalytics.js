@@ -225,7 +225,7 @@
         //so I create rootScope variable and set interval there
         //it will be called in $state onExit handler
         $rootScope.intervalScales = $interval(function () {
-            vmGetScaleData();
+            //vmGetScaleData();
         }, scalesRefresh);
 
     }

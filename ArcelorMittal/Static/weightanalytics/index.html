@@ -97,27 +97,30 @@
             <div>WeightSheetNumber: {{CurrentWeightSheet.WeightSheetNumber}}</div>-->
             <!--<div>WeightSheetStartDT: {{CurrentWeightSheet.WeightSheetStartDT | date:'dd.MM.yyyy HH:mm' : 'UTC'}}</div>-->
 
-            <div ng-show="!CurrentWeightSheet.WeightingMode && isInfoLoaded">
+            <div ng-disabled="CurrentWeightSheet.WeightingMode || !isInfoLoaded">
                 Архивные отвесные:
             </div>
-
-            <div class="treeContainerWeightanalytics"
-                ng-show="!CurrentWeightSheet.WeightingMode && isInfoLoaded">
-                <div id="weight_sheet_list">
+            
+            <div style="position:relative">
+                <div class="treeContainerWeightanalytics">
+                    <div id="weight_sheet_list">
+                    </div>
+                </div>
+                <div class="disableWeightanalytics"
+                    ng-show="CurrentWeightSheet.WeightingMode || !isInfoLoaded">
                 </div>
             </div>
-
-
-            <div class="controls">
+            
+            <div class="controlsWeightanalytics">
                 <button type="button"
-                    class="btn btn-default"
+                    class="btn btn-default takeWeight"
                     ng-disabled="!CurrentWeightSheet.WeightSheetID"
                     ng-click="CloseWSheet()">
                     Печать отвесной
                 </button>
 
                 <button type="button"
-                    class="btn btn-default"
+                    class="btn btn-default takeWeight"
                     my-confirm-click="Вы уверены, что хотите закрыть отвесную?"
                     ng-disabled="!CurrentWeightSheet.WeightSheetID"
                     confirmed-click="CloseWeightSheet()">
@@ -350,8 +353,8 @@
                 {{CurrentWeightSheet.PairNumbers}}              
             </div>
 
-
-            <div class="controls">
+            
+            <div class="controlsWeightanalytics">
                 <button type="button"
                     class="btn btn-default takeWeight"
                     ng-disabled="!((CurrentWeightSheet.WeightingMode.Description == 'Weighting'  && CurrentWeightSheet.CurrentPairNumber && CurrentWeightSheet.WaySheetNumber 
