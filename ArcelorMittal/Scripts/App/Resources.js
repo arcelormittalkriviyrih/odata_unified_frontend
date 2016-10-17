@@ -1,7 +1,7 @@
 ﻿var translations = {
 
     en: {
-        index: {            
+        index: {
             User: 'User',
             Market: 'Market',
             WorkshopSpecs: 'WorkshopSpecs',
@@ -126,7 +126,7 @@
                 equipmentStatus: 'Equipment status'
             }
         },
-        marker: {            
+        marker: {
             changeSide: 'Change side for work:',
             failure: 'failure',
             kg: 'kg',
@@ -152,7 +152,7 @@
             rodsQuantity: 'Rods quantity',
             rodsLeft: 'Rods left',
             scalesBlocked: 'Scales blocked',
-            weightOver: 'Weight is over then maximum permissible weight',           
+            weightOver: 'Weight is over then maximum permissible weight',
             firstPack: 'First pack',
             secondPack: 'Second pack',
             bindingDia: 'Bindind diameter',
@@ -258,16 +258,52 @@
                 materialNo: 'Number of material',
                 mass: 'Mass'
             }
-            
+
         },
-		weightanalytics: {
+        weightanalytics: {
             Kopr4: 'ScrapYard 4',
-            Link2: 'Link2'
+            Link2: 'Link2',
+            Buttons: {
+                printWS: 'Print weightsheet',
+                closeWS: 'Close weightsheet',
+                takeWeight: 'Take weight'
+
+            },
+            Labels: {
+                noOpenedWS: 'No opened weightsheets',
+                openedWS: 'Weightsheet №',
+                archiveWS: 'Archive weightsheets',
+                platform: 'Platform',
+                offset: 'Offset',
+                enterParameter: 'Enter the data',
+                sender: 'Sender',
+                receiver: 'Receiver',
+                scrapType: 'Scrap type',
+                waybill: 'Waybill №',
+                wagon: 'Wagon №',
+                wagonSelect: 'Enter wagons...'
+            },
+            Modal: {
+                enterWSNo: 'Enter weightsheet number'
+            },
+            Table: {
+                weightsheet: 'Weightsheet',
+                wagon: 'Wagon',
+                waybill: 'Waybill',
+                CSH: 'Code',
+                brutto: 'Brutto',
+                tare: 'Tare',
+                netto: 'Netto',
+                weightingTime: 'Weighting time'
+            },
+            ton: 't',
+            Taring: 'Taring',
+            Weighting: 'Weighting'
         },
         error: {
             Unauthorized: 'This role is unavailable for you!'
         },
-        errorLog:{
+        errorLog: {
             errorCode: 'Error message',
             description: 'Enter extra info',
             sending: 'Sending...'
@@ -291,9 +327,9 @@
                 property: 'Property',
                 value: 'Value',
                 description: 'Description'
-            }                                
+            }
         },
-        tree:{
+        tree: {
             nodeName: 'Node name',
             parentID: 'Parent ID',
             equipmentClass: 'Equipment class',
@@ -302,7 +338,7 @@
     },
 
     ru: {
-        index: {            
+        index: {
             User: 'Пользователь',
             Market: 'Маркетолог',
             WorkshopSpecs: 'Специалист Цеха',
@@ -424,7 +460,7 @@
                 equipmentStatus: 'Статус оборудования'
             }
         },
-        marker: {            
+        marker: {
             changeSide: 'Выберите сторону стана для работы:',
             failure: 'авария',
             kg: 'кг',
@@ -556,9 +592,45 @@
                 mass: 'Масса'
             }
         },
-		weightanalytics: {
-		    Kopr4: 'Копровой 4',
-            Link2: 'Ссылка2'
+        weightanalytics: {
+            Kopr4: 'Копровой 4',
+            Link2: 'Ссылка2',
+            Buttons: {
+                printWS: 'Печать отвесной',
+                closeWS: 'Закрыть отвесную',
+                takeWeight: 'Взять вес'
+
+            },
+            Labels: {
+                noOpenedWS: 'Нет открытых отвесных',
+                openedWS: 'Отвесная №',
+                archiveWS: 'Архивные отвесные',
+                platform: 'Платформа',
+                offset: 'Смещение',
+                enterParameter: 'Введите данные',
+                sender: 'Отправитель',
+                receiver: 'Получатель',
+                scrapType: 'Вид лома',
+                waybill: '№ путевой',
+                wagon: 'Лафет-короб',
+                wagonSelect: 'Введите пару...'
+            },
+            Table: {
+                weightsheet: 'Отвесная',
+                wagon: 'Лафет-короб',
+                waybill: 'Путевая',
+                CSH: 'Код',
+                brutto: 'Брутто',
+                tare: 'Тара',
+                netto: 'Нетто',
+                weightingTime: 'Время взвешивания'
+            },
+            Modal: {
+                enterWSNo: 'Введите номер отвесной'
+            },
+            ton: 'т',
+            Taring: 'Тарирование',
+            Weighting: 'Взвешивание'
         },
         error: {
             Unauthorized: 'Эта роль Вам недоступна'
@@ -588,8 +660,8 @@
                 value: 'Значение',
                 description: 'Описание'
             }
-            
-            
+
+
 
         },
         tree: {
@@ -602,7 +674,7 @@
     },
 
     ua: {
-        index: {            
+        index: {
             User: 'Користувач',
             Market: 'Маркетолог',
             WorkshopSpecs: 'Спеціаліст Цеху',
@@ -628,7 +700,7 @@
                     edit: 'Редагувати замовлення',
                     copy: 'Копіювати замовлення'
                 },
-                 
+
                 CreateDialogue: {
 
                     STANDARD: 'Стандарт',
@@ -855,9 +927,43 @@
                 mass: 'Маса'
             }
         },
-		weightanalytics: {
-		    Kopr4: 'Копровий 4',
-            Link2: 'Посилання2'
+        weightanalytics: {
+            Kopr4: 'Копровий 4',
+            Link2: 'Посилання2',
+            Buttons: {
+                printWS: 'Друк вагової',
+                closeWS: 'Закрити вагову',
+                takeWeight: 'Взяти вагу'
+            },
+            Labels: {
+                noOpenedWS: 'Немає відкритих вагових',
+                openedWS: 'Вагова №',
+                archiveWS: 'Архівні вагові',
+                platform: 'Платформа',
+                offset: 'Зміщення',
+                enterParameter: 'Введіть дані',
+                sender: 'Відправник',
+                receiver: 'Отримувач',
+                scrapType: 'Вид лома',
+                waybill: '№ путівої',
+                wagon: 'Лафет-короб',
+                wagonSelect: 'Введіть пару...'
+            }, Table: {
+                weightsheet: 'Вагова',
+                wagon: 'Лафет-короб',
+                waybill: 'Путіва',
+                CSH: 'Код',
+                brutto: 'Бруто',
+                tare: 'Тара',
+                netto: 'Нето',
+                weightingTime: 'Час зважування'
+            },
+            Modal: {
+                enterWSNo: 'Введіть номер вагової'
+            },
+            ton: 'т',
+            Taring: 'Тарування',
+            Weighting: 'Зважування'
         },
         error: {
             Unauthorized: 'У доступі відмовлено'
@@ -887,7 +993,7 @@
                 value: 'Значення',
                 description: 'Опис'
             }
-                        
+
         },
         tree: {
             nodeName: 'Ім\'я вузла',

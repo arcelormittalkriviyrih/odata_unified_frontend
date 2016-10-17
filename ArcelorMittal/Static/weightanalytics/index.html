@@ -33,44 +33,16 @@
         <!--LEFT SIDE-->
         <div class="scaleInfo leftpanel">
 
-
-<!--            <div class="infoLabelWeightanalytics"
-                style="font-weight: bold"
-                ng-show="CurrentWeightSheet.WeightingMode && isInfoLoaded">
-                Отвесная № {{CurrentWeightSheet.WeightSheetNumber}} ({{CurrentWeightSheet.WeightingMode.Description}})
-            </div>
-
-            <div class="infoLabelWeightanalytics"
-                style="font-weight: bold"
-                ng-show="!CurrentWeightSheet.WeightingMode && isInfoLoaded">
-                Нет открытых отвесных
-            </div>
-
-            <div>
-                <div class="dropdown" ng-show="!CurrentWeightSheet.WeightingMode && isInfoLoaded">
-                    <button class="plusWeightanalytics btn btn-default dropdown-toggle " type="button" id="Button2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Создать отвесную                        
-                <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li ng-repeat="mode in WeightingModes"
-                            ng-click="SelectWeighingMode(mode)">{{mode.Description}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            -->
             <div class="controlsRowWeightanalytics" ng-disabled="false">
                 <div class="captionWeightanalytics"
                     style="font-weight: bold; width:80%"
                     ng-show="CurrentWeightSheet.WeightingMode && isInfoLoaded">
-                    Отвесная № {{CurrentWeightSheet.WeightSheetNumber}} ({{CurrentWeightSheet.WeightingMode.Description}})
+                    {{ 'weightanalytics.Labels.openedWS' | translate }} {{CurrentWeightSheet.WeightSheetNumber}} ({{ 'weightanalytics.' + CurrentWeightSheet.WeightingMode.Description | translate }})
                 </div>
                 <div class="captionWeightanalytics"
                     style="font-weight: bold; width:80%"
                     ng-show="!CurrentWeightSheet.WeightingMode && isInfoLoaded">
-                    Нет открытых отвесных
+                    {{ 'weightanalytics.Labels.noOpenedWS' | translate }}
                 </div>
 
                 <div style="text-align:right">
@@ -82,7 +54,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right ttt" aria-labelledby="dropdownMenu1"">
                             <li ng-repeat="mode in WeightingModes"
-                                ng-click="SelectWeighingMode(mode)">{{mode.Description}}
+                                ng-click="SelectWeighingMode(mode)">{{ 'weightanalytics.' + mode.Description | translate }}
                             </li>
                         </ul>
                     </div>
@@ -98,7 +70,7 @@
             <!--<div>WeightSheetStartDT: {{CurrentWeightSheet.WeightSheetStartDT | date:'dd.MM.yyyy HH:mm' : 'UTC'}}</div>-->
 
             <div ng-disabled="CurrentWeightSheet.WeightingMode || !isInfoLoaded">
-                Архивные отвесные:
+                {{ 'weightanalytics.Labels.archiveWS' | translate }}:
             </div>
             
             <div style="position:relative">
@@ -114,9 +86,9 @@
             <div class="controlsWeightanalytics">
                 <button type="button"
                     class="btn btn-default takeWeight"
-                    ng-disabled="!CurrentWeightSheet.WeightSheetID"
+                    ng-disabled="!CurrentWeightSheet.WeightSheetID && !ArchiveWeightSheetSelected"
                     ng-click="CloseWSheet()">
-                    Печать отвесной
+                    {{'weightanalytics.Buttons.printWS' | translate}}
                 </button>
 
                 <button type="button"
@@ -124,7 +96,7 @@
                     my-confirm-click="Вы уверены, что хотите закрыть отвесную?"
                     ng-disabled="!CurrentWeightSheet.WeightSheetID"
                     confirmed-click="CloseWeightSheet()">
-                    Закрыть отвесную
+                    {{'weightanalytics.Buttons.closeWS' | translate}}
                 </button>
 
             </div>
@@ -135,7 +107,7 @@
         <!--CENTER SIDE-->
         <div class="scaleInfo leftpanel" ng-disabled="!CurrentWeightSheet.WeightingMode">
             <div ng-style="{'visibility': CurrentWeightSheet.WeightingMode ? 'visible' : 'hidden'}">
-                <div uib-alert class="infoLabelWeightanalytics alertWeightanalytics" style="text-transform: uppercase">-- {{CurrentWeightSheet.WeightingMode.Description}} --</div>
+                <div uib-alert class="infoLabelWeightanalytics alertWeightanalytics" style="text-transform: uppercase">-- {{ 'weightanalytics.' + CurrentWeightSheet.WeightingMode.Description | translate }} --</div>
 
                 <div class="scaleContainer"
                     style="width: 290px"
@@ -152,11 +124,11 @@
 
                         <div ng-show="true">
 
-                            <h3 ng-show="true" class="indicatorsWeightanalytics">{{CurrentWeight | number:2}} {{ 'marker.kg' | translate }}
+                            <h3 ng-show="true" class="indicatorsWeightanalytics">{{CurrentWeight | number:2}} {{ 'weightanalytics.ton' | translate }}
                             </h3>
                             <div class="indicatorsWeightanalytics isStableScalesIndicator"
-                                style="display: inherit"
-                                ng-show="true">
+                                style=""
+                                ng-show="WeightStab">
                             </div>
 
                             <i class="circle indicatorsWeightanalytics"
@@ -174,19 +146,19 @@
 
                 <div class="paramRowWeightanalytics">
                     <div class="paramNameWeightanalytics">
-                        Платформа I                   
+                        {{ 'weightanalytics.Labels.platform' | translate }} I                   
                     </div>
                     <div class="paramValueWeightanalytics" ng-style="{'visibility': CurrentWeightSheet.WeightingMode ? 'visible' : 'hidden'}">
-                        {{CurrentWeight/(1.5) | number:2}} т
+                        {{CurrentWeight/(1.5) | number:2}} {{ 'weightanalytics.ton' | translate }}
                     </div>
                 </div>
 
                 <div class="paramRowWeightanalytics">
                     <div class="paramNameWeightanalytics">
-                        Платформа II                   
+                        {{ 'weightanalytics.Labels.platform' | translate }} II                   
                     </div>
                     <div class="paramValueWeightanalytics" ng-style="{'visibility': CurrentWeightSheet.WeightingMode ? 'visible' : 'hidden'}">
-                        {{CurrentWeight/(2) | number:2}} т
+                        {{CurrentWeight/(2) | number:2}} {{ 'weightanalytics.ton' | translate }}
                     </div>
                 </div>
 
@@ -196,19 +168,19 @@
 
                 <div class="paramRowWeightanalytics">
                     <div class="paramNameWeightanalytics">
-                        Смещение X                  
+                        {{ 'weightanalytics.Labels.offset' | translate }} X                  
                     </div>
                     <div class="paramValueWeightanalytics" ng-style="{'visibility': CurrentWeightSheet.WeightingMode ? 'visible' : 'hidden'}">
-                        {{0.1*CurrentWeight-5 | number:2}} т
+                        {{0.1*CurrentWeight-5 | number:2}} {{ 'weightanalytics.ton' | translate }}
                     </div>
                 </div>
 
                 <div class="paramRowWeightanalytics">
                     <div class="paramNameWeightanalytics">
-                        Смещение Y                   
+                        {{ 'weightanalytics.Labels.offset' | translate }} Y                   
                     </div>
                     <div class="paramValueWeightanalytics" ng-style="{'visibility': CurrentWeightSheet.WeightingMode ? 'visible' : 'hidden'}">
-                        {{0.05*CurrentWeight-4 | number:2}} т
+                        {{0.05*CurrentWeight-4 | number:2}} {{ 'weightanalytics.ton' | translate }}
                     </div>
                 </div>
 
@@ -225,11 +197,11 @@
         <!--RIGHT SIDE-->
         <div class="scaleInfo leftpanel" ng-disabled="!CurrentWeightSheet.WeightingMode">
 
-            <div uib-alert class="infoLabelWeightanalytics">Введите данные:</div>
+            <div uib-alert class="infoLabelWeightanalytics">{{ 'weightanalytics.Labels.enterParameter' | translate }}:</div>
             <!--<div class="controlsWrapper">-->
             <div class="controlsRowWeightanalytics" ng-disabled="CurrentWeightSheet.WeightingMode.Description == 'Taring' || !CurrentWeightSheet.WeightingMode">
                 <div class="captionWeightanalytics">
-                    Поставщик 
+                    {{ 'weightanalytics.Labels.sender' | translate }} 
                    
                 </div>
                 <div class="controlWeightanalytics">
@@ -257,7 +229,7 @@
             <!--<div class="controlsWrapper">-->
             <div class="controlsRowWeightanalytics" ng-disabled="CurrentWeightSheet.WeightingMode.Description == 'Taring' || !CurrentWeightSheet.WeightingMode">
                 <div class="captionWeightanalytics">
-                    Получатель 
+                    {{ 'weightanalytics.Labels.receiver' | translate }}  
                    
                 </div>
                 <div class="controlWeightanalytics">
@@ -285,8 +257,7 @@
             <!--<div class="controlsWrapper">-->
             <div class="controlsRowWeightanalytics" ng-disabled="CurrentWeightSheet.WeightingMode.Description == 'Taring' || !CurrentWeightSheet.WeightingMode">
                 <div class="captionWeightanalytics">
-                    Вид лома 
-                   
+                    {{ 'weightanalytics.Labels.scrapType' | translate }}                  
                 </div>
                 <div class="controlWeightanalytics">
                     <div class="dropdown form-control weightanalytics"
@@ -313,8 +284,7 @@
             <div class="controlsRowWeightanalytics"
                 ng-disabled="CurrentWeightSheet.WeightingMode.Description == 'Taring' || !CurrentWeightSheet.WeightingMode">
                 <div class="captionWeightanalytics">
-                    № путевой 
-                   
+                    {{ 'weightanalytics.Labels.waybill' | translate }} 
                 </div>
                 <div class="controlWeightanalytics">
                     <input type="text" class="input-small form-control"
@@ -326,12 +296,12 @@
 
             <div class="controlsRowWeightanalytics" ng-disabled="!CurrentWeightSheet.WeightingMode">
                 <div class="captionWeightanalytics">
-                    Лафет-Короб                   
+                    {{ 'weightanalytics.Labels.wagon' | translate }}                   
                 </div>
                 <div class="controlWeightanalytics">
                     <div class="dropdown weightanalytics">
                         <ui-select ng-model="CurrentPairNumber.selected" on-select="SelectPairNumber($item)" ng-disabled="!CurrentWeightSheet.WeightingMode">
-                            <ui-select-match placeholder="Enter or select pair...">{{$select.selected}}</ui-select-match>
+                            <ui-select-match placeholder="{{ 'weightanalytics.Labels.wagonSelect' | translate }}">{{$select.selected}}</ui-select-match>
                             <ui-select-choices repeat="Pair in GetPairNumbers($select.search) | filter: $select.search">
                                 <div ng-bind="Pair"></div>
                             </ui-select-choices>
@@ -359,10 +329,10 @@
                     class="btn btn-default takeWeight"
                     ng-disabled="!((CurrentWeightSheet.WeightingMode.Description == 'Weighting'  && CurrentWeightSheet.CurrentPairNumber && CurrentWeightSheet.WaySheetNumber 
                                         && CurrentWeightSheet.SelectedScrapSender.Name && CurrentWeightSheet.SelectedScrapReceiver.Name && CurrentWeightSheet.SelectedScrapType)
-                                || (CurrentWeightSheet.WeightingMode.Description == 'Taring'    && CurrentWeightSheet.CurrentPairNumber))
-                                || TakeWeightButtonDisabled || (CurrentWeight < 10)"
+                                || (CurrentWeightSheet.WeightingMode.Description == 'Taring'    && CurrentWeightSheet.CurrentPairNumber)) 
+                                || TakeWeightButtonDisabled || (CurrentWeight < 10) || !WeightStab"
                     ng-click="TakeWeight()">
-                    ВЗЯТЬ ВЕС
+                    {{'weightanalytics.Buttons.takeWeight' | translate}}
                 </button>
             </div>
 
@@ -392,7 +362,7 @@
 
 
 
-    <!--Manual weight input modal form-->
+    <!--weightsheet number input modal form-->
     <div class="black-wrapper" ng-show="ShowWeightSheetNumberModalWindow">
         <div class="modal additional">
             <button type="button"
@@ -401,10 +371,10 @@
                 <span class="glyphicon glyphicon-remove"></span>
             </button>
 
-            <h4>Enter WeightSheet number</h4>
+            <h4>{{ 'weightanalytics.Modal.enterWSNo' | translate }}</h4>
 
             <div class="enterLabelWrapper">
-                <label>Enter weightsheet number:</label>
+                <label>{{ 'weightanalytics.Modal.enterWSNo' | translate }}:</label>
                 <input type="text"
                     class="labelNumber form-control"
                     my-number-check

@@ -225,7 +225,7 @@
         //so I create rootScope variable and set interval there
         //it will be called in $state onExit handler
         $rootScope.intervalScales = $interval(function () {
-            //vmGetScaleData();
+            vmGetScaleData();
         }, scalesRefresh);
 
     }
@@ -281,11 +281,13 @@
     // получение онлайн показаний весов
     function vmGetScaleData() {
         //get data from SQL view//
-        var pathScalesDetail = 'v_ScalesDetailInfo?$filter=ID eq 240';
+        var pathScalesDetail = "v_AvailableWeighbridgesInfo?$filter=ID_Scales eq {0}".format($scope.CurrentWeightSheet.CurrentWeighbridgeID);
         indexService.getInfo(pathScalesDetail)
             .then(function (response) {
-                $scope.CurrentWeight = 45 + (Math.random() * 40);
-                //$scope.response = response;
+                //$scope.CurrentWeight = 45 + (Math.random() * 40);
+                var response = response.data.value[0];
+                $scope.CurrentWeight = response.Weight / 1000;
+                $scope.WeightStab = response.stabilizing_weight;
                 vmRedrawArrow();
 
             });
@@ -477,47 +479,47 @@
             fields: [{
                 id: 'WeightSheetNumber',
                 name: 'WeightSheetNumber',
-                title: 'WeightSheet',
+                title: $translate.instant('weightanalytics.Table.weightsheet'), //title: 'WeightSheet',
                 order: 2
             }, {
                 id: 'WagonNumber',
                 name: 'WagonNumber',
-                title: 'Wagon',
+                title: $translate.instant('weightanalytics.Table.wagon'), //title: 'Wagon',
                 order: 3,
                 css: "jsgrid-bold-cell"
             }, {
                 id: 'WaybillNumber',
                 name: 'WaybillNumber',
-                title: 'Waybill',
+                title: $translate.instant('weightanalytics.Table.waybill'), //title: 'Waybill',
                 order: 4
             }, {
                 id: 'CSH',
                 name: 'CSH',
-                title: 'CSH',
+                title: $translate.instant('weightanalytics.Table.CSH'), //title: 'CSH',
                 order: 5
             }, {
                 id: 'Brutto',
                 name: 'Brutto',
-                title: 'Brutto',
+                title: $translate.instant('weightanalytics.Table.brutto'), //title: 'Brutto',
                 width: 50,
                 order: 6
             }, {
                 id: 'Tare',
                 name: 'Tare',
-                title: 'Tare',
+                title: $translate.instant('weightanalytics.Table.tare'), //title: 'Tare',
                 width: 50,
                 order: 7
             }, {
                 id: 'Netto',
                 name: 'Netto',
-                title: 'Netto',
+                title: $translate.instant('weightanalytics.Table.netto'), //title: 'Netto',
                 width: 50,
                 order: 8,
                 css: "jsgrid-bold-cell"
             }, {
                 id: 'WeightingTime',
                 name: 'WeightingTime',
-                title: 'WeightingTime',
+                title: $translate.instant('weightanalytics.Table.weightingTime'), //title: 'WeightingTime',
                 width: 130,
                 order: 9
             }]

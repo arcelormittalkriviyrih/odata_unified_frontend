@@ -1399,6 +1399,7 @@ div.controlWeightanalytics .input-small {
     margin-top: -25px;
     margin-bottom: 5px;
     left: 10px;
+    top: 145px;
 }
 
 .infoLabelWeightanalytics {
@@ -1471,8 +1472,7 @@ div.controlWeightanalytics .input-small {
     /*width: 16px;
     height: 16px;*/
     /*background-position: 0 -160px;*/
-    background-position-x: 4px;
-    background-position-y:-156px;
+    background-position: 10px -200px;
     /*width: 24px; 
     height: 24px;*/
     /*border: none;*/
