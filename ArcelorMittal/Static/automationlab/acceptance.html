@@ -2,19 +2,19 @@
          <div class="col-md-12 col-sm-12">
             <div class="toggle-content text-center" id="tab1">
                 <div class="col-md-12 col-sm-12">
-                    <h3>Прием/выдача оборудования</h3>
+                    <h3 style="margin-bottom: 15px;">Прием/выдача оборудования</h3>
                     
                     <div class="lab" style="display:inline-block; margin-right:15px; color:black;">Введите заводской номер устройства:</div>
 
                     
                     <div id="search" style="display:inline-block;">
-                        <input name="q" type="text" ng-model="count" size="40" placeholder="Поиск..." id="searchnumber" style="height: 31px;" />
-                        <button id="go" class="btn btn-default btn-sm" ng-click="vmCreateMaterialTable()" style="outline:none; vertical-align:top;">Поиск</button>
+                        <input class="form-control ng-valid ng-touched ng-dirty ng-valid-parse ng-empty ng-pristine" name="q" ng-model="count" size="40" placeholder="Поиск..." id="searchnumber" style="height: 31px; padding-left: 15px; padding-right: 15px; width: 290px; display: inherit;" type="text">
+                        <button id="go" class="btn btn-default btn-sm" ng-click="vmCreateMaterialTable()" style="outline:none; vertical-align:top;">Искать</button>
                     </div>
                 </div>
              </div>        
            
-       <div class="col-md-12 col-sm-12"> 
+       <div style="margin-top: 15px;" class="col-md-12 col-sm-12">  
         <div class="gridWrapper">
             <div class="disable" id="materialDefinitionDisable">
 
@@ -23,28 +23,19 @@
             <div id="material_definition"></div>
         </div>
            </div>
-        
-       
-   
-
                  <div class="toggle-content text-center">
                        
                         <div id="rovn">
-                                <button type="button" id="send_in" class="btn btn-default btn-lg" style="outline:none; ">
+                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'Repair')" style="outline:none; ">
                                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Принять
                                 </button>
-                                <button type="button" id="send_out" class="btn btn-default btn-lg" style="outline:none; ">
+                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'В работе')" style="outline:none; ">
                                     <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span> Выдать
                                 </button>
-                                <button type="button" id="send_brak" class="btn btn-default btn-lg" style="outline:none; ">
+                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'Брак')" style="outline:none; ">
                                     <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Брак
                                 </button>
                         </div>                       
                     </div>       
-             
-
-
-
-    </div>
-        
+    </div>       
 </div>

@@ -34,11 +34,25 @@
 .controller('AutomationLabacceptanceCtrl', ['$scope', '$translate', 'indexService', '$q', function ($scope, $translate, indexService, $q) {
 
     $materialDefinitionDisable = $('#materialDefinitionDisable').show();
+    $scope.set_id;
     //$materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
 
     //$hierarchyMaterialClass = $('#hierarchy_material_class').empty();
-    $scope.count = "";
+    
    
+    $("#searchnumber").keypress(function (event) {
+        if (event.which == '13') {
+            $scope.vmCreateMaterialTable();
+            
+            event.preventDefault();
+
+        }
+       
+    });
+
+
+  
+
     $("#material_definition").jsGrid({
         height: "400px",
         width: "940px",
@@ -124,6 +138,7 @@
 
     $scope.vmCreateMaterialTable = function () {
         $materialDefinitionDisable.hide();
+        $('#searchnumber').val("");
         var Facnum = $scope.count;
         $("#material_definition").jsGrid({
             //height: "400px",
@@ -144,6 +159,9 @@
             },
 
             rowClick: function (args) {
+                vmActiveRow(args);
+                $scope.set_id = args.item.ID;
+
             },
 
             rowClass: function (item, itemIndex) {
@@ -209,9 +227,36 @@
 
     }
 
-    
+    $scope.SetStatus = function (id_ss, status) {
+        
+        alert(id_ss + " " + status);
+        indexService.sendInfo('ins_OpAc', {
+            F_number: id_ss,
+            Op_Type: status
+
+        }).then(function (response) {
+
+        });
+    }
 
 
+
+    //    var mesage_in;
+
+    //    mesage_in = {
+    //        F_number: id,
+    //        Op_Type: status
+    //     };
+
+    //    $.ajax({
+    //        url: serviceUrl + 'ins_OperationsAcceptence',
+    //        type: 'POST',
+    //        data: JSON.stringify(mesage_in),
+    //        contentType: "application/json"
+    //    }).done(function (result) {
+
+    //    });
+    //}
 }])
 
 
