@@ -2581,26 +2581,21 @@
 })
 
 .directive('myNumberCheck', function () {
-    return function (scope, element, attrs) {
-
-        element.bind("keydown keypress", function (event) {
-
-            var val = element.val();
-
-            var permittedSymbols = [8, 46, 13, 37, 38, 39, 40, 9];
-
-            if (attrs.myNumberCheck != 'number') 
-                permittedSymbols.push(190);
-                                      
-            if ((!((event.which >= 48 && event.which <= 57) || (event.which >= 96 && event.which <= 105))
-                && permittedSymbols.indexOf(event.which) == -1) || 
-                (attrs.myNumberCheck != 'number' && event.which == 190 && element.val().indexOf('.') > -1)) {
-
-                return false;
-            };
-        });
-    }
-        
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModelCtrl) {
+            function fromUser(text) {
+                var transformedInput = text.replace(/[^0-9]/g, '');
+                console.log(transformedInput);
+                if (transformedInput !== text) {
+                    ngModelCtrl.$setViewValue(transformedInput);
+                    ngModelCtrl.$render();
+                }
+                return transformedInput;
+            }
+            ngModelCtrl.$parsers.push(fromUser);
+        }
+    };
 });
 
 
