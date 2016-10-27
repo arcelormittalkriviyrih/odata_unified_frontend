@@ -35,22 +35,32 @@
 
     $materialDefinitionDisable = $('#materialDefinitionDisable').show();
     $scope.set_id;
+    $scope.chek_click = false;
+   
     //$materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
 
     //$hierarchyMaterialClass = $('#hierarchy_material_class').empty();
     
    
-    $("#searchnumber").keypress(function (event) {
-        if (event.which == '13') {
-            $scope.vmCreateMaterialTable();
+    //$("#searchnumber").keypress(function (event) {
+    //    if (event.which == '13') {
+    //        $scope.vmCreateMaterialTable();
             
-            event.preventDefault();
+    //        event.preventDefault();
 
-        }
+    //    }
        
-    });
+    //});
 
+    $scope.checkIfEnterKeyWasPressed = function ($event) {
+        var keyCode = $event.which || $event.keyCode;
+        if (keyCode === 13) {
+            $scope.chek_click = false;
+            $scope.vmCreateMaterialTable();
+           
+        }
 
+    };
   
 
     $("#material_definition").jsGrid({
@@ -68,10 +78,14 @@
         pageSize: 30,
 
         onDataLoaded: function (args) {
-                
+
         },
 
         rowClick: function (args) {
+            vmActiveRow(args);
+            $scope.set_id = args.item.ID;
+            $scope.chek_click = true;
+            $scope.$apply();
         },
 
         rowClass: function (item, itemIndex) {
@@ -88,7 +102,7 @@
             //};
 
             //return rowclass;
-                
+
         }
 
     }).jsGrid('initOdata', {
@@ -130,133 +144,51 @@
             clearFilterButton: true,
             modeSwitchButton: true
         }
-    }).jsGrid('loadOdata', {
-        defaultFilter: 'FactoryNumber eq \'{0}\''.format(-1)
-    });
-
-
-
+    }).jsGrid("loadOdata", { defaultFilter: 'FactoryNumber eq \'-1\'' });
+  
     $scope.vmCreateMaterialTable = function () {
         $materialDefinitionDisable.hide();
-        $('#searchnumber').val("");
-        var Facnum = $scope.count;
-        $("#material_definition").jsGrid({
-            //height: "400px",
-            width: "940px",
-
-            sorting: true,
-            paging: true,
-            editing: false,
-            filtering: true,
-            autoload: true,
-            pageLoading: true,
-            inserting: false,
-            pageIndex: 1,
-            pageSize: 30,
-
-            onDataLoaded: function (args) {
-                
-            },
-
-            rowClick: function (args) {
-                vmActiveRow(args);
-                $scope.set_id = args.item.ID;
-
-            },
-
-            rowClass: function (item, itemIndex) {
-                //// чередование цвета строк для разных вагонов
-                //var rowclass = "";
-                //if (item.WagonIndex % 2 == 1) {
-                //    rowclass = "jsgrid-weight-odd-row td";
-                //}
-                //else {
-                //    rowclass = "jsgrid-weight-even-row td";
-                //};
-                //if (item.WeightingIndex == 1) {
-                //    rowclass += " jsgrid-weight-border-row td";
-                //};
-
-                //return rowclass;
-                
-            }
-
-        }).jsGrid('initOdata', {
-            serviceUrl: serviceUrl,
-            table: 'v_AcceptanceMaterial',
-
-            fields: [{
-                id: 'ID',
-                name: 'ID',
-                title: 'ID',
-                order: 1
-            }, {
-                id: 'FactoryNumber',
-                name: 'FactoryNumber',
-                title: 'Factory Number',
-                order: 2
-            }, {
-
-                id: 'Description',
-                name: 'Description',
-                title: 'Description',
-                order: 3
-            }, {
-                id: 'Status',
-                name: 'Status',
-                title: 'Status',
-                order: 4
-            }, {
-                id: 'Location',
-                name: 'Location',
-                title: 'Location',
-                order: 5
-            }],
-
-            controlProperties: {
-                type: 'control',
-                editButton: false,
-                deleteButton: false,
-                clearFilterButton: true,
-                modeSwitchButton: true
-            
-            }
-        }).jsGrid('loadOdata', {
-            defaultFilter: 'FactoryNumber eq \'{0}\''.format(Facnum)
-        });
+        $scope.chek_click = false;
+        $("#material_definition").jsGrid("loadOdata", { defaultFilter: 'FactoryNumber eq \'' + $scope.count + '\'' });
+        $("#material_definition").jsGrid("refresh");
 
     }
 
     $scope.SetStatus = function (id_ss, status) {
         
-        alert(id_ss + " " + status);
-        indexService.sendInfo('ins_OpAc', {
-            F_number: id_ss,
-            Op_Type: status
+        //alert(id_ss + " " + status);
+        //indexService.sendInfo('ins_OperationsAcceptence', {
+        //    F_number: id_ss,
+        //    Op_Type: status
 
-        }).then(function (response) {
+        //}).then(function (response) {
 
-        });
-    }
-
-
-
-    //    var mesage_in;
-
-    //    mesage_in = {
-    //        F_number: id,
-    //        Op_Type: status
-    //     };
-
-    //    $.ajax({
-    //        url: serviceUrl + 'ins_OperationsAcceptence',
-    //        type: 'POST',
-    //        data: JSON.stringify(mesage_in),
-    //        contentType: "application/json"
-    //    }).done(function (result) {
-
-    //    });
+        //});
     //}
+
+
+
+        //var mesage_in;
+
+       //var mesage_in = {
+       //     F_number: id_ss,
+       //     Op_Type: status
+       //  };
+
+       // $.ajax({
+       //     url: serviceUrl + 'ins_OperationsAcceptence',
+       //     type: 'POST',
+       //     async: false,
+       //     data: JSON.stringify(mesage_in),
+       //     contentType: "application/json"
+       // }).done(function (result) {
+       //     $('#material_definition').jsGrid('loadOdata', {
+       //         defaultFilter: 'FactoryNumber eq \'{0}\''
+       //     });
+       // });
+        $scope.chek_click = false;
+        $scope.count = "";
+    }
 }])
 
 

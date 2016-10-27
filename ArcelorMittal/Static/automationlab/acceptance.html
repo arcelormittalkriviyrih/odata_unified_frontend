@@ -8,7 +8,7 @@
 
                     
                     <div id="search" style="display:inline-block;">
-                        <input class="form-control ng-valid ng-touched ng-dirty ng-valid-parse ng-empty ng-pristine" name="q" ng-model="count" size="40" placeholder="Поиск..." id="searchnumber" style="height: 31px; padding-left: 15px; padding-right: 15px; width: 290px; display: inherit;" type="text">
+                        <input class="form-control ng-valid ng-touched ng-dirty ng-valid-parse ng-empty ng-pristine" name="q" ng-model="count" size="40" placeholder="Поиск..." id="searchnumber" style="height: 31px; padding-left: 15px; padding-right: 15px; width: 290px; display: inherit;" type="text" ng-keypress="checkIfEnterKeyWasPressed($event)">
                         <button id="go" class="btn btn-default btn-sm" ng-click="vmCreateMaterialTable()" style="outline:none; vertical-align:top;">Искать</button>
                     </div>
                 </div>
@@ -26,13 +26,13 @@
                  <div class="toggle-content text-center">
                        
                         <div id="rovn">
-                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'Repair')" style="outline:none; ">
+                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'В ремонте')" style="outline:none;" ng-disabled="!chek_click">
                                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Принять
                                 </button>
-                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'В работе')" style="outline:none; ">
+                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'В работе')" style="outline:none;" ng-disabled="!chek_click">
                                     <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span> Выдать
                                 </button>
-                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'Брак')" style="outline:none; ">
+                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'Брак')" style="outline:none;" ng-disabled="!chek_click">
                                     <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Брак
                                 </button>
                         </div>                       
