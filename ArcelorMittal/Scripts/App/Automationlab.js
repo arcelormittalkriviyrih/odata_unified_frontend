@@ -157,38 +157,39 @@
     $scope.SetStatus = function (id_ss, status) {
         
         //alert(id_ss + " " + status);
-        //indexService.sendInfo('ins_OperationsAcceptence', {
-        //    F_number: id_ss,
-        //    Op_Type: status
+    //    indexService.sendInfo('ins_OperationsAcceptence', {
+    //        F_number: id_ss,
+    //        Op_Type: status
 
-        //}).then(function (response) {
+    //    }).then(function (response) {
 
-        //});
+    //    });
     //}
 
 
 
-        //var mesage_in;
+       //var mesage_in;
 
-       //var mesage_in = {
-       //     F_number: id_ss,
-       //     Op_Type: status
-       //  };
-
-       // $.ajax({
-       //     url: serviceUrl + 'ins_OperationsAcceptence',
-       //     type: 'POST',
-       //     async: false,
-       //     data: JSON.stringify(mesage_in),
-       //     contentType: "application/json"
-       // }).done(function (result) {
-       //     $('#material_definition').jsGrid('loadOdata', {
-       //         defaultFilter: 'FactoryNumber eq \'{0}\''
-       //     });
-       // });
+        var mesage_in = {
+            F_number: id_ss,
+            Op_Type: status
+         };
+        alert(mesage_in);
+        $.ajax({
+            url: serviceUrl + 'ins_OperationsAcceptence',
+            type: 'POST',
+            async: false,
+            data: JSON.stringify(mesage_in),
+            contentType: "application/json"
+        }).done(function (result) {
+            $('#material_definition').jsGrid('loadOdata', {
+                defaultFilter: 'FactoryNumber eq \'{0}\''
+            });
+        });
         $scope.chek_click = false;
         $scope.count = "";
     }
+    
 }])
 
 
