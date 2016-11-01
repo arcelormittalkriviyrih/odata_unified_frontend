@@ -1020,6 +1020,8 @@
 .controller('diagnosticsCtrl', ['$scope', '$translate', 'indexService', '$state', function ($scope, $translate, indexService, $state) {
 
     $scope.changeSide = vmChangeSide;
+    $scope.printSystemOnOff = vmPrintSystemOnOff;
+
     $scope.side = $state.params.side;
     var sidesListUrl = 'v_AvailableSidesAll';
     
@@ -1035,8 +1037,23 @@
         
     });
     
+    // get list of Global options
+    var globalOptionsURL = 'v_GlobalOptions';
+    indexService.getInfo(globalOptionsURL)
+        .then(function (response) {
 
-    function vmChangeSide(sideID) {
+            // get "Print System Enabled" option
+            var printSystemEnabled = response.data.value.find(function (item) {
+
+                return item.OptionCode == 'PRINT_SYSTEM_ENABLED';
+            });
+
+            // if option is missing than treat it as true
+            $scope.printSystemEnabled = !printSystemEnabled || !printSystemEnabled.OptionValue || printSystemEnabled.OptionValue == 'true';
+
+        });
+
+    function vmChangeSide(sideID) {        
 
         $scope.selectedSide = $scope.availableSides.find(function (item) {
 
@@ -1048,5 +1065,31 @@
 
                         $scope.diagnosticsInfo = response.data.value;
                     });
+    };
+
+    function vmPrintSystemOnOff() {
+
+        var state = $scope.printSystemEnabled;
+        var conf = state ? 'pa.diagnostics.printSystemTurnOn' : 'pa.diagnostics.printSystemTurnOff';
+
+        if (confirm($translate.instant(conf))) {
+
+            indexService.sendInfo('upd_EnablePrintSystem', {
+
+                Enabled: state
+
+            }).then(function () {
+
+                if (state)
+                    alert($translate.instant('pa.diagnostics.printSystemOn'));
+                else
+                    alert($translate.instant('pa.diagnostics.printSystemOff'));
+            });
+
+        } else {
+
+            // rejected return to previous state
+            $scope.printSystemEnabled = !state;
+        };
     };
 }]);

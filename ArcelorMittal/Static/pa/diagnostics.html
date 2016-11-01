@@ -1,4 +1,14 @@
-﻿<label ng-hide="side">{{ 'pa.diagnostics.changeSide' | translate }}:</label>
+﻿<div class="checkbox-inline">    
+
+    <input type="checkbox"
+           ng-model="printSystemEnabled"
+           ng-change="printSystemOnOff()" />
+
+    <label>{{ 'pa.diagnostics.printSystemEnabled' | translate }}</label>
+
+</div>
+
+<label ng-hide="side">{{ 'pa.diagnostics.changeSide' | translate }}:</label>
 
 <div class="dropdown form-control changeSideDiagnostics" ng-hide="side">    
 

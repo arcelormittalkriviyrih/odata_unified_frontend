@@ -123,7 +123,12 @@
             diagnostics: {
                 changeSide: 'Change side',
                 equipmentName: 'Equipment name',
-                equipmentStatus: 'Equipment status'
+                equipmentStatus: 'Equipment status',
+                printSystemEnabled: 'Labels print system enabled',
+                printSystemOn: 'Labels print system is ON',
+                printSystemOff: 'Labels print system is OFF',
+                printSystemTurnOn: 'Are you sure you want to turn labels printing system ON?',
+                printSystemTurnOff: 'Are you sure you want to turn labels printing system OFF?'
             }
         },
         marker: {
@@ -457,7 +462,12 @@
             diagnostics: {
                 changeSide: 'Выберите сторону',
                 equipmentName: 'Название оборудования',
-                equipmentStatus: 'Статус оборудования'
+                equipmentStatus: 'Статус оборудования',
+                printSystemEnabled: 'Система печати бирок включена',                
+                printSystemOn: 'Система печати бирок включена',
+                printSystemOff: 'Система печати бирок выключена',
+                printSystemTurnOn: 'Вы уверены, что хотите включить систему печати бирок?',
+                printSystemTurnOff: 'Вы уверены, что хотите выключить систему печати бирок? '
             }
         },
         marker: {
@@ -792,7 +802,12 @@
             diagnostics: {
                 changeSide: 'Виберіть сторону',
                 equipmentName: 'Назва обладнання',
-                equipmentStatus: 'Статус обладнання'
+                equipmentStatus: 'Статус обладнання',
+                printSystemEnabled: 'Система друку бирок увімкнена',
+                printSystemOn: 'Система друку бирок включена',
+                printSystemOff: 'Система друку бирок вимкнена',
+                printSystemTurnOn: 'Ви впевнені що хочете ввімкнути систему друку бирок?',
+                printSystemTurnOff: 'Ви впевнені що хочете вимкнути систему друку бирок? '
             }
         },
         marker: {
