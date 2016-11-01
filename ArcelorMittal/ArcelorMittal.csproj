@@ -193,7 +193,7 @@
     <Content Include="Scripts\App\Market.js" />
     <Content Include="Scripts\App\PA.js" />
     <Content Include="Scripts\App\WorkshopSpecs.js" />
-	<Content Include="Scripts\App\WeightAnalytics.js" />
+    <Content Include="Scripts\App\WeightAnalytics.js" />
     <Content Include="Scripts\Shared\common.js" />
     <Content Include="Scripts\Shared\util.js" />
     <Content Include="Scripts\Table\index.js" />
@@ -249,6 +249,7 @@
     <Content Include="Scripts\Vendor\jsgrid.min.js" />
     <Content Include="Scripts\TreeGrid\treeExt.js" />
     <Content Include="Scripts\Vendor\jstree.js" />
+    <Content Include="Scripts\Vendor\printPreview.js" />
     <Content Include="Scripts\Vendor\select.js" />
     <Content Include="Static\error.html" />
     <Content Include="Static\access_error.html" />
@@ -273,10 +274,12 @@
     <Content Include="Static\pa\version.html" />
     <Content Include="Static\pa\sapcommunication.html" />
     <Content Include="Static\weightanalytics\index.html" />
-    <Content Include="Static\weightanalytics\kopr_4.html" />
-    <Content Include="Static\weightanalytics\link2.html" />
+    <Content Include="Static\weightanalytics\link1.html" />
     <Content Include="Static\root.html" />
     <Content Include="Static\templates\dropdown.html" />
+    <Content Include="Static\weightanalytics\toprint.html">
+      <BrowseToURL>~/odata_unified_frontend/Static/weightanalytics/toprint.html</BrowseToURL>
+    </Content>
     <Content Include="Static\workshopspecs.html" />
     <Content Include="Static\index.html" />
     <Content Include="Static\welcome.html" />

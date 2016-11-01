@@ -19,36 +19,41 @@
             }
         })
 
-        .state('app.WeightAnalytics.Kopr4', {
+        .state('app.WeightAnalytics.Link1', {
 
-            url: '/kopr_4',
-            templateUrl: 'Static/weightanalytics/kopr_4.html',
-            controller: 'WeightAnalyticsKopr4Ctrl',
+            url: '/link1',
+            templateUrl: 'Static/weightanalytics/link1.html',
+            controller: 'WeightAnalyticsLink1Ctrl',
 
-            // stop periodic reading of scales
-            onExit: function ($state, $injector) {
-
-                var $interval = $injector.get('$interval');
-                var $rootScope = $injector.get('$rootScope');
-
-                $interval.cancel($rootScope.intervalScales);
-                //$interval.cancel($rootScope.intervalWorkRequest);
-            }
         })
 
-        .state('app.WeightAnalytics.Link2', {
+        .state('app.WeightAnalyticsPrint', {
 
-            url: '/link2',
-            templateUrl: 'Static/weightanalytics/link2.html',
-            controller: 'WeightAnalyticsLink2Ctrl',
+            url: '/weightanalytics/toprint/:data',
+            templateUrl: 'Static/weightanalytics/toprint.html',
+            controller: 'WeightAnalyticsPrintCtrl',
+            params: {
+                data: null
+            }
+            //url: '/toprint',
+            //templateUrl: 'Static/weightanalytics/toprint.html',
+            //controller: 'WeightAnalyticsPrintCtrl',
+            //params: {
+            //    data: null
+            //},
+            //onExit: function ($state, $injector) {
 
+            //    var $interval = $injector.get('$interval');
+            //    var $rootScope = $injector.get('$rootScope');
+
+            //    $interval.cancel($rootScope.intervalMonitor);
+            //}
         })
 
 }])
 
 
-
-.controller('WeightAnalyticsCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', 'scalesRefresh', '$interval', '$http', '$filter', '$translate', function ($scope, $rootScope, indexService, $state, roles, $q, scalesRefresh, $interval, $http, $filter, $translate) {
+.controller('WeightAnalyticsCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', 'scalesRefresh', '$interval', '$http', '$filter', '$translate', '$timeout', function ($scope, $rootScope, indexService, $state, roles, $q, scalesRefresh, $interval, $http, $filter, $translate, $timeout) {
 
     $scope.filter = [];
     $scope.Init = vmInit;
@@ -65,6 +70,7 @@
     $scope.GetPairNumbers = vmGetPairNumbers;
     $scope.TakeWeight = vmTakeWeight;
     $scope.CloseWeightSheet = vmCloseWeightSheet;
+    $scope.PrintWeightSheet = vmPrintWeightSheet;
 
     $scope.Modal = [];
     $scope.Modal.WeightSheetNumber = null;
@@ -76,9 +82,13 @@
     $scope.isInfoLoaded = false;
 
     $scope.CurrentWeight = 0;
-    $scope.CurrentWeightSheet = []; // test CurrentWSheet collection - all info about current opened WSheet
-    $scope.CurrentWeightSheet.CurrentWeighbridgeID = null;
+    $scope.CurrentWeightPlatf1 = 0;
+    $scope.CurrentWeightPlatf2 = 0;
+    $scope.WeightPlatforms = [{ ID: 1, Description: "Platform I" }, { ID: 2, Description: "Platform I+II" }];
     $scope.WeightingModes = [{ ID: 1, Description: "Taring" }, { ID: 2, Description: "Weighting" }];
+    $scope.CurrentWeightSheet = []; // CurrentWSheet collection - all info about current opened WSheet
+    $scope.CurrentWeightSheet.WeightPlatform = null;
+    $scope.CurrentWeightSheet.CurrentWeighbridgeID = null;
     $scope.CurrentWeightSheet.WeightingMode = null;
     $scope.CurrentWeightSheet.WeightSheetID = null;
     $scope.CurrentWeightSheet.WeightSheetNumber = null;
@@ -91,18 +101,22 @@
     $scope.CurrentWeightSheet.PairNumber = null;
     $scope.CurrentWeightSheet.PairNumbers = [];
     $scope.ArchiveWeightSheets = [];
+    $scope.WeightSheetForPrint = [];
 
 
+    var newTabForPrint;
 
     vmInit();
     vmGetAvalWeighbridges();
     vmCreatePlot();
+    //vmCreateTree();
 
     vmGetArchiveWeightSheetsTree();
 
     // сбрасываем переменные в начальное состояние
     function vmInit() {
         $scope.CurrentWeight = 0;
+        $scope.CurrentWeightSheet.WeightPlatform = $scope.WeightPlatforms[0];
         $scope.WaySheetNumberDisabled = false;
         $scope.TakeWeightButtonDisabled = false;
         $scope.ArchiveWeightSheetSelected = false;
@@ -246,7 +260,7 @@
 
                 vmGetWagonsInfo();
             };
-                $scope.isInfoLoaded = true;
+            $scope.isInfoLoaded = true;
         });
 
 
@@ -263,9 +277,9 @@
                 // используемые номера пар вагонов
                 if (item.WeightingIndex == 1) {
                     PairNumbers.unshift(item.WagonNumber);
-                    //$scope.CurrentWeightSheet.SelectedScrapSender = $filter('filter')($scope.ScrapSenders, { ID: item.ScrapSender })[0];
-                    //$scope.CurrentWeightSheet.SelectedScrapReceiver = $filter('filter')($scope.ScrapReceivers, { ID: item.ScrapReceiver })[0];
-
+                    $scope.CurrentWeightSheet.SelectedScrapSender = $filter('filter')($scope.ScrapSenders, { Name: item.sender })[0];
+                    $scope.CurrentWeightSheet.SelectedScrapReceiver = $filter('filter')($scope.ScrapReceivers, { Name: item.reciever })[0];
+                    $scope.CurrentWeightSheet.SelectedScrapType = $filter('filter')($scope.ScrapTypes, { ID: item.CSH })[0];
                 };
 
             });
@@ -286,11 +300,19 @@
             .then(function (response) {
                 //$scope.CurrentWeight = 45 + (Math.random() * 40);
                 var response = response.data.value[0];
-                $scope.CurrentWeight = response.Weight / 1000;
+                //$scope.CurrentWeight = response.Weight;
+                $scope.CurrentWeight = $scope.CurrentWeightSheet.WeightPlatform.ID == 1 ? response.Weight_platform_1 : response.Weight;
+                $scope.CurrentWeightPlatf1 = response.Weight_platform_1;
+                $scope.CurrentWeightPlatf2 = response.Weight_platform_2;
                 $scope.WeightStab = response.stabilizing_weight;
                 vmRedrawArrow();
 
             });
+    };
+
+    //
+    function vmCreateTree() {
+        $('#weight_sheet_list').empty();
     };
 
     // создание стрелочного индикатора
@@ -364,18 +386,19 @@
             WorkPerformanceID: $scope.CurrentWeightSheet.WeightSheetID || null
         }).then(function (response) {
             var weightsheetnumber = $scope.CurrentWeightSheet.WeightSheetNumber;
+            var weightsheetid = $scope.CurrentWeightSheet.WeightSheetID;
             vmInit();
-            vmRefreshWagonTable($scope.CurrentWeightSheet.WeightSheetID);
+            vmRefreshWagonTable(weightsheetid);
             alert('Отвесная №' + weightsheetnumber + ' закрыта.');
-            vmGetArchiveWeightSheetsTree();
+            vmGetArchiveWeightSheetsTree(weightsheetid);
             // увеличиваем на 1 номер отвесной
             if (weightsheetnumber) {
-                weightsheetnumber = parseInt(weightsheetnumber) + 1;
+                weightsheetnumber.WeightSheetNumber = parseInt(weightsheetnumber) + 1;
                 $scope.Modal.WeightSheetNumber = weightsheetnumber.toString();
             }
         });
 
-    }
+    };
 
     // кнопка "Взять вес"
     function vmTakeWeight() {
@@ -418,13 +441,12 @@
         });
         $scope.TakeWeightButtonDisabled = false;
 
-    }
+    };
 
     // создать таблицу с данными по отвесной
     function vmCreateWagonTable(weightsheetid) {
 
         $('#KP4_Wagon').jsGrid({
-            //height: "400px",
             width: "940px",
 
             sorting: false,
@@ -476,12 +498,13 @@
             serviceUrl: serviceUrl,
             table: 'v_KP4_Wagon',
 
-            fields: [{
+            fields: [
+            /*{
                 id: 'WeightSheetNumber',
                 name: 'WeightSheetNumber',
                 title: $translate.instant('weightanalytics.Table.weightsheet'), //title: 'WeightSheet',
                 order: 2
-            }, {
+            }, */{
                 id: 'WagonNumber',
                 name: 'WagonNumber',
                 title: $translate.instant('weightanalytics.Table.wagon'), //title: 'Wagon',
@@ -491,6 +514,7 @@
                 id: 'WaybillNumber',
                 name: 'WaybillNumber',
                 title: $translate.instant('weightanalytics.Table.waybill'), //title: 'Waybill',
+                width: 60,
                 order: 4
             }, {
                 id: 'CSH',
@@ -517,11 +541,23 @@
                 order: 8,
                 css: "jsgrid-bold-cell"
             }, {
+                id: 'sender',
+                name: 'Sender',
+                title: $translate.instant('weightanalytics.Labels.sender'), //title: 'Netto',
+                width: 100,
+                order: 9
+            }, {
+                id: 'reciever',
+                name: 'Receiver',
+                title: $translate.instant('weightanalytics.Labels.receiver'), //title: 'Netto',
+                width: 100,
+                order: 10
+            }, {
                 id: 'WeightingTime',
                 name: 'WeightingTime',
                 title: $translate.instant('weightanalytics.Table.weightingTime'), //title: 'WeightingTime',
-                width: 130,
-                order: 9
+                width: 120,
+                order: 11
             }]
         })
 
@@ -530,7 +566,7 @@
           order: 'WorkResponseID,WeightingIndex'
       });
 
-    }
+    };
 
     // обновить таблицу
     function vmRefreshWagonTable(weightsheetid) {
@@ -539,43 +575,75 @@
             defaultFilter: 'WorkPerformanceID eq ({0})'.format(weightsheetid),
             order: 'WorkResponseID,WeightingIndex'
         });
-    }
+    };
 
     // тестовая ф-ция архивные отвесные
-    function vmGetArchiveWeightSheetsTree() {
+    function vmGetArchiveWeightSheetsTree(weightsheetID) {
 
-        $WeightSheetList = $('#weight_sheet_list').empty();
-
+        $WeightSheetList = $('#weight_sheet_list').jstree('destroy');
         indexService.getInfo('v_KP4_AllWorkPerformance').then(function (response) {
 
-            $scope.ArchiveWeightSheets = response.data.value;
-            
-            $WeightSheetList.odataTree({
-                serviceUrl: serviceUrl,
-                //table: 'v_KP4_AllWorkPerformance',
-                data: $scope.ArchiveWeightSheets,
-                keys: {
-                    id: 'ID',
-                    parent: 'ParentID',
-                    text: 'Description'
-                },
-                translates: {
-                    nodeName: $translate.instant('tree.nodeName'),
-                    parentID: $translate.instant('tree.parentID')
-                },
-                parentID: {
-                    keyField: 'ID',
-                    valueField: 'WorkPerfomanceID',
-                },
-                disableControls: true
+            response.data.value.forEach(function (e) {
+                e.id = e.ID;
+                e.parent = e.ParentID;
+                e.text = e.Description;
+                if (e.WorkPerfomanceID) {
+                    e.icon = 'jstree-file';
+                };
+                delete e.ID;
+                delete e.ParentID;
+                delete e.Description;
             });
-            
+
+            $scope.ArchiveWeightSheets = response.data.value;
+
+            $WeightSheetList.jstree({
+                core: {
+                    data: $scope.ArchiveWeightSheets
+                }
+            });
+
+            $WeightSheetList.on('loaded.jstree', function (e, data) {
+                $WeightSheetList.jstree('close_all');
+                $WeightSheetList.jstree('deselect_all', true);
+                if (weightsheetID) {
+                    var node = $filter('filter')($scope.ArchiveWeightSheets, { WorkPerfomanceID: weightsheetID })[0].id;
+                    $WeightSheetList.jstree('select_node', node, false);
+                    $WeightSheetList.jstree('open_node', node);
+                }
+                else {
+                    $WeightSheetList.jstree('select_node', '5', false);
+                    $WeightSheetList.jstree('open_node', '5');
+                };
+            });
+
+
         });
 
         // выбор элемента в дереве отвесных
+        $WeightSheetList.on('select_node.jstree', function (e, data) {
+            //alert('RG');
+            $scope.ArchiveWeightSheetSelected = false;
+            if (data.node.original.WorkPerfomanceID) {
+                $scope.SelectedArchiveWeightSheetID = data.node.original.WorkPerfomanceID;
+                $scope.ArchiveWeightSheetSelected = true;
+                // если таблица существует, обновляем ее, если нет - создаем                
+                if ($("#KP4_Wagon").data("JSGrid")) {
+                    vmRefreshWagonTable(data.node.original.WorkPerfomanceID);
+                }
+                else {
+                    vmCreateWagonTable(data.node.original.WorkPerfomanceID);
+                };
+            };
+        });
+
+        /*
+        // выбор элемента в дереве отвесных
         $WeightSheetList.on('tree-item-selected', function (e, data) {
+            $scope.ArchiveWeightSheetSelected = false;
             var NodeID = data.id;
             var SelectedArchiveWeightSheet = $filter('filter')($scope.ArchiveWeightSheets, { ID: NodeID })[0];
+            $scope.SelectedArchiveWeightSheet = SelectedArchiveWeightSheet;
             if (SelectedArchiveWeightSheet.WorkPerfomanceID) {
                 $scope.ArchiveWeightSheetSelected = true;
                 // если таблица существует, обновляем ее, если нет - создаем
@@ -585,32 +653,225 @@
                 else {
                     vmCreateWagonTable(SelectedArchiveWeightSheet.WorkPerfomanceID);
                 };
-
             };
         });
+        */
 
+    };
+
+
+    function vmPrintWeightSheet() {
+        //vmGetArchiveWeightSheetsTree();
+
+        var WeightSheettoPrintID = $scope.CurrentWeightSheet.WeightSheetID ? $scope.CurrentWeightSheet.WeightSheetID : $scope.SelectedArchiveWeightSheetID;
+
+        var url = $state.href('app.WeightAnalyticsPrint', { data: WeightSheettoPrintID });
+
+        var windowwidth = 670;
+        var windowheight = screen.height - 105;
+        var windowleft = screen.width / 2 - windowwidth / 2;
+        var windowparam = 'top=0,width=' + windowwidth + ',left=' + windowleft + ',height=' + windowheight + 'resizable=no,scrollbars=no,status=no,titlebar=no,location=no';
+        //var windowparam = "menubar=no,location=no,resizable=no,scrollbars=no,status=no,navigation=no,titlebar=no";
+        if (newTabForPrint) {
+            newTabForPrint.close();
+        };
+        newTabForPrint = window.open(url, 'toPrint', windowparam);
+
+
+        //$state.go('app.WeightAnalytics.toPrint', { code: 100500 });
+        /*
+        indexService.getInfo("v_KP4_Wagon?$filter=WorkPerformanceID eq {0}&$orderby=WorkResponseID,WeightingIndex".format(WeightSheettoPrintID))
+            .then(function (response) {
+                $scope.WeightSheetForPrint = response.data.value;
+                if ($scope.WeightSheetForPrint) {
+
+                    var yyy = $scope.WeightSheetForPrint[0].EndTime;
+
+                    if ($scope.CurrentWeightSheet.WeightSheetID) {
+                        alert("Отвесная будет закрыта после печати!");
+                        vmCloseWeightSheet();
+                    }
+
+                    //$("#btnPrint").click();
+
+                    var printContents = document.getElementById('tbp').innerHTML;
+                    var windowwidth = 670;
+                    var windowheight = screen.height - 105;
+                    var windowleft = screen.width / 2 - windowwidth / 2;
+                    var windowparam = 'top=0,width=' + windowwidth + ',left=' + windowleft + ',location=no,height=' + windowheight + 'resizable=no,scrollbars=yes,status=no';
+                    var popupWin = window.open('', '_blank', windowparam);
+                    popupWin.document.open();
+                    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
+                    popupWin.document.close();
+                }
+            });
+*/
+        /*
+        $q.all([indexService.getInfo("v_KP4_Wagon?$filter=WorkPerformanceID eq {0}&$orderby=WorkResponseID,WeightingIndex".format(WeightSheettoPrintID)),
+            indexService.getInfo("v_KP4_WorkPerformance?$filter=WorkPerformanceID eq {0}&$orderby=ID".format(WeightSheettoPrintID))])
+        .then(function (responses) {
+            $timeout(function () {
+                $scope.WeightSheetForPrint = responses[0].data.value;
+                $scope.WeightSheetForPrint.Date = responses[1].data.value[0].EndTime;
+
+            });
+            if ($scope.WeightSheetForPrint) {
+
+                if ($scope.CurrentWeightSheet.WeightSheetID) {
+                    alert("Отвесная будет закрыта после печати!");
+                    vmCloseWeightSheet();
+                }
+
+                var windowwidth = 670;
+                var windowheight = screen.height - 105;
+                var windowleft = screen.width / 2 - windowwidth / 2;
+                var windowparam = 'top=0,width=' + windowwidth + ',left=' + windowleft + ',location=no,height=' + windowheight + 'resizable=no,scrollbars=yes,status=no';
+                //var printContents = document.getElementById('tbp').innerHTML;
+                //alert(printContents);
+                //var popupWin = window.open('', '_blank', windowparam);
+                //popupWin.document.open();
+                //popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
+                //popupWin.document.close();
+            }
+            //$("#btnPrint").click(); 
+            var printContents = document.getElementById('tbp').innerHTML;
+            alert(printContents);
+            //vmPrinttest();
+
+        });
+        */
 
     }
 
+    /*
+    $("#PrintWS").click(function () {
+        indexService.getInfo("v_KP4_Wagon?$filter=WorkPerformanceID eq 55").then(function (response) {
+            var obj = response.data.value;
+            $("#tbp table tbody").empty();
+            for (var i = 0; i < obj.length; i++) {
+                $("#tbp table tbody").append("<tr><td>" + obj[i].WagonNumber + "</td><td> " + obj[i].WaybillNumber + "</td><td> " +
+                    obj[i].CSH + "</td><td> " + obj[i].Brutto + "</td><td> " + obj[i].Tare + "</td><td> " + obj[i].Netto + "</td><td> " +
+                    obj[i].WeightingTime + "</td><td> " +
+                    obj[i].WeightingTime + "</td></tr>");
+            }
+      
+            $("#btnPrint").click();
+        });
 
-
-
-
-
+        
+    });
+    
+    $("#btnPrint").printPreview({
+        obj2print: '#tbp',
+        width: '810'
+    });
+    */
 
 }])
 
 
 
-.controller('WeightAnalyticsKopr4Ctrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $http) {
-
-}])
-
-.controller('WeightAnalyticsLink2Ctrl', ['$scope', '$translate', 'indexService', '$state', function ($scope, $translate, indexService, $state) {
+.controller('WeightAnalyticsLink1Ctrl', ['$scope', '$translate', 'indexService', '$state', function ($scope, $translate, indexService, $state) {
 
 }])
 
 
+.controller('WeightAnalyticsPrintCtrl', ['$scope', '$q', '$translate', 'indexService', '$state', '$timeout', function ($scope, $q, $translate, indexService, $state, $timeout) {
+
+    $scope.print = vmprint;
+
+    var WeightSheettoPrintID = $state.params.data;
+    $scope.WeightSheetForPrint = [];
+    $q.all([indexService.getInfo('v_System_User'),
+        indexService.getInfo("v_KP4_WorkPerformance?$filter=WorkPerformanceID eq {0}&$orderby=ID".format(WeightSheettoPrintID)),
+        indexService.getInfo("v_KP4_Wagon?$filter=WorkPerformanceID eq {0}&$orderby=WorkResponseID,WeightingIndex".format(WeightSheettoPrintID))])
+        .then(function (responses) {
+            $scope.WeightSheettoPrintID = WeightSheettoPrintID;
+            $scope.user = responses[0].data.value[0].SYSTEM_USER;
+            $scope.WeightSheetForPrint = responses[2].data.value;
+            $scope.WeightSheetForPrint.Date = responses[1].data.value[0].StartTime;
+
+            var rowspan = 0;
+            var wagonindex = 0;
+
+            for (var i = $scope.WeightSheetForPrint.length - 1; i >= 0; i--) {
+
+                if ($scope.WeightSheetForPrint[i].WagonIndex != wagonindex) {
+                    rowspan = $scope.WeightSheetForPrint[i].WeightingIndex;
+                    wagonindex = $scope.WeightSheetForPrint[i].WagonIndex;
+                };
+                if ($scope.WeightSheetForPrint[i].WeightingIndex == 1) {
+                    $scope.WeightSheetForPrint[i].RowSpan = rowspan;
+                };
+            }
+
+            angular.element(window.document)[0].title = "Печать отвесной №" + $scope.WeightSheetForPrint[0].WeightSheetNumber;
+
+            /*
+            //==
+            var obj = responses[2].data.value;
+            var current_wagon_array = [];
+            var current_wagon_Num = [];
+            var count_current_wagon = 0;
+            var current_wagon;
+            var count = 0;
+            var chek = false;
+
+            for (var i = 0; i < obj.length; i++) {
+
+                current_wagon = obj[i].WagonNumber;
+                
+                for (var q = 0; q < current_wagon_array.length ; q++) {
+                    if (current_wagon == current_wagon_array[q]) {
+                        chek = true;
+                    }
+                }
+
+                if (chek == true) {
+                    chek = false;
+                    continue;
+                }
+                
+                current_wagon_array[count_current_wagon] = obj[i].WagonNumber;
+                count_current_wagon++;
+                count++;
+
+                for (var j = 0; j < obj.length; j++) {
+                    if (current_wagon == obj[j].WagonNumber && j != i) {
+                        count++;
+                    }
+                }
+                var counter_chek = 0;
+                for (var s = 0; s < obj.length; s++) {
+                    if (current_wagon == obj[s].WagonNumber) {
+
+                        if (counter_chek == 0) {
+                            //count = count / 2;
+                            $("#masterContent table tbody").append("<tr> <td rowspan = " + count + " style=\"text-align:center; vertical-align:middle;\">" + obj[i].WagonNumber + "</td> <td rowspan = " + count + " style=\"text-align:center; vertical-align:middle;\">" + obj[i].WaybillNumber
+                            + "</td> <td rowspan = " + count + " style=\"text-align:center; vertical-align:middle;\">" + obj[i].Tare + "</td> <td>" + obj[i].Brutto + "</td><td>" + obj[i].Netto + "</td>  <td>" + obj[i].CSH + "</td> <td>" + obj[i].WeightingTime + "</td> <td>" + obj[i].WeightingTime + "</td> </tr>");
+                            counter_chek = 1;
+                        }
+                        else {
+                            $("#masterContent table tbody").append("<tr>  <td>" + obj[i].Brutto + "</td>  <td>" + obj[i].Netto + "</td><td>" + obj[i].CSH + "</td> <td>" + obj[i].WeightingTime + "</td> <td>" + obj[i].WeightingTime + "</td> </tr>");
+                        }
+                    }
+                }
+                count = 0;
+            }
+            //==
+            */
+
+        });
+
+    function vmprint() {
+        $timeout(function () {
+            $scope.$apply();
+            window.print();
+            window.close();
+        }, 1000);
+    };
+
+}])
 
 
 

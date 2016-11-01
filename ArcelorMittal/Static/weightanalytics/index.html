@@ -1,27 +1,23 @@
 ﻿<ul class="nav nav-tabs">
-
-
     <li ng-repeat="Weighbridge in AvalWeighbridges"
         class="tab" ui-sref-active="active"
         ng-click="SelectWeighbridge(Weighbridge.ID)">
         <a>{{Weighbridge.Description}}</a>
     </li>
-
 </ul>
 
-<!--ID Equipment: {{CurrentWeighbridgeID}}-->
 
-<!--<ui-view>-->
 
 <!--когда еще грузится страница-->
 <div class="container loading" ng-show="$root.showLoadingState">
-
     <div class="loading-msg">
         <h1>Loading ...</h1>
     </div>
-
 </div>
 
+<ui-view>
+
+</ui-view>
 
 
 <!--основная часть, когда страница прогрузилась-->
@@ -35,24 +31,24 @@
 
             <div class="controlsRowWeightanalytics" ng-disabled="false">
                 <div class="captionWeightanalytics"
-                    style="font-weight: bold; width:80%"
+                    style="font-weight: bold; width: 80%"
                     ng-show="CurrentWeightSheet.WeightingMode && isInfoLoaded">
                     {{ 'weightanalytics.Labels.openedWS' | translate }} {{CurrentWeightSheet.WeightSheetNumber}} ({{ 'weightanalytics.' + CurrentWeightSheet.WeightingMode.Description | translate }})
                 </div>
                 <div class="captionWeightanalytics"
-                    style="font-weight: bold; width:80%"
+                    style="font-weight: bold; width: 80%"
                     ng-show="!CurrentWeightSheet.WeightingMode && isInfoLoaded">
                     {{ 'weightanalytics.Labels.noOpenedWS' | translate }}
                 </div>
 
-                <div style="text-align:right">
+                <div style="text-align: right">
                     <div class="dropdown" ng-show="!CurrentWeightSheet.WeightingMode && isInfoLoaded">
                         <button class="btn btn-default dropdown-toggle plusWeightanalytics" type="button" id="Button1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <!--Создать отвесную-->
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                         
                 <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-right ttt" aria-labelledby="dropdownMenu1"">
+                        <ul class="dropdown-menu dropdown-menu-right addws" aria-labelledby="dropdownMenu1">
                             <li ng-repeat="mode in WeightingModes"
                                 ng-click="SelectWeighingMode(mode)">{{ 'weightanalytics.' + mode.Description | translate }}
                             </li>
@@ -64,16 +60,16 @@
 
 
 
-            <!--            <div>WeightingMode: {{CurrentWeightSheet.WeightingMode.Description}}</div>
-            <div>WeightSheetID: {{CurrentWeightSheet.WeightSheetID}}</div>
+                        <!--<div>WeightingMode: {{CurrentWeightSheet.WeightingMode.Description}}</div>-->
+            <!--<div>WeightSheetID: {{CurrentWeightSheet.WeightSheetID}}</div>
             <div>WeightSheetNumber: {{CurrentWeightSheet.WeightSheetNumber}}</div>-->
             <!--<div>WeightSheetStartDT: {{CurrentWeightSheet.WeightSheetStartDT | date:'dd.MM.yyyy HH:mm' : 'UTC'}}</div>-->
 
             <div ng-disabled="CurrentWeightSheet.WeightingMode || !isInfoLoaded">
                 {{ 'weightanalytics.Labels.archiveWS' | translate }}:
             </div>
-            
-            <div style="position:relative">
+
+            <div style="position: relative">
                 <div class="treeContainerWeightanalytics">
                     <div id="weight_sheet_list">
                     </div>
@@ -82,12 +78,13 @@
                     ng-show="CurrentWeightSheet.WeightingMode || !isInfoLoaded">
                 </div>
             </div>
-            
+
             <div class="controlsWeightanalytics">
                 <button type="button"
+                    id="PrintWS"
                     class="btn btn-default takeWeight"
                     ng-disabled="!CurrentWeightSheet.WeightSheetID && !ArchiveWeightSheetSelected"
-                    ng-click="CloseWSheet()">
+                    ng-click="PrintWeightSheet()">
                     {{'weightanalytics.Buttons.printWS' | translate}}
                 </button>
 
@@ -139,9 +136,17 @@
 
                 </div>
             </div>
-            <!--            <div>
-                {{response}}
-            </div>-->
+            <div style="padding:5px; font-size:12px">
+                <table style="table-layout:fixed; width:100%">
+                    <tr>
+                        <td ng-repeat="WP in WeightPlatforms">
+                         <input type="radio" name="radio-primary" ng-value="WP" ng-model="CurrentWeightSheet.WeightPlatform" value="true"/>                       
+                        {{WP.Description}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
             <div class="controlsWrapper">
 
                 <div class="paramRowWeightanalytics">
@@ -149,7 +154,7 @@
                         {{ 'weightanalytics.Labels.platform' | translate }} I                   
                     </div>
                     <div class="paramValueWeightanalytics" ng-style="{'visibility': CurrentWeightSheet.WeightingMode ? 'visible' : 'hidden'}">
-                        {{CurrentWeight/(1.5) | number:2}} {{ 'weightanalytics.ton' | translate }}
+                        {{CurrentWeightPlatf1 | number:2}} {{ 'weightanalytics.ton' | translate }}
                     </div>
                 </div>
 
@@ -158,7 +163,7 @@
                         {{ 'weightanalytics.Labels.platform' | translate }} II                   
                     </div>
                     <div class="paramValueWeightanalytics" ng-style="{'visibility': CurrentWeightSheet.WeightingMode ? 'visible' : 'hidden'}">
-                        {{CurrentWeight/(2) | number:2}} {{ 'weightanalytics.ton' | translate }}
+                        {{CurrentWeightPlatf2 | number:2}} {{ 'weightanalytics.ton' | translate }}
                     </div>
                 </div>
 
@@ -184,10 +189,6 @@
                     </div>
                 </div>
 
-            </div>
-
-            <div class="controlsWrapper">
-                {{rrr}}
             </div>
 
         </div>
@@ -323,9 +324,9 @@
                 {{CurrentWeightSheet.PairNumbers}}              
             </div>
 
-            
+
             <div class="controlsWeightanalytics">
-                <button type="button"
+                                <button type="button"
                     class="btn btn-default takeWeight"
                     ng-disabled="!((CurrentWeightSheet.WeightingMode.Description == 'Weighting'  && CurrentWeightSheet.CurrentPairNumber && CurrentWeightSheet.WaySheetNumber 
                                         && CurrentWeightSheet.SelectedScrapSender.Name && CurrentWeightSheet.SelectedScrapReceiver.Name && CurrentWeightSheet.SelectedScrapType)
@@ -346,7 +347,6 @@
     <div style="margin-top: 5px">
         <div id="KP4_Wagon" ng-show="CurrentWeightSheet.WeightingMode || ArchiveWeightSheetSelected">
         </div>
-
         <div ng-show="false" style="display: table; height: 500px; width: 940px">
             <p style="display: table-cell; text-align: center; vertical-align: middle;">
                 Loading ...
@@ -356,7 +356,12 @@
         </div>
     </div>
 
-
+    <table class="table table-striped table-condensed table-diagnostics">
+        <tr ng-repeat="WS in WeightSheetForPrint">
+            <td>{{WS.ID}}</td>
+            <td>{{WS.WeightingTime}}</td>
+        </tr>
+    </table>
 
 
 
@@ -403,8 +408,42 @@
         </div>
     </div>
 
+    <div class="table-print" id="tbp">
+
+        <div class="opis">
+            <p>Дата {{WeightSheetForPrint.Date | date:'dd.MM.yyyy HH:mm' : 'UTC'}}</p>
+            <p>Отправитель _______________________________</p>
+            <p>Получатель ________________________________</p>
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>№ вагона</th>
+                    <th>№ путевой</th>
+                    <th>Род груза</th>
+                    <th>Брутто</th>
+                    <th>Тара</th>
+                    <th>Нетто</th>
+                    <th>Отправитель</th>
+                    <th>Получатель</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <!--                <tr ng-repeat="WS in WeightSheetForPrint">
+                    <td>{{WS.ID}}</td>
+                    <td>{{WS.WeightingTime}}</td>
+                </tr>-->
+        </table>
+
+
+
+    </div>
+    <button id="btnPrint" style="display: none">Print Preview</button>
+
+
 
 </div>
 
 
-<!--</ui-view>-->

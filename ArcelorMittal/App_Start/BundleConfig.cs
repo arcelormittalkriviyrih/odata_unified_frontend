@@ -24,7 +24,8 @@ public class BundleConfig
             "~/scripts/vendor/jqplot/plugins/jqplot.highlighter.js",
             "~/scripts/vendor/dhtmlxscheduler.js",
             "~/scripts/vendor/dhtmlxscheduler_year_view.js",
-            "~/scripts/vendor/select.js"
+            "~/scripts/vendor/select.js",
+            "~/scripts/vendor/printPreview.js"
             //"~/scripts/vendor/backbone.js",
             //"~/scripts/vendor/joint.min.js",
             //"~/scripts/vendor/lodash.js"

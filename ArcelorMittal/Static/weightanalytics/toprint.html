@@ -1,0 +1,73 @@
+﻿<div class="printWeightanalytics">
+
+    <div>
+        <div class="printValueWeightanalytics">Дата:</div>
+        <div class="printValueWeightanalytics">{{WeightSheetForPrint.Date | date:'dd.MM.yyyy HH:mm' : 'UTC'}}</div>
+    </div>
+    <div>
+        <div class="printValueWeightanalytics">Весовщик:</div>
+        <div class="printValueWeightanalytics">{{user}}</div>
+    </div>
+    <div>
+        <div class="printValueWeightanalytics">Весы:</div>
+        <div class="printValueWeightanalytics">XXXX</div>
+    </div>
+
+    <div class="printLabelWeightanalytics">Отвесная № {{WeightSheetForPrint[0].WeightSheetNumber}}</div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>{{ 'weightanalytics.Table.wagon' | translate }}</th>
+                <th>{{ 'weightanalytics.Table.waybill' | translate }}</th>
+                <th>{{ 'weightanalytics.Table.tare' | translate }}</th>
+                <th>{{ 'weightanalytics.Table.brutto' | translate }}</th>
+                <th>{{ 'weightanalytics.Table.netto' | translate }}</th>
+                <th>{{ 'weightanalytics.Table.CSH' | translate }}</th>
+                <th>{{ 'weightanalytics.Labels.sender' | translate }}</th>
+                <th>{{ 'weightanalytics.Labels.receiver' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="WS in WeightSheetForPrint" ng-init="$last ? print() : angular.noop()">
+                <td ng-hide="WS.WeightingIndex>1" rowspan="{{WS.RowSpan}}">{{WS.WagonNumber}}</td>
+                <td ng-hide="WS.WeightingIndex>1" rowspan="{{WS.RowSpan}}">{{WS.WaybillNumber}}</td>
+                <td ng-hide="WS.WeightingIndex>1" rowspan="{{WS.RowSpan}}">{{WS.Tare}}</td>
+                <td>{{WS.Brutto}}</td>
+                <td>{{WS.Netto}}</td>
+                <td>{{WS.CSH}}</td>
+                <td>{{WS.sender}}</td>
+                <td>{{WS.reciever}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!--<div id="content">
+    <div id="masterContent">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>№ Вагона</th>
+                    <th>№ Путевой</th>
+                    <th>Тара</th>
+                    <th>Брутто</th>
+                    <th>Нетто</th>
+                    <th>Род груза</th>
+                    <th>Отправитель</th>
+                    <th>Получатель</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <button id="btnPrint" style="display: none;">Print Preview</button>
+    <button id="other" style="margin: 0 auto;">Print Preview</button>
+</div>-->
+
+
+
+
+
