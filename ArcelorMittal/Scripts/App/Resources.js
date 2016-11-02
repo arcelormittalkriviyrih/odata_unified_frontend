@@ -6,12 +6,31 @@
             Market: 'Market',
             WorkshopSpecs: 'WorkshopSpecs',
             Marker: 'Marker',
-            PA: 'PA'
+            PA: 'PA',
+            AutomationLab: 'Automation Lab'
         },
         welcome: {
             Welcome: 'Welcome',
             UseRoles: 'Use one of the available roles',
             NoRoles: 'There are no available roles'
+        },
+
+        automationlab: {
+            Income: 'Income/Outcome',
+            Material: 'Device',
+            Repair: 'Repair & Maintenance',
+            material: {
+                buttonAdd: 'New device',
+                addnewmaterial: 'Add a new device'
+            },
+            income: {
+                incomeoutcome: 'Income/Outcome device',
+                factorynumber: 'Enter the factory number:',
+                search: 'Search',
+                income: 'Income',
+                outcome: 'Outcome',
+                defect: 'Defect'
+            },
         },
         market: {
             OrderLabel: 'Orders',
@@ -300,12 +319,32 @@
             Market: 'Маркетолог',
             WorkshopSpecs: 'Специалист Цеха',
             Marker: 'Маркировщик',
-            PA: 'Специалист АСУТП'
+            PA: 'Специалист АСУТП',
+            AutomationLab: 'Лаборатория автоматизации'
         },
         welcome: {
             Welcome: 'Привет',
             UseRoles: 'Виберите одну из доступних ролей',
             NoRoles: 'Нет доступных ролей'
+        },
+
+
+        automationlab: {
+            Income:'Прием/Выдача',
+            Material: 'Устройства',
+            Repair: 'Ремонт и техобслуживание',
+        material: {
+            buttonAdd: 'Добавить',
+            addnewmaterial: 'Добавление нового устройство'
+        },
+        income: {
+            incomeoutcome: 'Прием/выдача устройств',
+            factorynumber: 'Введите заводской номер устройства:',
+            search: 'Поиск',
+            income: 'Принять',
+            outcome: 'Выдать',
+            defect: 'Брак'
+        },
         },
         market: {
             OrderLabel: 'Заказы',
@@ -593,12 +632,30 @@
             Market: 'Маркетолог',
             WorkshopSpecs: 'Спеціаліст Цеху',
             Marker: 'Маркувальник',
-            PA: 'Спеціаліст АСУТП'
+            PA: 'Спеціаліст АСУТП',
+            AutomationLab: 'Лабораторія автоматизації'
         },
         welcome: {
             Welcome: 'Привiт',
             UseRoles: 'Виберіть одну з доступних ролей',
             NoRoles: 'Не має доступных ролей'
+        },
+        automationlab: {
+            Income: 'Прийом/Видача',
+            Material: 'Пристрої',
+            Repair: 'Ремонт і техобслуговування',
+            material: {
+                buttonAdd: 'Добавить',
+                addnewmaterial: 'Внесення нового пристрою'
+            },
+            income: {
+                incomeoutcome: 'Прийом/Видача пристроїв',
+                factorynumber: 'Введіть заводський номер приладу:',
+                search: 'Пошук',
+                income: 'Прийняти',
+                outcome: 'Видати',
+                defect: 'Брак'
+            },
         },
         market: {
             OrderLabel: 'Замовлення',

@@ -3,11 +3,11 @@
 .config(['$stateProvider', function ($stateProvider) {
 
     $stateProvider
-        .state('app.AutomationLab.Acceptance', {
+        .state('app.AutomationLab.Income', {
 
-            url: '/acceptance',
-            templateUrl: 'Static/automationlab/acceptance.html',
-            controller: 'AutomationLabacceptanceCtrl'
+            url: '/income',
+            templateUrl: 'Static/automationlab/income.html',
+            controller: 'AutomationLabincomeCtrl'
         })
 
         .state('app.AutomationLab.Repair', {
@@ -31,7 +31,7 @@
 
 }])
 
-.controller('AutomationLabacceptanceCtrl', ['$scope', '$translate', 'indexService', '$q', function ($scope, $translate, indexService, $q) {
+.controller('AutomationLabincomeCtrl', ['$scope', '$translate', 'indexService', '$q', function ($scope, $translate, indexService, $q) {
 
     $materialDefinitionDisable = $('#materialDefinitionDisable').show();
     $scope.set_id;
