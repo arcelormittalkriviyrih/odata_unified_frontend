@@ -244,7 +244,7 @@
 
     }
 
-    //
+    // проверка последней открытой отвесной
     function vmGetWorkPerfomanceInfo() {
         $scope.isInfoLoaded = false;
         // get info about current WeightSheet for CurrentWeighbridgeID
@@ -266,6 +266,7 @@
 
     }
 
+    // получение детальной информации для отвесной
     function vmGetWagonsInfo() {
         // получаем перечень всех провесок для отвесной
         indexService.getInfo("v_KP4_Wagon?$filter=WorkPerformanceID eq {0}".format($scope.CurrentWeightSheet.WeightSheetID))
@@ -298,21 +299,16 @@
         var pathScalesDetail = "v_AvailableWeighbridgesInfo?$filter=ID_Scales eq {0}".format($scope.CurrentWeightSheet.CurrentWeighbridgeID);
         indexService.getInfo(pathScalesDetail)
             .then(function (response) {
-                //$scope.CurrentWeight = 45 + (Math.random() * 40);
                 var response = response.data.value[0];
-                //$scope.CurrentWeight = response.Weight;
-                $scope.CurrentWeight = $scope.CurrentWeightSheet.WeightPlatform.ID == 1 ? response.Weight_platform_1 : response.Weight;
-                $scope.CurrentWeightPlatf1 = response.Weight_platform_1;
-                $scope.CurrentWeightPlatf2 = response.Weight_platform_2;
-                $scope.WeightStab = response.stabilizing_weight;
-                vmRedrawArrow();
-
+                if (response) {
+                    //$scope.CurrentWeight = response.Weight;
+                    $scope.CurrentWeight = $scope.CurrentWeightSheet.WeightPlatform.ID == 1 ? response.Weight_platform_1 : response.Weight;
+                    $scope.CurrentWeightPlatf1 = response.Weight_platform_1;
+                    $scope.CurrentWeightPlatf2 = response.Weight_platform_2;
+                    $scope.WeightStab = response.stabilizing_weight;
+                    vmRedrawArrow();
+                };
             });
-    };
-
-    //
-    function vmCreateTree() {
-        $('#weight_sheet_list').empty();
     };
 
     // создание стрелочного индикатора
@@ -364,7 +360,7 @@
         vmInit();
         $scope.CurrentWeightSheet.WeightingMode = null;
         $scope.ShowWeightSheetNumberModalWindow = false;
-    }
+    };
 
     // нажатие ОК при вводе номера отвесной
     function vmEnterWeightSheetNumber() {
@@ -376,12 +372,11 @@
         $scope.ShowWeightSheetNumberModalWindow = false;
         //удалить таблицу
         $("#KP4_Wagon").jsGrid("destroy");
-    }
+    };
 
     // кнопка "Закрыть отвесную"
     function vmCloseWeightSheet() {
 
-        // exec SQL procedure
         indexService.sendInfo('upd_KP4_WorkPerformance', {
             WorkPerformanceID: $scope.CurrentWeightSheet.WeightSheetID || null
         }).then(function (response) {
@@ -393,7 +388,7 @@
             vmGetArchiveWeightSheetsTree(weightsheetid);
             // увеличиваем на 1 номер отвесной
             if (weightsheetnumber) {
-                weightsheetnumber.WeightSheetNumber = parseInt(weightsheetnumber) + 1;
+                weightsheetnumber = parseInt(weightsheetnumber) + 1;
                 $scope.Modal.WeightSheetNumber = weightsheetnumber.toString();
             }
         });
@@ -499,12 +494,7 @@
             table: 'v_KP4_Wagon',
 
             fields: [
-            /*{
-                id: 'WeightSheetNumber',
-                name: 'WeightSheetNumber',
-                title: $translate.instant('weightanalytics.Table.weightsheet'), //title: 'WeightSheet',
-                order: 2
-            }, */{
+            {
                 id: 'WagonNumber',
                 name: 'WagonNumber',
                 title: $translate.instant('weightanalytics.Table.wagon'), //title: 'Wagon',
@@ -568,7 +558,7 @@
 
     };
 
-    // обновить таблицу
+    // обновить таблицу для отвесной
     function vmRefreshWagonTable(weightsheetid) {
 
         $('#KP4_Wagon').jsGrid('loadOdata', {
@@ -577,7 +567,7 @@
         });
     };
 
-    // тестовая ф-ция архивные отвесные
+    // получение дерева архивных отвесных
     function vmGetArchiveWeightSheetsTree(weightsheetID) {
 
         $WeightSheetList = $('#weight_sheet_list').jstree('destroy');
@@ -604,6 +594,8 @@
             });
 
             $WeightSheetList.on('loaded.jstree', function (e, data) {
+                alert('loaded');
+                // при загрузке данные убираем выделение эл-тов и сворачиваем дерево
                 $WeightSheetList.jstree('close_all');
                 $WeightSheetList.jstree('deselect_all', true);
                 if (weightsheetID) {
@@ -612,17 +604,20 @@
                     $WeightSheetList.jstree('open_node', node);
                 }
                 else {
-                    $WeightSheetList.jstree('select_node', '5', false);
-                    $WeightSheetList.jstree('open_node', '5');
+                    var node = $scope.ArchiveWeightSheets.filter(function (element) {
+                        element.ParentID != '#' &
+                        element.WorkPerfomanceID != null &
+                        isNaN(element.Description)
+                    })[0].id;
+                    $WeightSheetList.jstree('select_node', node, false);
+                    $WeightSheetList.jstree('open_node', node);
                 };
             });
-
-
         });
 
         // выбор элемента в дереве отвесных
         $WeightSheetList.on('select_node.jstree', function (e, data) {
-            //alert('RG');
+            alert('select_node');
             $scope.ArchiveWeightSheetSelected = false;
             if (data.node.original.WorkPerfomanceID) {
                 $scope.SelectedArchiveWeightSheetID = data.node.original.WorkPerfomanceID;
@@ -637,31 +632,10 @@
             };
         });
 
-        /*
-        // выбор элемента в дереве отвесных
-        $WeightSheetList.on('tree-item-selected', function (e, data) {
-            $scope.ArchiveWeightSheetSelected = false;
-            var NodeID = data.id;
-            var SelectedArchiveWeightSheet = $filter('filter')($scope.ArchiveWeightSheets, { ID: NodeID })[0];
-            $scope.SelectedArchiveWeightSheet = SelectedArchiveWeightSheet;
-            if (SelectedArchiveWeightSheet.WorkPerfomanceID) {
-                $scope.ArchiveWeightSheetSelected = true;
-                // если таблица существует, обновляем ее, если нет - создаем
-                if ($("#KP4_Wagon").data("JSGrid")) {
-                    vmRefreshWagonTable(SelectedArchiveWeightSheet.WorkPerfomanceID);
-                }
-                else {
-                    vmCreateWagonTable(SelectedArchiveWeightSheet.WorkPerfomanceID);
-                };
-            };
-        });
-        */
-
     };
 
-
+    // кнопка "Печать"
     function vmPrintWeightSheet() {
-        //vmGetArchiveWeightSheetsTree();
 
         var WeightSheettoPrintID = $scope.CurrentWeightSheet.WeightSheetID ? $scope.CurrentWeightSheet.WeightSheetID : $scope.SelectedArchiveWeightSheetID;
 
@@ -706,41 +680,6 @@
                 }
             });
 */
-        /*
-        $q.all([indexService.getInfo("v_KP4_Wagon?$filter=WorkPerformanceID eq {0}&$orderby=WorkResponseID,WeightingIndex".format(WeightSheettoPrintID)),
-            indexService.getInfo("v_KP4_WorkPerformance?$filter=WorkPerformanceID eq {0}&$orderby=ID".format(WeightSheettoPrintID))])
-        .then(function (responses) {
-            $timeout(function () {
-                $scope.WeightSheetForPrint = responses[0].data.value;
-                $scope.WeightSheetForPrint.Date = responses[1].data.value[0].EndTime;
-
-            });
-            if ($scope.WeightSheetForPrint) {
-
-                if ($scope.CurrentWeightSheet.WeightSheetID) {
-                    alert("Отвесная будет закрыта после печати!");
-                    vmCloseWeightSheet();
-                }
-
-                var windowwidth = 670;
-                var windowheight = screen.height - 105;
-                var windowleft = screen.width / 2 - windowwidth / 2;
-                var windowparam = 'top=0,width=' + windowwidth + ',left=' + windowleft + ',location=no,height=' + windowheight + 'resizable=no,scrollbars=yes,status=no';
-                //var printContents = document.getElementById('tbp').innerHTML;
-                //alert(printContents);
-                //var popupWin = window.open('', '_blank', windowparam);
-                //popupWin.document.open();
-                //popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
-                //popupWin.document.close();
-            }
-            //$("#btnPrint").click(); 
-            var printContents = document.getElementById('tbp').innerHTML;
-            alert(printContents);
-            //vmPrinttest();
-
-        });
-        */
-
     }
 
     /*
