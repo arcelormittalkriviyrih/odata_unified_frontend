@@ -571,6 +571,7 @@
     function vmGetArchiveWeightSheetsTree(weightsheetID) {
 
         $WeightSheetList = $('#weight_sheet_list').jstree('destroy');
+
         indexService.getInfo('v_KP4_AllWorkPerformance').then(function (response) {
 
             response.data.value.forEach(function (e) {
@@ -593,31 +594,36 @@
                 }
             });
 
-            $WeightSheetList.on('loaded.jstree', function (e, data) {
-                alert('loaded');
-                // при загрузке данные убираем выделение эл-тов и сворачиваем дерево
-                $WeightSheetList.jstree('close_all');
-                $WeightSheetList.jstree('deselect_all', true);
-                if (weightsheetID) {
-                    var node = $filter('filter')($scope.ArchiveWeightSheets, { WorkPerfomanceID: weightsheetID })[0].id;
-                    $WeightSheetList.jstree('select_node', node, false);
-                    $WeightSheetList.jstree('open_node', node);
-                }
-                else {
-                    var node = $scope.ArchiveWeightSheets.filter(function (element) {
-                        element.ParentID != '#' &
-                        element.WorkPerfomanceID != null &
-                        isNaN(element.Description)
-                    })[0].id;
-                    $WeightSheetList.jstree('select_node', node, false);
-                    $WeightSheetList.jstree('open_node', node);
-                };
-            });
+        });
+
+        // загрузка дерева отвесных
+        $WeightSheetList.on('loaded.jstree', function (e, data) {
+            //alert('loaded');
+            // при загрузке данные убираем выделение эл-тов и сворачиваем дерево
+            $WeightSheetList.jstree('close_all');
+            $WeightSheetList.jstree('deselect_all', true);
+            // после закрытия выделяем закрытую отвесную
+            if (weightsheetID) {
+                var node = $filter('filter')($scope.ArchiveWeightSheets, { WorkPerfomanceID: weightsheetID })[0].id;
+                $WeightSheetList.jstree('select_node', node, false);
+                $WeightSheetList.jstree('open_node', node);
+            }
+            // при первой загрузке дерева выделяем число месяца, содержащее последнюю отвесную
+            else {
+                var node = $scope.ArchiveWeightSheets.filter(function (element) {
+                    return  element.parent != '#' &&
+                            element.WorkPerfomanceID == null &&
+                            !isNaN(element.text)
+                });
+                node = node[0].id;
+                $WeightSheetList.jstree('select_node', node, false);
+                $WeightSheetList.jstree('open_node', node);
+            };
         });
 
         // выбор элемента в дереве отвесных
         $WeightSheetList.on('select_node.jstree', function (e, data) {
-            alert('select_node');
+            //alert('select_node');
             $scope.ArchiveWeightSheetSelected = false;
             if (data.node.original.WorkPerfomanceID) {
                 $scope.SelectedArchiveWeightSheetID = data.node.original.WorkPerfomanceID;
