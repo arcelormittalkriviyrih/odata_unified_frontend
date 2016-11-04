@@ -53,6 +53,10 @@ body {
     word-break: break-all;
 }
 
+.jsgrid-header-row th{
+    word-break: normal;
+}
+
 .logo .jsgrid-table img{
     width: 100px;
 }

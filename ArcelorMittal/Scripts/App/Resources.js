@@ -240,13 +240,13 @@
 
                 getBtn: 'Get',
                 SelectGrouppingMode: 'Select groupping mode',
-                labelsOverall: 'Labels overall',
+                labelsCount: 'Labels overall',
                 weightOverall: 'Weight overall',
                 byChanges: 'By changes',
                 byBrigades: 'By brigades',
-                byMelts: 'By melts',
-                byOrders: 'by orders',
-                byParties: 'By parties',
+                byMelt: 'By melts',
+                byOrder: 'By orders',
+                byParty: 'By parties',
                 handMode: 'Hand mode',
                 allLabels: 'All labels',
                 labelQuantity: 'Label quantity',
@@ -261,7 +261,8 @@
                 dateTimeMeasure: 'Measure date and time',
                 prodOrder: 'Product order',
                 materialNo: 'Number of material',
-                mass: 'Mass'
+                mass: 'Mass',
+                statusName: 'Status'
             }
 
         },
@@ -578,13 +579,13 @@
 
                 getBtn: 'Получить',
                 SelectGrouppingMode: 'Выберите режим группировки',
-                labelsOverall: 'Бирок всего',
+                labelsCount: 'Бирок всего',
                 weightOverall: 'Масса всего',
                 byChanges: 'По сменам',
                 byBrigades: 'По бригадам',
-                byMelts: 'По плавкам',
-                byOrders: 'По заказам',
-                byParties: 'По партиям',
+                byMelt: 'По плавкам',
+                byOrder: 'По заказам',
+                byParty: 'По партиям',
                 handMode: 'Ручной режим',
                 allLabels: 'Все бирки',
                 labelQuantity: 'Количество бирок',
@@ -599,7 +600,8 @@
                 dateTimeMeasure: 'Дата и время взвешивания',
                 prodOrder: 'Производственный заказ',
                 materialNo: 'Номер материала',
-                mass: 'Масса'
+                mass: 'Масса',
+                statusName: 'Статус'
             }
         },
         weightanalytics: {
@@ -918,13 +920,13 @@
 
                 getBtn: 'Отримати',
                 SelectGrouppingMode: 'Виберіть режим групування',
-                labelsOverall: 'Бирок всього',
+                labelsCount: 'Бирок всього',
                 weightOverall: 'Маса всього',
                 byChanges: 'За змінами',
                 byBrigades: 'За бригадами',
-                byMelts: 'За плавками',
-                byOrders: 'За замовленнями',
-                byParties: 'За партіями',
+                byMelt: 'За плавками',
+                byOrder: 'За замовленнями',
+                byParty: 'За партіями',
                 handMode: 'Ручний режим',
                 allLabels: 'Всі бирки',
                 labelQuantity: 'Кількість бирок',
@@ -939,7 +941,8 @@
                 dateTimeMeasure: 'Дата та час зважування',
                 prodOrder: 'Виробниче замовлення',
                 materialNo: 'Номер матеріала',
-                mass: 'Маса'
+                mass: 'Маса',
+                statusName: 'Статус'
             }
         },
         weightanalytics: {
