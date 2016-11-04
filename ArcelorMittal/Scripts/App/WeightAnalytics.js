@@ -735,6 +735,7 @@
             $scope.user = responses[0].data.value[0].SYSTEM_USER;
             $scope.WeightSheetForPrint = responses[2].data.value;
             $scope.WeightSheetForPrint.Date = responses[1].data.value[0].StartTime;
+            $scope.WeightSheetForPrint.WeightBridge = responses[1].data.value[0].WeightBridge;
 
             var rowspan = 0;
             var wagonindex = 0;
