@@ -7,7 +7,7 @@
             WorkshopSpecs: 'WorkshopSpecs',
             Marker: 'Marker',
             PA: 'PA',
-            WeightAnalytics: 'WeightAnalytics'
+            WeightAnalytics: 'WeightAnalytics',
             AutomationLab: 'Automation Lab'
         },
         welcome: {
@@ -368,7 +368,7 @@
             WorkshopSpecs: 'Специалист Цеха',
             Marker: 'Маркировщик',
             PA: 'Специалист АСУТП',
-            WeightAnalytics: 'Аналитик'
+            WeightAnalytics: 'Аналитик',
             AutomationLab: 'Лаборатория автоматизации'
         },
         welcome: {
@@ -729,7 +729,7 @@
             WorkshopSpecs: 'Спеціаліст Цеху',
             Marker: 'Маркувальник',
             PA: 'Спеціаліст АСУТП',
-            WeightAnalytics: 'Аналітик'
+            WeightAnalytics: 'Аналітик',
             AutomationLab: 'Лабораторія автоматизації'
         },
         welcome: {
