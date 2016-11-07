@@ -141,7 +141,7 @@
                     <tr>
                         <td ng-repeat="WP in WeightPlatforms">
                          <input type="radio" name="radio-primary" ng-value="WP" ng-model="CurrentWeightSheet.WeightPlatform" value="true"/>                       
-                        {{WP.Description}}
+                        {{ 'weightanalytics.Labels.' + WP.Description | translate }}
                         </td>
                     </tr>
                 </table>
@@ -176,7 +176,7 @@
                         {{ 'weightanalytics.Labels.offset' | translate }} X                  
                     </div>
                     <div class="paramValueWeightanalytics" ng-style="{'visibility': CurrentWeightSheet.WeightingMode ? 'visible' : 'hidden'}">
-                        {{0.1*CurrentWeight-5 | number:2}} {{ 'weightanalytics.ton' | translate }}
+                        {{CurrentWeightOffsetX | number:2}} {{ 'weightanalytics.ton' | translate }}
                     </div>
                 </div>
 
@@ -185,7 +185,7 @@
                         {{ 'weightanalytics.Labels.offset' | translate }} Y                   
                     </div>
                     <div class="paramValueWeightanalytics" ng-style="{'visibility': CurrentWeightSheet.WeightingMode ? 'visible' : 'hidden'}">
-                        {{0.05*CurrentWeight-4 | number:2}} {{ 'weightanalytics.ton' | translate }}
+                        {{CurrentWeightOffsetY | number:2}} {{ 'weightanalytics.ton' | translate }}
                     </div>
                 </div>
 

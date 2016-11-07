@@ -84,7 +84,7 @@
     $scope.CurrentWeight = 0;
     $scope.CurrentWeightPlatf1 = 0;
     $scope.CurrentWeightPlatf2 = 0;
-    $scope.WeightPlatforms = [{ ID: 1, Description: "Platform I" }, { ID: 2, Description: "Platform I+II" }];
+    $scope.WeightPlatforms = [{ ID: 1, Description: "Platform_I" }, { ID: 2, Description: "Platform_I_II" }];
     $scope.WeightingModes = [{ ID: 1, Description: "Taring" }, { ID: 2, Description: "Weighting" }];
     $scope.CurrentWeightSheet = []; // CurrentWSheet collection - all info about current opened WSheet
     $scope.CurrentWeightSheet.WeightPlatform = null;
@@ -135,13 +135,15 @@
 
     // получение списка доступных весов
     function vmGetAvalWeighbridges() {
-        $q.all([indexService.getInfo('v_AvailableWeighbridges'), indexService.getInfo('GetUserProcedure')])
+        $q.all([indexService.getInfo('v_AvailableWeighbridges')/*, indexService.getInfo('GetUserProcedure')*/])
         .then(function (responses) {
             //AvalWeighbridges - коллекция доступных весов
             $scope.AvalWeighbridges = responses[0].data.value;
+            /*
             $scope.userMetadata = responses[1].data.value.map(function (item) {
                 return item.Name;
             });
+            */
         });
 
     };
@@ -296,7 +298,7 @@
     // получение онлайн показаний весов
     function vmGetScaleData() {
         //get data from SQL view//
-        var pathScalesDetail = "v_AvailableWeighbridgesInfo?$filter=ID_Scales eq {0}".format($scope.CurrentWeightSheet.CurrentWeighbridgeID);
+        var pathScalesDetail = "v_AvailableWeighbridgesInfo?$filter=EquipmentID eq {0}".format($scope.CurrentWeightSheet.CurrentWeighbridgeID);
         indexService.getInfo(pathScalesDetail)
             .then(function (response) {
                 var response = response.data.value[0];
@@ -305,6 +307,8 @@
                     $scope.CurrentWeight = $scope.CurrentWeightSheet.WeightPlatform.ID == 1 ? response.Weight_platform_1 : response.Weight;
                     $scope.CurrentWeightPlatf1 = response.Weight_platform_1;
                     $scope.CurrentWeightPlatf2 = response.Weight_platform_2;
+                    $scope.CurrentWeightOffsetX = response.L_bias_weight;
+                    $scope.CurrentWeightOffsetY = response.H_bias_weight;
                     $scope.WeightStab = response.stabilizing_weight;
                     vmRedrawArrow();
                 };

@@ -7,7 +7,7 @@
             WorkshopSpecs: 'WorkshopSpecs',
             Marker: 'Marker',
             PA: 'PA',
-            WeightAnalytics: 'WeightAnalytics'
+            WeightAnalytics: 'WeightAnalytics',
             AutomationLab: 'Automation Lab'
         },
         welcome: {
@@ -298,6 +298,8 @@
                 openedWS: 'Weightsheet №',
                 archiveWS: 'Archive weightsheets',
                 platform: 'Platform',
+                Platform_I: 'Platform I',
+                Platform_I_II: 'Platform I+II',
                 offset: 'Offset',
                 enterParameter: 'Enter the data',
                 sender: 'Sender',
@@ -368,7 +370,7 @@
             WorkshopSpecs: 'Специалист Цеха',
             Marker: 'Маркировщик',
             PA: 'Специалист АСУТП',
-            WeightAnalytics: 'Аналитик'
+            WeightAnalytics: 'Аналитик',
             AutomationLab: 'Лаборатория автоматизации'
         },
         welcome: {
@@ -655,6 +657,8 @@
                 openedWS: 'Отвесная №',
                 archiveWS: 'Архивные отвесные',
                 platform: 'Платформа',
+                Platform_I: 'Платформа I',
+                Platform_I_II: 'Платформа I+II',
                 offset: 'Смещение',
                 enterParameter: 'Введите данные',
                 sender: 'Отправитель',
@@ -729,7 +733,7 @@
             WorkshopSpecs: 'Спеціаліст Цеху',
             Marker: 'Маркувальник',
             PA: 'Спеціаліст АСУТП',
-            WeightAnalytics: 'Аналітик'
+            WeightAnalytics: 'Аналітик',
             AutomationLab: 'Лабораторія автоматизації'
         },
         welcome: {
@@ -1012,6 +1016,8 @@
                 openedWS: 'Вагова №',
                 archiveWS: 'Архівні вагові',
                 platform: 'Платформа',
+                Platform_I: 'Платформа I',
+                Platform_I_II: 'Платформа I+II',
                 offset: 'Зміщення',
                 enterParameter: 'Введіть дані',
                 sender: 'Відправник',
