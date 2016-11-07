@@ -1,0 +1,41 @@
+﻿<div class="row col-md-12" ng-show="!$root.showLoadingState" ng-controller="AutomationLabincomeCtrl">
+         <div class="col-md-12 col-sm-12">
+            <div class="toggle-content text-center" id="tab1">
+                <div class="col-md-12 col-sm-12">
+                    <h3 style="margin-bottom: 15px;">{{ 'automationlab.income.incomeoutcome' | translate }}</h3>
+                    
+                    <div class="lab" style="display:inline-block; margin-right:15px; color:black;">{{ 'automationlab.income.factorynumber' | translate }}</div>
+
+                    
+                    <div id="search" style="display:inline-block;">
+                        <input class="form-control ng-valid ng-touched ng-dirty ng-valid-parse ng-empty ng-pristine" name="q" ng-model="count" size="40" placeholder="{{ 'automationlab.income.search' | translate }}" id="searchnumber" style="height: 31px; padding-left: 15px; padding-right: 15px; width: 290px; display: inherit;" type="text" ng-keypress="checkIfEnterKeyWasPressed($event)">
+                        <button id="go" class="btn btn-default btn-sm" ng-click="vmCreateMaterialTable()" style="outline:none; vertical-align:top;">{{ 'automationlab.income.search' | translate }}</button>
+                    </div>
+                </div>
+             </div>        
+           
+       <div style="margin-top: 15px;" class="col-md-12 col-sm-12">  
+        <div class="gridWrapper">
+            <div class="disable" id="materialDefinitionDisable">
+
+            </div>
+
+            <div id="material_definition"></div>
+        </div>
+           </div>
+                 <div class="toggle-content text-center">
+                       
+                        <div id="rovn">
+                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'Принято')" style="outline:none;" ng-disabled="!chek_click">
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{ 'automationlab.income.income' | translate }}
+                                </button>
+                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'Выдано')" style="outline:none;" ng-disabled="!chek_click">
+                                    <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span> {{ 'automationlab.income.outcome' | translate }}
+                                </button>
+                                <button type="button" class="btn btn-default btn-lg" ng-click="SetStatus(set_id,'Брак')" style="outline:none;" ng-disabled="!chek_click">
+                                    <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> {{ 'automationlab.income.defect' | translate }}
+                                </button>
+                        </div>                       
+                    </div>       
+    </div>       
+</div>

@@ -1,0 +1,80 @@
+﻿<div class="container loading" ng-show="$root.showLoadingState">
+
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
+    </div>
+
+</div>
+
+
+
+<div class="row col-md-12" ng-show="!$root.showLoadingState">
+     <div class="col-md-12">
+         <button class="add btn btn-default"
+         ng-click="createForm('create', 'ins_Order')">
+        {{ 'automationlab.material.buttonAdd' | translate }}
+         </button>
+     </div>
+
+     <div class="treeContainer col-md-4">
+        <div id="hierarchy_material_class">
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="gridWrapper">
+            <div class="disable" id="materialDefinitionDisable">
+
+            </div>
+
+            <div id="material_definition"></div>
+        </div>
+        <div class="gridWrapper">
+            <div class="disable" id="materialDefinitionPropertyDisable">
+
+            </div>
+
+            <div id="material_definition_property"></div>
+        </div>
+    </div>
+    
+
+</div>
+
+ <div class="black-wrapper" ng-class="{'show': isShowModal}" ng-show="isShowModal">
+        <div class="modal additional">
+           <div class="col-md-12 col-sm-12 clearfix"> 
+                <div class="toggle-content text-center">
+                    <h3>{{ 'automationlab.material.addnewmaterial' | translate }}</h3>
+                </div>
+                
+                    <div style="width:400px;" class="clearfix">
+                        Класс СИТ:<input type="text" name="class" style="float:right">
+                    </div>
+                    <div class="clearfix" style="width:400px; margin-top: 5px;" >Название СИТ:<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Идентификационный номер СИТ :<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Цех-владелец:<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Статус<input type="text" name="class" style="float:right"></div>
+                
+           </div>
+            <div class="col-md-12 col-sm-12 clearfix"> 
+                <div class="toggle-content left-center">
+                    <h5 style="font-weight: bold;">Свойства</h5>
+                </div>
+                
+                    <div style="width:400px;" class="clearfix">
+                        Свойство 1:<input type="text" name="class" style="float:right">
+                    </div>
+                    <div class="clearfix" style="width:400px; margin-top: 5px;" >Свойство 2:<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Свойство 3 :<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Свойство 4:<input type="text" name="class" style="float:right"></div>
+                    <div style="width:400px; margin-top: 5px;" class="clearfix">Свойство 5<input type="text" name="class" style="float:right"></div>
+                
+           </div>
+        <div class="toggle-content text-right" style="padding: 20px 20px 0px; margin-bottom: -20px;"> 
+            <button class="add btn btn-default">Добавить</button>
+            <button class="add btn btn-default" id="cancel">Отмена</button>   
+         </div>
+         </div>
+ </div>
+   
