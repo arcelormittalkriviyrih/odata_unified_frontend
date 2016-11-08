@@ -219,9 +219,9 @@
 
         indexService.getInfo("v_KP4_PackagingUnitsProperty?$filter=Wagon eq '{0}'".format(selected_pair_number))
         .then(function (response) {
-            var TareInfo = response.data.value;
-            $scope.CurrentPairNumberTare = TareInfo.Value;
-            //alert(TareInfo.Value);
+            var TareInfo = response.data.value;            
+            $scope.CurrentPairNumberTare = TareInfo.length ? TareInfo[0].Value : null;
+            //alert($scope.CurrentPairNumberTare);
         });
 
     };
@@ -542,13 +542,13 @@
                 order: 8,
                 css: "jsgrid-bold-cell"
             }, {
-                id: 'sender',
+                id: 'Sender',
                 name: 'Sender',
                 title: $translate.instant('weightanalytics.Labels.sender'), //title: 'Netto',
                 width: 100,
                 order: 9
             }, {
-                id: 'reciever',
+                id: 'Receiver',
                 name: 'Receiver',
                 title: $translate.instant('weightanalytics.Labels.receiver'), //title: 'Netto',
                 width: 100,

@@ -311,6 +311,27 @@
                 </div>
             </div>
 
+            <div class="controlsRowWeightanalytics"
+                 ng-show="CurrentWeightSheet.WeightingMode.Description == 'Weighting' && CurrentPairNumber.selected">
+                <div class="captionWeightanalytics">
+                </div>
+                <div style="font-size:12px">
+                        {{ 'weightanalytics.Table.tare' | translate }}: {{CurrentPairNumberTare | number:2}} {{ 'weightanalytics.ton' | translate }}
+                </div>
+            </div>
+            
+            
+            
+<!--            <div class="paramRowWeightanalytics">
+                    <div class="paramNameWeightanalytics">
+                        Tare                    
+                    </div>
+                    <div class="paramValueWeightanalytics">
+                        {{CurrentPairNumberTare | number:2}} {{ 'weightanalytics.ton' | translate }}
+                    </div>
+                </div>-->
+
+
             <div ng-hide="true">
                 {{CurrentWeightSheet.SelectedScrapSender.Name}}
                 <br />
