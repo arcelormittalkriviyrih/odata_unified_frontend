@@ -480,7 +480,7 @@ input#filter{
     text-align: center;
 }
 
-div.control-row button.btn {
+div.control-row .btn {
     margin-right: 5px;
     margin-top: 10px;
 }

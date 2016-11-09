@@ -28,11 +28,11 @@
             {{ 'buttonSend' | translate }}
         </button>
 
-        <button class="btn btn-default"
+        <a class="btn btn-default"
                 ng-if="back"
-                ng-click="cancel()">
+                ui-sref="{{back}}">
             {{ 'buttonCancel' | translate }}
-        </button>
+        </a>
     </div>
 
 </div>
