@@ -252,6 +252,7 @@
     <Content Include="Scripts\Vendor\jstree.js" />
     <Content Include="Scripts\Vendor\printPreview.js" />
     <Content Include="Scripts\Vendor\select.js" />
+    <Content Include="Static\automationlab\device.html" />
     <Content Include="Static\automationlab\income.html" />
     <Content Include="Static\automationlab\index.html" />
     <Content Include="Static\automationlab\repair.html" />
