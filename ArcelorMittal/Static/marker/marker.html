@@ -90,7 +90,6 @@
 
 </div>
 
-
 <div class="scaleDetailInfo" ng-show="currentScaleID && !scalesDetailsInfo.ALARM">
 
     <div class="scaleInfo task">
@@ -477,9 +476,9 @@
                     class="btn btn-default"
                     ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'&& (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU)"
                     ng-disabled="!(
-                    (!sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')
+                    (!sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')
                     ||
-                    (sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1'))"
+                    (sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1'))"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeWeight','takeWeightLabel', 'marker.takeWeightButton')">
                 {{takeWeightLabel}}
             </button>
@@ -487,7 +486,7 @@
             <button type="button"
                     class="btn btn-default"
                     ng-show="sandwichModeAccepted && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
-                    ng-disabled="!(scalesDetailsInfo && scalesDetailsInfo.EN_BUTTON_TARA)"
+                    ng-disabled="!(scalesDetailsInfo && scalesDetailsInfo.EN_BUTTON_TARA && scalesDetailsInfo.WEIGHT_OK)"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeTara','takeTaraLabel', 'marker.takeTaraButton')">
                 {{takeTaraLabel}}
             </button>
@@ -706,7 +705,6 @@
     </div>
 </div>
 
-<!--Manual weight input modal form-->
 <div class="black-wrapper" ng-show="toggleModalHandMode">
     <div class="modal additional">
         <button type="button"

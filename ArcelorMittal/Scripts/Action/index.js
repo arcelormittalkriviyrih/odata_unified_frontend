@@ -127,10 +127,10 @@
                                                     .appendTo(li);
                         });
 
-                        $('#filter').keyup(function () {
+                        controlsControlGroup.find('#filter').keyup(function () {
 
                             var comboList = ul.find('li a');
-                            var val = $(this).val();
+                            var val = $(this).val().toLowerCase();
                             
                             if (val.length > 0) {
 
@@ -141,7 +141,7 @@
 
                                 comboList.each(function (i, item) {
 
-                                    if ($(item).text().indexOf(val) == -1)
+                                    if ($(item).text().toLowerCase().indexOf(val) == -1)
                                         $(item).parent().hide();
                                 })
                             } else {

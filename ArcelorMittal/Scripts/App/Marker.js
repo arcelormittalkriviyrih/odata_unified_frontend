@@ -2337,44 +2337,22 @@
     var date = getTimeToUpdate();
 
     $scope.dateStart = $scope.dateEnd = '{0}.{1}.{2}'.format(date.day, date.month, date.year);   
-    $scope.groupParams = [{
+    $scope.groupParams = ['labelsCount', 'weightOverall', 'byChanges', 'byBrigades', 'byMelt', 'byOrder', 'byParty', 'handMode', 'allLabels'];
 
-                            ID: 'labelsCount',
-                            Description: $translate.instant('marker.statistics.labelsOverall')
-                        }, {
+    $scope.groupParams = $scope.groupParams.map(function (item) {
 
-                            ID: 'weightOverall',
-                            Description: $translate.instant('marker.statistics.weightOverall')
-                        }, {
+        return {
 
-                            ID: 'byChanges',
-                            Description: $translate.instant('marker.statistics.byChanges')
-                        }, {
-
-                            ID: 'byBrigades',
-                            Description: $translate.instant('marker.statistics.byBrigades')
-                        }, {
-
-                            ID: 'byMelt',
-                            Description: $translate.instant('marker.statistics.byMelts')
-                        }, {
-
-                            ID: 'byOrder',
-                            Description: $translate.instant('marker.statistics.byOrders')
-                        },
-                        {
-
-                            ID: 'byParty',
-                            Description: $translate.instant('marker.statistics.byParties')
-                        }, {
-
-                            ID: 'handMode',
-                            Description: $translate.instant('marker.statistics.handMode')
-                        }, {
-
-                            ID: 'allLabels',
-                            Description: $translate.instant('marker.statistics.allLabels')
-                        }];
+            ID: item,
+            Description: $translate.instant('marker.statistics.' + item)
+        }
+    }).sort(function (a, b) {
+        if (a.Description < b.Description)
+            return -1
+        else if (a.Description > b.Description)
+            return 1
+        else return 0
+    });
     $scope.groupBy = null;
     $scope.comboValue = '';
 
@@ -2519,6 +2497,23 @@
     else {
 
         var data = $state.params.data;
+        var fields = [
+                { name: "FactoryNumber", title: $translate.instant('marker.statistics.labelNumder'), type: "text", width: 100 },
+                { name: "Quantity", title: $translate.instant('marker.statistics.mass'), type: "text", align: "center", width: 50 },
+                { name: "BRIGADE_NO", title: $translate.instant('marker.statistics.brigade'), type: "text", align: "center", width: 55 },
+                { name: "MEASURE_TIME", title: $translate.instant('marker.statistics.dateTimeMeasure'), align: "center", type: "dateTime", width: 150 },
+                { name: "PART_NO", title: $translate.instant('marker.statistics.party'), type: "text", align: "center", width: 50 },
+                { name: "MELT_NO", title: $translate.instant('marker.statistics.melt'), type: "text", align: "center", width: 50 },
+                { name: "PROD_ORDER", title: $translate.instant('marker.statistics.prodOrder'), type: "text", align: "center", width: 150 },
+                { name: "MATERIAL_NO", title: $translate.instant('marker.statistics.materialNo'), type: "text", align: "center", width: 70 }
+                
+        ];
+
+        var fieldsHandMode = fields.slice(0);
+        var fieldsAllLabels = fields.slice(0);
+
+        fieldsAllLabels.push({ name: "StatusName", title: $translate.instant('marker.statistics.statusName'), type: "text", align: "center", width: 70 });
+
 
         if ($state.current.name == 'app.Marker.Statistics.handMode') {
 
@@ -2552,17 +2547,7 @@
                 }
             },
 
-            fields: [
-                { name: "FactoryNumber", title: $translate.instant('marker.statistics.labelNumder'), type: "text", width: 150 },
-                { name: "Quantity", title: $translate.instant('marker.statistics.mass'), type: "text", align: "center", width: 50 },
-                { name: "BRIGADE_NO", title: $translate.instant('marker.statistics.brigade'), type: "text", align: "center", width: 55 },
-                { name: "MEASURE_TIME", title: $translate.instant('marker.statistics.dateTimeMeasure'), align: "center", type: "dateTime", width: 150 },
-                { name: "PART_NO", title: $translate.instant('marker.statistics.party'), type: "text", align: "center", width: 50 },
-                { name: "MELT_NO", title: $translate.instant('marker.statistics.melt'), type: "text", align: "center", width: 50 },
-                { name: "PROD_ORDER", title: $translate.instant('marker.statistics.prodOrder'), type: "text", align: "center", width: 150 },
-                { name: "MATERIAL_NO", title: $translate.instant('marker.statistics.materialNo'), type: "text", align: "center", width: 70 },
-
-            ]
+            fields: $state.current.name == 'app.Marker.Statistics.handMode' ? fieldsHandMode : fieldsAllLabels
         });
     };
 

@@ -84,7 +84,7 @@
     $scope.CurrentWeight = 0;
     $scope.CurrentWeightPlatf1 = 0;
     $scope.CurrentWeightPlatf2 = 0;
-    $scope.WeightPlatforms = [{ ID: 1, Description: "Platform I" }, { ID: 2, Description: "Platform I+II" }];
+    $scope.WeightPlatforms = [{ ID: 1, Description: "Platform_I" }, { ID: 2, Description: "Platform_I_II" }];
     $scope.WeightingModes = [{ ID: 1, Description: "Taring" }, { ID: 2, Description: "Weighting" }];
     $scope.CurrentWeightSheet = []; // CurrentWSheet collection - all info about current opened WSheet
     $scope.CurrentWeightSheet.WeightPlatform = null;
@@ -135,13 +135,15 @@
 
     // получение списка доступных весов
     function vmGetAvalWeighbridges() {
-        $q.all([indexService.getInfo('v_AvailableWeighbridges'), indexService.getInfo('GetUserProcedure')])
+        $q.all([indexService.getInfo('v_AvailableWeighbridges')/*, indexService.getInfo('GetUserProcedure')*/])
         .then(function (responses) {
             //AvalWeighbridges - коллекция доступных весов
             $scope.AvalWeighbridges = responses[0].data.value;
+            /*
             $scope.userMetadata = responses[1].data.value.map(function (item) {
                 return item.Name;
             });
+            */
         });
 
     };
@@ -215,6 +217,13 @@
             });
         };
 
+        indexService.getInfo("v_KP4_PackagingUnitsProperty?$filter=Wagon eq '{0}'".format(selected_pair_number))
+        .then(function (response) {
+            var TareInfo = response.data.value;            
+            $scope.CurrentPairNumberTare = TareInfo.length ? TareInfo[0].Value : null;
+            //alert($scope.CurrentPairNumberTare);
+        });
+
     };
 
     // выбор весов
@@ -278,8 +287,8 @@
                 // используемые номера пар вагонов
                 if (item.WeightingIndex == 1) {
                     PairNumbers.unshift(item.WagonNumber);
-                    $scope.CurrentWeightSheet.SelectedScrapSender = $filter('filter')($scope.ScrapSenders, { Name: item.sender })[0];
-                    $scope.CurrentWeightSheet.SelectedScrapReceiver = $filter('filter')($scope.ScrapReceivers, { Name: item.reciever })[0];
+                    $scope.CurrentWeightSheet.SelectedScrapSender = $filter('filter')($scope.ScrapSenders, { Name: item.Sender })[0];
+                    $scope.CurrentWeightSheet.SelectedScrapReceiver = $filter('filter')($scope.ScrapReceivers, { Name: item.Receiver })[0];
                     $scope.CurrentWeightSheet.SelectedScrapType = $filter('filter')($scope.ScrapTypes, { ID: item.CSH })[0];
                 };
 
@@ -296,7 +305,7 @@
     // получение онлайн показаний весов
     function vmGetScaleData() {
         //get data from SQL view//
-        var pathScalesDetail = "v_AvailableWeighbridgesInfo?$filter=ID_Scales eq {0}".format($scope.CurrentWeightSheet.CurrentWeighbridgeID);
+        var pathScalesDetail = "v_AvailableWeighbridgesInfo?$filter=EquipmentID eq {0}".format($scope.CurrentWeightSheet.CurrentWeighbridgeID);
         indexService.getInfo(pathScalesDetail)
             .then(function (response) {
                 var response = response.data.value[0];
@@ -305,6 +314,8 @@
                     $scope.CurrentWeight = $scope.CurrentWeightSheet.WeightPlatform.ID == 1 ? response.Weight_platform_1 : response.Weight;
                     $scope.CurrentWeightPlatf1 = response.Weight_platform_1;
                     $scope.CurrentWeightPlatf2 = response.Weight_platform_2;
+                    $scope.CurrentWeightOffsetX = response.L_bias_weight;
+                    $scope.CurrentWeightOffsetY = response.H_bias_weight;
                     $scope.WeightStab = response.stabilizing_weight;
                     vmRedrawArrow();
                 };
@@ -531,13 +542,13 @@
                 order: 8,
                 css: "jsgrid-bold-cell"
             }, {
-                id: 'sender',
+                id: 'Sender',
                 name: 'Sender',
                 title: $translate.instant('weightanalytics.Labels.sender'), //title: 'Netto',
                 width: 100,
                 order: 9
             }, {
-                id: 'reciever',
+                id: 'Receiver',
                 name: 'Receiver',
                 title: $translate.instant('weightanalytics.Labels.receiver'), //title: 'Netto',
                 width: 100,

@@ -11,7 +11,7 @@ var scalesRefresh = 1000; //scales autorefresh interval (1 sec)
 var workRequestRefresh = 1000; //last Work Refresh for scales;
 var dropBoxTmpl = '<div class="dropdown form-control">' +
                                        '<div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">' +
-                                       '<input type="text" class="dropdown-input" id="{0}" />' +
+                                       '<input type="text" class="dropdown-input" id="{0}" readonly/>' +
                                        '<input type="hidden" id="{1}" data-parent="dropDown"/>' +
                                        '<span class="caret"></span>' +
                                        '</div>' +

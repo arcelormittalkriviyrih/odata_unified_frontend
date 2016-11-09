@@ -259,13 +259,13 @@
 
                 getBtn: 'Get',
                 SelectGrouppingMode: 'Select groupping mode',
-                labelsOverall: 'Labels overall',
+                labelsCount: 'Labels overall',
                 weightOverall: 'Weight overall',
                 byChanges: 'By changes',
                 byBrigades: 'By brigades',
-                byMelts: 'By melts',
-                byOrders: 'by orders',
-                byParties: 'By parties',
+                byMelt: 'By melts',
+                byOrder: 'By orders',
+                byParty: 'By parties',
                 handMode: 'Hand mode',
                 allLabels: 'All labels',
                 labelQuantity: 'Label quantity',
@@ -280,7 +280,8 @@
                 dateTimeMeasure: 'Measure date and time',
                 prodOrder: 'Product order',
                 materialNo: 'Number of material',
-                mass: 'Mass'
+                mass: 'Mass',
+                statusName: 'Status'
             }
 
         },
@@ -298,6 +299,8 @@
                 openedWS: 'Weightsheet №',
                 archiveWS: 'Archive weightsheets',
                 platform: 'Platform',
+                Platform_I: 'Platform I',
+                Platform_I_II: 'Platform I+II',
                 offset: 'Offset',
                 enterParameter: 'Enter the data',
                 sender: 'Sender',
@@ -373,7 +376,7 @@
         },
         welcome: {
             Welcome: 'Привет',
-            UseRoles: 'Выберите одну из доступних ролей',
+            UseRoles: 'Выберите одну из доступных ролей',
             NoRoles: 'Нет доступных ролей'
         },
 
@@ -384,7 +387,7 @@
             Repair: 'Ремонт и техобслуживание',
         material: {
             buttonAdd: 'Добавить',
-            addnewmaterial: 'Добавление нового устройство'
+            addnewmaterial: 'Добавление нового устройства'
         },
         income: {
             incomeoutcome: 'Прием/выдача устройств',
@@ -617,13 +620,13 @@
 
                 getBtn: 'Получить',
                 SelectGrouppingMode: 'Выберите режим группировки',
-                labelsOverall: 'Бирок всего',
+                labelsCount: 'Бирок всего',
                 weightOverall: 'Масса всего',
                 byChanges: 'По сменам',
                 byBrigades: 'По бригадам',
-                byMelts: 'По плавкам',
-                byOrders: 'По заказам',
-                byParties: 'По партиям',
+                byMelt: 'По плавкам',
+                byOrder: 'По заказам',
+                byParty: 'По партиям',
                 handMode: 'Ручной режим',
                 allLabels: 'Все бирки',
                 labelQuantity: 'Количество бирок',
@@ -638,7 +641,8 @@
                 dateTimeMeasure: 'Дата и время взвешивания',
                 prodOrder: 'Производственный заказ',
                 materialNo: 'Номер материала',
-                mass: 'Масса'
+                mass: 'Масса',
+                statusName: 'Статус'
             }
         },
         weightanalytics: {
@@ -655,6 +659,8 @@
                 openedWS: 'Отвесная №',
                 archiveWS: 'Архивные отвесные',
                 platform: 'Платформа',
+                Platform_I: 'Платформа I',
+                Platform_I_II: 'Платформа I+II',
                 offset: 'Смещение',
                 enterParameter: 'Введите данные',
                 sender: 'Отправитель',
@@ -975,13 +981,13 @@
 
                 getBtn: 'Отримати',
                 SelectGrouppingMode: 'Виберіть режим групування',
-                labelsOverall: 'Бирок всього',
+                labelsCount: 'Бирок всього',
                 weightOverall: 'Маса всього',
                 byChanges: 'За змінами',
                 byBrigades: 'За бригадами',
-                byMelts: 'За плавками',
-                byOrders: 'За замовленнями',
-                byParties: 'За партіями',
+                byMelt: 'За плавками',
+                byOrder: 'За замовленнями',
+                byParty: 'За партіями',
                 handMode: 'Ручний режим',
                 allLabels: 'Всі бирки',
                 labelQuantity: 'Кількість бирок',
@@ -996,7 +1002,8 @@
                 dateTimeMeasure: 'Дата та час зважування',
                 prodOrder: 'Виробниче замовлення',
                 materialNo: 'Номер матеріала',
-                mass: 'Маса'
+                mass: 'Маса',
+                statusName: 'Статус'
             }
         },
         weightanalytics: {
@@ -1012,6 +1019,8 @@
                 openedWS: 'Вагова №',
                 archiveWS: 'Архівні вагові',
                 platform: 'Платформа',
+                Platform_I: 'Платформа I',
+                Platform_I_II: 'Платформа I+II',
                 offset: 'Зміщення',
                 enterParameter: 'Введіть дані',
                 sender: 'Відправник',

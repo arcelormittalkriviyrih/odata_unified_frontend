@@ -20,7 +20,9 @@
                    ng-model="filterCombo">
         </li>
 
-        <li ng-if="showFilter" ng-show="filterCombo == null || filterCombo == '' || item.Description.indexOf(filterCombo) > -1" ng-repeat="item in iterator | orderBy: 'Description'">
+        <li ng-if="showFilter" 
+            ng-show="filterCombo == null || filterCombo == '' || item.Description.toLowerCase().indexOf(filterCombo.toLowerCase()) > -1" 
+            ng-repeat="item in iterator | orderBy: 'Description'">
             <a href="#"
                ng-click="changeDropBoxValue(item); methodOnClick(item); $event.preventDefault();">
                 {{item.Description || item.Value || item}}

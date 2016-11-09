@@ -17,11 +17,11 @@
             controller: 'AutomationLabrepairCtrl'
         })
 
-        .state('app.AutomationLab.Material', {
+        .state('app.AutomationLab.Device', {
 
-            url: '/material',
-            templateUrl: 'Static/automationlab/material.html',
-            controller: 'AutomationLabmaterialCtrl'
+            url: '/device',
+            templateUrl: 'Static/automationlab/device.html',
+            controller: 'AutomationLabdeviceCtrl'
         })
 
 
@@ -37,20 +37,7 @@
     $scope.set_id;
     $scope.chek_click = false;
    
-    //$materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
-
-    //$hierarchyMaterialClass = $('#hierarchy_material_class').empty();
     
-   
-    //$("#searchnumber").keypress(function (event) {
-    //    if (event.which == '13') {
-    //        $scope.vmCreateMaterialTable();
-            
-    //        event.preventDefault();
-
-    //    }
-       
-    //});
 
     $scope.checkIfEnterKeyWasPressed = function ($event) {
         var keyCode = $event.which || $event.keyCode;
@@ -89,19 +76,7 @@
         },
 
         rowClass: function (item, itemIndex) {
-            //// чередование цвета строк для разных вагонов
-            //var rowclass = "";
-            //if (item.WagonIndex % 2 == 1) {
-            //    rowclass = "jsgrid-weight-odd-row td";
-            //}
-            //else {
-            //    rowclass = "jsgrid-weight-even-row td";
-            //};
-            //if (item.WeightingIndex == 1) {
-            //    rowclass += " jsgrid-weight-border-row td";
-            //};
-
-            //return rowclass;
+            
 
         }
 
@@ -156,25 +131,17 @@
 
     $scope.SetStatus = function (id_ss, status) {
         
-        //alert(id_ss + " " + status);
-    //    indexService.sendInfo('ins_OperationsAcceptence', {
-    //        F_number: id_ss,
-    //        Op_Type: status
-
-    //    }).then(function (response) {
-
-    //    });
-    //}
-
-
-
-       //var mesage_in;
+    
 
         var mesage_in = {
             F_number: id_ss,
             Op_Type: status
          };
+<<<<<<< HEAD
         
+=======
+       
+>>>>>>> refs/remotes/origin/master
         $.ajax({
             url: serviceUrl + 'ins_OperationsAcceptence',
             type: 'POST',
@@ -195,7 +162,7 @@
 
 
 
-.controller('AutomationLabmaterialCtrl', ['$scope', '$translate', 'indexService', '$q', 'marketService', '$rootScope', function ($scope, $translate, indexService, $q, marketService, $rootScope) {
+.controller('AutomationLabdeviceCtrl', ['$scope', '$translate', 'indexService', '$q', 'marketService', '$rootScope', function ($scope, $translate, indexService, $q, marketService, $rootScope) {
 
      $scope.orderDetails = [];
 
@@ -212,52 +179,13 @@
 
          vmToggleModal(true);
 
-         //$scope.loadingModalData = true;
-         //$scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
-
-         //var oDataAPI = [indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")];
-
-         //if (id) {
-
-         //    oDataAPI.push(indexService.getInfo('v_OrderPropertiesAll?$filter=OperationsRequest eq ({0})'.format(id)))
-         //}
-
-         //$q.all(oDataAPI)
-         //    .then(function (responce) {
-
-         //        $scope.loadingModalData = false;
-
-         //        var rowData;
-
-         //        var templateData = responce[0].data.value;
-
-         //        if (id)
-         //            rowData = responce[1].data.value;
-
-         //        marketService.createForm(type, procedure, id, keyField, templateData, rowData);
-
-         //    });
+         
      }
 
 
      function vmDeleteRow(order) {
 
-         //if (confirm('Are you sure?')) {
-
-         //    $.ajax({
-         //        url: serviceUrl + 'del_Order',
-         //        type: 'POST',
-         //        data: JSON.stringify({ COMM_ORDER: order }),
-         //        contentType: "application/json"
-         //    }).done(function (result) {
-
-         //        $('#orders').jsGrid('loadOdata', {});
-         //        $("#orderDetails").jsGrid('loadOdata', {
-         //            defaultFilter: 'OperationsRequest eq (-1)',
-         //        });
-
-         //    }).fail(handleError);
-         //}
+        
 
      }
 
@@ -266,25 +194,8 @@
          $scope.isShowModal = expr;
      }
 
-
+      
     
-    
-     //$('#orderForm').on('oDataForm.success', function (e, data) {
-
-     //    $scope.isLoading = false;
-
-     //    vmToggleModal(false);
-
-     //    $('#orders').jsGrid('loadOdata', {
-     //        order: 'id desc'
-     //    });
-
-     //    $("#orderDetails").jsGrid('loadOdata', {
-     //        defaultFilter: 'OperationsRequest eq (-1)',
-     //    });
-
-     //    $scope.$apply();
-     //});
 
      $('#orderForm').on('oDataForm.cancel', function (e) { // button Cancel
 
