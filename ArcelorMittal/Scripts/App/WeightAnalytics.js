@@ -219,7 +219,7 @@
 
         indexService.getInfo("v_KP4_PackagingUnitsProperty?$filter=Wagon eq '{0}'".format(selected_pair_number))
         .then(function (response) {
-            var TareInfo = response.data.value;            
+            var TareInfo = response.data.value;
             $scope.CurrentPairNumberTare = TareInfo.length ? TareInfo[0].Value : null;
             //alert($scope.CurrentPairNumberTare);
         });
@@ -585,26 +585,27 @@
 
         indexService.getInfo('v_KP4_AllWorkPerformance').then(function (response) {
 
-            response.data.value.forEach(function (e) {
-                e.id = e.ID;
-                e.parent = e.ParentID;
-                e.text = e.Description;
-                if (e.WorkPerfomanceID) {
-                    e.icon = 'jstree-file';
-                };
-                delete e.ID;
-                delete e.ParentID;
-                delete e.Description;
-            });
+            if (response.data.value.length) {
+                response.data.value.forEach(function (e) {
+                    e.id = e.ID;
+                    e.parent = e.ParentID;
+                    e.text = e.Description;
+                    if (e.WorkPerfomanceID) {
+                        e.icon = 'jstree-file';
+                    };
+                    delete e.ID;
+                    delete e.ParentID;
+                    delete e.Description;
+                });
 
-            $scope.ArchiveWeightSheets = response.data.value;
+                $scope.ArchiveWeightSheets = response.data.value;
 
-            $WeightSheetList.jstree({
-                core: {
-                    data: $scope.ArchiveWeightSheets
-                }
-            });
-
+                $WeightSheetList.jstree({
+                    core: {
+                        data: $scope.ArchiveWeightSheets
+                    }
+                });
+            };
         });
 
         // загрузка дерева отвесных
@@ -619,10 +620,10 @@
                 $WeightSheetList.jstree('select_node', node, false);
                 $WeightSheetList.jstree('open_node', node);
             }
-            // при первой загрузке дерева выделяем число месяца, содержащее последнюю отвесную
+                // при первой загрузке дерева выделяем число месяца, содержащее последнюю отвесную
             else {
                 var node = $scope.ArchiveWeightSheets.filter(function (element) {
-                    return  element.parent != '#' &&
+                    return element.parent != '#' &&
                             element.WorkPerfomanceID == null &&
                             !isNaN(element.text)
                 });
@@ -738,6 +739,7 @@
 
     var WeightSheettoPrintID = $state.params.data;
     $scope.WeightSheetForPrint = [];
+    $scope.NettoSum = 0;
     $q.all([indexService.getInfo('v_System_User'),
         indexService.getInfo("v_KP4_WorkPerformance?$filter=WorkPerformanceID eq {0}&$orderby=ID".format(WeightSheettoPrintID)),
         indexService.getInfo("v_KP4_Wagon?$filter=WorkPerformanceID eq {0}&$orderby=WorkResponseID,WeightingIndex".format(WeightSheettoPrintID))])
@@ -760,6 +762,8 @@
                 if ($scope.WeightSheetForPrint[i].WeightingIndex == 1) {
                     $scope.WeightSheetForPrint[i].RowSpan = rowspan;
                 };
+
+                $scope.NettoSum = $scope.NettoSum + $scope.WeightSheetForPrint[i].Netto;
             }
 
             angular.element(window.document)[0].title = "Печать отвесной №" + $scope.WeightSheetForPrint[0].WeightSheetNumber;

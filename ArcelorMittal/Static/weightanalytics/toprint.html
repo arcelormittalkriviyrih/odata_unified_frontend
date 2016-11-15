@@ -6,7 +6,7 @@
     </div>
     <div>
         <div class="printValueWeightanalytics">Весовщик:</div>
-        <div class="printValueWeightanalytics">{{user}}</div>
+        <div class="printValueWeightanalytics">{{WeightSheetForPrint[0].Person}}</div>
     </div>
     <div>
         <div class="printValueWeightanalytics">Весы:</div>
@@ -38,6 +38,11 @@
                 <td>{{WS.CSH}}</td>
                 <td>{{WS.Sender}}</td>
                 <td>{{WS.Receiver}}</td>
+            </tr>
+            <tr>
+                <th style="border: 1px solid white" colspan="4"></th>
+                <th style="border: 2px solid #ddd">{{NettoSum}}</th>
+                <th style="border: 1px solid white" colspan="3"></th>
             </tr>
         </tbody>
     </table>
