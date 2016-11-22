@@ -42,6 +42,13 @@
             controller: 'marketOrderCtrl'
         })
 
+        .state('app.PA.gasCollection', {
+
+            url: '/gascollection',
+            templateUrl: 'Static/gascollection/reports.html',
+            controller: 'gasCollectionReportsCtrl'
+        })
+
         .state('app.PA.LabelTemplate', {
 
             url: '/labeltemplate',

@@ -33,6 +33,14 @@
                 defect: 'Defect'
             },
         },
+
+        gasCollection: {
+            reports: 'Reports', //Отчёты
+            gasReports: 'Gas reports', //Отчёты по газу
+            trends: 'Trends', //Тренды
+            gasTrends: 'Gas trends', //Тренды по газу
+        },
+
         market: {
             OrderLabel: 'Orders',
             TemplateLabel: 'Label Templates',
@@ -398,6 +406,14 @@
             defect: 'Брак'
         },
         },
+
+        gasCollection: {
+            reports: 'Отчёты', //Отчёты
+            gasReports: 'Отчёты по газу', //Отчёты по газу
+            trends: 'Тренды', //Тренды
+            gasTrends: 'Тренды по газу', //Тренды по газу
+        },
+
         market: {
             OrderLabel: 'Заказы',
             TemplateLabel: 'Шаблоны Бирок',
@@ -760,6 +776,14 @@
                 defect: 'Брак'
             },
         },
+
+        gasCollection: {
+            reports: 'Звiти', //Отчёты
+            gasReports: 'Звiти по газу', //Отчёты по газу
+            trends: 'Графiки', //Тренды
+            gasTrends: 'Графiки по газу', //Тренды по газу
+        },
+
         market: {
             OrderLabel: 'Замовлення',
             TemplateLabel: 'Шаблони Бирок',
