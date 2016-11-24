@@ -175,6 +175,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
     <Content Include="Scripts\App\Automationlab.js" />
+    <Content Include="Scripts\App\gasCollection.js" />
     <Content Include="Scripts\App\Resources.js" />
     <Content Include="Scripts\Vendor\backbone.js" />
     <Content Include="Scripts\Diagram\diagramExt.js" />
@@ -259,6 +260,9 @@
     <Content Include="Static\error.html" />
     <Content Include="Static\access_error.html" />
     <Content Include="Static\errorlog.html" />
+    <Content Include="Static\gascollection\index.html" />
+    <Content Include="Static\gascollection\reports.html" />
+    <Content Include="Static\gascollection\trends.html" />
     <Content Include="Static\marker\index.html" />
     <Content Include="Static\marker\marker.html" />
     <Content Include="Static\marker\monitor.html" />

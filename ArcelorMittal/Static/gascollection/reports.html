@@ -1,0 +1,113 @@
+<!--<table class="table table-striped">-->
+<!--<h2>!!!{{mytexts}}!!!</h2>-->
+
+<div>
+    Выберите тип отчёта:
+    <select ng-model="typeOfReport.selected"
+            ng-options="item.description for item in typeOfReport track by item.id"></select>
+</div>
+<div>
+    <input type="checkbox" ng-model="showFullData"/> отображать полные данные
+</div>
+
+<div ng-switch on="typeOfReport.selected.id">
+    <table class="table table-striped table-condensed text-center" ng-switch-when=0>
+       <caption>Почасовой отчёт за сутки</caption>
+        <!--<caption>{{typeOfReport.selected.description}}</caption>-->
+      <thead>
+       <tr>
+        <th>Время</th>
+        <th ng-if="showFullData">Давление (среднее за час)</th>
+        <th ng-if="showFullData">Температура (средняя за час)</th>
+        <th ng-if="showFullData">Концентрация (средняя за час)</th>
+        <th>Потребление за час</th>
+        <th>Суммарное потребление</th>
+       </tr>
+       <tr>
+        <th>&nbsp;</th>
+        <th ng-if="showFullData">PE1.1</th>
+        <th ng-if="showFullData">TE1.1</th>
+        <th ng-if="showFullData">QE1.1</th>
+        <th>FE1.1</th>
+        <th>сумма FE1.1</th>
+       </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="data in dataDaily">
+          <td>{{data.datetime}}</td>
+          <td ng-if="showFullData">{{data.valPE}}</td>
+          <td ng-if="showFullData">{{data.valTE}}</td>
+          <td ng-if="showFullData">{{data.valQE}}</td>
+          <td>{{data.val}}</td>
+          <td>{{data.sumVal}}</td>
+      </tr>
+    </table>
+
+    <table class="table table-striped table-condensed text-center" ng-switch-when=1>
+        <caption>Посуточный отчёт за месяц</caption>
+        <!--<caption>{{typeOfReport.selected.description}}</caption>-->
+        <thead>
+        <tr>
+            <th>Время</th>
+            <th ng-if="showFullData">Давление (среднее за час)</th>
+            <th ng-if="showFullData">Температура (средняя за час)</th>
+            <th ng-if="showFullData">Концентрация (средняя за час)</th>
+            <th>Потребление за час</th>
+            <th>Суммарное потребление</th>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <th ng-if="showFullData">PE1.1</th>
+            <th ng-if="showFullData">TE1.1</th>
+            <th ng-if="showFullData">QE1.1</th>
+            <th>FE1.1</th>
+            <th>сумма FE1.1</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="data in dataMonth">
+            <td>{{data.datetime}}</td>
+            <td ng-if="showFullData">{{data.valPE}}</td>
+            <td ng-if="showFullData">{{data.valTE}}</td>
+            <td ng-if="showFullData">{{data.valQE}}</td>
+            <td>{{data.val}}</td>
+            <td>{{data.sumVal}}</td>
+        </tr>
+    </table>
+
+    <table class="table table-striped table-condensed text-center" ng-switch-when=2>
+        <caption>Помесячный отчёт за год</caption>
+        <!--<caption>{{typeOfReport.selected.description}}</caption>-->
+        <thead>
+        <tr>
+            <th>Время</th>
+            <th ng-if="showFullData">Давление (среднее за час)</th>
+            <th ng-if="showFullData">Температура (средняя за час)</th>
+            <th ng-if="showFullData">Концентрация (средняя за час)</th>
+            <th>Потребление за час</th>
+            <th>Суммарное потребление</th>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <th ng-if="showFullData">PE1.1</th>
+            <th ng-if="showFullData">TE1.1</th>
+            <th ng-if="showFullData">QE1.1</th>
+            <th>FE1.1</th>
+            <th>сумма FE1.1</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="data in dataYear">
+            <td>{{data.datetime}}</td>
+            <td ng-if="showFullData">{{data.valPE}}</td>
+            <td ng-if="showFullData">{{data.valTE}}</td>
+            <td ng-if="showFullData">{{data.valQE}}</td>
+            <td>{{data.val}}</td>
+            <td>{{data.sumVal}}</td>
+        </tr>
+    </table>
+</div>
+
+<div id="reports">
+
+</div>

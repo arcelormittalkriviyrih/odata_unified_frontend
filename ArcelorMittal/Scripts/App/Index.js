@@ -133,6 +133,18 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
                 }
             })
 
+            .state('app.gasCollection', {
+
+                url: '/gascollection',
+                templateUrl: 'Static/gascollection/index.html',
+                controller: 'gasCollectionCtrl',
+                onEnter: function ($state, roles) {
+
+                    if (!vmIsAuthorized('gasCollection', roles))
+                        $state.go('app.error', { code: 'unauthorized' });
+                }
+            })
+
             .state('app.AutomationLab', {
 
                  url: '/AutomationLab',
