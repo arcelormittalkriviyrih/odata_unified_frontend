@@ -1,5 +1,5 @@
 ﻿angular.module('indexApp')
-//angular.module('indexAppDaf')
+// angular.module('indexAppDaf')
 
   .config(['$stateProvider', function ($stateProvider) {
     $stateProvider
@@ -32,7 +32,12 @@
     ];
     $scope.typeOfReport.selected = $scope.typeOfReport[0];
 
+    $scope.equipmentlist = getEquipmentList();
+    $scope.equipmentlist.selected = $scope.equipmentlist[0];
+
     $scope.showFullData = false;
+    $scope.onlineData = false;
+    $scope.errorReceiveData = false;
 
     $scope.dataDaily = [
       {datetime: '01:00', valPE: 12.2, valTE: 22, valQE: 0.66, val: 105, sumVal: 105 },
@@ -109,6 +114,31 @@
       {datetime: '11', valPE: 11.4, valTE: 19, valQE: 0.68, val: 109, sumVal: 1088 },
       {datetime: '12', valPE: 8.1 ,  valTE: 19,  valQE: 0.73,  val: 98, sumVal:  1186 }
     ];
+    $scope.ttt = '---';
+    $scope.selectedQuery = '';
+    $scope.selectedQueryTable = '';
+
+    $scope.getGasDataClick = function() {
+        var queryGasCollection = "?$filter=IDeq eq 10010 and type eq '1'";
+      // var queryGasCollection = '';
+        var gasCollectionData = getGasCollectionData($scope.onlineData, queryGasCollection);
+      $scope.ttt = gasCollectionData;
+    };
+
+    $scope.getAllGasDataClick = function() {
+      var queryGasCollection = '';
+      var gasCollectionData = getGasCollectionData($scope.onlineData, queryGasCollection);
+      $scope.ttt = gasCollectionData;
+    };
+
+    $scope.getSelectedGasDataClick = function() {
+        var gasCollectionData = getGasCollectionData($scope.onlineData, $scope.selectedQuery, $scope.selectedQueryTable);
+      $scope.ttt = gasCollectionData;
+    };
+
+    $scope.dataGasCollection = gasCollectionTableData();
+    $scope.dataGasCollection = getGasCollectionData();
+    $scope.dataDaily = gasCollectionTableData();
 
     $scope.data = {
       dataset0: [
@@ -122,79 +152,6 @@
         {x: 7, val_0: 4.927, val_1: 3.35, val_2: -13.074, val_3: -12.625}
       ]
     };
-// --------------------------------------------------------------
-    $('#reports').jsGrid({
-        height: "500px",
-        width: "950px",
-
-        sorting: false,
-        paging: false,
-        editing: false,
-        filtering: true,
-        autoload: true,
-        pageLoading: false,
-        inserting: false,
-//        pageIndex: 1,
-//        pageSize: 10,
-    }).jsGrid('initOdata', {
-        serviceUrl: serviceUrl,
-        table: 'v_GasCollectionData',
-
-        fields: [{
-            id: 'ID',
-            name: 'ID',
-            title: 'ID', // $translate.instant('market.grid.orders.order'),
-            order: 1
-        }, {
-            id: 'dtStart',
-            name: 'dtStart',
-            title: 'dtStart', // $translate.instant('market.grid.orders.contract'),
-            order: 2
-        }, {
-            id: 'dtEnd',
-            name: 'dtEnd',
-            title: 'dtEnd', // $translate.instant('market.grid.orders.direction'),
-            order: 3
-        }, {
-            id: 'FE',
-            name: 'FE',
-            title: 'FE', //$translate.instant('market.grid.orders.labelTemplate'),
-            order: 4
-        }, {
-            id: 'TE',
-            name: 'TE',
-            title: 'TE', //$translate.instant('market.grid.orders.labelTemplate'),
-            order: 5
-        }, {
-            id: 'PE',
-            name: 'PE',
-            title: 'PE', //$translate.instant('market.grid.orders.labelTemplate'),
-            order: 6
-        }, {
-            id: 'QE',
-            name: 'QE',
-            title: 'QE', //$translate.instant('market.grid.orders.labelTemplate'),
-            order: 7
-        }, {
-            id: 'type',
-            name: 'type',
-            title: 'type', //$translate.instant('market.grid.orders.labelTemplate'),
-            order: 8
-        }, {
-            id: 'IDeq',
-            name: 'IDeq',
-            title: 'IDeq', //$translate.instant('market.grid.orders.labelTemplate'),
-            order: 9
-        }, {
-            id: 'Description',
-            name: 'Description',
-            title: 'Description', //$translate.instant('market.grid.orders.labelTemplate'),
-            order: 10
-        }]
-    }).jsGrid('loadOdata', {
-        order: 'type desc'
-    })
- // --------------------------------------------------------------
 
     $scope.options = {
       series: [

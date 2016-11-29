@@ -34,6 +34,7 @@ public class BundleConfig
         bundles.Add(new Bundle("~/bundles/js/app").Include(
             "~/scripts/shared/common.js",
             "~/scripts/shared/util.js",
+            "~/scripts/shared/gasCollectionUtils.js",
             "~/scripts/app/resources.js",
             "~/scripts/app/index.js",
             "~/scripts/app/marker.js",
