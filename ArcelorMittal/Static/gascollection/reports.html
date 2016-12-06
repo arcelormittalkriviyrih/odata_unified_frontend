@@ -4,6 +4,30 @@
     </div>
 </div>
 
+<div class="row chart-control-wrapper">
+
+    <div class="date-control-wrapper">
+        {{ 'marker.period' | translate }}:
+        <input type="text"
+               id="statistics-date-start"
+               class="form-control"
+               ng-model="dateStart"/>
+    </div>
+    &ndash;
+    <div class="date-control-wrapper">
+        <input type="text"
+               id="statistics-date-end"
+               class="form-control"
+               ng-model="dateEnd"/>
+    </div>
+
+    <button class="btn btn-default"
+            ng-click="getReportData(dateStart, dateEnd)">
+        {{'marker.statistics.getBtn' | translate}}
+    </button>
+
+</div>
+
 <div>
     <div>
         Выберите тип отчёта:
@@ -63,14 +87,14 @@
         <th>Потребление за час</th>
         <th>Суммарное потребление</th>
        </tr>
-       <tr>
+       <!--<tr>
         <th>&nbsp;</th>
         <th ng-if="showFullData">PE1.1</th>
         <th ng-if="showFullData">TE1.1</th>
         <th ng-if="showFullData">QE1.1</th>
         <th>FE1.1</th>
         <th>сумма FE1.1</th>
-       </tr>
+       </tr> -->
       </thead>
       <tbody>
       <tr ng-repeat="data in dataDaily">

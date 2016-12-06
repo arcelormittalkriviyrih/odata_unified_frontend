@@ -32,6 +32,21 @@
       {description: "Помесячный за год", id: 2}
     ];
      
+    var date = getTimeToUpdate();
+    $scope.dateStart = $scope.dateEnd = '{0}.{1}.{2}'.format(date.day, date.month, date.year);
+
+    $('#statistics-date-start').datepicker({
+        defaultDate: new Date($scope.dateStart),
+        dateFormat: 'dd.mm.yy',
+        controlType: dateTimePickerControl
+    });
+
+    $('#statistics-date-end').datepicker({
+        defaultDate: new Date($scope.dateEnd),
+        dateFormat: 'dd.mm.yy',
+        controlType: dateTimePickerControl
+    });
+
     $scope.typeOfReport.selected = $scope.typeOfReport[0];
 
     $scope.equipmentlist = getEquipmentList();
@@ -121,7 +136,10 @@
     $scope.selectedQueryTable = 'v_GasCollectionData';
       
     $scope.getGasDataClick = function () {
-        $scope.queryStringForGetInfo = "v_GasCollectionData?$filter=IDeq eq {0} and type eq '{1}'".format($scope.equipmentlist.selected.id, $scope.typeOfReport.selected.id +1);
+        var dateStartForOData = $scope.dateStart.split('.').reverse().join('-') + 'T00:00:00.000Z';
+        var dateEndForOData = $scope.dateEnd.split('.').reverse().join('-') + 'T23:59:59.999Z';
+
+        $scope.queryStringForGetInfo = "v_GasCollectionData?$filter=IDeq eq {0} and type eq '{1}' and dtStart ge {2} and dtEnd le {3}".format($scope.equipmentlist.selected.id, $scope.typeOfReport.selected.id + 1, dateStartForOData, dateEndForOData);
         indexService.getInfo($scope.queryStringForGetInfo)
               .then(function (response) {
                   $scope.getInfoData = response.data;
