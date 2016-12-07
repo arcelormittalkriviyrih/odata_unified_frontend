@@ -56,15 +56,17 @@ function gasCollectionTableData(gasColectionRawData) {
     }
   var gasCollectionArray = [];
   gasCollectionArray = gasColectionRawData.value.map(function (curr) {
-      var myDateTime = Date.parse(curr.dtStart);
-    //const stringDateTime = dateTime.getFullYear();
+      var time = getTimeToUpdate(curr.dtStart);
+      //time.year, time.month, time.day, time.hour, time.minute, time.second
     return ({
-      datetime: curr.dtStart, //"2016-11-21T09:00:00+02:00",
+      datetime: '{0}-{1}-{2} {3}:{4}'.format(time.day, time.month, time.year, time.hour, time.minute), //time.hour + ':' + time.minute,//curr.dtStart, //"2016-11-21T09:00:00+02:00",
+      date: '{0}-{1}-{2}'.format(time.day, time.month, time.year),
+      time: '{0}:{1}'.format(time.hour, time.minute), 
       valPE: curr.PE,
       valTE: curr.TE,
-      valQE: curr.QE,
+      valQE: curr.QE ? curr.QE : '-',
       val: curr.FE,
-      sumVal: 0
+      sumVal: '-'
     });
   });
   return gasCollectionArray; 

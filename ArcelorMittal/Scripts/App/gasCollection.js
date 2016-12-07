@@ -26,11 +26,26 @@
 
   .controller('gasCollectionReportsCtrl', ['$scope', 'indexService', '$state', '$http', function ($scope, indexService, $state, $http) {
 
+//temporary variable
+    $scope.ttt = '---';
+    $scope.selectedQuery = '';
+    $scope.selectedQueryTable = 'v_GasCollectionData';
+    $scope.onlineData = false;
+    $scope.errorReceiveData = false;
+
+      // variable for label of table
+    $scope.typeLabelOfTable = 1;
+    $scope.showFullData = true;
+
+    $scope.equipmentlist = getEquipmentList();
+    $scope.equipmentlist.selected = $scope.equipmentlist[0];
+
     $scope.typeOfReport = [
       {description: "Почасовой за сутки", id: 0},
       {description: "Посуточный за месяц", id: 1},
       {description: "Помесячный за год", id: 2}
     ];
+    $scope.typeOfReport.selected = $scope.typeOfReport[0];
      
     var date = getTimeToUpdate();
     $scope.dateStart = $scope.dateEnd = '{0}.{1}.{2}'.format(date.day, date.month, date.year);
@@ -47,16 +62,9 @@
         controlType: dateTimePickerControl
     });
 
-    $scope.typeOfReport.selected = $scope.typeOfReport[0];
 
-    $scope.equipmentlist = getEquipmentList();
-    $scope.equipmentlist.selected = $scope.equipmentlist[0];
-
-    $scope.showFullData = false;
-    $scope.onlineData = false;
-    $scope.errorReceiveData = false;
-
-// Временные статические данные
+      // Временные статические данные
+      /*
     $scope.dataDaily = [
       {datetime: '01:00', valPE: 12.2, valTE: 22, valQE: 0.66, val: 105, sumVal: 105 },
       {datetime: '02:00', valPE: 7.6 , valTE: 20, valQE: 0.69, val: 120, sumVal: 225 },
@@ -130,20 +138,20 @@
       {datetime: '11', valPE: 11.4, valTE: 19, valQE: 0.68, val: 109, sumVal: 1088 },
       {datetime: '12', valPE: 8.1 ,  valTE: 19,  valQE: 0.73,  val: 98, sumVal:  1186 }
     ];
-      
-    $scope.ttt = '---';
-    $scope.selectedQuery = '';
-    $scope.selectedQueryTable = 'v_GasCollectionData';
+      */
+    
       
     $scope.getGasDataClick = function () {
         var dateStartForOData = $scope.dateStart.split('.').reverse().join('-') + 'T00:00:00.000Z';
         var dateEndForOData = $scope.dateEnd.split('.').reverse().join('-') + 'T23:59:59.999Z';
+        $scope.typeLabelOfTable = $scope.typeOfReport.id;
+        $scope.queryStringForGetInfo = "v_GasCollectionData?$filter=IDeq eq {0} and type eq '{1}' and dtStart ge {2} and dtEnd le {3}&$orderby=dtStart".format($scope.equipmentlist.selected.id, $scope.typeOfReport.selected.id + 1, dateStartForOData, dateEndForOData);
 
-        $scope.queryStringForGetInfo = "v_GasCollectionData?$filter=IDeq eq {0} and type eq '{1}' and dtStart ge {2} and dtEnd le {3}".format($scope.equipmentlist.selected.id, $scope.typeOfReport.selected.id + 1, dateStartForOData, dateEndForOData);
         indexService.getInfo($scope.queryStringForGetInfo)
               .then(function (response) {
                   $scope.getInfoData = response.data;
                   $scope.dataDaily = gasCollectionTableData($scope.getInfoData);
+                  //$scope.typeLabelOfTable = $scope.typeOfReport.id;
               });
       
     };
