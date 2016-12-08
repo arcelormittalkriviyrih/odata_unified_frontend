@@ -49,6 +49,7 @@
      
     var date = getTimeToUpdate();
     $scope.dateStart = $scope.dateEnd = '{0}.{1}.{2}'.format(date.day, date.month, date.year);
+    //$scope.dateStart = $scope.dateEnd = '07.{0}.{1}'.format(date.month, date.year);
 
     $('#statistics-date-start').datepicker({
         defaultDate: new Date($scope.dateStart),
