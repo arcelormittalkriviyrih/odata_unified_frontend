@@ -24,21 +24,48 @@
 
   }])
 
-  .controller('gasCollectionReportsCtrl', ['$scope', '$state', function ($scope, $state) {
-    $scope.typeOfReport = [
-      {description: "Почасовой за сутки", id: 0},
-      {description: "Посуточный за месяц", id: 1},
-      {description: "Помесячный за год", id: 2},
-    ];
-    $scope.typeOfReport.selected = $scope.typeOfReport[0];
+  .controller('gasCollectionReportsCtrl', ['$scope', 'indexService', '$state', '$http', function ($scope, indexService, $state, $http) {
+
+//temporary variable
+    $scope.ttt = '---';
+    $scope.selectedQuery = '';
+    $scope.selectedQueryTable = 'v_GasCollectionData';
+    $scope.onlineData = false;
+    $scope.errorReceiveData = false;
+
+      // variable for label of table
+    $scope.typeLabelOfTable = 1;
+    $scope.showFullData = true;
 
     $scope.equipmentlist = getEquipmentList();
     $scope.equipmentlist.selected = $scope.equipmentlist[0];
 
-    $scope.showFullData = false;
-    $scope.onlineData = false;
-    $scope.errorReceiveData = false;
+    $scope.typeOfReport = [
+      {description: "Почасовой за сутки", id: 0},
+      {description: "Посуточный за месяц", id: 1},
+      {description: "Помесячный за год", id: 2}
+    ];
+    $scope.typeOfReport.selected = $scope.typeOfReport[0];
+     
+    var date = getTimeToUpdate();
+    $scope.dateStart = $scope.dateEnd = '{0}.{1}.{2}'.format(date.day, date.month, date.year);
+    //$scope.dateStart = $scope.dateEnd = '07.{0}.{1}'.format(date.month, date.year);
 
+    $('#statistics-date-start').datepicker({
+        defaultDate: new Date($scope.dateStart),
+        dateFormat: 'dd.mm.yy',
+        controlType: dateTimePickerControl
+    });
+
+    $('#statistics-date-end').datepicker({
+        defaultDate: new Date($scope.dateEnd),
+        dateFormat: 'dd.mm.yy',
+        controlType: dateTimePickerControl
+    });
+
+
+      // Временные статические данные
+      /*
     $scope.dataDaily = [
       {datetime: '01:00', valPE: 12.2, valTE: 22, valQE: 0.66, val: 105, sumVal: 105 },
       {datetime: '02:00', valPE: 7.6 , valTE: 20, valQE: 0.69, val: 120, sumVal: 225 },
@@ -65,7 +92,6 @@
       {datetime: '23:00', valPE: 8.4 , valTE: 18, valQE: 0.66, val: 105, sumVal: 2330 },
       {datetime: '23:59', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 }
     ];
-
     $scope.dataMonth = [
       {datetime: '01', valPE: 12.2, valTE: 22, valQE: 0.66, val: 105, sumVal: 105 },
       {datetime: '02', valPE: 7.6 , valTE: 20, valQE: 0.69, val: 120, sumVal: 225 },
@@ -99,7 +125,6 @@
       {datetime: '30', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 },
       {datetime: '31', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 }
     ];
-
     $scope.dataYear = [
       {datetime: '01', valPE: 12.2, valTE: 22, valQE: 0.66, val: 105, sumVal: 105 },
       {datetime: '02', valPE: 7.6 , valTE: 20, valQE: 0.69, val: 120, sumVal: 225 },
@@ -114,17 +139,24 @@
       {datetime: '11', valPE: 11.4, valTE: 19, valQE: 0.68, val: 109, sumVal: 1088 },
       {datetime: '12', valPE: 8.1 ,  valTE: 19,  valQE: 0.73,  val: 98, sumVal:  1186 }
     ];
-    $scope.ttt = '---';
-    $scope.selectedQuery = '';
-    $scope.selectedQueryTable = '';
+      */
+    
+      
+    $scope.getGasDataClick = function () {
+        var dateStartForOData = $scope.dateStart.split('.').reverse().join('-') + 'T00:00:00.000Z';
+        var dateEndForOData = $scope.dateEnd.split('.').reverse().join('-') + 'T23:59:59.999Z';
+        $scope.typeLabelOfTable = $scope.typeOfReport.id;
+        $scope.queryStringForGetInfo = "v_GasCollectionData?$filter=IDeq eq {0} and type eq '{1}' and dtStart ge {2} and dtEnd le {3}&$orderby=dtStart".format($scope.equipmentlist.selected.id, $scope.typeOfReport.selected.id + 1, dateStartForOData, dateEndForOData);
 
-    $scope.getGasDataClick = function() {
-        var queryGasCollection = "?$filter=IDeq eq 10010 and type eq '1'";
-      // var queryGasCollection = '';
-        var gasCollectionData = getGasCollectionData($scope.onlineData, queryGasCollection);
-      $scope.ttt = gasCollectionData;
+        indexService.getInfo($scope.queryStringForGetInfo)
+              .then(function (response) {
+                  $scope.getInfoData = response.data;
+                  $scope.dataDaily = gasCollectionTableData($scope.getInfoData);
+                  //$scope.typeLabelOfTable = $scope.typeOfReport.id;
+              });
+      
     };
-
+      
     $scope.getAllGasDataClick = function() {
       var queryGasCollection = '';
       var gasCollectionData = getGasCollectionData($scope.onlineData, queryGasCollection);
@@ -136,35 +168,33 @@
       $scope.ttt = gasCollectionData;
     };
 
-    $scope.dataGasCollection = gasCollectionTableData();
-    $scope.dataGasCollection = getGasCollectionData();
-    $scope.dataDaily = gasCollectionTableData();
+    $scope.getSelectedGasDataForGetInfoClick = function () {
+        $scope.queryStringForGetInfo = $scope.selectedQueryTable + $scope.selectedQuery;
+        //$scope.ttt = gasCollectionData;
+        //indexService.getInfo("v_GasCollectionData")
+        indexService.getInfo($scope.queryStringForGetInfo)
+              .then(function (response) {
+                  $scope.getInfoData = response.data;
+                  $scope.dataDaily = gasCollectionTableData($scope.getInfoData);
+              });
 
-    $scope.data = {
-      dataset0: [
-        {x: 0, val_0: 0, val_1: 0, val_2: 0, val_3: 0},
-        {x: 1, val_0: 0.993, val_1: 3.894, val_2: 8.47, val_3: 14.347},
-        {x: 2, val_0: 1.947, val_1: 7.174, val_2: 13.981, val_3: 19.991},
-        {x: 3, val_0: 2.823, val_1: 9.32, val_2: 14.608, val_3: 13.509},
-        {x: 4, val_0: 3.587, val_1: 9.996, val_2: 10.132, val_3: -1.167},
-        {x: 5, val_0: 4.207, val_1: 9.093, val_2: 2.117, val_3: -15.136},
-        {x: 6, val_0: 4.66, val_1: 6.755, val_2: -6.638, val_3: -19.923},
-        {x: 7, val_0: 4.927, val_1: 3.35, val_2: -13.074, val_3: -12.625}
-      ]
     };
 
-    $scope.options = {
-      series: [
-        {
-          axis: "y",
-          dataset: "dataset0",
-          key: "val_0",
-          label: "An area series",
-          color: "#1f77b4",
-          type: ['line', 'dot', 'area'],
-          id: 'mySeries0'
-        }
-      ],
-      axes: {x: {key: "x"}}
-    };
+    
+    
+      /*indexService.getInfo("v_GasCollectionData?$filter = FileType eq '{0}'".format($state.params.fileType))
+              .then(function (response) {
+
+                  $scope.files = response.data.value;
+
+                  $scope.fileNames = $scope.files.map(function (x) {
+
+                      return x.Name;
+                  })
+              });
+        */      
+    //$scope.dataGasCollection = gasCollectionTableData();
+    //$scope.dataGasCollection = getGasCollectionData();
+    //$scope.dataDaily = gasCollectionTableData();
+  
   }]);
