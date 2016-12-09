@@ -48,34 +48,33 @@ function getGasCollectionData(isOnlineData, queryGasCollection, queryTable) {
 }
 
 function gasCollectionTableData(gasColectionRawData) {
-    //  {datetime: '23:59', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 }
-    // "ID":"189d5539","dtStart":"2016-11-21T09:00:00+02:00","dtEnd":"2016-11-21T10:00:00+02:00","FE":123456.789,"TE":12.34,"PE":34.56,"QE":56.78,"type":"1","IDeq":10010,"Description":"qqqq"
-    
-    if (!gasColectionRawData) {
-        return [];
-    }
-    var gasCollectionArray = [];
+  //  {datetime: '23:59', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 }
+  // "ID":"189d5539","dtStart":"2016-11-21T09:00:00+02:00","dtEnd":"2016-11-21T10:00:00+02:00","FE":123456.789,"TE":12.34,"PE":34.56,"QE":56.78,"type":"1","IDeq":10010,"Description":"qqqq"
+  if (!gasColectionRawData) {
+    return [];
+  }
+  var gasCollectionArray = [];
    
-    gasCollectionArray = gasColectionRawData.value.reduce(function (prev, curr) {
-        var isUTC = true;
-        var time = getTimeToUpdate(curr.dtStart, isUTC);
-        var newArray = prev.slice();
-        var sum = !prev.slice(-1)[0].sumVal ? Number(curr.FE) : Number(prev.slice(-1)[0].sumVal) + Number(curr.FE);
-        newArray.push(
-        {
-            //time.year, time.month, time.day, time.hour, time.minute, time.second
-            datetime: '{0}-{1}-{2} {3}:{4}'.format(time.day, time.month, time.year, time.hour, time.minute), //time.hour + ':' + time.minute,//curr.dtStart, //"2016-11-21T09:00:00+02:00",
-            date: '{0}-{1}-{2}'.format(time.day, time.month, time.year),
-            time: '{0}:{1}'.format(time.hour, time.minute),
-            valPE: curr.PE ? curr.PE.toFixed(2) : 0,
-            valTE: curr.TE ? curr.TE.toFixed(2) : 0,
-            valQE: curr.QE ? curr.QE.toFixed(2) : 0,
-            val:   curr.FE ? curr.FE.toFixed(2) : 0,
-            sumVal: sum.toFixed(0) 
-        });
-        return newArray;
-    }, [{}]);
-    return gasCollectionArray;
+  gasCollectionArray = gasColectionRawData.value.reduce(function (prev, curr) {
+    var isUTC = true;
+    var time = getTimeToUpdate(curr.dtStart, isUTC);
+    var newArray = prev.slice();
+    var sum = !prev.slice(-1)[0].sumVal ? Number(curr.FE) : Number(prev.slice(-1)[0].sumVal) + Number(curr.FE);
+    newArray.push(
+    {
+      //time.year, time.month, time.day, time.hour, time.minute, time.second
+      datetime: '{0}.{1}.{2} {3}:{4}'.format(time.day, time.month, time.year, time.hour, time.minute), //time.hour + ':' + time.minute,//curr.dtStart, //"2016-11-21T09:00:00+02:00",
+      date: '{0}-{1}-{2}'.format(time.day, time.month, time.year),
+      time: '{0}:{1}'.format(time.hour, time.minute),
+      valPE: curr.PE ? curr.PE.toFixed(2) : 0,
+      valTE: curr.TE ? curr.TE.toFixed(2) : 0,
+      valQE: curr.QE ? curr.QE.toFixed(2) : 0,
+      val:   curr.FE ? curr.FE.toFixed(2) : 0,
+      sumVal: sum.toFixed(0) 
+    });
+    return newArray;
+  }, [{}]);
+  return gasCollectionArray.slice(1);
 };
 
 function getEquipmentList() {

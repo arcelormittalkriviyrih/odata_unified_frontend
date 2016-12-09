@@ -48,8 +48,8 @@
     $scope.typeOfReport.selected = $scope.typeOfReport[0];
      
     var date = getTimeToUpdate();
-    $scope.dateStart = $scope.dateEnd = '{0}.{1}.{2}'.format(date.day, date.month, date.year);
-    //$scope.dateStart = $scope.dateEnd = '07.{0}.{1}'.format(date.month, date.year);
+    //$scope.dateStart = $scope.dateEnd = '{0}.{1}.{2}'.format(date.day, date.month, date.year);
+    $scope.dateStart = $scope.dateEnd = '08.{0}.{1}'.format(date.month, date.year);
 
     $('#statistics-date-start').datepicker({
         defaultDate: new Date($scope.dateStart),
@@ -62,99 +62,24 @@
         dateFormat: 'dd.mm.yy',
         controlType: dateTimePickerControl
     });
-
-
-      // Временные статические данные
-      /*
-    $scope.dataDaily = [
-      {datetime: '01:00', valPE: 12.2, valTE: 22, valQE: 0.66, val: 105, sumVal: 105 },
-      {datetime: '02:00', valPE: 7.6 , valTE: 20, valQE: 0.69, val: 120, sumVal: 225 },
-      {datetime: '03:00', valPE: 8.3 , valTE: 21, valQE: 0.75, val: 101, sumVal: 326 },
-      {datetime: '04:00', valPE: 7.2 ,  valTE: 19,  valQE: 0.8 ,  val: 93, sumVal:  419 },
-      {datetime: '05:00', valPE: 10.9,  valTE: 22,  valQE: 0.8 ,  val: 84, sumVal:  503 },
-      {datetime: '06:00', valPE: 7.5 ,  valTE: 21,  valQE: 0.85,  val: 94, sumVal:  597 },
-      {datetime: '07:00', valPE: 8.7 ,  valTE: 20,  valQE: 0.76,  val: 88, sumVal:  685 },
-      {datetime: '08:00', valPE: 9.0 ,  valTE: 20,  valQE: 0.77,  val: 98, sumVal:  783 },
-      {datetime: '09:00', valPE: 12.8, valTE: 19, valQE: 0.82, val: 107, sumVal: 890 },
-      {datetime: '10:00', valPE: 8.9 ,  valTE: 18,  valQE: 0.85,  val: 89, sumVal:  979 },
-      {datetime: '11:00', valPE: 11.4, valTE: 19, valQE: 0.68, val: 109, sumVal: 1088 },
-      {datetime: '12:00', valPE: 8.1 ,  valTE: 19,  valQE: 0.73,  val: 98, sumVal:  1186 },
-      {datetime: '13:00', valPE: 9.0 , valTE: 22, valQE: 0.84, val: 103, sumVal: 1289 },
-      {datetime: '14:00', valPE: 13.1,  valTE: 22,  valQE: 0.83,  val: 94, sumVal:  1383 },
-      {datetime: '15:00', valPE: 12.9, valTE: 20, valQE: 0.86, val: 115, sumVal: 1498 },
-      {datetime: '16:00', valPE: 13.7, valTE: 19, valQE: 0.62, val: 100, sumVal: 1598 },
-      {datetime: '17:00', valPE: 12.7, valTE: 21, valQE: 0.62, val: 120, sumVal: 1718 },
-      {datetime: '18:00', valPE: 13.9,  valTE: 21,  valQE: 0.6 ,  val: 93, sumVal:  1811 },
-      {datetime: '19:00', valPE: 11.1, valTE: 22, valQE: 0.9 , val: 100, sumVal: 1911 },
-      {datetime: '20:00', valPE: 8.5 , valTE: 19, valQE: 0.68, val: 108, sumVal: 2019 },
-      {datetime: '21:00', valPE: 8.2 , valTE: 21, valQE: 0.84, val: 100, sumVal: 2119 },
-      {datetime: '22:00', valPE: 10.1, valTE: 20, valQE: 0.78, val: 106, sumVal: 2225 },
-      {datetime: '23:00', valPE: 8.4 , valTE: 18, valQE: 0.66, val: 105, sumVal: 2330 },
-      {datetime: '23:59', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 }
-    ];
-    $scope.dataMonth = [
-      {datetime: '01', valPE: 12.2, valTE: 22, valQE: 0.66, val: 105, sumVal: 105 },
-      {datetime: '02', valPE: 7.6 , valTE: 20, valQE: 0.69, val: 120, sumVal: 225 },
-      {datetime: '03', valPE: 8.3 , valTE: 21, valQE: 0.75, val: 101, sumVal: 326 },
-      {datetime: '04', valPE: 7.2 ,  valTE: 19,  valQE: 0.8 ,  val: 93, sumVal:  419 },
-      {datetime: '05', valPE: 10.9,  valTE: 22,  valQE: 0.8 ,  val: 84, sumVal:  503 },
-      {datetime: '06', valPE: 7.5 ,  valTE: 21,  valQE: 0.85,  val: 94, sumVal:  597 },
-      {datetime: '07', valPE: 8.7 ,  valTE: 20,  valQE: 0.76,  val: 88, sumVal:  685 },
-      {datetime: '08', valPE: 9.0 ,  valTE: 20,  valQE: 0.77,  val: 98, sumVal:  783 },
-      {datetime: '09', valPE: 12.8, valTE: 19, valQE: 0.82, val: 107, sumVal: 890 },
-      {datetime: '10', valPE: 8.9 ,  valTE: 18,  valQE: 0.85,  val: 89, sumVal:  979 },
-      {datetime: '11', valPE: 11.4, valTE: 19, valQE: 0.68, val: 109, sumVal: 1088 },
-      {datetime: '12', valPE: 8.1 ,  valTE: 19,  valQE: 0.73,  val: 98, sumVal:  1186 },
-      {datetime: '13', valPE: 9.0 , valTE: 22, valQE: 0.84, val: 103, sumVal: 1289 },
-      {datetime: '14', valPE: 13.1,  valTE: 22,  valQE: 0.83,  val: 94, sumVal:  1383 },
-      {datetime: '15', valPE: 12.9, valTE: 20, valQE: 0.86, val: 115, sumVal: 1498 },
-      {datetime: '16', valPE: 13.7, valTE: 19, valQE: 0.62, val: 100, sumVal: 1598 },
-      {datetime: '17', valPE: 12.7, valTE: 21, valQE: 0.62, val: 120, sumVal: 1718 },
-      {datetime: '18', valPE: 13.9,  valTE: 21,  valQE: 0.6 ,  val: 93, sumVal:  1811 },
-      {datetime: '19', valPE: 11.1, valTE: 22, valQE: 0.9 , val: 100, sumVal: 1911 },
-      {datetime: '20', valPE: 8.5 , valTE: 19, valQE: 0.68, val: 108, sumVal: 2019 },
-      {datetime: '21', valPE: 8.2 , valTE: 21, valQE: 0.84, val: 100, sumVal: 2119 },
-      {datetime: '22', valPE: 10.1, valTE: 20, valQE: 0.78, val: 106, sumVal: 2225 },
-      {datetime: '23', valPE: 8.4 , valTE: 18, valQE: 0.66, val: 105, sumVal: 2330 },
-      {datetime: '24', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 },
-      {datetime: '25', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 },
-      {datetime: '26', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 },
-      {datetime: '27', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 },
-      {datetime: '28', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 },
-      {datetime: '29', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 },
-      {datetime: '30', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 },
-      {datetime: '31', valPE: 11.4, valTE: 19, valQE: 0.86, val: 109, sumVal: 2439 }
-    ];
-    $scope.dataYear = [
-      {datetime: '01', valPE: 12.2, valTE: 22, valQE: 0.66, val: 105, sumVal: 105 },
-      {datetime: '02', valPE: 7.6 , valTE: 20, valQE: 0.69, val: 120, sumVal: 225 },
-      {datetime: '03', valPE: 8.3 , valTE: 21, valQE: 0.75, val: 101, sumVal: 326 },
-      {datetime: '04', valPE: 7.2 ,  valTE: 19,  valQE: 0.8 ,  val: 93, sumVal:  419 },
-      {datetime: '05', valPE: 10.9,  valTE: 22,  valQE: 0.8 ,  val: 84, sumVal:  503 },
-      {datetime: '06', valPE: 7.5 ,  valTE: 21,  valQE: 0.85,  val: 94, sumVal:  597 },
-      {datetime: '07', valPE: 8.7 ,  valTE: 20,  valQE: 0.76,  val: 88, sumVal:  685 },
-      {datetime: '08', valPE: 9.0 ,  valTE: 20,  valQE: 0.77,  val: 98, sumVal:  783 },
-      {datetime: '09', valPE: 12.8, valTE: 19, valQE: 0.82, val: 107, sumVal: 890 },
-      {datetime: '10', valPE: 8.9 ,  valTE: 18,  valQE: 0.85,  val: 89, sumVal:  979 },
-      {datetime: '11', valPE: 11.4, valTE: 19, valQE: 0.68, val: 109, sumVal: 1088 },
-      {datetime: '12', valPE: 8.1 ,  valTE: 19,  valQE: 0.73,  val: 98, sumVal:  1186 }
-    ];
-      */
     
-      
     $scope.getGasDataClick = function () {
-        var dateStartForOData = $scope.dateStart.split('.').reverse().join('-') + 'T00:00:00.000Z';
-        var dateEndForOData = $scope.dateEnd.split('.').reverse().join('-') + 'T23:59:59.999Z';
-        $scope.typeLabelOfTable = $scope.typeOfReport.id;
-        $scope.queryStringForGetInfo = "v_GasCollectionData?$filter=IDeq eq {0} and type eq '{1}' and dtStart ge {2} and dtEnd le {3}&$orderby=dtStart".format($scope.equipmentlist.selected.id, $scope.typeOfReport.selected.id + 1, dateStartForOData, dateEndForOData);
+      var dateStartForOData = $scope.dateStart.split('.').reverse().join('-') + 'T00:00:00.000Z';
+      var dateEndForOData = $scope.dateEnd.split('.').reverse().join('-') + 'T23:59:59.999Z';
+      $scope.typeLabelOfTable = $scope.typeOfReport.id;
+      $scope.queryStringForGetInfo = "v_GasCollectionData?$filter=IDeq eq {0} and type eq '{1}' and dtStart ge {2} and dtEnd le {3}&$orderby=dtStart".format($scope.equipmentlist.selected.id, $scope.typeOfReport.selected.id + 1, dateStartForOData, dateEndForOData);
 
-        indexService.getInfo($scope.queryStringForGetInfo)
-              .then(function (response) {
-                  $scope.getInfoData = response.data;
-                  $scope.dataDaily = gasCollectionTableData($scope.getInfoData);
-                  //$scope.typeLabelOfTable = $scope.typeOfReport.id;
-              });
-      
+      indexService.getInfo($scope.queryStringForGetInfo)
+        .then(function (response) {
+          $scope.getInfoData = response.data;
+          $scope.dataDaily = gasCollectionTableData($scope.getInfoData);
+          //$scope.typeLabelOfTable = $scope.typeOfReport.id;
+          
+          $scope.drawTrends($scope.dateStart, $scope.dateEnd, $scope.dataDaily);
+          
+
+
+        });
     };
       
     $scope.getAllGasDataClick = function() {
@@ -164,37 +89,166 @@
     };
 
     $scope.getSelectedGasDataClick = function() {
-        var gasCollectionData = getGasCollectionData($scope.onlineData, $scope.selectedQuery, $scope.selectedQueryTable);
+      var gasCollectionData = getGasCollectionData($scope.onlineData, $scope.selectedQuery, $scope.selectedQueryTable);
       $scope.ttt = gasCollectionData;
     };
 
     $scope.getSelectedGasDataForGetInfoClick = function () {
-        $scope.queryStringForGetInfo = $scope.selectedQueryTable + $scope.selectedQuery;
-        //$scope.ttt = gasCollectionData;
-        //indexService.getInfo("v_GasCollectionData")
-        indexService.getInfo($scope.queryStringForGetInfo)
-              .then(function (response) {
-                  $scope.getInfoData = response.data;
-                  $scope.dataDaily = gasCollectionTableData($scope.getInfoData);
-              });
-
+      $scope.queryStringForGetInfo = $scope.selectedQueryTable + $scope.selectedQuery;
+      //$scope.ttt = gasCollectionData;
+      //indexService.getInfo("v_GasCollectionData")
+      indexService.getInfo($scope.queryStringForGetInfo)
+        .then(function (response) {
+          $scope.getInfoData = response.data;
+          $scope.dataDaily = gasCollectionTableData($scope.getInfoData);
+        });
     };
 
+    $scope.drawTrends = function (dateStart, dateEnd, gasColectionData) {
+      $('#chart').empty();
+      
+      var dataTrendPE = gasColectionData.map(function (item) {
+        var arr = [];
+        arr.push(item.datetime);
+        arr.push(item.valQE);
+        return [arr];
+      });
+      dataTrendPE = gasColectionData.reduce(function (prev, curr) {
+        var retArr = prev.slice();
+        var arr = [];
+        arr[0] = curr.datetime;
+        arr[1] = curr.valQE;
+        //arr.push(curr.datetime);
+        //arr.pus(curr.valQE);
+
+        retArr.push(arr);
+        return retArr;
+      }, [[]]);
+      
+      //dataTrendPE = [['08.12.2016 08:00:00', 42.2], ['08.12.2016 09:00:00', 24.2], ['08.12.2016 10:00:00', 3], ['08.12.2016 11:00:00', 4], ['08.12.2016 12:00:00', 15]];
+      //alert(dataTrendPE[0][0] + ' | ' + dataTrendPE[0][1] + ' # ' + dataTrendPE[1][0]);
+      plot1 = $.jqplot('chart', [dataTrendPE], {
+        // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+        animate: !$.jqplot.use_excanvas,
+        //seriesDefaults: {
+        //renderer: $.jqplot.BarRenderer,
+        //renderer: $.jqplot.EnhancedLegendRenderer,
+        //pointLabels: { show: true }
+        //},
+        axes: {
+          xaxis: {
+            renderer: $.jqplot.DateAxisRenderer,
+            label: '<' + dataTrendPE + '>', //'Время',
+            labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+            tickOptions: {
+              formatString: '%d.%m.%Y %H:%M',
+              angle: 15
+            },
+            min: dateStart + ' 00:00', //'08.12.2016 08:00:00', //$scope.dateStart,
+            max: dateEnd + ' 23:59', //'08.12.2016 12:00:00', //$scope.dateEnd,
+            tickInterval: '60 minutes',
+            drawMajorGridlines: true
+          },
+          yaxis: {
+            //label: 'КГ',
+            min: 0,
+            max: 100 ,
+            labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+          },
+        },
+        highlighter: { show: true },
+        cursor: {
+          show: true
+        }
+      });
+
+
+    }
+      var s1 = [['08.12.2016 08:00', 12], ['08.12.2016 09:00:00', 2], ['08.12.2016 10:00:00', 23], ['08.12.2016 11:00:00', 4], ['08.12.2016 12:00:00', 15]];
+      plot1 = $.jqplot('chart', [s1], {
+        // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+        //animate: !$.jqplot.use_excanvas,
+        //seriesDefaults: {
+        //renderer: $.jqplot.BarRenderer,
+        //renderer: $.jqplot.EnhancedLegendRenderer,
+        //pointLabels: { show: true }
+        //},
+        axes: {
+          xaxis: {
+            renderer: $.jqplot.DateAxisRenderer,
+            label: '<' + s1 + '>', //'Время',
+            labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+            tickOptions: {
+              formatString: '%d.%m.%Y %H:%M:%S',
+              angle: -30
+            },
+            min: '08.12.2016 08:00:00', //$scope.dateStart,
+            max: '08.12.2016 12:00:00', //$scope.dateEnd,
+            tickInterval: '60 minutes',
+            drawMajorGridlines: true
+          },
+          yaxis: {
+            //label: 'КГ',
+            labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+          },
+        },
+        highlighter: { show: true },
+        cursor: {
+          show: true
+        }
+      });
     
     
-      /*indexService.getInfo("v_GasCollectionData?$filter = FileType eq '{0}'".format($state.params.fileType))
-              .then(function (response) {
+/**/
+ /*   $('#chart').empty();
+    var chartDataChunks = [['10.11.2016 08:00:00', 1], ['10.11.2016 09:00:00', 2], ['10.11.2016 10:00:00',3], ['10.11.2016 11:00:00',4], ['10.11.2016 12:00:00',5]];
+    var labels = ['1', '2', '3', '4', '5'];
+    var plotLine = $.jqplot('chart', chartDataChunks, {
 
-                  $scope.files = response.data.value;
+      seriesDefaults: { showMarker: false },
 
-                  $scope.fileNames = $scope.files.map(function (x) {
+      legend: {
+        show: true,
+        labels: labels,
+        placement: "outside",
+        renderer: $.jqplot.EnhancedLegendRenderer,
+        location: 's',
+      },
 
-                      return x.Name;
-                  })
-              });
-        */      
-    //$scope.dataGasCollection = gasCollectionTableData();
-    //$scope.dataGasCollection = getGasCollectionData();
-    //$scope.dataDaily = gasCollectionTableData();
-  
+      axes: {
+
+        xaxis: {
+          renderer: $.jqplot.DateAxisRenderer,
+          tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+          tickOptions: {
+            formatString: '%d.%m.%Y %H:%M:%S',
+            angle: -30,
+          },
+          min: $scope.dateStart,
+          max: $scope.dateEnd,
+          tickInterval: '60 minutes',//vmGetAxeInterval(dateStart, dateEnd),
+          drawMajorGridlines: false
+        },
+
+        yaxis: {
+          label: 'КГ',
+          labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+        },
+      },
+
+      highlighter: {
+        show: true,
+        sizeAdjust: 7.5,
+        useAxesFormatters: true,
+        formatString: '%s , %s {0}'.format('marker.kg')
+
+      },
+      cursor: {
+        show: false
+      }
+
+    });
+    /**/
   }]);
