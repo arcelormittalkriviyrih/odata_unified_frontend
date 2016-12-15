@@ -1,4 +1,5 @@
 ﻿angular.module('indexApp')
+  
 // angular.module('indexAppDaf')
 
   .config(['$stateProvider', function ($stateProvider) {
@@ -8,16 +9,23 @@
         name: 'gasCollection.reports',
         url: '/reports',
         controller: 'gasCollectionReportsCtrl',
-        //template: '<h3>It is area for reports</h3>'
         templateUrl: 'Static/gascollection/reports.html'
       })
 
       .state('app.gasCollection.Trends', {
         name: 'gasCollection.trends',
         url: '/trends',
-        // template: '<h3>It is area for trends</h3>'
+        controller: 'gasCollectionTrendsCtrl',
         templateUrl: 'Static/gascollection/trends.html'
-      });
+      })
+
+      .state('app.gasCollection.Balance', {
+        name: 'gasCollection.balance',
+        url: '/balance',
+        controller: 'gasCollectionBalanceCtrl',
+        templateUrl: 'Static/gascollection/balance.html'
+      })
+
   }])
 
   .controller('gasCollectionCtrl', ['$scope', 'indexService', '$state', 'roles', function ($scope, indexService, $state, roles) {
@@ -305,6 +313,6 @@
        /**/
   }])
 
-.controller('gasCollectionBalanceCtrl', ['$scope', 'indexService', '$state', '$http', function ($scope, indexService, $state, $http) {
+  .controller('gasCollectionBalanceCtrl', ['$scope', 'indexService', '$state', '$http', function ($scope, indexService, $state, $http) {
 
 }]);
