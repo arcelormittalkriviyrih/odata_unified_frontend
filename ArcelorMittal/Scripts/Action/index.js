@@ -74,7 +74,7 @@
                             case 'STANDARD':
                             case 'CHEM_ANALYSIS':
                                 field.input = $('<textarea />').addClass('form-control')
-                                                                                    .attr('rows', '1');
+                                                                                    .attr('rows', '2');
                                 break;
                             default:
                                 field.input = $('<input />').addClass('form-control').attr('type', 'text');

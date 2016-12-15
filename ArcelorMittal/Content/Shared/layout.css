@@ -454,8 +454,9 @@ button.add{
     width: 220px;
 }
 
-.control-group textarea, .control-group .dropdown.form-control{
+.control-group textarea{
     width: 220px;
+	height: 54px;
 }
 
 .control-group.large{
