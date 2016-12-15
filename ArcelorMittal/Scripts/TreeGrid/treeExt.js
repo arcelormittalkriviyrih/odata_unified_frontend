@@ -2,7 +2,7 @@
 
     jQuery.fn.odataTree = function (options) {
 
-        var self = this,
+        var self = this.empty(),
             to = false, // variable for timeout search
             _data = options.data,
             serviceUrl = options.serviceUrl,
