@@ -41,9 +41,17 @@
     </li>
 
     <li class="tab" ui-sref-active="active">
-        <a ui-sref=".gasCollection" ui-sref-opts="{reload: true}">{{ 'gasCollection.gasReports' | translate }}</a>
+        <a ui-sref=".gasCollectionReports" ui-sref-opts="{reload: true}">{{ 'gasCollection.gasReports' | translate }}</a>
     </li>
-       
+
+    <li class="tab" ui-sref-active="active">
+        <a ui-sref=".gasCollectionTrends" ui-sref-opts="{reload: true}">{{ 'gasCollection.gasTrends' | translate }}</a>
+    </li>
+
+    <li class="tab" ui-sref-active="active">
+        <a ui-sref=".gasCollectionBalance" ui-sref-opts="{reload: true}">{{ 'gasCollection.gasBalance' | translate }}</a>
+    </li>
+
 </ul>
 
 <ui-view></ui-view>

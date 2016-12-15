@@ -1,1 +1,44 @@
-<h2>It is area for trends</h2>
+<h2>Отчёты в виде графиков</h2>
+<div class="alert alert-info" role="alert">
+    <strong>Внимание!</strong> Оборудование в процессе пуско-наладки. Данные могут быть недостоверны.
+</div>
+
+<div>
+    <div>
+        Выберите тип отчёта:
+        <select disabled ng-model="typeOfReport.selected"
+                ng-options="item.description for item in typeOfReport track by item.id"></select>
+    </div>
+
+    <div>
+        Выберите точку отбора :
+        <select ng-model="equipmentlist.selected"
+                ng-options="item.description for item in equipmentlist track by item.id"></select>
+    </div>
+
+    <div class="date-control-wrapper">
+        {{ 'marker.period' | translate }}:
+        <input type="text"
+               id="statistics-date-start"
+               class="form-control"
+               ng-model="dateStart" />
+    </div>
+    &ndash;
+    <div class="date-control-wrapper">
+        <input type="text"
+               id="statistics-date-end"
+               class="form-control"
+               ng-model="dateEnd" />
+    </div>
+    <button type="button" class="btn btn-primary" ng-click="getGasDataClick()">Получить данные</button>
+
+</div>
+
+<div id="wrapper-chart">
+    <div id="chart">
+    </div>
+</div>
+
+<div class="alert alert-info" role="alert">
+    <strong>Внимание!</strong> Оборудование в процессе пуско-наладки. Данные могут быть недостоверны.
+</div>
