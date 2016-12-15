@@ -228,7 +228,7 @@
                 wrongDeviation: 'Deviation is wrong! Please, recalculate it!',
                 enterProdOrder: 'You must enter new prod order number!',
                 selectLabel: 'You must change label!',
-                handModeQuantity: 'You must enter weight!'
+                handModeQuantity: 'You must enter weight!',
 				notNullable: 'Field "{0}" cannot be nullable!',
                 fieldIsRequired: 'Field "{0}" is required!',
                 fieldName: {
@@ -606,7 +606,7 @@
                 wrongDeviation: 'Отклонение неверно! Пожалуйста, пересчитайте!',
                 enterProdOrder: 'Вы должны ввести новый номер производственного заказа!',
                 selectLabel: 'Вы должны выбрать бирку!',
-                handModeQuantity: 'Вы должны ввести вес!'
+                handModeQuantity: 'Вы должны ввести вес!',
 				notNullable: 'Значение поля "{0}" не должно равняться 0!',
                 fieldIsRequired: 'Поле "{0}" обязательно для заполнения!',
                 fieldName: {
@@ -984,7 +984,7 @@
                 wrongDeviation: 'Відхилення невірне! Будь ласка, перерахуйте!',
                 enterProdOrder: 'Ви повинні ввести новий номер виробничого замовлення!',
                 selectLabel: 'Ви повинні вибрати бірку!',
-                handModeQuantity: 'Ви повинні ввести вагу!'
+                handModeQuantity: 'Ви повинні ввести вагу!',
 				notNullable: 'Значення поля "{0}" не повинно дорівнювати 0!',
                 fieldIsRequired: 'Поле "{0}" обов\'язкове для заповнення!',
                 fieldName: {
