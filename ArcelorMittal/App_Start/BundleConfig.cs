@@ -56,6 +56,7 @@ public class BundleConfig
             "~/content/table/jsgrid-theme.css",
             "~/content/shared/datetimepicker.css",
             "~/content/shared/layout.css",
+            "~/content/shared/layoutWA.css",
             "~/content/chart/jquery.jqplot.css",
             "~/content/shared/select.css"
         ));
