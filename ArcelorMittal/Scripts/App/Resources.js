@@ -35,10 +35,17 @@
         },
 
         gasCollection: {
-            reports: 'Reports', //Отчёты
-            gasReports: 'Gas reports', //Отчёты по газу
-            trends: 'Trends', //Тренды
-            gasTrends: 'Gas trends', //Тренды по газу
+          reports: 'Reports', //Отчёты
+          gasReports: 'Gas reports', //Отчёты по газу
+          trends: 'Trends', //Тренды
+          gasTrends: 'Gas trends', //Тренды по газу
+          // Нижеследующие переводы ещё следует добавить в рус и укр варианте
+          balance: 'Balance', // Баланс
+          gasBalance: 'Gas balances', // Балансы по газу
+          selectTypeOfReports: 'Select type of reports', // Выберите тип отчёта
+          // Выберите точку отбора
+          // Получить данные
+          // Отображать полные данные
         },
 
         market: {

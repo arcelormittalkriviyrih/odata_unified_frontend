@@ -752,6 +752,7 @@
 
             var rowspan = 0;
             var wagonindex = 0;
+            var nettosum = 0;
 
             for (var i = $scope.WeightSheetForPrint.length - 1; i >= 0; i--) {
 
@@ -763,9 +764,11 @@
                     $scope.WeightSheetForPrint[i].RowSpan = rowspan;
                 };
 
-                $scope.NettoSum = $scope.NettoSum + $scope.WeightSheetForPrint[i].Netto;
+                nettosum += $scope.WeightSheetForPrint[i].Netto;
+                //$scope.NettoSum = $scope.NettoSum + $scope.WeightSheetForPrint[i].Netto;
             }
 
+            $scope.NettoSum = Math.round(nettosum * 100) / 100; //round(2)
             angular.element(window.document)[0].title = "Печать отвесной №" + $scope.WeightSheetForPrint[0].WeightSheetNumber;
 
             /*
