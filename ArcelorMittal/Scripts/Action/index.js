@@ -25,7 +25,7 @@
 
                 $form.on('keyup keypress', function (e) {
                     var keyCode = e.keyCode || e.which;
-                    if (keyCode === 13) {
+                    if (keyCode === 13 && e.target.localName != 'textarea') {
                         e.preventDefault();
                         return false;
                     }
@@ -65,8 +65,21 @@
 
                     case 'text':
 
-                        field.input = $('<input />').addClass('form-control')
-                                                    .attr('type', 'text');
+                        switch (field.name) {
+                            case 'CONTRACT_NO':
+                            case 'DIRECTION':
+                            case 'CLASS':
+                            case 'STEEL_CLASS':
+                            case 'BUYER_ORDER_NO':
+                            case 'STANDARD':
+                            case 'CHEM_ANALYSIS':
+                                field.input = $('<textarea />').addClass('form-control')
+                                                                                    .attr('rows', '2');
+                                break;
+                            default:
+                                field.input = $('<input />').addClass('form-control').attr('type', 'text');
+
+                        }
                            
                         break;
 
@@ -130,9 +143,12 @@
                         controlsControlGroup.find('#filter').keyup(function () {
 
                             var comboList = ul.find('li a');
-                            var val = $(this).val().toLowerCase();
+                            var val = $(this).val().toLowerCase();                                
                             
                             if (val.length > 0) {
+
+                                var notEqual = 0;//hack for ie9
+                                var itemLength = comboList.length;//hack for ie9
 
                                 comboList.each(function (i, item) {
 
@@ -141,15 +157,28 @@
 
                                 comboList.each(function (i, item) {
 
-                                    if ($(item).text().toLowerCase().indexOf(val) == -1)
+                                    if ($(item).text().toLowerCase().indexOf(val) == -1) {
+
+                                        notEqual++;//hack for ie9
                                         $(item).parent().hide();
-                                })
+                                    }
+
+                                });
+
+                                if (notEqual == itemLength)//hack for ie9 
+                                    ul.addClass('zeroHeight'); //hack for ie9                              
+                                else//hack for ie9
+                                    ul.removeClass('zeroHeight');//hack for ie9
+
                             } else {
 
                                 comboList.each(function (i, item) {
 
                                     $(item).parent().show();
-                                })
+                                });
+
+
+                                ul.removeClass('zeroHeight');//hack for ie9
                             }
                             
                         })

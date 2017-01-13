@@ -24,8 +24,8 @@ public class BundleConfig
             "~/scripts/vendor/jqplot/plugins/jqplot.highlighter.js",
             "~/scripts/vendor/dhtmlxscheduler.js",
             "~/scripts/vendor/dhtmlxscheduler_year_view.js",
-            "~/scripts/vendor/select.js",
-            "~/scripts/vendor/printPreview.js"
+            "~/scripts/vendor/select.js"
+            //"~/scripts/vendor/printPreview.js"
             //"~/scripts/vendor/backbone.js",
             //"~/scripts/vendor/joint.min.js",
             //"~/scripts/vendor/lodash.js"
@@ -34,13 +34,15 @@ public class BundleConfig
         bundles.Add(new Bundle("~/bundles/js/app").Include(
             "~/scripts/shared/common.js",
             "~/scripts/shared/util.js",
+            "~/scripts/shared/gasCollectionUtils.js",
             "~/scripts/app/resources.js",
             "~/scripts/app/index.js",
             "~/scripts/app/marker.js",
             "~/scripts/app/market.js",
             "~/scripts/app/pa.js",
             "~/scripts/app/workshopspecs.js",
-            "~/scripts/app/weightanalytics.js",  
+            "~/scripts/app/weightanalytics.js",
+            "~/scripts/app/gasCollection.js",
             "~/scripts/app/automationlab.js",
             "~/scripts/treeGrid/treeExt.js",
             "~/scripts/table/jsGridExt.js",
@@ -54,6 +56,7 @@ public class BundleConfig
             "~/content/table/jsgrid-theme.css",
             "~/content/shared/datetimepicker.css",
             "~/content/shared/layout.css",
+            "~/content/shared/layoutWA.css",
             "~/content/chart/jquery.jqplot.css",
             "~/content/shared/select.css"
         ));

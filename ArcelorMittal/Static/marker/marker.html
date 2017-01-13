@@ -147,7 +147,7 @@
         <div class="controlsWrapper">
             <div class="controlsGroup"
                  ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' || scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
-                <div class="controlsRow" style="margin-bottom:0">
+                <div class="controlsRow">
                     <div class="captionTask">
                         {{ 'marker.size' | translate }}
                     </div>
@@ -176,14 +176,15 @@
             </div>
         </div>
 
-        <div class="controlsWrapper" ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET'">
+        <div class="controlsWrapper" ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET'" style="margin-top:-5px;">
             <div class="controlsGroup">
                 <div class="controlsRow" style="margin-bottom:0;">
 
                     <div class="captionTask">
 
                     </div>
-                    <div class="controlTask singleLeft checkbox-inline" style="width:40%">
+                    <div class="controlTask singleLeft checkbox-inline"
+                          style="width:40%">
                         <input type="checkbox"
                                ng-model="nemera"
                                ng-disabled="!standard"
@@ -219,6 +220,7 @@
                         <input type="text"
                                class="form-control"
                                ng-model="barQuantity"
+                               ng-class="{'wrong': (!barQuantity || barQuantity == 0) && standard}"
                                my-number-check="number"
                                ng-disabled="!standard"
                                ng-change="calculate()" />
@@ -254,7 +256,7 @@
                                class="form-control"
                                ng-model="minMass"
                                ng-disabled="!standard"
-                               ng-class="{'wrong': !minMass && standard}"
+                               ng-class="{'wrong': (!minMass || minMass == 0) && standard}"
                                my-number-check="number"
                                ng-change="enableControlOK(); calculateMaxMass()" />
                     </div>
@@ -303,7 +305,7 @@
                         <input type="text"
                                class="form-control"
                                ng-model="maxMass"
-                               ng-class="{'wrong': !maxMass && standard}"
+                               ng-class="{'wrong': !maxMass || maxMass == 0 && standard}"
                                ng-disabled="!standard"
                                my-number-check="number"
                                ng-change="enableControlOK();" />

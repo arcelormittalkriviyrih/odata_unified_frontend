@@ -33,6 +33,21 @@
                 defect: 'Defect'
             },
         },
+
+        gasCollection: {
+          reports: 'Reports', //Отчёты
+          gasReports: 'Gas reports', //Отчёты по газу
+          trends: 'Trends', //Тренды
+          gasTrends: 'Gas trends', //Тренды по газу
+          // Нижеследующие переводы ещё следует добавить в рус и укр варианте
+          balance: 'Balance', // Баланс
+          gasBalance: 'Gas balances', // Балансы по газу
+          selectTypeOfReports: 'Select type of reports', // Выберите тип отчёта
+          // Выберите точку отбора
+          // Получить данные
+          // Отображать полные данные
+        },
+
         market: {
             OrderLabel: 'Orders',
             TemplateLabel: 'Label Templates',
@@ -220,7 +235,16 @@
                 wrongDeviation: 'Deviation is wrong! Please, recalculate it!',
                 enterProdOrder: 'You must enter new prod order number!',
                 selectLabel: 'You must change label!',
-                handModeQuantity: 'You must enter weight!'
+                handModeQuantity: 'You must enter weight!',
+				notNullable: 'Field "{0}" cannot be nullable!',
+                fieldIsRequired: 'Field "{0}" is required!',
+                fieldName: {
+
+                    minMass: 'Min weight',
+                    maxMass: 'Max weight',
+                    profile: 'Profile',
+                    rodsQuantity: 'Rods quantity'
+                }
             },
             modalCaptions: {
 
@@ -398,6 +422,14 @@
             defect: 'Брак'
         },
         },
+
+        gasCollection: {
+            reports: 'Отчёты', //Отчёты
+            gasReports: 'Отчёты по газу', //Отчёты по газу
+            trends: 'Тренды', //Тренды
+            gasTrends: 'Тренды по газу', //Тренды по газу
+        },
+
         market: {
             OrderLabel: 'Заказы',
             TemplateLabel: 'Шаблоны Бирок',
@@ -581,7 +613,16 @@
                 wrongDeviation: 'Отклонение неверно! Пожалуйста, пересчитайте!',
                 enterProdOrder: 'Вы должны ввести новый номер производственного заказа!',
                 selectLabel: 'Вы должны выбрать бирку!',
-                handModeQuantity: 'Вы должны ввести вес!'
+                handModeQuantity: 'Вы должны ввести вес!',
+				notNullable: 'Значение поля "{0}" не должно равняться 0!',
+                fieldIsRequired: 'Поле "{0}" обязательно для заполнения!',
+                fieldName: {
+
+                    minMass: 'Масса минимум',
+                    maxMass: 'Масса максимум',
+                    profile: 'Профиль',
+                    rodsQuantity: 'Количество прутков'
+                }
             },
             modalCaptions: {
 
@@ -760,6 +801,14 @@
                 defect: 'Брак'
             },
         },
+
+        gasCollection: {
+            reports: 'Звiти', //Отчёты
+            gasReports: 'Звiти по газу', //Отчёты по газу
+            trends: 'Графiки', //Тренды
+            gasTrends: 'Графiки по газу', //Тренды по газу
+        },
+
         market: {
             OrderLabel: 'Замовлення',
             TemplateLabel: 'Шаблони Бирок',
@@ -942,7 +991,16 @@
                 wrongDeviation: 'Відхилення невірне! Будь ласка, перерахуйте!',
                 enterProdOrder: 'Ви повинні ввести новий номер виробничого замовлення!',
                 selectLabel: 'Ви повинні вибрати бірку!',
-                handModeQuantity: 'Ви повинні ввести вагу!'
+                handModeQuantity: 'Ви повинні ввести вагу!',
+				notNullable: 'Значення поля "{0}" не повинно дорівнювати 0!',
+                fieldIsRequired: 'Поле "{0}" обов\'язкове для заповнення!',
+                fieldName: {
+
+                    minMass: 'Маса мінімум',
+                    maxMass: 'Маса максимум',
+                    profile: 'Профіль',
+                    rodsQuantity: 'Кількість прутків'
+                }
             },
             modalCaptions: {
 

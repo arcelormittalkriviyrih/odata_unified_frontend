@@ -654,7 +654,6 @@
                     vmShowScaleInfo($scope.currentScaleID);
             }, scalesRefresh);
         })
-
     }
 
     //get detail info for every scale
@@ -1605,10 +1604,11 @@
         if (
 
             ($scope.commOrder
-            && $scope.minMass
-            && $scope.maxMass
+            && $scope.minMass > 0
+            && $scope.maxMass > 0
+            && $scope.barQuantity > 0
             && (parseInt($scope.maxMass) >= parseInt($scope.minMass))
-            && $scope.isAcceptedOrder) ||
+            && $scope.isAcceptedOrder) &&
 
             (($scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET' &&
             $scope.deviationState != 'wrong' && $scope.selectedProfile)
@@ -1661,8 +1661,27 @@
 
             var errors = [];
 
-            if (!($scope.maxMass && $scope.minMass && $scope.selectedProfile))
-                errors.push($translate.instant('marker.errorMessages.fillRequired'));
+            if ($scope.minMass === null || $scope.minMass.toString().length == 0)
+                errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.errorMessages.fieldName.minMass')));
+
+            if ($scope.minMass == '0')
+                errors.push($translate.instant('marker.errorMessages.notNullable').format($translate.instant('marker.errorMessages.fieldName.minMass')));
+
+            if ($scope.maxMass === null || $scope.maxMass.toString().length == 0 || isNaN($scope.maxMass))
+                errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.errorMessages.fieldName.maxMass')));
+
+            if ($scope.maxMass == '0')
+                errors.push($translate.instant('marker.errorMessages.notNullable').format($translate.instant('marker.errorMessages.fieldName.maxMass')));
+
+            if ($scope.barQuantity === null || $scope.barQuantity.toString().length == 0)
+                errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.errorMessages.fieldName.rodsQuantity')));
+
+            if ($scope.barQuantity == '0')
+                errors.push($translate.instant('marker.errorMessages.notNullable').format($translate.instant('marker.errorMessages.fieldName.rodsQuantity')));
+
+            if ($scope.selectedProfile === null)
+                errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.errorMessages.fieldName.profile')));
+
 
             if (!$scope.isAcceptedOrder)
                 errors.push($translate.instant('marker.errorMessages.acceptOrder'));
@@ -1834,7 +1853,6 @@
                 EquipmentID: parseInt($scope.currentScaleID) || null,
                 Quantity: $scope.handModeQuantity
             }).then(vmCancelHandMode);
-            
         };
     };
 
@@ -2336,7 +2354,8 @@
 
     var date = getTimeToUpdate();
 
-    $scope.dateStart = $scope.dateEnd = '{0}.{1}.{2}'.format(date.day, date.month, date.year);   
+    $scope.dateStart = $scope.dateEnd = '{0}.{1}.{2}'.format(date.day, date.month, date.year);
+
     $scope.groupParams = ['labelsCount', 'weightOverall', 'byChanges', 'byBrigades', 'byMelt', 'byOrder', 'byParty', 'handMode', 'allLabels'];
 
     $scope.groupParams = $scope.groupParams.map(function (item) {
@@ -2353,6 +2372,7 @@
             return 1
         else return 0
     });
+
     $scope.groupBy = null;
     $scope.comboValue = '';
 
@@ -2576,18 +2596,18 @@
 
             var permittedSymbols = [8, 46, 13, 37, 38, 39, 40, 9];
 
-            if (attrs.myNumberCheck != 'number') 
+            if (attrs.myNumberCheck != 'number')
                 permittedSymbols.push(190);
-                                      
+
             if ((!((event.which >= 48 && event.which <= 57) || (event.which >= 96 && event.which <= 105))
-                && permittedSymbols.indexOf(event.which) == -1) || 
+                && permittedSymbols.indexOf(event.which) == -1) ||
                 (attrs.myNumberCheck != 'number' && event.which == 190 && element.val().indexOf('.') > -1)) {
 
                 return false;
             };
         });
     }
-        
+
 });
 
 

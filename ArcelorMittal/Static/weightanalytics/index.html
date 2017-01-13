@@ -320,17 +320,6 @@
                 </div>
             </div>
             
-            
-            
-<!--            <div class="paramRowWeightanalytics">
-                    <div class="paramNameWeightanalytics">
-                        Tare                    
-                    </div>
-                    <div class="paramValueWeightanalytics">
-                        {{CurrentPairNumberTare | number:2}} {{ 'weightanalytics.ton' | translate }}
-                    </div>
-                </div>-->
-
 
             <div ng-hide="true">
                 {{CurrentWeightSheet.SelectedScrapSender.Name}}
@@ -363,7 +352,15 @@
 
     </div>
 
-
+<!--    <table class="table container" ng-show="CurrentWeightSheet.WeightSheetNumber || ArchiveWeightSheetSelected">
+            <thead>
+                <tr class="row">
+                    <th class="col-sm-4"></th>
+                    <th class="col-sm-4">{{ 'weightanalytics.Labels.openedWS' | translate }} {{CurrentWeightSheet.WeightSheetNumber}}</th>
+                    <th class="col-sm-4">Весовщик: 90909</th>
+                </tr>
+            </thead>
+    </table>-->
 
     <div style="margin-top: 5px">
         <div id="KP4_Wagon" ng-show="CurrentWeightSheet.WeightingMode || ArchiveWeightSheetSelected">
@@ -377,12 +374,12 @@
         </div>
     </div>
 
-    <table class="table table-striped table-condensed table-diagnostics">
+<!--    <table class="table table-striped table-condensed table-diagnostics">
         <tr ng-repeat="WS in WeightSheetForPrint">
             <td>{{WS.ID}}</td>
             <td>{{WS.WeightingTime}}</td>
         </tr>
-    </table>
+    </table>-->
 
 
 
@@ -429,7 +426,7 @@
         </div>
     </div>
 
-    <div class="table-print" id="tbp">
+    <!--<div class="table-print" id="tbp">
 
         <div class="opis">
             <p>Дата {{WeightSheetForPrint.Date | date:'dd.MM.yyyy HH:mm' : 'UTC'}}</p>
@@ -452,16 +449,13 @@
             </thead>
             <tbody>
             </tbody>
-            <!--                <tr ng-repeat="WS in WeightSheetForPrint">
-                    <td>{{WS.ID}}</td>
-                    <td>{{WS.WeightingTime}}</td>
-                </tr>-->
+
         </table>
 
 
 
     </div>
-    <button id="btnPrint" style="display: none">Print Preview</button>
+    <button id="btnPrint" style="display: none">Print Preview</button>-->
 
 
 

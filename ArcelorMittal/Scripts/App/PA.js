@@ -42,6 +42,24 @@
             controller: 'marketOrderCtrl'
         })
 
+        .state('app.PA.gasCollectionReports', {
+            url: '/gcreports',
+            templateUrl: 'Static/gascollection/reports.html',
+            controller: 'gasCollectionReportsCtrl'
+        })
+
+        .state('app.PA.gasCollectionTrends', {
+          url: '/gctrends',
+          templateUrl: 'Static/gascollection/trends.html',
+          controller: 'gasCollectionTrendsCtrl'
+        })
+
+        .state('app.PA.gasCollectionBalance', {
+          url: '/gcbalance',
+          templateUrl: 'Static/gascollection/balance.html',
+          controller: 'gasCollectionBalanceCtrl'
+        })
+
         .state('app.PA.LabelTemplate', {
 
             url: '/labeltemplate',
