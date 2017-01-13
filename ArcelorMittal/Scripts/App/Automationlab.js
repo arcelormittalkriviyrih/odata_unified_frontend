@@ -137,7 +137,11 @@
             F_number: id_ss,
             Op_Type: status
          };
+<<<<<<< HEAD
+        
+=======
        
+>>>>>>> refs/remotes/origin/master
         $.ajax({
             url: serviceUrl + 'ins_OperationsAcceptence',
             type: 'POST',
