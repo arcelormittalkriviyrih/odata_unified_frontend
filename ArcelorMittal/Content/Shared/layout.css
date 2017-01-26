@@ -1341,7 +1341,7 @@ div.odataDiagram .controls{
 }
 
 .tabs_PhysicalAsset_css {
-    width: 620px;
+    width: 100%;
 }
 
 .tabs_PhysicalAsset_css>section {
