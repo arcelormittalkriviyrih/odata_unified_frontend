@@ -124,6 +124,11 @@
             Equipment: 'Equipment',
             Material: 'Material',
             Personnel: 'Personnel',
+            PhysicalAsset: 'PhysicalAsset',
+            PhysTabs: {
+                Property: 'Properties',
+                Structure: 'Structure'
+            },
             Label: 'Labels',
             SAPCommunication: "SAP communication",
             Version: 'Version',
@@ -504,6 +509,11 @@
             Equipment: 'Оборудование',
             Material: 'Материалы',
             Personnel: 'Персонал',
+            PhysicalAsset: 'Физические активы',
+            PhysTabs: {
+                Property: 'Свойства',
+                Structure: 'Структура'
+            },
             Label: 'Бирки',
             SAPCommunication: "Связь с SAP",
             Version: 'Версия',
@@ -882,6 +892,11 @@
             Equipment: 'Обладнання',
             Material: 'Матеріали',
             Personnel: 'Персонал',
+            PhysicalAsset: 'Фізичні активи',
+            PhysTabs: {
+                Property: 'Властивості',
+                Structure: 'Структура'
+            },
             Label: 'Бирки',
             SAPCommunication: "Зв\'язок з SAP",
             Version: 'Версія',
