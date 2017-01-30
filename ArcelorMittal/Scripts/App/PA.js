@@ -108,6 +108,13 @@
             controller: 'PAphysicalassetCtrl'
         })
 
+        .state('app.PA.Operations', {
+
+            url: '/operations',
+            templateUrl: 'Static/pa/operations.html',
+            controller: 'PAoperationsCtrl'
+        })
+
 
 }])
 
@@ -1347,5 +1354,431 @@
 
 
 
+
+}])
+
+.controller('PAoperationsCtrl', ['$scope', '$translate', 'indexService', '$q', function ($scope, $translate, indexService, $q) {
+
+    $treeContainer = $('#hierarchy').empty();
+
+    $equipmentDisable = $('#equipmentDisable').show();
+    $equipmentPropertyDisable = $('#equipmentPropertyDisable').show();
+
+    $q.all([indexService.getInfo('Equipment'), indexService.getInfo('EquipmentClass')])
+        .then(function (responses) {
+
+            var equipment = responses[0].data.value;
+            var equipmentClass = responses[1].data.value;
+
+            equipment = equipment.sort(function (a, b) {
+
+                return vmSort('Description', a, b);
+            });
+            equipmentClass = equipmentClass.sort(function (a, b) {
+
+                return vmSort('Description', a, b);
+            });
+
+            $scope.equipment = equipment;
+
+            $treeContainer.odataTree({
+                serviceUrl: serviceUrl,
+                table: 'Equipment',
+                data: equipment,
+                keys: {
+                    id: 'ID',
+                    parent: 'Equipment1',
+                    text: 'Description'
+                },
+                translates: {
+                    nodeName: $translate.instant('tree.nodeName'),
+                    parentID: $translate.instant('tree.parentID'),
+                    search: $translate.instant('tree.search')
+                },
+                parentID: {
+                    keyField: 'ID',
+                    valueField: 'Description',
+                },
+                additionalFields: [{
+                    id: 'EquipmentClassID', //this param MUST be called similar to table field where we get data from this field
+                    control: 'combo',
+                    data: equipmentClass,
+                    keyField: 'ID',
+                    valueField: 'Description',
+                    required: true,
+                    editReadOnly: true,
+                    translate: $translate.instant('tree.equipmentClass'),
+                }]
+            });
+        });
+
+
+
+    $treeContainer.on('tree-item-selected', function (e, data) {
+
+        var EquipmentID = parseInt(data.id);
+
+        vmGetEquipmentClass(EquipmentID, $scope.equipment);
+    });
+
+    $('div#operations_segment').jsGrid({
+        width: "100%",
+        height: "540px",
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 10,
+
+        rowClick: vmActiveRow
+
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'EquipmentProperty',
+
+        fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            width: 65,
+            order: 1
+        }, {
+            id: 'ClassPropertyID',
+            name: 'ClassPropertyID',
+            title: $translate.instant('grid.common.property'),
+            width: 200,
+            order: 2,
+            type: 'combo',
+            table: {
+                name: 'EquipmentClassProperty',
+                id: 'ID',
+                title: 'Description'
+            },
+            textField: 'name',
+            valueField: 'id'
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: $translate.instant('grid.common.value'),
+            width: 200,
+            order: 3
+        }],
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
+
+    $('div#OpMaterialSpecification').jsGrid({
+        width: "100%",
+        height: "440px",
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 20,
+
+        rowClick: vmActiveRow
+
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'EquipmentProperty',
+
+        fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            width: 65,
+            order: 1
+        }, {
+            id: 'ClassPropertyID',
+            name: 'ClassPropertyID',
+            title: $translate.instant('grid.common.property'),
+            width: 200,
+            order: 2,
+            type: 'combo',
+            table: {
+                name: 'EquipmentClassProperty',
+                id: 'ID',
+                title: 'Description'
+            },
+            textField: 'name',
+            valueField: 'id'
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: $translate.instant('grid.common.value'),
+            width: 200,
+            order: 3
+        }],
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
+
+    $('div#OpPhysicalAssetSpecification').jsGrid({
+        width: "100%",
+        height: "440px",
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 20,
+
+        rowClick: vmActiveRow
+
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'EquipmentProperty',
+
+        fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            width: 65,
+            order: 1
+        }, {
+            id: 'ClassPropertyID',
+            name: 'ClassPropertyID',
+            title: $translate.instant('grid.common.property'),
+            width: 200,
+            order: 2,
+            type: 'combo',
+            table: {
+                name: 'EquipmentClassProperty',
+                id: 'ID',
+                title: 'Description'
+            },
+            textField: 'name',
+            valueField: 'id'
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: $translate.instant('grid.common.value'),
+            width: 200,
+            order: 3
+        }],
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
+
+    $('div#OpEquipmentSpecification').jsGrid({
+        width: "100%",
+        height: "440px",
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 20,
+
+        rowClick: vmActiveRow
+
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'EquipmentProperty',
+
+        fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            width: 65,
+            order: 1
+        }, {
+            id: 'ClassPropertyID',
+            name: 'ClassPropertyID',
+            title: $translate.instant('grid.common.property'),
+            width: 200,
+            order: 2,
+            type: 'combo',
+            table: {
+                name: 'EquipmentClassProperty',
+                id: 'ID',
+                title: 'Description'
+            },
+            textField: 'name',
+            valueField: 'id'
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: $translate.instant('grid.common.value'),
+            width: 200,
+            order: 3
+        }],
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
+
+    $('div#OpPersonnelSpecification').jsGrid({
+        width: "100%",
+        height: "440px",
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 20,
+
+        rowClick: vmActiveRow
+
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'EquipmentProperty',
+
+        fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            width: 65,
+            order: 1
+        }, {
+            id: 'ClassPropertyID',
+            name: 'ClassPropertyID',
+            title: $translate.instant('grid.common.property'),
+            width: 200,
+            order: 2,
+            type: 'combo',
+            table: {
+                name: 'EquipmentClassProperty',
+                id: 'ID',
+                title: 'Description'
+            },
+            textField: 'name',
+            valueField: 'id'
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: $translate.instant('grid.common.value'),
+            width: 200,
+            order: 3
+        }],
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
+
+    $('div#OpParameters').jsGrid({
+        width: "100%",
+        height: "440px",
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 20,
+
+        rowClick: vmActiveRow
+
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'EquipmentProperty',
+
+        fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            width: 65,
+            order: 1
+        }, {
+            id: 'ClassPropertyID',
+            name: 'ClassPropertyID',
+            title: $translate.instant('grid.common.property'),
+            width: 200,
+            order: 2,
+            type: 'combo',
+            table: {
+                name: 'EquipmentClassProperty',
+                id: 'ID',
+                title: 'Description'
+            },
+            textField: 'name',
+            valueField: 'id'
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: $translate.instant('grid.common.value'),
+            width: 200,
+            order: 3
+        }],
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
 
 }]);

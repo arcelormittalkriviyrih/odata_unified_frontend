@@ -1380,7 +1380,9 @@ div.odataDiagram .controls{
 }
 
 /* Активация секций с помощью псевдокласса :checked */
-.tabs_PhysicalAsset_css #tab1:checked~#content1, .tabs_PhysicalAsset_css #tab2:checked~#content2 {
+.tabs_PhysicalAsset_css #tab1:checked~#content1, .tabs_PhysicalAsset_css #tab2:checked~#content2,
+.tabs_PhysicalAsset_css #tab3:checked~#content3,.tabs_PhysicalAsset_css #tab4:checked~#content4,
+.tabs_PhysicalAsset_css #tab5:checked~#content5 {
 	display: block;
 }
 
@@ -1388,6 +1390,14 @@ div.modal.treeControls {
 
 height: 650px;
 overflow: scroll;
+}
+
+/* OPERATIONS */
+
+#Operations_overflow_tree #treeRoot {
+
+    overflow:scroll;
+    height:450px;
 }
 
 

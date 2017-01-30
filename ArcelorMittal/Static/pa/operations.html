@@ -1,0 +1,74 @@
+﻿<div class="container loading" ng-show="$root.showLoadingState">
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
+    </div>
+</div>
+<div class="row col-md-12" ng-show="!$root.showLoadingState">
+    <div id="Operations_overflow_tree" class="treeContainer col-md-4">
+        <div id="hierarchy">
+        </div>
+    </div>
+    <div class="cancelMarginLeft col-md-8">
+        <div class="gridWrapper">
+            <div class="disable" id="equipmentPropertyDisable">
+            </div>
+
+            <div id="operations_segment"></div>
+        </div> 
+    </div>
+</div> 
+<div class="row cancelMarginLeft col-md-12">
+        <div class="tabs_PhysicalAsset_css">
+            <input id="tab1" type="radio" name="tabs" checked>
+            <label for="tab1" title="Material Specification">MaterialS</label>
+            <input id="tab2" type="radio" name="tabs">
+            <label for="tab2" title="PhysicalAsset Specification">PhysicalAssetS</label>
+            <input id="tab3" type="radio" name="tabs">
+            <label for="tab3" title="Equipment Specification">EquipmentS</label>
+            <input id="tab4" type="radio" name="tabs">
+            <label for="tab4" title="Personnel Specification">PersonnelS</label>
+            <input id="tab5" type="radio" name="tabs">
+            <label for="tab5" title="Params">Params</label>
+
+            <section id="content1">
+                <div class="gridWrapper">
+                    <div class="disable" id="OpMaterialSpecificationDisable">
+                    </div>
+
+                    <div id="OpMaterialSpecification"></div>
+                </div>
+            </section>  
+            <section id="content2">
+               <div class="gridWrapper">
+                    <div class="disable" id="OpPhysicalAssetSpecificationDisable">
+                    </div>
+
+                    <div id="OpPhysicalAssetSpecification"></div>
+                </div> 
+            </section>
+            <section id="content3">
+                <div class="gridWrapper">
+                    <div class="disable" id="OpEquipmentSpecificationDisable">
+                    </div>
+
+                    <div id="OpEquipmentSpecification"></div>
+                </div>
+            </section>
+            <section id="content4">
+                <div class="gridWrapper">
+                    <div class="disable" id="OpPersonnelSpecificationDisable">
+                    </div>
+
+                    <div id="OpPersonnelSpecification"></div>
+                </div>
+            </section>
+            <section id="content5">
+                <div class="gridWrapper">
+                    <div class="disable" id="OpParametersDisable">
+                    </div>
+
+                    <div id="OpParameters"></div>
+                </div>
+            </section>
+        </div> 
+    </div>
