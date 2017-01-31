@@ -535,6 +535,18 @@
                                          order: 19
                                      },
                                  }, {
+
+                                     name: 'LABEL_PRINT_QTY',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: true,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.LABEL_PRINT_QTY'),
+                                         order: 98
+                                     },
+                                 }, {
                                      name: 'TEMPLATE',
                                      properties: {
                                          control: 'combo',
@@ -546,6 +558,8 @@
                                          data: templateData,
                                          keyField: 'ID',
                                          valueField: 'Name',
+                                         filter: true,
+                                         className: 'large',
                                          order: 99
                                      }
                                  }];

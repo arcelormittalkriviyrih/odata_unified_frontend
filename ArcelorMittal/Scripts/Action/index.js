@@ -96,10 +96,13 @@
                     case 'combo':
 
 
-                        controlsControlGroup.addClass('large').append(dropBoxTmpl.format('selectedComboTextValue', 'selectedComboDataValue', 'oDataFormCombo'));
+                        controlsControlGroup.append(dropBoxTmpl.format('selectedComboTextValue', 'selectedComboDataValue', 'oDataFormCombo'));
 
-                        var selectedComboTextValue = $('#selectedComboTextValue');
-                        var selectedComboDataValue = $('#selectedComboDataValue');
+                        if (properties.className) //large
+                            controlsControlGroup.addClass(properties.className);
+
+                        var selectedComboTextValue = controlsControlGroup.find('#selectedComboTextValue');
+                        var selectedComboDataValue = controlsControlGroup.find('#selectedComboDataValue');
 
                         var ul = controlsControlGroup.find('#oDataFormCombo');
 
@@ -139,51 +142,54 @@
                                                     })
                                                     .appendTo(li);
                         });
+                        var filterField = controlsControlGroup.find('#filter');
 
-                        controlsControlGroup.find('#filter').keyup(function () {
+                        if (!properties.filter)
+                            filterField.hide();
+                        else {
+                            filterField.keyup(function () {
 
-                            var comboList = ul.find('li a');
-                            var val = $(this).val().toLowerCase();                                
-                            
-                            if (val.length > 0) {
+                                var comboList = ul.find('li a');
+                                var val = $(this).val().toLowerCase();
 
-                                var notEqual = 0;//hack for ie9
-                                var itemLength = comboList.length;//hack for ie9
+                                if (val.length > 0) {
 
-                                comboList.each(function (i, item) {
+                                    var notEqual = 0;//hack for ie9
+                                    var itemLength = comboList.length;//hack for ie9
 
-                                    $(item).parent().show();
-                                });
+                                    comboList.each(function (i, item) {
 
-                                comboList.each(function (i, item) {
+                                        $(item).parent().show();
+                                    });
 
-                                    if ($(item).text().toLowerCase().indexOf(val) == -1) {
+                                    comboList.each(function (i, item) {
 
-                                        notEqual++;//hack for ie9
-                                        $(item).parent().hide();
-                                    }
+                                        if ($(item).text().toLowerCase().indexOf(val) == -1) {
 
-                                });
+                                            notEqual++;//hack for ie9
+                                            $(item).parent().hide();
+                                        }
 
-                                if (notEqual == itemLength)//hack for ie9 
-                                    ul.addClass('zeroHeight'); //hack for ie9                              
-                                else//hack for ie9
+                                    });
+
+                                    if (notEqual == itemLength)//hack for ie9 
+                                        ul.addClass('zeroHeight'); //hack for ie9                              
+                                    else//hack for ie9
+                                        ul.removeClass('zeroHeight');//hack for ie9
+
+                                } else {
+
+                                    comboList.each(function (i, item) {
+
+                                        $(item).parent().show();
+                                    });
+
+
                                     ul.removeClass('zeroHeight');//hack for ie9
+                                }
 
-                            } else {
-
-                                comboList.each(function (i, item) {
-
-                                    $(item).parent().show();
-                                });
-
-
-                                ul.removeClass('zeroHeight');//hack for ie9
-                            }
-                            
-                        })
-
-                        
+                            })
+                        }                                               
 
                         field.input = selectedComboDataValue;
 
@@ -202,8 +208,7 @@
 
                         })
                 }
-                                       
-                    
+                                                           
                 //fill field if there is data for this field (in edit and copy mode)
                 
                 if (formType != 'create') {
@@ -218,8 +223,15 @@
                         if (defaultValue)
                             field.input.siblings('.dropdown-input').val(defaultValue.Name);
                     }
-
+                   
                     field.input.val(field.properties.defaultValue);
+                }
+
+                //set default value for combo in create form mode if available
+                if (formType == 'create' && field.input.attr('data-parent') == 'dropDown' && properties.defaultValue) {
+
+                    field.input.val(properties.defaultValue);
+                    field.input.siblings('.dropdown-input').val(properties.defaultValue);
                 }
                     
                 

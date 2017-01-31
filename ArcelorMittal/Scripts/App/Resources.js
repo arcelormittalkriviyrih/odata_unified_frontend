@@ -90,6 +90,7 @@
                     MATERIAL_NO: 'Material No',
                     BRIGADE_NO: 'Brigade',
                     PROD_DATE: 'Production date',
+					LABEL_PRINT_QTY: 'Number of printed labels',
                     additionalButtonCaptions: {
 
                         testPrint: 'Test print'
@@ -476,6 +477,7 @@
                     MATERIAL_NO: '№ материала',
                     BRIGADE_NO: 'Бригада',
                     PROD_DATE: 'Производственная дата',
+					LABEL_PRINT_QTY: 'Кол-во печатаемых бирок',
                     additionalButtonCaptions: {
 
                         testPrint: 'Тестовая печать'
@@ -860,6 +862,7 @@
                     MATERIAL_NO: '№ материала',
                     BRIGADE_NO: 'Бригада',
                     PROD_DATE: 'Виробнича дата',
+					LABEL_PRINT_QTY: 'К-сть друкуємих бирок',
                     additionalButtonCaptions: {
 
                         testPrint: 'Тестовий друк'
