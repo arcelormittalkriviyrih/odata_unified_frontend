@@ -1059,7 +1059,32 @@
                 translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO'),
                 order: 18
             },
-        }, {
+        },
+
+        {
+            name: 'LABEL_PRINT_QTY',
+            properties: {
+                control: 'combo',
+                required: true,
+                show: true,
+                disable: false,
+                send: true,
+                defaultValue: 1,
+                translate: $translate.instant('market.Order.CreateDialogue.LABEL_PRINT_QTY'),
+                data: [{
+                    'ID': 1,
+                    'Name': 1
+                }, {
+                    'ID': 2,
+                    'Name': 2
+                }],
+                keyField: 'ID',
+                valueField: 'Name',
+                filter: false,
+                order: 99
+            }
+        },
+        {
             name: 'TEMPLATE',
             properties: {
                 control: 'combo',
@@ -1071,6 +1096,8 @@
                 data: templateData,
                 keyField: 'ID',
                 valueField: 'Name',
+                filter: true,
+                className: 'large',               
                 order: 99
             }
         }];
@@ -1088,7 +1115,7 @@
                     field.properties.defaultValue = data.Value;
                 else
                     field.properties.defaultValue = null;
-            }else
+            } else if (!field.properties.defaultValue)
                 field.properties.defaultValue = null;
             
         });
