@@ -1,7 +1,7 @@
 ﻿<div class="container loading" ng-show="$root.showLoadingState">
 
     <div class="loading-msg">
-        <h1>Loading ...</h1>
+        <h1>{{'loadingMsg' | translate}}</h1>
     </div>
 
 </div>
@@ -28,7 +28,7 @@
 
         <div ng-show="!showGrid" style="display: table; height:500px; width: 940px">
             <p style="display: table-cell;text-align: center;vertical-align: middle;">
-                Loading ...
+                {{'loadingMsg' | translate}}
             </p>
                 
         </div>

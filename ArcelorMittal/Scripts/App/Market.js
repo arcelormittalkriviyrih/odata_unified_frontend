@@ -158,6 +158,13 @@
             oDataAPI.push(indexService.getInfo('v_OrderPropertiesAll?$filter=OperationsRequest eq ({0})'.format(id)))
         }
 
+        var controlList = [{
+            type: 'additional',
+            name: 'testPrint',
+            text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.testPrint'),
+            procedure: 'ins_MaterialLotForTestPrint'
+        }];
+
         $q.all(oDataAPI)
             .then(function (responce) {
 
@@ -170,7 +177,7 @@
                 if (id)
                     rowData = responce[1].data.value;
 
-                marketService.createForm(type, procedure, id, keyField, templateData, rowData);
+                marketService.createForm(type, procedure, id, keyField, templateData, rowData, false, controlList);
 
             });
     }
@@ -642,6 +649,25 @@
 
         $scope.loadingModalData = true;
         $scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
+        var controlList = [
+            {
+                type: 'additional',
+                name: 'preview',
+                text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.preview'),
+                procedure: 'ins_MaterialLotForPreview',
+                procedureParams: {
+                    additionalProcedureParams: {
+                        prop: 'MaterialLotID',
+                        value: 1
+                    }
+                }
+            },
+            {
+                type: 'additional',
+                name: 'testPrint',
+                text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.testPrint'),
+                procedure: 'ins_MaterialLotForTestPrint'
+        }];
 
         indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")
             .then(function (responce) {
@@ -655,7 +681,7 @@
                         Value: id.toString()
                 }];
 
-                marketService.createForm(type, procedure, id, keyField, templateData, rowData, true);
+                marketService.createForm(type, procedure, id, keyField, templateData, rowData, true, controlList);
 
         });
     };
@@ -749,14 +775,14 @@
 
 .service('marketService', ['$translate', 'sapUrl', function ($translate, sapUrl) {
 
-    this.createForm = function (type, procedure, id, keyField, templateData, rowData, hideSubmit) {
+    this.createForm = function (type, procedure, id, keyField, templateData, rowData, hideSubmit, controlList) {
 
-        var controlList = [{
+        /*var controlList = [{
             type: 'additional',
             name: 'testPrint',
             text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.testPrint'),
             procedure: 'ins_MaterialLotForTestPrint'
-        }];
+        }];*/
 
         if (hideSubmit) {
 
@@ -1065,7 +1091,7 @@
             name: 'LABEL_PRINT_QTY',
             properties: {
                 control: 'combo',
-                required: true,
+                required: false,
                 show: true,
                 disable: false,
                 send: true,
@@ -1132,7 +1158,9 @@
             },
             translates: {
 
+                loadingMsg: $translate.instant('loadingMsg'),
                 errorConnection: $translate.instant('errorConnection'),
+                notAcceptable: $translate.instant('market.modal.notAcceptable'),
                 fillRequired: $translate.instant('marker.errorMessages.fillRequired')
             },
             fields: fields,

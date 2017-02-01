@@ -291,17 +291,31 @@ function getLastChild(obj, parents, child) {
 //method for handling AJAX errors
 function handleError(err, localization) {
 
+    var msg;
+
     if (err.responseText) {
         err = JSON.parse(err.responseText);
-        var msg = getLastChild(err, ['error', 'innererror', 'internalexception'], 'message');
+        msg = getLastChild(err, ['error', 'innererror', 'internalexception'], 'message');
         alert(msg);
     }
     else {
-        if (localization && localization.errorConnection)
-            alert(localization.errorConnection);
-         else
-            alert('unknown http error');
-    }
+
+
+
+        if (err.status == 406) {
+
+            if (localization && localization.notAcceptable)
+                msg = localization.notAcceptable;
+        } else {
+
+            if (localization && localization.errorConnection)
+                msg = localization.errorConnection;
+            else
+                msg = 'unknown http error';
+        }
+
+        alert(msg);
+    }  
     
 }
 

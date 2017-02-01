@@ -433,6 +433,14 @@ button.add{
     max-width: 800px;
 }
 
+.modal.fullImage.modalPreview{
+    width: 780px;
+}
+
+.modal.fullImage.modalPreview .tableContainer{
+    height: 400px;
+}
+
 .modal.fullImage .btn-circle{
     position: absolute;
     top: 0;

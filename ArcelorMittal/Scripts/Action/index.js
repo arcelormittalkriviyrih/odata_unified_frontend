@@ -347,6 +347,37 @@
                                                                .text(control.text)
                                                                .click(function () {
 
+                                                                   if (control.name == 'preview') {
+
+                                                                       var blackWrapper = $('<div />').attr({ 'id': 'fullImageModalPreview' })
+                                                                                                   .addClass('black-wrapper')
+                                                                                                   .appendTo('body').hide(),
+
+                                                                       controlsRootModal = $('<div />').addClass('modal fullImage modalPreview')
+                                                                                                .appendTo(blackWrapper),
+
+                                                                       fullImageZone = $('<div />').addClass('scaleZone')
+                                                                                                .appendTo(controlsRootModal),
+
+                                                                       loadingContainer = $('<div />').addClass('tableContainer')
+                                                                           .appendTo(fullImageZone),
+
+                                                                       loadingMsg = $('<span />').addClass('loading-msg')
+                                                                           .text(translates.loadingMsg || 'loading...').appendTo(loadingContainer),
+
+                                                                       fullImage = $('<img />').appendTo(fullImageZone),
+
+                                                                       cancelBtn = $('<button />')
+                                                                                                .addClass('btn btn-circle')
+                                                                                                .append('<span class="glyphicon glyphicon-remove"></span>')
+                                                                                                .appendTo(controlsRootModal)
+                                                                                                .click(function () {
+
+                                                                                                    fullImage.removeAttr('src');
+                                                                                                    blackWrapper.hide();
+                                                                                                })
+                                                                   };
+
                                                                    if (!vmCheckRequiredFields($form)) {
 
                                                                        alert(translates.fillRequired);
@@ -355,8 +386,44 @@
 
                                                                    self.trigger('oDataForm.procedureProcessing');
 
-                                                                   vmCallAction(control.procedure)
+                                                                   var arguments = [control.procedure];
+
+                                                                   if (control.procedureParams) {
+
+                                                                       if (control.procedureParams.additionalProcedureParams) {
+                                                                           arguments.push(control.procedureParams.additionalProcedureParams);
+                                                                       }
+                                                                   } 
+
+                                                                   vmCallAction.apply(this, arguments)
                                                                         .done(function (result) {
+
+                                                                            if (control.name == 'preview') {
+                                                                                blackWrapper.show();
+                                                                                loadingContainer.show();
+
+                                                                                var materialLotID = result.ActionParameters.find(function(item){
+                                                                                    return item.Name == "MaterialLotID"
+                                                                                });
+                                                                                var src = domainURL + '/api/MediaData/GenerateExcelPreview?materialLotID=' + materialLotID.Value;
+                                                                                fullImage.attr('src', src).hide();
+
+                                                                                $.get(src).then(function () {
+
+                                                                                    loadingContainer.hide();
+                                                                                    fullImage.show();
+
+                                                                                }).fail(function (err) {
+
+                                                                                    blackWrapper.hide();
+                                                                                    //self.trigger('oDataForm.procedureFailed');
+                                                                                    handleError(err, options.translates);
+
+                                                                                });
+
+                                                                                
+                                                                            }
+                                                                            
 
                                                                             self.trigger('oDataForm.procedureProcessed');
                                                                         }).fail(function(err){
@@ -425,7 +492,7 @@
             })
         }
 
-        function vmCallAction(procedure) {
+        function vmCallAction(procedure, additionalParam) {
             
             var url = serviceUrl;
 
@@ -446,6 +513,9 @@
                 if (data[prop] == '')
                     data[prop] = null;
             }
+
+            if (additionalParam)
+                data[additionalParam.prop] = additionalParam.value;
 
              //call service action
             return $.ajax({
