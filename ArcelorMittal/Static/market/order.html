@@ -1,7 +1,7 @@
 ﻿<div class="container loading" ng-show="$root.showLoadingState">
 
     <div class="loading-msg">
-        <h1>Loading ...</h1>
+        <h1>{{'loadingMsg' | translate}}</h1>
     </div>
 
 </div>
@@ -46,7 +46,7 @@
             <div class="formWrapper">
 
                 <div class="loading" ng-show="loadingModalData || processingTestPrint || processingOuterDataReceipt">
-                    loading...
+                    {{'loadingMsg' | translate}}
                 </div>
                 <form id="orderForm" novalidate ng-show="!loadingModalData"></form>
             </div>
