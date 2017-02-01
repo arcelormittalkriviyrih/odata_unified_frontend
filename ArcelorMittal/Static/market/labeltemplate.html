@@ -230,7 +230,7 @@
         <div class="formWrapper">
 
             <div class="loading" ng-show="loadingModalData || processingTestPrint">
-                loading...
+                {{'loadingMsg' | translate}}
             </div>
             <form id="orderForm" novalidate ng-show="!loadingModalData"></form>
         </div>

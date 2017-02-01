@@ -383,6 +383,7 @@ div.modal.treeControls select{
     display: table-cell;
     text-align: center;
     vertical-align: middle;
+	font-size: 30px;
 }
 
 /*market page*/

@@ -5,7 +5,8 @@
         <input type="text"
                id="chart-date-start"
                class="form-control"
-               ng-model="dateStart" />
+               ng-model="dateStart"
+               ng-disabled="chartDataLoaded" />
     </div>
     &ndash;
     <div class="date-control-wrapper">
@@ -13,11 +14,13 @@
         <input type="text"
                id="chart-date-end"
                class="form-control"
-               ng-model="dateEnd" />
+               ng-model="dateEnd"
+               ng-disabled="chartDataLoaded" />
     </div>
 
     <button class="btn btn-default"
-            ng-click="getChartData(dateStart, dateEnd)">
+            ng-click="getChartData(dateStart, dateEnd)"
+            ng-disabled="chartDataLoaded">
         {{ 'marker.getChartDataBtn' | translate }}
     </button>
 
@@ -25,12 +28,14 @@
 
 <div class="row">
 
-    
+    <div class="chart-container" style="display: table; width: 100%;" ng-show="chartDataLoaded">
+        <span class="loading-msg">{{'loadingMsg' | translate}}</span>
+    </div>
 
     <div id="chart" class="chart-container">
         <div class="state-data-inside loading"
-             ng-show="chartDataLoaded">
-            <span class="loading-msg">loading...</span>
+             ng-show="!chartDataLoaded">
+            
         </div>     
     </div>
 
