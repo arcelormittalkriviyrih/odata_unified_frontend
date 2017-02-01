@@ -421,7 +421,7 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
     $scope.disable = false;
     $scope.back = params.back;
 
-    if (typeof responseText == 'object')
+    if (responseText && typeof responseText == 'object')
         responseText = responseText.error.innererror.message;
 
     $scope.errorCode = error.status + ' ' + error.statusText + '\n' + responseText;

@@ -93,7 +93,8 @@
 					LABEL_PRINT_QTY: 'Number of printed labels',
                     additionalButtonCaptions: {
 
-                        testPrint: 'Test print'
+                        testPrint: 'Test print',
+                        preview: 'Preview'
                     }
                 }
             },
@@ -118,6 +119,9 @@
                     upload: 'Upload',
                     update: 'Update'
                 }
+            },
+            modal: {
+                notAcceptable: 'Cannot load preview for this template!',
             }
 
         },
@@ -480,7 +484,8 @@
 					LABEL_PRINT_QTY: 'Кол-во печатаемых бирок',
                     additionalButtonCaptions: {
 
-                        testPrint: 'Тестовая печать'
+                        testPrint: 'Тестовая печать',
+                        preview: 'Превью'
                     }
                 }
             },
@@ -505,6 +510,9 @@
                     upload: 'Загрузить',
                     update: 'Обновить'
                 }
+            },
+            modal: {
+                notAcceptable: 'Невозможно загрузить превью для этого шаблона!',
             }
         },
         pa: {
@@ -865,7 +873,8 @@
 					LABEL_PRINT_QTY: 'К-сть друкуємих бирок',
                     additionalButtonCaptions: {
 
-                        testPrint: 'Тестовий друк'
+                        testPrint: 'Тестовий друк',
+                        preview: 'Прев\'ю'
                     }
                 }
             },
@@ -889,6 +898,9 @@
                     upload: 'Завантажити',
                     update: 'Оновити'
                 }
+            },
+            modal: {
+                notAcceptable: 'Неможливо завантажити прев\'ю для цього шаблона!',
             }
         },
         pa: {
