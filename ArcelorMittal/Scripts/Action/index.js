@@ -365,7 +365,7 @@
                                                                        loadingMsg = $('<span />').addClass('loading-msg')
                                                                            .text(translates.loadingMsg || 'loading...').appendTo(loadingContainer),
 
-                                                                       fullImage = $('<img />').appendTo(fullImageZone),
+                                                                       fullImage = $('<img />').appendTo(fullImageZone).hide(),
 
                                                                        cancelBtn = $('<button />')
                                                                                                 .addClass('btn btn-circle')
@@ -373,7 +373,7 @@
                                                                                                 .appendTo(controlsRootModal)
                                                                                                 .click(function () {
 
-                                                                                                    fullImage.removeAttr('src');
+                                                                                                    //fullImage.removeAttr('src');
                                                                                                     blackWrapper.hide();
                                                                                                 })
                                                                    };
@@ -406,22 +406,18 @@
                                                                                     return item.Name == "MaterialLotID"
                                                                                 });
                                                                                 var src = domainURL + '/api/MediaData/GenerateExcelPreview?materialLotID=' + materialLotID.Value;
-                                                                                fullImage.attr('src', src).hide();
 
-                                                                                $.get(src).then(function () {
+                                                                                fullImage.attr('src', src)
+                                                                                         .on('load', function () {
 
-                                                                                    loadingContainer.hide();
-                                                                                    fullImage.show();
+                                                                                             loadingContainer.hide();
+                                                                                             fullImage.show();
+                                                                                         }).on('error', function () {
 
-                                                                                }).fail(function (err) {
-
-                                                                                    blackWrapper.hide();
-                                                                                    //self.trigger('oDataForm.procedureFailed');
-                                                                                    handleError(err, options.translates);
-
-                                                                                });
-
-                                                                                
+                                                                                             loadingContainer.show();
+                                                                                             loadingMsg.text(options.translates.notAcceptable);
+                                                                                             
+                                                                                         });                                                                                                                                                                
                                                                             }
                                                                             
 
