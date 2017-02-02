@@ -393,6 +393,10 @@
                                                                        if (control.procedureParams.additionalProcedureParams) {
                                                                            arguments.push(control.procedureParams.additionalProcedureParams);
                                                                        }
+																	   
+																	   if (control.procedureParams.escapedProcedureParam) {
+                                                                           arguments.push(control.procedureParams.escapedProcedureParam);
+                                                                       }
                                                                    } 
 
                                                                    vmCallAction.apply(this, arguments)
@@ -488,7 +492,7 @@
             })
         }
 
-        function vmCallAction(procedure, additionalParam) {
+        function vmCallAction(procedure, additionalParam, escapedParam) {
             
             var url = serviceUrl;
 
@@ -513,11 +517,16 @@
             if (additionalParam)
                 data[additionalParam.prop] = additionalParam.value;
 
+            if (escapedParam) {
+                var newData = jQuery.extend({}, data);
+                delete newData[escapedParam];
+            }
+                
              //call service action
             return $.ajax({
                 url: url + procedure,
                 type: 'POST',
-                data: JSON.stringify(data),
+                data: newData ? JSON.stringify(newData) : JSON.stringify(data),
                 contentType: "application/json",
                 timeout: 15000
             })

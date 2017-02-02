@@ -777,13 +777,6 @@
 
     this.createForm = function (type, procedure, id, keyField, templateData, rowData, hideSubmit, controlList) {
 
-        /*var controlList = [{
-            type: 'additional',
-            name: 'testPrint',
-            text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.testPrint'),
-            procedure: 'ins_MaterialLotForTestPrint'
-        }];*/
-
         if (hideSubmit) {
 
             controlList.push({
