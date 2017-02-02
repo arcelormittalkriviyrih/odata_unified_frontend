@@ -1270,6 +1270,20 @@
  
                                  });
 
+                                 var controlList = [{
+                                     type: 'additional',
+                                     name: 'preview',
+                                     text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.preview'),
+                                     procedure: 'ins_MaterialLotForPreview',
+                                     procedureParams: {
+                                         additionalProcedureParams: {
+                                             prop: 'MaterialLotID',
+                                             value: 1
+                                         },
+                                         escapedProcedureParam: 'EquipmentID'
+                                     }
+                                 }];
+
                                  vmCreateForm($('#orderForm'),
                                               'edit',
                                               procedure,
@@ -1278,7 +1292,7 @@
                                                {
                                                    OK: 'OK',
                                                    Cancel: $translate.instant('buttonCancel')
-                                               });
+                                               }, controlList);
                              } else {
 
                                  vmShowLastCommOrderValue();
@@ -1465,7 +1479,7 @@
                     });
     };
 
-    function vmCreateForm(container, type, procedure, fields, keyField, captions) {
+    function vmCreateForm(container, type, procedure, fields, keyField, captions, controlList) {
 
         vmToggleModal(true);
 
@@ -1482,9 +1496,11 @@
             translates: {
 
                 errorConnection: $translate.instant('errorConnection'),
-                fillRequired: $translate.instant('marker.errorMessages.fillRequired')
+                fillRequired: $translate.instant('marker.errorMessages.fillRequired'),
+                notAcceptable: $translate.instant('market.modal.notAcceptable'),
             },
-            fields: fields
+            fields: fields,
+            controlList: controlList,
         });
 
     };
