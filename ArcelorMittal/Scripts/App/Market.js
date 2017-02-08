@@ -160,6 +160,17 @@
 
         var controlList = [{
             type: 'additional',
+            name: 'preview',
+            text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.preview'),
+            procedure: 'ins_MaterialLotForPreview',
+            procedureParams: {
+                additionalProcedureParams: {
+                    prop: 'MaterialLotID',
+                    value: 1
+                }
+            }
+        },{
+            type: 'additional',
             name: 'testPrint',
             text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.testPrint'),
             procedure: 'ins_MaterialLotForTestPrint'
