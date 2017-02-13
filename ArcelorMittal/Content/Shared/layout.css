@@ -982,6 +982,10 @@ div.controlTask.profile .dropdown-toggle .dropdown-input{
     margin: 10px 0 0 20px;
 }
 
+.modal.additional.largeHeight{
+    top: 1%;
+}
+
 .enterLabelWrapper select.input-small{
     margin:0;
 }

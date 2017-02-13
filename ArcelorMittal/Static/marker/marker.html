@@ -546,6 +546,13 @@
                     ng-disabled="!standard">
                 {{ 'marker.changeOrderButton' | translate }}
             </button>
+
+            <button type="button"
+                    class="btn btn-default specialLabelMode"
+                    ng-click="showToggleModalReversal()"
+                    ng-disabled="!standard">
+                {{ 'marker.reversalButton' | translate }}
+            </button>
         </div>
 
 
@@ -747,7 +754,7 @@
 </div>
 
 <div class="black-wrapper" ng-show="toggleModalOrderChange">
-    <div class="modal additional">
+    <div class="modal additional largeHeight">
 
         <h4>{{ 'marker.modalCaptions.OrderChangeMode' | translate }}</h4>
 
@@ -784,6 +791,49 @@
 
     </div>
 </div>
+
+
+
+
+
+
+
+<div class="black-wrapper" ng-show="toggleReversal">
+    <div class="modal additional">
+
+        <h4>{{ 'marker.modalCaptions.Reversal' | translate }}</h4>
+
+        <div class="formWrapper" style="margin: 10px 0 0 13px;">
+
+            <p>{{'marker.grid.reversed' | translate}}:</p>
+
+            <div id="reverseGrid">
+
+            </div>
+        </div>
+
+        <div class="control-row">
+            <button type="button"
+                    class="btn btn-default"
+                    ng-click="acceptOrderReversal()">
+                OK
+            </button>
+            <button type="button"
+                    class="btn btn-default"
+                    ng-click="cancelReversal()">
+                {{ 'marker.buttonExit' | translate }}
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
 
 <div style="position:fixed; top:0; left:0; width: 100%; height: 100%; z-index:2000;"
      class="container loading"

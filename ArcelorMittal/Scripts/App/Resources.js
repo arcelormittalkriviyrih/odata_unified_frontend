@@ -234,6 +234,7 @@
             separateButton: 'Split pack',
             handModeButton: 'Manual input',
             changeOrderButton: 'Change order',
+			reversalButton: 'Reversal',
             statisticsButton: 'Statistics',
             errorMessages: {
 
@@ -268,7 +269,8 @@
                 HandMode: 'Manual Mode',
                 enterQuantity: 'Enter weight',
                 getHandModeCredentials: 'Run',
-                OrderChangeMode: 'Change order',
+                OrderChangeMode: 'Change order',				
+                Reversal: 'Reversal',
                 enterNewOrder: 'Enter new order no'
             },
             grid: {
@@ -279,7 +281,8 @@
                 BUNT_NO: 'Bunt No',
                 CreateTime: 'Date',
                 Quantity: 'Quantity',
-                selected: 'Select records needed to change'
+                selected: 'Select records needed to change',
+                reversed: 'Select records needed to reverse'
             },
             monitorCaptions: {
 
@@ -622,6 +625,7 @@
             separateButton: 'Разделение пачки',
             handModeButton: 'Ручной ввод',
             changeOrderButton: 'Изменить заказ',
+			reversalButton: 'Сторнирование',
             statisticsButton: 'Статистика',
             errorMessages: {
 
@@ -657,6 +661,7 @@
                 enterQuantity: 'Введите вес',
                 getHandModeCredentials: 'Run',
                 OrderChangeMode: 'Изменить заказ',
+				Reversal: 'Сторнирование',
                 enterNewOrder: 'Введите новый номер заказа'
             },
             grid: {
@@ -667,7 +672,8 @@
                 BUNT_NO: '№ бунта',
                 CreateTime: 'Дата',
                 Quantity: 'Вес',
-                selected: 'Отметьте записи, которые нужно изменить'
+                selected: 'Отметьте записи, которые нужно изменить',
+				reversed: 'Отметьте записи, которые нужно сторнировать'
             },
             monitorCaptions: {
 
@@ -1010,6 +1016,7 @@
             separateButton: 'Розділення пачки',
             handModeButton: 'Ручне введення',
             changeOrderButton: 'Змінити замовл.',
+			reversalButton: 'Сторнування',
             statisticsButton: 'Статистика',
             errorMessages: {
 
@@ -1045,6 +1052,7 @@
                 enterQuantity: 'Введіть вагу',
                 getHandModeCredentials: 'Run',
                 OrderChangeMode: 'Змінити замовлення',
+				Reversal: 'Сторнування',
                 enterNewOrder: 'Введіть новий номер замовлення'
             },
             grid: {
@@ -1055,7 +1063,8 @@
                 BUNT_NO: '№ бунта',
                 CreateTime: 'Дата',
                 Quantity: 'Вага',
-                selected: 'Відмітьте записи, котрі необхідно змінити'
+                selected: 'Відмітьте записи, котрі необхідно змінити',
+				reversed: 'Відмітьте записи, котрі необхідно сторнувати'
             },
             monitorCaptions: {
 
