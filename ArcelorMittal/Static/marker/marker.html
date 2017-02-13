@@ -590,6 +590,19 @@
 
 </div>
 
+<div class="scaleDetailInfo" ng-show="markerErrors.length > 0 && currentScaleID" style="margin-top: 2px; padding: 1px 0 1px">
+
+    <h4 class="labelTask">{{'marker.markerErrorCaption' | translate}}</h4>
+
+    <div class="markerErrors blink red" style="padding-left: 12px">
+        <p ng-repeat="error in markerErrors">
+            {{error.ErrorMessage}}
+        </p>
+    </div>
+</div>
+
+
+
 <div class="black-wrapper" ng-show="isShowModal">
     <div class="modal additional">
 

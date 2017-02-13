@@ -216,7 +216,7 @@
             chartEndDate: 'End Date',
             getChartDataBtn: 'Get',
             chartNoData: 'There are no data for this period! select another period!',
-
+			markerErrorCaption: 'Errors',
 
             CreateDialogue: {
                 CHANGE_NO: 'Change',
@@ -608,6 +608,7 @@
             chartEndDate: 'Дата до',
             getChartDataBtn: 'Получить',
             chartNoData: 'Нет данных за этот период! Выберите другой период',
+			markerErrorCaption: 'Ошибки',
 
             CreateDialogue: {
                 CHANGE_NO: 'Смена',
@@ -999,6 +1000,7 @@
             chartEndDate: 'Дата до',
             getChartDataBtn: 'Отримати',
             chartNoData: 'Немає даних за цей період! Виберіть інший період',
+			markerErrorCaption: 'Помилки',
 
             CreateDialogue: {
                 FactoryNumber: 'Номер бірки',
