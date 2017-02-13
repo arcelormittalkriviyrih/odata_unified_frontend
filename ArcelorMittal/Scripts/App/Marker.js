@@ -16,6 +16,8 @@
 
                 $interval.cancel($rootScope.intervalScales);
                 $interval.cancel($rootScope.intervalWorkRequest);
+                $interval.cancel($rootScope.intervalErrors);
+                $interval.cancel($rootScope.blinkingInterval);
             }
         })
 
@@ -656,10 +658,14 @@
             }
 
             vmGetCurrentScalesShortInfo();
+            vmGetMarkerErrors();
 
             //remove old interval
             if ($rootScope.intervalScales)
                 $interval.cancel($rootScope.intervalScales);
+
+            if ($rootScope.intervalErrors)
+                $interval.cancel($rootScope.intervalErrors);
 
             //create interval for autorefresh scales
             //this interval must be clear on activity exit
@@ -672,6 +678,15 @@
                 if ($scope.currentScaleID)
                     vmShowScaleInfo($scope.currentScaleID);
             }, scalesRefresh);
+
+            $rootScope.intervalErrors = $interval(function () {
+
+                vmGetMarkerErrors();
+            }, errorsRefresh);
+
+            $rootScope.blinkingInterval = $interval(function () {
+                vmSetBlinking('color', 'rgb(255, 0, 0)');
+            }, 1000);
         })
     }
 
@@ -727,13 +742,20 @@
 
                                        if (!scale.ALARM)
                                            vmRedrawArrow(scale);
-                                   };
+                                   };                              
 
                                };
                            });
 
                        });
         
+    };
+
+    function vmGetMarkerErrors() {
+        indexService.getInfo('v_MarkerErrors').then(function (response) {
+            $scope.markerErrors = response.data.value;
+                
+        });
     };
 
     function vmRedrawScale(scale) {
@@ -1749,7 +1771,8 @@
 
             $scope[label] = $translate.instant('loadingMsg');
 
-            $scope.isLoading = true;
+            $scope.isLoading = true;            
+
             indexService.sendInfo(url, {
 
                 EquipmentID: parseInt($scope.currentScaleID) || null
@@ -2244,7 +2267,7 @@
                if (($scope.scalesLeftSideInfo && $scope.scalesLeftSideInfo.POCKET_LOC == true && $scope.scalesLeftSideInfo.WEIGHT_STAB == false) ||
                    ($scope.scalesRightSideInfo && $scope.scalesRightSideInfo.POCKET_LOC == true && $scope.scalesRightSideInfo.WEIGHT_STAB == false)) {
 
-                   vmSetBlinking();
+                   vmSetBlinking('backgroundColor');
                } else {
 
                    vmClearStyle($('.monitorSideItem'));

@@ -1034,6 +1034,12 @@ div.controlTask.profile .dropdown-toggle .dropdown-input{
     bottom:10px;
 }
 
+/*marker errors*/
+.markerErrors{    
+    font-size: 16px;
+	color: rgb(255, 0, 0);
+}
+
 /*monitor*/
 
 .markerView{
