@@ -1996,12 +1996,17 @@
 
                 PROD_ORDER: $scope.NewOrderNumber,
                 MaterialLotIDs: $scope.MaterialLotIDs
-            }).then(function () {
-
-                $scope.isLoading = false;
-
-                $scope.NewOrderNumber = null;
+            }).then(function () {                
+                
                 $('#changeOrderGrid').jsGrid('loadData', {});
+
+                $('#changeOrderGrid').on('oDataGrid.dataLoadedSuccessfull', function () {
+
+                    $scope.NewOrderNumber = null;
+                    $scope.isLoading = false;
+
+                    $scope.$apply();
+                });
             });
         }
     }
@@ -2048,9 +2053,14 @@
                 MaterialLotIDs: $scope.MaterialLotIDs
             }).then(function () {
 
-                $scope.isLoading = false;
-
                 $('#reverseGrid').jsGrid('loadData', {});
+
+                $('#reverseGrid').on('oDataGrid.dataLoadedSuccessfull', function () {
+
+                    $scope.isLoading = false;
+
+                    $scope.$apply();
+                });
             });
         }
     }
