@@ -170,7 +170,7 @@
 
 }])
 
-.controller('markerIndexCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $http) {
+.controller('markerIndexCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$timeout', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $timeout, $http) {
 
     //properties
     $scope.filter = [];
@@ -677,6 +677,7 @@
 
                 if ($scope.currentScaleID)
                     vmShowScaleInfo($scope.currentScaleID);
+               
             }, scalesRefresh);
 
             $rootScope.intervalErrors = $interval(function () {
@@ -842,6 +843,10 @@
                 if (item.ID == id)
                     return item;
             });
+
+            //this variable created for watching change CMD_TAKE_WEIGHT parameter from controller
+            //true/false meaning of this parameter influences on caption of 'take weight' button
+            $scope.cmdTakeWeight = $scope.scalesDetailsInfo.CMD_TAKE_WEIGHT;
                                             
             vmCalculateRods();
             
@@ -1768,15 +1773,38 @@
 
             alert($translate.instant('marker.errorMessages.acceptOrder'))
         } else {
+           
+            $scope.isLoading = true;
 
-            $scope[label] = $translate.instant('loadingMsg');
+            if (label == 'takeWeightLabel') {
 
-            $scope.isLoading = true;            
+                $scope[label] = $translate.instant('marker.takeWeightButtonProcessing');               
+                
+            } else {
+                $scope[label] = $translate.instant('loadingMsg');
+            }
 
             indexService.sendInfo(url, {
 
                 EquipmentID: parseInt($scope.currentScaleID) || null
             }).then(function (response) {
+
+                if (label == 'takeWeightLabel') {
+                    var cmdTakeWeightWatcher = $scope.$watch('cmdTakeWeight', function () {
+
+                            if (!$scope.cmdTakeWeight) {
+                                $scope[label] = $translate.instant('marker.takeWeightButtonProcessing');
+
+                            } else {
+
+                                $scope[label] = $translate.instant('marker.takeWeightButton');
+                                $timeout(function () {
+                                    cmdTakeWeightWatcher();
+                                }, 0);
+                            }                            
+                        
+                    });
+                }                
 
                 $scope[label] = $translate.instant(text);
                 $scope.isLoading = false;

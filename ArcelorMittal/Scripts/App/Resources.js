@@ -211,7 +211,7 @@
             chartEndDate: 'End Date',
             getChartDataBtn: 'Get',
             chartNoData: 'There are no data for this period! select another period!',
-			markerErrorCaption: 'Errors',
+			markerErrorCaption: 'Errors:',
 
             CreateDialogue: {
                 CHANGE_NO: 'Change',
@@ -220,6 +220,7 @@
             },
             acceptOrderTask: 'Accept task',
             takeWeightButton: 'Take weight',
+			takeWeightButtonProcessing: 'Taking...',
             takeTaraButton: 'Take tara',
             testPrintButton: 'Test print',
             buttonExit: 'Exit',
@@ -598,7 +599,7 @@
             chartEndDate: 'Дата до',
             getChartDataBtn: 'Получить',
             chartNoData: 'Нет данных за этот период! Выберите другой период',
-			markerErrorCaption: 'Ошибки',
+			markerErrorCaption: 'Ошибки:',
 
             CreateDialogue: {
                 CHANGE_NO: 'Смена',
@@ -607,6 +608,7 @@
             },
             acceptOrderTask: 'Подтвердить задание',
             takeWeightButton: 'Взять вес',
+			takeWeightButtonProcessing: 'Взятие...',
             takeTaraButton: 'Взять тару',
             testPrintButton: 'Тест печать',
             buttonExit: 'Выход',
@@ -985,7 +987,7 @@
             chartEndDate: 'Дата до',
             getChartDataBtn: 'Отримати',
             chartNoData: 'Немає даних за цей період! Виберіть інший період',
-			markerErrorCaption: 'Помилки',
+			markerErrorCaption: 'Помилки:',
 
             CreateDialogue: {
                 FactoryNumber: 'Номер бірки',
@@ -994,6 +996,7 @@
             },
             acceptOrderTask: 'Підтвердити завдання',
             takeWeightButton: 'Взяти вагу',
+			takeWeightButtonProcessing: 'Взяття...',
             takeTaraButton: 'Взяти тару',
             testPrintButton: 'Тест друк',
             buttonExit: 'Вихід',
