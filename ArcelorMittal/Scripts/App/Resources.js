@@ -94,7 +94,8 @@
                     additionalButtonCaptions: {
 
                         testPrint: 'Test print',
-                        preview: 'Preview'
+                        preview: 'Preview',
+                        refresh: 'Refresh'
                     }
                 }
             },
@@ -489,7 +490,8 @@
                     additionalButtonCaptions: {
 
                         testPrint: 'Тестовая печать',
-                        preview: 'Превью'
+                        preview: 'Превью',
+                        refresh: 'Обновить'
                     }
                 }
             },
@@ -883,7 +885,8 @@
                     additionalButtonCaptions: {
 
                         testPrint: 'Тестовий друк',
-                        preview: 'Прев\'ю'
+                        preview: 'Прев\'ю',
+                        refresh: 'Оновити'
                     }
                 }
             },

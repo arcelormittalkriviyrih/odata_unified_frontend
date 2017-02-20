@@ -197,6 +197,8 @@
 
                 }
 
+                field.input.attr('name', field.name);
+
                 if (properties.required) {
 
                     field.input.attr('required', 'required') // for IE
@@ -376,13 +378,7 @@
                                                                                                     //fullImage.removeAttr('src');
                                                                                                     blackWrapper.hide();
                                                                                                 })
-                                                                   };
-
-                                                                   if (!vmCheckRequiredFields($form)) {
-
-                                                                       alert(translates.fillRequired);
-                                                                       return false;
-                                                                   }
+                                                                   };                                                                   
 
                                                                    self.trigger('oDataForm.procedureProcessing');
 
@@ -393,11 +389,19 @@
                                                                        if (control.procedureParams.additionalProcedureParams) {
                                                                            arguments.push(control.procedureParams.additionalProcedureParams);
                                                                        }
-																	   
-																	   if (control.procedureParams.escapedProcedureParam) {
+
+                                                                       if (control.procedureParams.escapedProcedureParam) {
+
                                                                            arguments.push(control.procedureParams.escapedProcedureParam);
                                                                        }
-                                                                   } 
+
+                                                                   }
+
+                                                                   if (!vmCheckRequiredFields($form)) {
+
+                                                                       alert(translates.fillRequired);
+                                                                       return false;
+                                                                   }
 
                                                                    vmCallAction.apply(this, arguments)
                                                                         .done(function (result) {
@@ -422,6 +426,10 @@
                                                                                              loadingMsg.text(options.translates.notAcceptable);
                                                                                              
                                                                                          });                                                                                                                                                                
+                                                                            }
+
+                                                                            if (control.procedureParams.callBack) {
+                                                                                control.procedureParams.callBack();
                                                                             }
                                                                             
 
@@ -519,7 +527,12 @@
 
             if (escapedParam) {
                 var newData = jQuery.extend({}, data);
-                delete newData[escapedParam];
+
+                escapedParam.forEach(function (item) {
+                    delete newData[item];
+                });
+
+                
             }
                 
              //call service action
