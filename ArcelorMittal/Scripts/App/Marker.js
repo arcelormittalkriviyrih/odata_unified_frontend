@@ -1292,20 +1292,35 @@
                                          field.properties.defaultValue = null;
                                  });
 
-                                 $scope.fields.push({
+                                 var isEquipmentID = $scope.fields.filter(function (item) {
 
-                                     name: 'EquipmentID',
-                                     properties: {
-                                         control: 'text',
-                                         required: false,
-                                         show: false,
-                                         disable: false,
-                                         send: true,
-                                         defaultValue: $scope.currentScaleID,
-                                         order: -1
-                                     }
- 
+                                     return item.name == 'EquipmentID';
                                  });
+
+                                 if (isEquipmentID.length > 0) {
+                                     $scope.fields.forEach(function (item) {
+                                         if (item.name == 'EquipmentID')
+                                             item.properties.defaultValue = $scope.currentScaleID;
+                                     })
+                                 } else {
+                                     $scope.fields.push({
+
+                                         name: 'EquipmentID',
+                                         properties: {
+                                             control: 'text',
+                                             required: false,
+                                             show: false,
+                                             disable: false,
+                                             send: true,
+                                             defaultValue: $scope.currentScaleID,
+                                             order: -1
+                                         }
+
+                                     });
+                                 }
+
+
+                                 
 
                                  var controlList = [{
                                      type: 'additional',
@@ -1313,11 +1328,49 @@
                                      text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.preview'),
                                      procedure: 'ins_MaterialLotForPreview',
                                      procedureParams: {
+
                                          additionalProcedureParams: {
                                              prop: 'MaterialLotID',
                                              value: 1
                                          },
-                                         escapedProcedureParam: 'EquipmentID'
+                                         escapedProcedureParam: ['EquipmentID']
+                                     }
+                                 }, {
+                                     type: 'additional',
+                                     name: 'refresh',
+                                     text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.refresh'),
+                                     procedure: 'upd_WorkDefinitionFromOrder',
+                                     procedureParams: {
+
+                                         additionalProcedureParams: {},                                         
+                                         escapedProcedureParam: ['BRIGADE_NO', 'BUNT_DIA', 'BUNT_NO', 'BUYER_ORDER_NO',
+                                         'CHANGE_NO', 'CHEM_ANALYSIS', 'CLASS', 'CONTRACT_NO', 'DIRECTION', 'LABEL_PRINT_QTY',
+                                         'LENGTH', 'MATERIAL_NO', 'MELT_NO', 'MIN_ROD', 'PART_NO', 'PRODUCT', 'PROD_DATE',
+                                         'PROD_ORDER', 'SIZE', 'STANDARD', 'STEEL_CLASS', 'TEMPLATE', 'TOLERANCE', 'UTVK'],
+
+                                         callBack: function () {
+
+                                             $scope.isLoading = false;
+                                             vmToggleModal(false);
+
+                                             vmBuildForm();
+
+                                             //vmShowLastCommOrderValue();
+
+                                             $scope.$apply();
+
+                                             //vmCreateForm($('#orderForm'),
+                                             // 'edit',
+                                             // procedure,
+                                             // fields,
+                                             // 'COMM_ORDER',
+                                             //  {
+                                             //      OK: 'OK',
+                                             //      Cancel: $translate.instant('buttonCancel')
+                                             //  }, controlList);
+                                         },
+                                         
+
                                      }
                                  }];
 
