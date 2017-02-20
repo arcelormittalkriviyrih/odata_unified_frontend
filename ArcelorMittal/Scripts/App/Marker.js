@@ -2167,6 +2167,24 @@
         vmToggleModal(false);
         vmShowLastCommOrderValue();
 
+        $scope.brigadeNo = $translate.instant('loadingMsg');
+        $scope.prodDate = $translate.instant('loadingMsg');
+
+        indexService.getInfo("v_WorkDefinitionPropertiesAll?$filter=comm_order eq '{0}' and (EquipmentID eq {1} or EquipmentID eq null)".format($scope.commOrder, $scope.currentScaleID))
+                    .then(function (response) {
+
+                        var data = response.data.value;
+                        $scope.brigadeNo = data.find(function (item) {
+                            return item.Property == 'BRIGADE_NO';
+                        }).Value;
+
+                        $scope.prodDate = data.find(function (item) {
+                            return item.Property == 'PROD_DATE';
+                        }).Value;
+                    }).fail(function () {
+                        vmShowLastCommOrderValue();
+                    })
+
         $scope.$apply();
     });
 
