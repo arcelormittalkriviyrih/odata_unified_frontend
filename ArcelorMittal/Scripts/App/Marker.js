@@ -753,7 +753,7 @@
     };
 
     function vmGetMarkerErrors() {
-        indexService.getInfo('v_MarkerErrors').then(function (response) {
+        indexService.getInfo('v_MarkerErrors?$orderby=ErrorMessage').then(function (response) {
             $scope.markerErrors = response.data.value;
                 
         });
