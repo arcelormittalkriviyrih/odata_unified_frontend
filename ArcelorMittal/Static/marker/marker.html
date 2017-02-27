@@ -404,7 +404,7 @@
             <button type="button"
                     class="btn btn-default"
                     ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
-                    ng-disabled="disableButtonOKTask"
+                    ng-disabled="disableButtonOKTask || scalesDetailsInfo.Send_OPC_Error"
                     ng-click="workRequest()">
                 {{OKLabel}}
             </button>
@@ -480,7 +480,7 @@
                     ng-disabled="!(
                     (!sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')
                     ||
-                    (sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1'))"
+                    (sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')) || scalesDetailsInfo.Send_OPC_Error"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeWeight','takeWeightLabel', 'marker.takeWeightButton')">
                 {{takeWeightLabel}}
             </button>
@@ -488,7 +488,7 @@
             <button type="button"
                     class="btn btn-default"
                     ng-show="sandwichModeAccepted && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
-                    ng-disabled="!(scalesDetailsInfo && scalesDetailsInfo.EN_BUTTON_TARA && scalesDetailsInfo.WEIGHT_OK)"
+                    ng-disabled="!(scalesDetailsInfo && scalesDetailsInfo.EN_BUTTON_TARA && scalesDetailsInfo.WEIGHT_OK) || scalesDetailsInfo.Send_OPC_Error"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeTara','takeTaraLabel', 'marker.takeTaraButton')">
                 {{takeTaraLabel}}
             </button>
