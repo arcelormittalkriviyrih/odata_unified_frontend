@@ -348,6 +348,12 @@
                         var additionalControl = $('<button />').addClass('btn btn-default {0}'.format(control.name))
                                                                .text(control.text)
                                                                .click(function () {
+																   
+																   if (!vmCheckRequiredFields($form)) {
+
+                                                                       alert(translates.fillRequired);
+                                                                       return false;
+                                                                   }
 
                                                                    if (control.name == 'preview') {
 
@@ -396,13 +402,7 @@
                                                                        }
 
                                                                    }
-
-                                                                   if (!vmCheckRequiredFields($form)) {
-
-                                                                       alert(translates.fillRequired);
-                                                                       return false;
-                                                                   }
-
+                                                                   
                                                                    vmCallAction.apply(this, arguments)
                                                                         .done(function (result) {
 
