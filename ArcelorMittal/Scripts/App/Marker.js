@@ -1723,18 +1723,20 @@
 
         if (
 
-            ($scope.commOrder
+           ($scope.commOrder
             && $scope.minMass > 0
             && $scope.maxMass > 0
-            && $scope.barQuantity > 0
             && (parseInt($scope.maxMass) >= parseInt($scope.minMass))
-            && $scope.isAcceptedOrder) &&
-
-            (($scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET' &&
-            $scope.deviationState != 'wrong' && $scope.selectedProfile)
-            ||
-            ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT' && $scope.scalesDetailsInfo.PACK_RULE == 'CALC'            
-            && $scope.bindingDia && $scope.bindingQty))
+            && $scope.isAcceptedOrder)
+            && !($scope.scalesDetailsInfo.SCALES_TYPE === null)
+            && (($scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET'
+                    && $scope.deviationState != 'wrong'
+                    && $scope.selectedProfile
+                    && $scope.barQuantity > 0)
+            || ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT'
+                    && $scope.scalesDetailsInfo.PACK_RULE == 'CALC'
+                    && $scope.bindingDia
+                    && $scope.bindingQty))
             ) {
 
             $scope.minMassWrongClass = false;
@@ -1793,13 +1795,13 @@
             if ($scope.maxMass == '0')
                 errors.push($translate.instant('marker.errorMessages.notNullable').format($translate.instant('marker.errorMessages.fieldName.maxMass')));
 
-            if ($scope.barQuantity === null || $scope.barQuantity.toString().length == 0)
+            if (($scope.barQuantity === null || $scope.barQuantity.toString().length == 0) && $scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET')
                 errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.errorMessages.fieldName.rodsQuantity')));
 
-            if ($scope.barQuantity == '0')
+            if ($scope.barQuantity == '0' && $scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET')
                 errors.push($translate.instant('marker.errorMessages.notNullable').format($translate.instant('marker.errorMessages.fieldName.rodsQuantity')));
 
-            if ($scope.selectedProfile === null)
+            if ($scope.selectedProfile === null && $scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET')
                 errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.errorMessages.fieldName.profile')));
 
 
@@ -1809,8 +1811,17 @@
             if (parseInt($scope.maxMass) < parseInt($scope.minMass))
                 errors.push($translate.instant('marker.errorMessages.minMaxWeight'));
 
-            if ($scope.deviationState == 'wrong')
+            if ($scope.deviationState == 'wrong' && $scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET')
                 errors.push($translate.instant('marker.errorMessages.wrongDeviation'));
+
+            if ($scope.barQuantity === null)
+                errors.push($translate.instant('marker.errorMessages.scalesTypeUndefined'));
+
+            if ($scope.bindingDia === null && $scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT' && $scope.scalesDetailsInfo.PACK_RULE == 'CALC')
+                errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.bindingDia')));
+
+            if ($scope.bindingQty === null && $scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT' && $scope.scalesDetailsInfo.PACK_RULE == 'CALC')
+                errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.bindingQty')));
 
             errors = errors.join(' \n ');
             alert(errors);

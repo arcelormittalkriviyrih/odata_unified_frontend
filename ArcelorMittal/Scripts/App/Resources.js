@@ -251,6 +251,7 @@
                 handModeQuantity: 'You must enter weight!',
 				notNullable: 'Field "{0}" cannot be nullable!',
                 fieldIsRequired: 'Field "{0}" is required!',
+				scalesTypeUndefined: 'Scales type is undefined, check equipment properties',
                 fieldName: {
 
                     minMass: 'Min weight',
@@ -645,6 +646,7 @@
                 handModeQuantity: 'Вы должны ввести вес!',
 				notNullable: 'Значение поля "{0}" не должно равняться 0!',
                 fieldIsRequired: 'Поле "{0}" обязательно для заполнения!',
+				scalesTypeUndefined: 'Тип весов не указан, проверьте свойства оборудования',
                 fieldName: {
 
                     minMass: 'Масса минимум',
@@ -1039,6 +1041,7 @@
                 handModeQuantity: 'Ви повинні ввести вагу!',
 				notNullable: 'Значення поля "{0}" не повинно дорівнювати 0!',
                 fieldIsRequired: 'Поле "{0}" обов\'язкове для заповнення!',
+				scalesTypeUndefined: 'Тип вагів не задано, перевірте властивості обладнання',
                 fieldName: {
 
                     minMass: 'Маса мінімум',
