@@ -1403,11 +1403,17 @@ div.odataDiagram .controls{
 	display: block;
 }
 
+.tableContainer{
+    width: 100%;
+    display:table;
+}
+
 div.modal.treeControls {
 
-height: 650px;
-overflow: scroll;
+height: 700px;
+overflow: auto;
 }
+
 
 
 

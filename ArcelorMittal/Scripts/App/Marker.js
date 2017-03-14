@@ -1722,12 +1722,12 @@
     function vmWorkRequest() {
 
         if (
-
-           ($scope.commOrder
+            ($scope.commOrder
             && $scope.minMass > 0
             && $scope.maxMass > 0
             && (parseInt($scope.maxMass) >= parseInt($scope.minMass))
             && $scope.isAcceptedOrder)
+
             && !($scope.scalesDetailsInfo.SCALES_TYPE === null)
             && (($scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET'
                     && $scope.deviationState != 'wrong'
@@ -1736,7 +1736,9 @@
             || ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT'
                     && $scope.scalesDetailsInfo.PACK_RULE == 'CALC'
                     && $scope.bindingDia
-                    && $scope.bindingQty))
+                    && $scope.bindingQty)
+			|| ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT'
+                    && $scope.scalesDetailsInfo.PACK_RULE == 'ENTERED'))
             ) {
 
             $scope.minMassWrongClass = false;
@@ -1814,7 +1816,7 @@
             if ($scope.deviationState == 'wrong' && $scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET')
                 errors.push($translate.instant('marker.errorMessages.wrongDeviation'));
 
-            if ($scope.barQuantity === null)
+            if ($scope.scalesDetailsInfo.SCALES_TYPE === null)
                 errors.push($translate.instant('marker.errorMessages.scalesTypeUndefined'));
 
             if ($scope.bindingDia === null && $scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT' && $scope.scalesDetailsInfo.PACK_RULE == 'CALC')
