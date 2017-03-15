@@ -102,7 +102,7 @@
                 <input type="text" class="input-small form-control"
                        ng-change="checkIsAcceptedOrder()"
                        ng-model="commOrder"
-                       ng-readonly="!standard"
+                       ng-readonly="!standard"  
                        my-enter="buildForm()" />
             </div>
 
@@ -449,14 +449,14 @@
             </span>
         </p>
 
-        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
+        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL' || scalesDetailsInfo.SCALES_TYPE == 'BUNT'">
             <span class="description">{{ 'marker.weight' | translate }}:</span>
             <span class="value scalesValue" ng-show="scalesDetailsInfo.weightCurrent >=0">
                 {{scalesDetailsInfo.weightCurrent}} {{ 'marker.kg' | translate }}
             </span>
         </p>
 
-        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
+        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL' || scalesDetailsInfo.SCALES_TYPE == 'BUNT'">
             <span class="description">{{ 'marker.rodsQuantity' | translate }}:</span>
 
             <span class="value rodsValue" ng-show="scalesDetailsInfo.RodsQuantity && scalesDetailsInfo.RodsQuantity > 0">
