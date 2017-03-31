@@ -1084,6 +1084,8 @@ div.controlTask.profile .dropdown-toggle .dropdown-input{
 .monitorSidesWrapper{
     font-size:0; 
     height: 90%;  
+	font-weight: bold;	
+	color: #fff;
 }
 
 .monitorSideItem{
@@ -1111,7 +1113,7 @@ div.controlTask.profile .dropdown-toggle .dropdown-input{
 }
 
 .monitorSideItem.green{
-    background: lightGreen;
+    background: #45ae1e;
 }
 
 .monitorSideItem .paramCaption{
