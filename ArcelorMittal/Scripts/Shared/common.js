@@ -430,10 +430,11 @@ function vmShowSelectedRows(args, list, key, property) {
     var selectedRowsList = [];
 
     var data = args.data.data.filter(function (item) {
-
-        if (list.indexOf(item[key]) > -1)
-            return item[key]
-
+		
+		if (list) {
+			if (list.indexOf(item[key]) > -1)
+				return item[key]
+		}
     });
 
     if (data.length > 0) {
