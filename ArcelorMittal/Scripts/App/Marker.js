@@ -1550,6 +1550,21 @@
                                     
                             });
 
+                            var controlList = [{
+                                type: 'additional',
+                                name: 'preview',
+                                text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.preview'),
+                                procedure: 'ins_MaterialLotForPreview',
+                                procedureParams: {
+
+                                    additionalProcedureParams: {
+                                        prop: 'MaterialLotID',
+                                        value: 1
+                                    },
+                                    escapedProcedureParam: ['EquipmentID', 'FACTORY_NUMBER', 'PACKS_LEFT']
+                                }
+                            }];
+
                             vmCreateForm($('#' + container),
                             'edit',
                             procedureName,
@@ -1558,7 +1573,7 @@
                             {
                                 OK: 'OK',
                                 Cancel: container == 'remarkerForm' ? $translate.instant('marker.buttonExit') : $translate.instant('buttonCancel')
-                            });
+                            }, controlList);
                         }
                         else {
                             $scope.readOnly = false;
