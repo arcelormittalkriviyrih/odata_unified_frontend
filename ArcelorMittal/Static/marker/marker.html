@@ -180,13 +180,13 @@
 
                     <div class="controlTask singleRight checkbox-inline">
                         <input type="checkbox"
-                                ng-model="autoMode"
-                                ng-checked="autoMode || scalesDetailsInfo.KEY_MANU == false"
-                                ng-disabled="!standard || scalesDetailsInfo.KEY_MANU == false"
-                                ng-change="enableControlOK()" />
+                               ng-model="autoMode"
+                               ng-checked="autoMode || scalesDetailsInfo.KEY_MANU == false"
+                               ng-disabled="!standard || scalesDetailsInfo.KEY_MANU == false"
+                               ng-change="enableControlOK()" />
                         <span>{{ 'marker.byAccept' | translate }}</span>
                     </div>
-                </div>               
+                </div>
             </div>
         </div>
 
@@ -479,7 +479,7 @@
             </span>
         </p>
 
-        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL' || scalesDetailsInfo.SCALES_TYPE == 'BUNT'">
+        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
             <span class="description">{{ 'marker.weight' | translate }}:</span>
             <span class="value scalesValue" ng-show="scalesDetailsInfo.weightCurrent >=0">
                 {{scalesDetailsInfo.weightCurrent}} {{ 'marker.kg' | translate }}
@@ -494,12 +494,21 @@
             </span>
         </p>
 
-        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
+        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL' || scalesDetailsInfo.SCALES_TYPE == 'BUNT'">
             <span class="description">{{ 'marker.rodsLeft' | translate }}:</span>
             <span class="value rodsValue" ng-show="rodsLeft != null">
                 <span ng-show="rodsLeft > 0">+</span>
                 {{rodsLeft}} {{ 'marker.pcs' | translate }}
             </span>
+        </p>
+
+        <p class="scaleInfoContainer" ng-show="scalesDetailsInfo.SCALES_TYPE == 'BUNT'">
+            <span class="description">
+                {{ 'marker.buntNo' | translate }}:
+            </span>
+            <span class="value rodsValue">
+                {{buntNo}}
+            </span>                 
         </p>
 
         <div class="controls">

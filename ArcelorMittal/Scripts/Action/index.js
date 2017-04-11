@@ -11,7 +11,8 @@
             controlList = options.controlList,
             translates = options.translates,
             preventEnterSubmit = options.preventEnterSubmit,
-            _fields = null;
+            _fields = null,
+            _isNoZeroValuesFields = []; //array of fieds name. There are fields must be not '0' value but still have 0
 
         vmBuildForm(self);
 
@@ -268,6 +269,32 @@
                         };
                     });
 
+                if (properties.notZeroValue) {
+
+                    field.input
+                        .focus(function (e) {
+
+                            if ($(this).hasClass('wrong'))
+                                $(this).removeClass('wrong');
+
+                        })
+                        .on("keyup", function (event) {
+
+                            var indexNoZero = _isNoZeroValuesFields.indexOf(properties.translate);
+
+                            if (!vmCheckNullableField($form, field.input)) {
+                                if (indexNoZero == -1)
+                                _isNoZeroValuesFields.push(properties.translate);
+                            } else {
+                                if (indexNoZero > -1)
+                                    _isNoZeroValuesFields.splice(indexNoZero, 1);
+                            }
+                            
+
+                    })
+                }
+                    
+
                 //set keyfield as readonly if we build edit form
                 if (formType == 'edit') {
 
@@ -296,6 +323,14 @@
                     if (!vmCheckRequiredFields($form)) {
 
                         alert(translates.fillRequired);
+                        return false;
+                    }
+
+                    if (_isNoZeroValuesFields.length > 0) {
+
+                        var zeroFieldsNames = _isNoZeroValuesFields.join();
+
+                        alert(translates.noZeroValue.format(zeroFieldsNames));
                         return false;
                     }
 
