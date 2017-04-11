@@ -123,6 +123,7 @@
             },
             modal: {
                 notAcceptable: 'Cannot load preview for this template!',
+                noZeroValue: 'Field "{0}" cannot be with value "0"!'
             }
 
         },
@@ -200,6 +201,7 @@
             autoMode: 'Auto Mode',
             weight: 'Weight',
             rodsQuantity: 'Rods quantity',
+            buntNo: 'Bunt number',
             rodsLeft: 'Rods left',
             scalesBlocked: 'Scales blocked',
             weightOver: 'Weight is over then maximum permissible weight',
@@ -520,6 +522,7 @@
             },
             modal: {
                 notAcceptable: 'Невозможно загрузить превью для этого шаблона!',
+                noZeroValue: 'Поле "{0}" не может иметь значение "0"!'
             }
         },
         pa: {
@@ -595,6 +598,7 @@
             autoMode: 'Автоматический режим',
             weight: 'Вес',
             rodsQuantity: 'Количество прутков',
+            buntNo: 'Номер бунта',
             rodsLeft: 'Осталось прутков',
             scalesBlocked: 'Весы заблокированы',
             weightOver: 'Масса превышает максимально допустимую',
@@ -915,6 +919,7 @@
             },
             modal: {
                 notAcceptable: 'Неможливо завантажити прев\'ю для цього шаблона!',
+                noZeroValue: 'Поле "{0}" не може мати значення "0"!'
             }
         },
         pa: {
@@ -990,6 +995,7 @@
             autoMode: 'Автоматичний режим',
             weight: 'Вага',
             rodsQuantity: 'Кількість прутків',
+            buntNo: 'Номер бунта',
             rodsLeft: 'Залишилось прутків',
             scalesBlocked: 'Ваги заблоковані',
             weightOver: 'Маса перевищує максимально допустиму',

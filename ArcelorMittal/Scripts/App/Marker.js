@@ -217,8 +217,8 @@
 
     $scope.getProfilePropertiesList = vmGetProfilePropertiesList;
     $scope.calculate = vmCalculate;
-    $scope.reset = vmReset;
     $scope.workRequest = vmWorkRequest;
+    $scope.reset = vmReset;
     $scope.showBuildFormWindow = vmShowBuildFormWindow;
     $scope.doAction = vmDoAction;
     $scope.buildFormSpecialMode = vmBuildFormSpecialMode;
@@ -391,6 +391,7 @@
                                          show: true,
                                          disable: false,
                                          send: true,
+                                         countOnly: true,
                                          translate: $translate.instant('market.Order.CreateDialogue.BUNT_NO'),
                                          order: 25
                                      }
@@ -847,6 +848,7 @@
             //this variable created for watching change CMD_TAKE_WEIGHT parameter from controller
             //true/false meaning of this parameter influences on caption of 'take weight' button
             $scope.cmdTakeWeight = $scope.scalesDetailsInfo.CMD_TAKE_WEIGHT;
+            $scope.buntNo = $scope.scalesDetailsInfo.BUNT_NO;
                                             
             vmCalculateRods();
             
@@ -855,8 +857,7 @@
 
     //this method is called when we show scale detail info
     //this method get last work request data
-    function vmGetLatestWorkRequest(id)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     {
-
+    function vmGetLatestWorkRequest(id) {
         //get last work request for current scales
         if ($scope.scales[0].isInfoLoaded) {
 
@@ -898,7 +899,7 @@
                             $scope.length = vmGetProfileProperty(profileProperties, 2) || null;
                             $scope.tolerancePlus = vmGetProfileProperty(profileProperties, 3) || null;
                             $scope.toleranceMinus = vmGetProfileProperty(profileProperties, 4) || null;
-                                                        
+
                         } else {
 
                             $scope.linearMassFromBase = null;
@@ -954,11 +955,11 @@
                                 $scope.isAcceptedOrder = true;
                             }
 
-                            else if (item.PropertyType == "MAX_WEIGHT"){
+                            else if (item.PropertyType == "MAX_WEIGHT") {
                                 $scope.maxMass = parseInt(item.Value);
                                 //$scope.lastRequestMaxMass = parseInt(item.Value);
                             }
-                                
+
 
                             else if (item.PropertyType == "MIN_WEIGHT")
                                 $scope.minMass = parseInt(item.Value);
@@ -1010,7 +1011,7 @@
 
                                 $scope.BindingDiaDataValue = $scope.bindingDia.Value;
                             }
-                                
+
 
                             else if (item.PropertyType == 'BINDING_QTY') {
 
@@ -1021,7 +1022,10 @@
 
                                 $scope.BindingQtyDataValue = $scope.bindingQty.Value;
                             }
-                                
+
+                            /* else if (item.PropertyType == 'BUNT_NO') {
+                                $scope.buntNo = item.Value;
+                            }*/
 
                         });
 
@@ -1035,8 +1039,7 @@
             });
 
         };
-
-    };
+    }
 
     function vmBuildLabelGrid($container) {
 
@@ -1278,6 +1281,18 @@
                                      procedure = 'ins_WorkDefinitionStandard';
 
                                  var fields = $scope.fields;
+
+                                 if ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT') {
+
+                                     fields.forEach(function (item) {
+
+                                         if (item.name == 'BUNT_NO') {
+                                             item.properties.required = true;
+                                             item.properties.notZeroValue = true;
+                                         }
+
+                                     });
+                                 }
 
                                  fields.forEach(function (field) {
 
@@ -1603,6 +1618,7 @@
                 errorConnection: $translate.instant('errorConnection'),
                 fillRequired: $translate.instant('marker.errorMessages.fillRequired'),
                 notAcceptable: $translate.instant('market.modal.notAcceptable'),
+                noZeroValue: $translate.instant('market.modal.noZeroValue')
             },
             fields: fields,
             controlList: controlList,
@@ -1715,7 +1731,6 @@
     function vmReset() {
 
         $scope.selectedProfile = null;
-        $scope.commOrder = null;
         $scope.maxMass = null;
         $scope.minMass = null;
         $scope.barWeight = null;
@@ -1723,7 +1738,6 @@
         $scope.sampleMass = null;
         $scope.deviation = null;
         $scope.brigadeNo = null;
-        $scope.prodDate = null;
         $scope.length = null;
         $scope.barQuantity = null;
         $scope.sandwichMode = null;

@@ -406,6 +406,16 @@ function vmShowUnfilledRequiredFields(form, unFilledFields) {
     });
 }
 
+function vmCheckNullableField(form, field) {
+
+    if (parseInt($(field).val()) === 0) {
+
+        vmShowUnfilledRequiredFields(form, field);
+        return false;
+    } else return true;
+
+}
+
 function vmSort(property, a, b) {
 
     if (a[property] < b[property])
