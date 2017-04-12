@@ -246,6 +246,9 @@
     $scope.cancelHandMode = vmCancelHandMode;
     $scope.showOuterPage = vmShowOuterPage;
 
+    //these global variables for correct showing commorderValue in special mode (without blinking)
+    var _commOrder, _brigadeNo, _prodDate;
+
     vmInit();
 
     function vmInit() {
@@ -857,7 +860,8 @@
 
     //this method is called when we show scale detail info
     //this method get last work request data
-    function vmGetLatestWorkRequest(id) {
+    function vmGetLatestWorkRequest(id) {        
+
         //get last work request for current scales
         if ($scope.scales[0].isInfoLoaded) {
 
@@ -951,7 +955,12 @@
 
                             if (item.PropertyType == "COMM_ORDER") {
 
-                                $scope.commOrder = item.Value;
+                                _commOrder = item.Value;
+
+                                if ($scope.commOrder != _commOrder)
+                                    $scope.commOrder = _commOrder;
+
+                                //$scope.commOrder = item.Value;
                                 $scope.isAcceptedOrder = true;
                             }
 
@@ -976,11 +985,23 @@
                             else if (item.PropertyType == "DEVIATION")
                                 $scope.deviation = item.Value;
 
-                            else if (item.PropertyType == "BRIGADE_NO")
-                                $scope.brigadeNo = item.Value;
+                            else if (item.PropertyType == "BRIGADE_NO") {
 
-                            else if (item.PropertyType == "PROD_DATE")
-                                $scope.prodDate = item.Value;
+                                _brigadeNo = item.Value;
+
+                                if ($scope.brigadeNo != _brigadeNo)
+                                    $scope.brigadeNo = _brigadeNo;
+                            }
+                                
+
+                            else if (item.PropertyType == "PROD_DATE"){
+
+                                _prodDate = item.Value;
+
+                                if ($scope.prodDate != _prodDate)
+                                    $scope.prodDate = _prodDate;
+                            }
+                                
 
                             else if (item.PropertyType == "LENGTH")
                                 $scope.length = item.Value;
@@ -1022,10 +1043,6 @@
 
                                 $scope.BindingQtyDataValue = $scope.bindingQty.Value;
                             }
-
-                            /* else if (item.PropertyType == 'BUNT_NO') {
-                                $scope.buntNo = item.Value;
-                            }*/
 
                         });
 
@@ -1433,6 +1450,11 @@
 
                 $scope.isLoading = false;
 
+                //clear _commOrder, _brigadeNo and _prodDate to return to standard mode
+                _commOrder = null;
+                _brigadeNo = null;
+                _prodDate = null;
+
                 vmGetLatestWorkRequest($scope.currentScaleID);
             });
         };
@@ -1731,13 +1753,23 @@
     function vmReset() {
 
         $scope.selectedProfile = null;
+
+        if ($scope.commOrder != _commOrder)
+            $scope.commOrder = null;
+
         $scope.maxMass = null;
         $scope.minMass = null;
         $scope.barWeight = null;
         $scope.sampleLength = 1;
         $scope.sampleMass = null;
         $scope.deviation = null;
-        $scope.brigadeNo = null;
+
+        if ($scope.brigadeNo != _brigadeNo)
+            $scope.brigadeNo = null;
+
+        if ($scope.prodDate != _prodDate)
+            $scope.prodDate = null;
+
         $scope.length = null;
         $scope.barQuantity = null;
         $scope.sandwichMode = null;
@@ -1757,7 +1789,7 @@
             && (parseInt($scope.maxMass) >= parseInt($scope.minMass))
             && $scope.isAcceptedOrder)
 
-            && !($scope.scalesDetailsInfo.SCALES_TYPE === null)
+            //&& $scope.scalesDetailsInfo.SCALES_TYPE
             && (($scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET'
                     && $scope.deviationState != 'wrong'
                     && $scope.selectedProfile
@@ -1768,6 +1800,8 @@
                     && $scope.bindingQty)
 			|| ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT'
                     && $scope.scalesDetailsInfo.PACK_RULE == 'ENTERED'))
+
+            || ($scope.scalesDetailsInfo.SCALES_TYPE == 'LINEPACK')
             ) {
 
             $scope.minMassWrongClass = false;
@@ -1845,7 +1879,7 @@
             if ($scope.deviationState == 'wrong' && $scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET')
                 errors.push($translate.instant('marker.errorMessages.wrongDeviation'));
 
-            if ($scope.scalesDetailsInfo.SCALES_TYPE === null)
+            if (!$scope.scalesDetailsInfo.SCALES_TYPE)
                 errors.push($translate.instant('marker.errorMessages.scalesTypeUndefined'));
 
             if ($scope.bindingDia === null && $scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT' && $scope.scalesDetailsInfo.PACK_RULE == 'CALC')
@@ -2048,6 +2082,11 @@
         $scope.noHandModeQuantity = false;
         $scope.handModeQuantity = null;
         $scope.isLoading = false;
+
+        //clear _commOrder, _brigadeNo and _prodDate to return to standard mode 
+        _commOrder = null;
+        _brigadeNo = null;
+        _prodDate = null;
     };
 
     function vmShowOrderChangeModal() {
@@ -2216,13 +2255,24 @@
                     .then(function (response) {
 
                         var data = response.data.value;
-                        $scope.brigadeNo = data.find(function (item) {
+                        var brigadeNo = data.find(function (item) {
                             return item.Property == 'BRIGADE_NO';
-                        }).Value;
+                        });
 
-                        $scope.prodDate = data.find(function (item) {
+                        if (brigadeNo)
+                            $scope.brigadeNo = brigadeNo.Value;
+                        else
+                            $scope.brigadeNo = null;
+
+                        var prodDate = data.find(function (item) {
                             return item.Property == 'PROD_DATE';
-                        }).Value;
+                        });
+
+                        if (prodDate)
+                            $scope.prodDate = prodDate.Value;
+                        else
+                            $scope.prodDate = null;
+
                     }).catch(function () {
                         vmShowLastCommOrderValue();
                     })
@@ -2528,6 +2578,7 @@
                             while (i--) {
                                 if (chartDataChunks[i].length == 0) {
                                     chartDataChunks.splice(i, 1);
+                                    labels.splice(i, 1);
                                 }
                             }
 
