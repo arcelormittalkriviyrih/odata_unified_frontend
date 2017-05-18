@@ -827,7 +827,19 @@
 
         });
 
-    function vmprint() {
+    function vmprint() {        
+        $timeout(function () {
+            $scope.$apply();
+            //var eeeee = angular.element(window.document);
+            var inner_html = $('#WStoPrint');
+            if (inner_html.length > 0) {
+                var inner_html = inner_html[0]['innerHTML'];                
+            }
+            //window.open().document.write(output);
+            window.open().document.write(inner_html);
+        });
+
+        return
         $timeout(function () {
             $scope.$apply();
             window.print();

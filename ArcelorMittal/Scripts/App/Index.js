@@ -187,7 +187,21 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
                     $interval.cancel($rootScope.intervalScales);
                     $interval.cancel($rootScope.intervalWorkRequest);
                 }
-            })
+			})
+
+			.state('app.Consigners', {
+			    //abstract: true,
+			    url: '/consigners',
+			    //templateUrl: 'Static/consigners/index.html',
+			    template: '<div ui-view>app.Consigners</div>',
+			    controller: 'ConsignersCtrl',
+                
+			    onEnter: function ($state, roles) {
+
+			        if (!vmIsAuthorized('Consigners', roles))
+			            $state.go('app.error', { code: 'unauthorized' });
+			    }
+			})
 
             .state('accessError', {
 
@@ -305,6 +319,10 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
 
             case 'WorkshopSpecs':
                 role.order = 4;
+                break;
+
+            case 'Consigners':
+                role.order = 5;
                 break;
 
         };

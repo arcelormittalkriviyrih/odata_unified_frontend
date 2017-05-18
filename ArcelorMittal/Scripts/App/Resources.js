@@ -8,7 +8,8 @@
             Marker: 'Marker',
             PA: 'PA',
             WeightAnalytics: 'WeightAnalytics',
-            AutomationLab: 'Automation Lab'
+            AutomationLab: 'Automation Lab',
+            Consigners: 'Consigners'
         },
         welcome: {
             Welcome: 'Welcome',
@@ -401,6 +402,7 @@
             Marker: 'Маркировщик',
             PA: 'Специалист АСУТП',
             WeightAnalytics: 'Аналитик',
+            Consigners: 'Приемосдатчик',
             AutomationLab: 'Лаборатория автоматизации'
         },
         welcome: {
@@ -787,6 +789,7 @@
             Marker: 'Маркувальник',
             PA: 'Спеціаліст АСУТП',
             WeightAnalytics: 'Аналітик',
+            Consigners: 'Прийомоздавач',
             AutomationLab: 'Лабораторія автоматизації'
         },
         welcome: {
