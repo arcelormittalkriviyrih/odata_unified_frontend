@@ -16,6 +16,8 @@
 
                 $interval.cancel($rootScope.intervalScales);
                 $interval.cancel($rootScope.intervalWorkRequest);
+                $interval.cancel($rootScope.intervalErrors);
+                $interval.cancel($rootScope.blinkingInterval);
             }
         })
 
@@ -168,7 +170,7 @@
 
 }])
 
-.controller('markerIndexCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $http) {
+.controller('markerIndexCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$timeout', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $timeout, $http) {
 
     //properties
     $scope.filter = [];
@@ -215,8 +217,8 @@
 
     $scope.getProfilePropertiesList = vmGetProfilePropertiesList;
     $scope.calculate = vmCalculate;
-    $scope.reset = vmReset;
     $scope.workRequest = vmWorkRequest;
+    $scope.reset = vmReset;
     $scope.showBuildFormWindow = vmShowBuildFormWindow;
     $scope.doAction = vmDoAction;
     $scope.buildFormSpecialMode = vmBuildFormSpecialMode;
@@ -235,9 +237,17 @@
     $scope.showOrderChangeModal = vmShowOrderChangeModal;
     $scope.acceptOrderChange = vmAcceptOrderChange;
     $scope.cancelOrderChange = vmCancelOrderChange;
+
+    $scope.showToggleModalReversal = vmShowToggleModalReversal;
+    $scope.acceptOrderReversal = vmAcceptOrderReversal;
+    $scope.cancelReversal = vmCancelReversal;
+
     $scope.acceptHandMode = vmAcceptHandMode;
     $scope.cancelHandMode = vmCancelHandMode;
     $scope.showOuterPage = vmShowOuterPage;
+
+    //these global variables for correct showing commorderValue in special mode (without blinking)
+    var _commOrder, _brigadeNo, _prodDate;
 
     vmInit();
 
@@ -250,7 +260,7 @@
         vmGetProfiles();
 
         //init form fields list
-        indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")
+        indexService.getInfo("Files?$select=ID,Name&$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")
                             .then(function (response) {
 
                                 var templateData = response.data.value;
@@ -384,6 +394,7 @@
                                          show: true,
                                          disable: false,
                                          send: true,
+                                         countOnly: true,
                                          translate: $translate.instant('market.Order.CreateDialogue.BUNT_NO'),
                                          order: 25
                                      }
@@ -535,6 +546,18 @@
                                          order: 19
                                      },
                                  }, {
+
+                                     name: 'LABEL_PRINT_QTY',
+                                     properties: {
+                                         control: 'text',
+                                         required: false,
+                                         show: true,
+                                         disable: true,
+                                         send: true,
+                                         translate: $translate.instant('market.Order.CreateDialogue.LABEL_PRINT_QTY'),
+                                         order: 98
+                                     },
+                                 }, {
                                      name: 'TEMPLATE',
                                      properties: {
                                          control: 'combo',
@@ -546,6 +569,8 @@
                                          data: templateData,
                                          keyField: 'ID',
                                          valueField: 'Name',
+                                         filter: true,
+                                         className: 'large',
                                          order: 99
                                      }
                                  }];
@@ -637,10 +662,14 @@
             }
 
             vmGetCurrentScalesShortInfo();
+            vmGetMarkerErrors();
 
             //remove old interval
             if ($rootScope.intervalScales)
                 $interval.cancel($rootScope.intervalScales);
+
+            if ($rootScope.intervalErrors)
+                $interval.cancel($rootScope.intervalErrors);
 
             //create interval for autorefresh scales
             //this interval must be clear on activity exit
@@ -652,7 +681,17 @@
 
                 if ($scope.currentScaleID)
                     vmShowScaleInfo($scope.currentScaleID);
+               
             }, scalesRefresh);
+
+            $rootScope.intervalErrors = $interval(function () {
+
+                vmGetMarkerErrors();
+            }, errorsRefresh);
+
+            $rootScope.blinkingInterval = $interval(function () {
+                vmSetBlinking('color', 'rgb(255, 0, 0)');
+            }, 1000);
         })
     }
 
@@ -708,13 +747,20 @@
 
                                        if (!scale.ALARM)
                                            vmRedrawArrow(scale);
-                                   };
+                                   };                              
 
                                };
                            });
 
                        });
         
+    };
+
+    function vmGetMarkerErrors() {
+        indexService.getInfo('v_MarkerErrors?$orderby=ErrorMessage').then(function (response) {
+            $scope.markerErrors = response.data.value;
+                
+        });
     };
 
     function vmRedrawScale(scale) {
@@ -801,6 +847,11 @@
                 if (item.ID == id)
                     return item;
             });
+
+            //this variable created for watching change CMD_TAKE_WEIGHT parameter from controller
+            //true/false meaning of this parameter influences on caption of 'take weight' button
+            $scope.cmdTakeWeight = $scope.scalesDetailsInfo.CMD_TAKE_WEIGHT;
+            $scope.buntNo = $scope.scalesDetailsInfo.BUNT_NO;
                                             
             vmCalculateRods();
             
@@ -809,7 +860,7 @@
 
     //this method is called when we show scale detail info
     //this method get last work request data
-    function vmGetLatestWorkRequest(id) {
+    function vmGetLatestWorkRequest(id) {        
 
         //get last work request for current scales
         if ($scope.scales[0].isInfoLoaded) {
@@ -828,125 +879,8 @@
                     $scope.workRequestID = data[0].WorkRequestID;
                     $scope.selectedProfile = data[0].ProfileID;
 
-                    $('#changeOrderGrid').jsGrid({
-                        width: "750px",
-
-                        sorting: false,
-                        paging: true,
-                        editing: false,
-                        filtering: true,
-                        autoload: true,
-                        pageLoading: true,
-                        inserting: false,
-                        pageIndex: 1,
-                        pageSize: 14,
-
-                        onDataLoaded: function (args) {
-
-                            var rows = vmShowSelectedRows(args, $scope.materialLotProdorderIDs, 'ID', 'FactoryNumber');
-
-                            if (rows)
-                                rows.forEach(function (row) {
-
-                                    var checkbox = row.find('input[type=checkbox]');
-                                    $(checkbox).prop('checked', true);
-                                });
-                        },
-
-                        rowClick: function (args) {
-
-                            var $tr = $(args.event.currentTarget);
-                            $tr.toggleClass('selected-row');
-
-                            var elem = $(args.event.target);
-                            var checkbox = $(args.event.currentTarget).find('input[type=checkbox]');
-
-                            var materialLotProdorderID = args.item.ID;
-                            var index = $scope.materialLotProdorderIDs.indexOf(materialLotProdorderID);
-
-
-                            if (index == -1) {
-
-                                if (!elem.is('input'))
-                                    $(checkbox).prop('checked', true);
-
-                                $scope.materialLotProdorderIDs.push(materialLotProdorderID);
-                            }
-
-                            else {
-
-                                if (!elem.is('input'))
-                                    $(checkbox).prop('checked', false);
-
-                                $scope.materialLotProdorderIDs = $scope.materialLotProdorderIDs.filter(function (item) {
-                                    return item != materialLotProdorderID;
-                                });
-                            };
-
-                            $scope.$apply();
-
-
-
-                        }
-
-                    }).jsGrid('initOdata', {
-                        serviceUrl: serviceUrl,
-                        table: 'v_MaterialLotChange',
-
-                        fields: [{
-                            id: 'PROD_ORDER',
-                            name: 'PROD_ORDER',
-                            title: $translate.instant('marker.grid.PROD_ORDER'),
-                            width: 120,
-                            order: 1
-                        },
-                        {
-                            id: 'PART_NO',
-                            name: 'PART_NO',
-                            title: $translate.instant('marker.grid.PART_NO'),
-                            width: 100,
-                            order: 2
-                        },
-                        {
-                            id: 'FactoryNumber',
-                            name: 'FactoryNumber',
-                            title: $translate.instant('marker.grid.FactoryNumber'),
-                            width: 120,
-                            order: 3
-                        },
-                        {
-                            id: 'BUNT_NO',
-                            name: 'BUNT_NO',
-                            title: $translate.instant('marker.grid.BUNT_NO'),
-                            width: 145,
-                            order: 4
-                        },
-                        {
-                            id: 'CreateTime',
-                            name: 'CreateTime',
-                            title: $translate.instant('marker.grid.CreateTime'),
-                            width: 150,
-                            order: 5
-                        },
-
-                        {
-                            id: 'Quantity',
-                            name: 'Quantity',
-                            title: $translate.instant('marker.grid.Quantity'),
-                            width: 50,
-                            order: 6
-                        },
-                        {
-                            id: 'selected',
-                            name: 'selected',
-                            title: ' ',
-                            type: 'myCheckbox',
-                            width: 25,
-                            order: 7
-                        }]
-
-                    })
-
+                    vmBuildLabelGrid($('#changeOrderGrid'));
+                    vmBuildLabelGrid($('#reverseGrid'));
 
 
 
@@ -969,7 +903,7 @@
                             $scope.length = vmGetProfileProperty(profileProperties, 2) || null;
                             $scope.tolerancePlus = vmGetProfileProperty(profileProperties, 3) || null;
                             $scope.toleranceMinus = vmGetProfileProperty(profileProperties, 4) || null;
-                                                        
+
                         } else {
 
                             $scope.linearMassFromBase = null;
@@ -1021,15 +955,20 @@
 
                             if (item.PropertyType == "COMM_ORDER") {
 
-                                $scope.commOrder = item.Value;
+                                _commOrder = item.Value;
+
+                                if ($scope.commOrder != _commOrder)
+                                    $scope.commOrder = _commOrder;
+
+                                //$scope.commOrder = item.Value;
                                 $scope.isAcceptedOrder = true;
                             }
 
-                            else if (item.PropertyType == "MAX_WEIGHT"){
+                            else if (item.PropertyType == "MAX_WEIGHT") {
                                 $scope.maxMass = parseInt(item.Value);
                                 //$scope.lastRequestMaxMass = parseInt(item.Value);
                             }
-                                
+
 
                             else if (item.PropertyType == "MIN_WEIGHT")
                                 $scope.minMass = parseInt(item.Value);
@@ -1046,11 +985,23 @@
                             else if (item.PropertyType == "DEVIATION")
                                 $scope.deviation = item.Value;
 
-                            else if (item.PropertyType == "BRIGADE_NO")
-                                $scope.brigadeNo = item.Value;
+                            else if (item.PropertyType == "BRIGADE_NO") {
 
-                            else if (item.PropertyType == "PROD_DATE")
-                                $scope.prodDate = item.Value;
+                                _brigadeNo = item.Value;
+
+                                if ($scope.brigadeNo != _brigadeNo)
+                                    $scope.brigadeNo = _brigadeNo;
+                            }
+                                
+
+                            else if (item.PropertyType == "PROD_DATE"){
+
+                                _prodDate = item.Value;
+
+                                if ($scope.prodDate != _prodDate)
+                                    $scope.prodDate = _prodDate;
+                            }
+                                
 
                             else if (item.PropertyType == "LENGTH")
                                 $scope.length = item.Value;
@@ -1081,7 +1032,7 @@
 
                                 $scope.BindingDiaDataValue = $scope.bindingDia.Value;
                             }
-                                
+
 
                             else if (item.PropertyType == 'BINDING_QTY') {
 
@@ -1092,7 +1043,6 @@
 
                                 $scope.BindingQtyDataValue = $scope.bindingQty.Value;
                             }
-                                
 
                         });
 
@@ -1106,8 +1056,129 @@
             });
 
         };
+    }
 
-    };
+    function vmBuildLabelGrid($container) {
+
+        $container.jsGrid({
+            width: "750px",
+
+            sorting: false,
+            paging: true,
+            editing: false,
+            filtering: true,
+            autoload: true,
+            pageLoading: true,
+            inserting: false,
+            pageIndex: 1,
+            pageSize: 14,
+
+            onDataLoaded: function (args) {
+
+                var rows = vmShowSelectedRows(args, $scope.materialLotProdorderIDs, 'ID', 'FactoryNumber');
+
+                if (rows)
+                    rows.forEach(function (row) {
+
+                        var checkbox = row.find('input[type=checkbox]');
+                        $(checkbox).prop('checked', true);
+                    });
+            },
+
+            rowClick: function (args) {
+
+                var $tr = $(args.event.currentTarget);
+                $tr.toggleClass('selected-row');
+
+                var elem = $(args.event.target);
+                var checkbox = $(args.event.currentTarget).find('input[type=checkbox]');
+
+                var materialLotProdorderID = args.item.ID;
+                var index = $scope.materialLotProdorderIDs.indexOf(materialLotProdorderID);
+
+
+                if (index == -1) {
+
+                    if (!elem.is('input'))
+                        $(checkbox).prop('checked', true);
+
+                    $scope.materialLotProdorderIDs.push(materialLotProdorderID);
+                }
+
+                else {
+
+                    if (!elem.is('input'))
+                        $(checkbox).prop('checked', false);
+
+                    $scope.materialLotProdorderIDs = $scope.materialLotProdorderIDs.filter(function (item) {
+                        return item != materialLotProdorderID;
+                    });
+                };
+
+                $scope.$apply();
+
+
+
+            }
+
+        }).jsGrid('initOdata', {
+            serviceUrl: serviceUrl,
+            table: 'v_MaterialLotChange',
+
+            fields: [{
+                id: 'PROD_ORDER',
+                name: 'PROD_ORDER',
+                title: $translate.instant('marker.grid.PROD_ORDER'),
+                width: 120,
+                order: 1
+            },
+            {
+                id: 'PART_NO',
+                name: 'PART_NO',
+                title: $translate.instant('marker.grid.PART_NO'),
+                width: 100,
+                order: 2
+            },
+            {
+                id: 'FactoryNumber',
+                name: 'FactoryNumber',
+                title: $translate.instant('marker.grid.FactoryNumber'),
+                width: 120,
+                order: 3
+            },
+            {
+                id: 'BUNT_NO',
+                name: 'BUNT_NO',
+                title: $translate.instant('marker.grid.BUNT_NO'),
+                width: 145,
+                order: 4
+            },
+            {
+                id: 'CreateTime',
+                name: 'CreateTime',
+                title: $translate.instant('marker.grid.CreateTime'),
+                width: 150,
+                order: 5
+            },
+
+            {
+                id: 'Quantity',
+                name: 'Quantity',
+                title: $translate.instant('marker.grid.Quantity'),
+                width: 50,
+                order: 6
+            },
+            {
+                id: 'selected',
+                name: 'selected',
+                title: ' ',
+                type: 'myCheckbox',
+                width: 25,
+                order: 7
+            }]
+
+        })
+    }
 
     function vmGetProfiles() {
 
@@ -1228,6 +1299,18 @@
 
                                  var fields = $scope.fields;
 
+                                 if ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT') {
+
+                                     fields.forEach(function (item) {
+
+                                         if (item.name == 'BUNT_NO') {
+                                             item.properties.required = true;
+                                             item.properties.notZeroValue = true;
+                                         }
+
+                                     });
+                                 }
+
                                  fields.forEach(function (field) {
 
                                      var data = orderData.find(function (item) {
@@ -1241,20 +1324,87 @@
                                          field.properties.defaultValue = null;
                                  });
 
-                                 $scope.fields.push({
+                                 var isEquipmentID = $scope.fields.filter(function (item) {
 
-                                     name: 'EquipmentID',
-                                     properties: {
-                                         control: 'text',
-                                         required: false,
-                                         show: false,
-                                         disable: false,
-                                         send: true,
-                                         defaultValue: $scope.currentScaleID,
-                                         order: -1
-                                     }
- 
+                                     return item.name == 'EquipmentID';
                                  });
+
+                                 if (isEquipmentID.length > 0) {
+                                     $scope.fields.forEach(function (item) {
+                                         if (item.name == 'EquipmentID')
+                                             item.properties.defaultValue = $scope.currentScaleID;
+                                     })
+                                 } else {
+                                     $scope.fields.push({
+
+                                         name: 'EquipmentID',
+                                         properties: {
+                                             control: 'text',
+                                             required: false,
+                                             show: false,
+                                             disable: false,
+                                             send: true,
+                                             defaultValue: $scope.currentScaleID,
+                                             order: -1
+                                         }
+
+                                     });
+                                 }
+
+
+                                 
+
+                                 var controlList = [{
+                                     type: 'additional',
+                                     name: 'preview',
+                                     text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.preview'),
+                                     procedure: 'ins_MaterialLotForPreview',
+                                     procedureParams: {
+
+                                         additionalProcedureParams: {
+                                             prop: 'MaterialLotID',
+                                             value: 1
+                                         },
+                                         escapedProcedureParam: ['EquipmentID']
+                                     }
+                                 }, {
+                                     type: 'additional',
+                                     name: 'refresh',
+                                     text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.refresh'),
+                                     procedure: 'upd_WorkDefinitionFromOrder',
+                                     procedureParams: {
+
+                                         additionalProcedureParams: {},                                         
+                                         escapedProcedureParam: ['BRIGADE_NO', 'BUNT_DIA', 'BUNT_NO', 'BUYER_ORDER_NO',
+                                         'CHANGE_NO', 'CHEM_ANALYSIS', 'CLASS', 'CONTRACT_NO', 'DIRECTION', 'LABEL_PRINT_QTY',
+                                         'LENGTH', 'MATERIAL_NO', 'MELT_NO', 'MIN_ROD', 'PART_NO', 'PRODUCT', 'PROD_DATE',
+                                         'PROD_ORDER', 'SIZE', 'STANDARD', 'STEEL_CLASS', 'TEMPLATE', 'TOLERANCE', 'UTVK'],
+
+                                         callBack: function () {
+
+                                             $scope.isLoading = false;
+                                             vmToggleModal(false);
+
+                                             vmBuildForm();
+
+                                             //vmShowLastCommOrderValue();
+
+                                             $scope.$apply();
+
+                                             //vmCreateForm($('#orderForm'),
+                                             // 'edit',
+                                             // procedure,
+                                             // fields,
+                                             // 'COMM_ORDER',
+                                             //  {
+                                             //      OK: 'OK',
+                                             //      Cancel: $translate.instant('buttonCancel')
+                                             //  }, controlList);
+                                         },
+                                         
+
+                                     }
+                                 }];
 
                                  vmCreateForm($('#orderForm'),
                                               'edit',
@@ -1264,7 +1414,7 @@
                                                {
                                                    OK: 'OK',
                                                    Cancel: $translate.instant('buttonCancel')
-                                               });
+                                               }, controlList);
                              } else {
 
                                  vmShowLastCommOrderValue();
@@ -1299,6 +1449,11 @@
                 $scope.sandwichModeAccepted = false;
 
                 $scope.isLoading = false;
+
+                //clear _commOrder, _brigadeNo and _prodDate to return to standard mode
+                _commOrder = null;
+                _brigadeNo = null;
+                _prodDate = null;
 
                 vmGetLatestWorkRequest($scope.currentScaleID);
             });
@@ -1432,6 +1587,21 @@
                                     
                             });
 
+                            var controlList = [{
+                                type: 'additional',
+                                name: 'preview',
+                                text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.preview'),
+                                procedure: 'ins_MaterialLotForPreview',
+                                procedureParams: {
+
+                                    additionalProcedureParams: {
+                                        prop: 'MaterialLotID',
+                                        value: 1
+                                    },
+                                    escapedProcedureParam: ['EquipmentID', 'FACTORY_NUMBER', 'PACKS_LEFT']
+                                }
+                            }];
+
                             vmCreateForm($('#' + container),
                             'edit',
                             procedureName,
@@ -1440,7 +1610,7 @@
                             {
                                 OK: 'OK',
                                 Cancel: container == 'remarkerForm' ? $translate.instant('marker.buttonExit') : $translate.instant('buttonCancel')
-                            });
+                            }, controlList);
                         }
                         else {
                             $scope.readOnly = false;
@@ -1451,7 +1621,7 @@
                     });
     };
 
-    function vmCreateForm(container, type, procedure, fields, keyField, captions) {
+    function vmCreateForm(container, type, procedure, fields, keyField, captions, controlList) {
 
         vmToggleModal(true);
 
@@ -1468,9 +1638,12 @@
             translates: {
 
                 errorConnection: $translate.instant('errorConnection'),
-                fillRequired: $translate.instant('marker.errorMessages.fillRequired')
+                fillRequired: $translate.instant('marker.errorMessages.fillRequired'),
+                notAcceptable: $translate.instant('market.modal.notAcceptable'),
+                noZeroValue: $translate.instant('market.modal.noZeroValue')
             },
-            fields: fields
+            fields: fields,
+            controlList: controlList,
         });
 
     };
@@ -1580,15 +1753,23 @@
     function vmReset() {
 
         $scope.selectedProfile = null;
-        $scope.commOrder = null;
+
+        if ($scope.commOrder != _commOrder)
+            $scope.commOrder = null;
+
         $scope.maxMass = null;
         $scope.minMass = null;
         $scope.barWeight = null;
         $scope.sampleLength = 1;
         $scope.sampleMass = null;
         $scope.deviation = null;
-        $scope.brigadeNo = null;
-        $scope.prodDate = null;
+
+        if ($scope.brigadeNo != _brigadeNo)
+            $scope.brigadeNo = null;
+
+        if ($scope.prodDate != _prodDate)
+            $scope.prodDate = null;
+
         $scope.length = null;
         $scope.barQuantity = null;
         $scope.sandwichMode = null;
@@ -1602,19 +1783,25 @@
     function vmWorkRequest() {
 
         if (
-
             ($scope.commOrder
             && $scope.minMass > 0
             && $scope.maxMass > 0
-            && $scope.barQuantity > 0
             && (parseInt($scope.maxMass) >= parseInt($scope.minMass))
-            && $scope.isAcceptedOrder) &&
+            && $scope.isAcceptedOrder)
 
-            (($scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET' &&
-            $scope.deviationState != 'wrong' && $scope.selectedProfile)
-            ||
-            ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT' && $scope.scalesDetailsInfo.PACK_RULE == 'CALC'            
-            && $scope.bindingDia && $scope.bindingQty))
+            //&& $scope.scalesDetailsInfo.SCALES_TYPE
+            && (($scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET'
+                    && $scope.deviationState != 'wrong'
+                    && $scope.selectedProfile
+                    && $scope.barQuantity > 0)
+            || ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT'
+                    && $scope.scalesDetailsInfo.PACK_RULE == 'CALC'
+                    && $scope.bindingDia
+                    && $scope.bindingQty)
+			|| ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT'
+                    && $scope.scalesDetailsInfo.PACK_RULE == 'ENTERED'))
+
+            || ($scope.scalesDetailsInfo.SCALES_TYPE == 'LINEPACK')
             ) {
 
             $scope.minMassWrongClass = false;
@@ -1673,13 +1860,13 @@
             if ($scope.maxMass == '0')
                 errors.push($translate.instant('marker.errorMessages.notNullable').format($translate.instant('marker.errorMessages.fieldName.maxMass')));
 
-            if ($scope.barQuantity === null || $scope.barQuantity.toString().length == 0)
+            if (($scope.barQuantity === null || $scope.barQuantity.toString().length == 0) && $scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET')
                 errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.errorMessages.fieldName.rodsQuantity')));
 
-            if ($scope.barQuantity == '0')
+            if ($scope.barQuantity == '0' && $scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET')
                 errors.push($translate.instant('marker.errorMessages.notNullable').format($translate.instant('marker.errorMessages.fieldName.rodsQuantity')));
 
-            if ($scope.selectedProfile === null)
+            if ($scope.selectedProfile === null && $scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET')
                 errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.errorMessages.fieldName.profile')));
 
 
@@ -1689,8 +1876,17 @@
             if (parseInt($scope.maxMass) < parseInt($scope.minMass))
                 errors.push($translate.instant('marker.errorMessages.minMaxWeight'));
 
-            if ($scope.deviationState == 'wrong')
+            if ($scope.deviationState == 'wrong' && $scope.scalesDetailsInfo.SCALES_TYPE == 'POCKET')
                 errors.push($translate.instant('marker.errorMessages.wrongDeviation'));
+
+            if (!$scope.scalesDetailsInfo.SCALES_TYPE)
+                errors.push($translate.instant('marker.errorMessages.scalesTypeUndefined'));
+
+            if ($scope.bindingDia === null && $scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT' && $scope.scalesDetailsInfo.PACK_RULE == 'CALC')
+                errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.bindingDia')));
+
+            if ($scope.bindingQty === null && $scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT' && $scope.scalesDetailsInfo.PACK_RULE == 'CALC')
+                errors.push($translate.instant('marker.errorMessages.fieldIsRequired').format($translate.instant('marker.bindingQty')));
 
             errors = errors.join(' \n ');
             alert(errors);
@@ -1706,14 +1902,38 @@
 
             alert($translate.instant('marker.errorMessages.acceptOrder'))
         } else {
-
-            $scope[label] = $translate.instant('loadingMsg');
-
+           
             $scope.isLoading = true;
+
+            if (label == 'takeWeightLabel') {
+
+                $scope[label] = $translate.instant('marker.takeWeightButtonProcessing');               
+                
+            } else {
+                $scope[label] = $translate.instant('loadingMsg');
+            }
+
             indexService.sendInfo(url, {
 
                 EquipmentID: parseInt($scope.currentScaleID) || null
             }).then(function (response) {
+
+                if (label == 'takeWeightLabel') {
+                    var cmdTakeWeightWatcher = $scope.$watch('cmdTakeWeight', function () {
+
+                            if (!$scope.cmdTakeWeight) {
+                                $scope[label] = $translate.instant('marker.takeWeightButtonProcessing');
+
+                            } else {
+
+                                $scope[label] = $translate.instant('marker.takeWeightButton');
+                                $timeout(function () {
+                                    cmdTakeWeightWatcher();
+                                }, 0);
+                            }                            
+                        
+                    });
+                }                
 
                 $scope[label] = $translate.instant(text);
                 $scope.isLoading = false;
@@ -1862,6 +2082,11 @@
         $scope.noHandModeQuantity = false;
         $scope.handModeQuantity = null;
         $scope.isLoading = false;
+
+        //clear _commOrder, _brigadeNo and _prodDate to return to standard mode 
+        _commOrder = null;
+        _brigadeNo = null;
+        _prodDate = null;
     };
 
     function vmShowOrderChangeModal() {
@@ -1875,6 +2100,7 @@
             order: 'ID desc'
         });
     }
+
     function vmAcceptOrderChange() {
 
         $scope.MaterialLotIDs = $scope.materialLotProdorderIDs.join(',');
@@ -1904,12 +2130,17 @@
 
                 PROD_ORDER: $scope.NewOrderNumber,
                 MaterialLotIDs: $scope.MaterialLotIDs
-            }).then(function () {
-
-                $scope.isLoading = false;
-
-                $scope.NewOrderNumber = null;
+            }).then(function () {                
+                
                 $('#changeOrderGrid').jsGrid('loadData', {});
+
+                $('#changeOrderGrid').on('oDataGrid.dataLoadedSuccessfull', function () {
+
+                    $scope.NewOrderNumber = null;
+                    $scope.isLoading = false;
+
+                    $scope.$apply();
+                });
             });
         }
     }
@@ -1919,6 +2150,58 @@
         $scope.noNewOrderNumber = false;
         $scope.toggleModalOrderChange = false;
         $scope.NewOrderNumber = null;
+    }
+
+    function vmShowToggleModalReversal() {
+
+        $scope.toggleReversal = true;
+        $scope.materialLotProdorderIDs = [];
+
+        $('#reverseGrid').jsGrid('loadOdata', {
+
+            defaultFilter: 'SideID eq {0}'.format($scope.sideIsSelected),
+            order: 'ID desc'
+        });
+    }
+
+    function vmAcceptOrderReversal() {
+
+        $scope.MaterialLotIDs = $scope.materialLotProdorderIDs.join(',');
+
+        var errors = [];
+
+        if ($scope.materialLotProdorderIDs.length == 0)
+            errors.push($translate.instant('marker.errorMessages.selectLabel'));
+
+        if (errors.length > 0) {
+
+            errors = errors.join(' \n ');
+            alert(errors);
+
+        } else {
+
+            $scope.isLoading = true;
+
+            indexService.sendInfo('upd_MaterialLotReversal', {
+
+                MaterialLotIDs: $scope.MaterialLotIDs
+            }).then(function () {
+
+                $('#reverseGrid').jsGrid('loadData', {});
+
+                $('#reverseGrid').on('oDataGrid.dataLoadedSuccessfull', function () {
+
+                    $scope.isLoading = false;
+
+                    $scope.$apply();
+                });
+            });
+        }
+    }
+
+    function vmCancelReversal() {
+
+        $scope.toggleReversal = false;
     }
 
     function vmShowOuterPage(state) {
@@ -1964,6 +2247,35 @@
         $scope.isLoading = false;
         vmToggleModal(false);
         vmShowLastCommOrderValue();
+
+        $scope.brigadeNo = $translate.instant('loadingMsg');
+        $scope.prodDate = $translate.instant('loadingMsg');
+
+        indexService.getInfo("v_WorkDefinitionPropertiesAll?$filter=comm_order eq '{0}' and (EquipmentID eq {1} or EquipmentID eq null)".format($scope.commOrder, $scope.currentScaleID))
+                    .then(function (response) {
+
+                        var data = response.data.value;
+                        var brigadeNo = data.find(function (item) {
+                            return item.Property == 'BRIGADE_NO';
+                        });
+
+                        if (brigadeNo)
+                            $scope.brigadeNo = brigadeNo.Value;
+                        else
+                            $scope.brigadeNo = null;
+
+                        var prodDate = data.find(function (item) {
+                            return item.Property == 'PROD_DATE';
+                        });
+
+                        if (prodDate)
+                            $scope.prodDate = prodDate.Value;
+                        else
+                            $scope.prodDate = null;
+
+                    }).catch(function () {
+                        vmShowLastCommOrderValue();
+                    })
 
         $scope.$apply();
     });
@@ -2156,7 +2468,7 @@
                if (($scope.scalesLeftSideInfo && $scope.scalesLeftSideInfo.POCKET_LOC == true && $scope.scalesLeftSideInfo.WEIGHT_STAB == false) ||
                    ($scope.scalesRightSideInfo && $scope.scalesRightSideInfo.POCKET_LOC == true && $scope.scalesRightSideInfo.WEIGHT_STAB == false)) {
 
-                   vmSetBlinking();
+                   vmSetBlinking('backgroundColor');
                } else {
 
                    vmClearStyle($('.monitorSideItem'));
@@ -2261,6 +2573,14 @@
                                 chartDataChunks.push(chartDataForScale);
                                 labels.push(scale.name);
                             });
+
+                            var i = chartDataChunks.length;
+                            while (i--) {
+                                if (chartDataChunks[i].length == 0) {
+                                    chartDataChunks.splice(i, 1);
+                                    labels.splice(i, 1);
+                                }
+                            }
 
                             var plotLine = $.jqplot('chart', chartDataChunks, {
 

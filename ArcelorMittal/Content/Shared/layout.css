@@ -383,6 +383,7 @@ div.modal.treeControls select{
     display: table-cell;
     text-align: center;
     vertical-align: middle;
+	font-size: 30px;
 }
 
 /*market page*/
@@ -430,6 +431,14 @@ button.add{
     width:auto;
     padding: 15px;
     max-width: 800px;
+}
+
+.modal.fullImage.modalPreview{
+    width: 780px;
+}
+
+.modal.fullImage.modalPreview .tableContainer{
+    height: 400px;
 }
 
 .modal.fullImage .btn-circle{
@@ -973,6 +982,10 @@ div.controlTask.profile .dropdown-toggle .dropdown-input{
     margin: 10px 0 0 20px;
 }
 
+.modal.additional.largeHeight{
+    top: 1%;
+}
+
 .enterLabelWrapper select.input-small{
     margin:0;
 }
@@ -1021,6 +1034,12 @@ div.controlTask.profile .dropdown-toggle .dropdown-input{
     bottom:10px;
 }
 
+/*marker errors*/
+.markerErrors{    
+    font-size: 16px;
+	color: rgb(255, 0, 0);
+}
+
 /*monitor*/
 
 .markerView{
@@ -1065,6 +1084,8 @@ div.controlTask.profile .dropdown-toggle .dropdown-input{
 .monitorSidesWrapper{
     font-size:0; 
     height: 90%;  
+	font-weight: bold;	
+	color: #fff;
 }
 
 .monitorSideItem{
@@ -1092,7 +1113,7 @@ div.controlTask.profile .dropdown-toggle .dropdown-input{
 }
 
 .monitorSideItem.green{
-    background: lightGreen;
+    background: #45ae1e;
 }
 
 .monitorSideItem .paramCaption{
@@ -1341,7 +1362,7 @@ div.odataDiagram .controls{
 }
 
 .tabs_PhysicalAsset_css {
-    width: 620px;
+    width: 100%;
 }
 
 .tabs_PhysicalAsset_css>section {
@@ -1384,11 +1405,17 @@ div.odataDiagram .controls{
 	display: block;
 }
 
+.tableContainer{
+    width: 100%;
+    display:table;
+}
+
 div.modal.treeControls {
 
-height: 650px;
-overflow: scroll;
+height: 700px;
+overflow: auto;
 }
+
 
 
 

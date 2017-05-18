@@ -1,12 +1,13 @@
 ﻿<div class="container loading" ng-show="$root.showLoadingState">
 
     <div class="loading-msg">
-        <h1>Loading ...</h1>
+        <h1>{{'loadingMsg' | translate}}</h1>
     </div>
 
 </div>
 
-<div ng-show="!$root.showLoadingState">
+<div ng-show="!$root.showLoadingState">    
+
     <button id="addFile" class="add btn btn-default">{{ 'market.buttonAddTempate' | translate }}</button>
     <button class="add btn btn-default"
             ng-if="labelTemplateMode"
@@ -230,7 +231,7 @@
         <div class="formWrapper">
 
             <div class="loading" ng-show="loadingModalData || processingTestPrint">
-                loading...
+                {{'loadingMsg' | translate}}
             </div>
             <form id="orderForm" novalidate ng-show="!loadingModalData"></form>
         </div>

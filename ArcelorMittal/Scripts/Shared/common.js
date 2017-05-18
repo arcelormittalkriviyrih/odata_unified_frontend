@@ -8,6 +8,7 @@ var sapUrl = '../../odata_sap_svc/GetSAPInfo?orderNo=';
 var interval = 5000; //grid auto refresh interval (5 sec)
 var _intervalID; //initiate interval ID
 var scalesRefresh = 1000; //scales autorefresh interval (1 sec)
+var errorsRefresh = 15000; //marker errors autorefresh interval (15 sec)
 var workRequestRefresh = 1000; //last Work Refresh for scales;
 var dropBoxTmpl = '<div class="dropdown form-control">' +
                                        '<div class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">' +
@@ -291,17 +292,31 @@ function getLastChild(obj, parents, child) {
 //method for handling AJAX errors
 function handleError(err, localization) {
 
+    var msg;
+
     if (err.responseText) {
         err = JSON.parse(err.responseText);
-        var msg = getLastChild(err, ['error', 'innererror', 'internalexception'], 'message');
+        msg = getLastChild(err, ['error', 'innererror', 'internalexception'], 'message');
         alert(msg);
     }
     else {
-        if (localization && localization.errorConnection)
-            alert(localization.errorConnection);
-         else
-            alert('unknown http error');
-    }
+
+
+
+        if (err.status == 406) {
+
+            if (localization && localization.notAcceptable)
+                msg = localization.notAcceptable;
+        } else {
+
+            if (localization && localization.errorConnection)
+                msg = localization.errorConnection;
+            else
+                msg = 'unknown http error';
+        }
+
+        alert(msg);
+    }  
     
 }
 
@@ -391,6 +406,16 @@ function vmShowUnfilledRequiredFields(form, unFilledFields) {
     });
 }
 
+function vmCheckNullableField(form, field) {
+
+    if (parseInt($(field).val()) === 0) {
+
+        vmShowUnfilledRequiredFields(form, field);
+        return false;
+    } else return true;
+
+}
+
 function vmSort(property, a, b) {
 
     if (a[property] < b[property])
@@ -415,10 +440,11 @@ function vmShowSelectedRows(args, list, key, property) {
     var selectedRowsList = [];
 
     var data = args.data.data.filter(function (item) {
-
-        if (list.indexOf(item[key]) > -1)
-            return item[key]
-
+		
+		if (list) {
+			if (list.indexOf(item[key]) > -1)
+				return item[key]
+		}
     });
 
     if (data.length > 0) {
@@ -535,29 +561,29 @@ function vmLoadStaticData(filter, data) {
     return d.promise();
 }
 
-function vmSetBlinking() {
+function vmSetBlinking(property, color) {
+
+    var animatedObj = {};
 
     if ($('.blink').hasClass('red')) {
-        $('.blink').animate({
 
-            backgroundColor: 'white'
-        }, 100, function () {
+        animatedObj[property] = 'white';
 
-            $('.blink').animate({
+        $('.blink').stop(true, true).animate(animatedObj, 100, function () {
 
-                backgroundColor: 'tomato'
-            }, 100);
+            animatedObj[property] = color? color : 'tomato';
+
+            $('.blink').animate(animatedObj, 100);
         })
     } else if ($('.blink').hasClass('green')) {
-        $('.blink').animate({
 
-            backgroundColor: 'white'
-        }, 100, function () {
+        animatedObj[property] = 'white';
 
-            $('.blink').animate({
+        $('.blink').stop(true, true).animate(animatedObj, 100, function () {
 
-                backgroundColor: 'lightgreen'
-            }, 100);
+            animatedObj[property] = color ? color : 'lightgreen';
+
+            $('.blink').animate(animatedObj, 100);
         })
     }
 };

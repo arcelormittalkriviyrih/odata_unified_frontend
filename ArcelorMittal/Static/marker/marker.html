@@ -34,7 +34,7 @@
 
     <p>{{currentSide}}</p>
 
-    <div class="scaleWrapper scaleCount-{{scales.length}}">
+    <div class="scaleWrapper scaleCount-{{groups.length > 1 ? '4' : scales.length}}">
 
         <div class="scaleGroup" ng-repeat="group in groups">
 
@@ -44,7 +44,7 @@
                  ng-click="selectCurrentSides(scale.ID)">
 
                 <label>
-                    {{scale.Description}}                    
+                    {{scale.Description}}
                 </label>
 
                 <span class="autoManuMsg" ng-show="(!scale.AUTO_MANU && scale.SCALES_TYPE != 'MANUAL') || scale.KEY_MANU == false">
@@ -54,7 +54,7 @@
                 <span class="autoManuMsg" ng-show="!((!scale.AUTO_MANU && scale.SCALES_TYPE != 'MANUAL') || scale.KEY_MANU == false)">
                     {{'marker.autoModeShort' | translate}}
                 </span>
-               
+
                 <span class="failureMsg" ng-show="scale.ALARM">
                     {{ 'marker.failure' | translate }}
                 </span>
@@ -122,7 +122,7 @@
 
         </div>
 
-        <div class="controlsWrapper" 
+        <div class="controlsWrapper"
              ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET' || scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
             <div class="controlsRow">
                 <div class="captionTask profile">
@@ -151,7 +151,7 @@
                     <div class="captionTask">
                         {{ 'marker.size' | translate }}
                     </div>
-                    
+
                     <div class="controlTask">
                         <input type="text"
                                class="form-control"
@@ -174,6 +174,20 @@
                     </div>
                 </div>
             </div>
+
+            <div class="controlsGroup" ng-show="scalesDetailsInfo.SCALES_TYPE == 'LINEPACK'">
+                <div class="controlsRow" style="margin-bottom:0;">
+
+                    <div class="controlTask singleRight checkbox-inline">
+                        <input type="checkbox"
+                               ng-model="autoMode"
+                               ng-checked="autoMode || scalesDetailsInfo.KEY_MANU == false"
+                               ng-disabled="!standard || scalesDetailsInfo.KEY_MANU == false"
+                               ng-change="enableControlOK()" />
+                        <span>{{ 'marker.byAccept' | translate }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="controlsWrapper" ng-show="scalesDetailsInfo.SCALES_TYPE == 'POCKET'" style="margin-top:-5px;">
@@ -184,7 +198,7 @@
 
                     </div>
                     <div class="controlTask singleLeft checkbox-inline"
-                          style="width:40%">
+                         style="width:40%">
                         <input type="checkbox"
                                ng-model="nemera"
                                ng-disabled="!standard"
@@ -196,7 +210,7 @@
 
             <div class="controlsGroup">
                 <div class="controlsRow" style="margin-bottom:0;">
-                    
+
                     <div class="controlTask singleRight checkbox-inline">
                         <input type="checkbox"
                                ng-model="autoMode"
@@ -207,7 +221,23 @@
                     </div>
                 </div>
             </div>
-            
+
+        </div>
+
+        <div class="controlsWrapper" ng-show="scalesDetailsInfo.SCALES_TYPE == 'BUNT'" style="margin-top:-5px;">
+            <div class="controlsGroup">
+                <div class="controlsRow" style="margin-bottom:0;">
+
+                    <div class="controlTask singleRight checkbox-inline">
+                        <input type="checkbox"
+                               ng-model="autoMode"
+                               ng-checked="autoMode || scalesDetailsInfo.KEY_MANU == false"
+                               ng-disabled="!standard || scalesDetailsInfo.KEY_MANU == false"
+                               ng-change="enableControlOK()" />
+                        <span>{{ 'marker.byAccept' | translate }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="controlsWrapper"
@@ -342,7 +372,7 @@
             </div>
         </div>
 
-        <div class="controlsWrapper" style="margin-top:40px;" ng-show="scalesDetailsInfo.SCALES_TYPE == 'BUNT'
+        <div class="controlsWrapper" ng-show="scalesDetailsInfo.SCALES_TYPE == 'BUNT'
                 && scalesDetailsInfo.PACK_RULE == 'CALC'">
             <div class="controlsGroup">
 
@@ -404,7 +434,7 @@
             <button type="button"
                     class="btn btn-default"
                     ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
-                    ng-disabled="disableButtonOKTask"
+                    ng-disabled="disableButtonOKTask || scalesDetailsInfo.Send_OPC_Error"
                     ng-click="workRequest()">
                 {{OKLabel}}
             </button>
@@ -432,7 +462,7 @@
             {{ 'marker.byAccept' | translate }}
         </span>
 
-        <p class="msgRed" ng-show="scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.weightCurrent > scalesDetailsInfo.MaxWeight && scalesDetailsInfo.MaxWeight > 0">
+        <p class="msgRed" ng-show="scalesDetailsInfo.PEREBOR">
             {{'marker.weightOver' | translate}}
         </p>
 
@@ -456,7 +486,7 @@
             </span>
         </p>
 
-        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
+        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL' || scalesDetailsInfo.SCALES_TYPE == 'BUNT'">
             <span class="description">{{ 'marker.rodsQuantity' | translate }}:</span>
 
             <span class="value rodsValue" ng-show="scalesDetailsInfo.RodsQuantity && scalesDetailsInfo.RodsQuantity > 0">
@@ -464,14 +494,23 @@
             </span>
         </p>
 
-        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
+        <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL' || scalesDetailsInfo.SCALES_TYPE == 'BUNT'">
             <span class="description">{{ 'marker.rodsLeft' | translate }}:</span>
             <span class="value rodsValue" ng-show="rodsLeft != null">
                 <span ng-show="rodsLeft > 0">+</span>
                 {{rodsLeft}} {{ 'marker.pcs' | translate }}
             </span>
         </p>
-        
+
+        <p class="scaleInfoContainer" ng-show="scalesDetailsInfo.SCALES_TYPE == 'BUNT'">
+            <span class="description">
+                {{ 'marker.buntNo' | translate }}:
+            </span>
+            <span class="value rodsValue">
+                {{buntNo}}
+            </span>                 
+        </p>
+
         <div class="controls">
 
             <button type="button"
@@ -480,7 +519,7 @@
                     ng-disabled="!(
                     (!sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')
                     ||
-                    (sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1'))"
+                    (sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')) || scalesDetailsInfo.Send_OPC_Error"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeWeight','takeWeightLabel', 'marker.takeWeightButton')">
                 {{takeWeightLabel}}
             </button>
@@ -488,12 +527,12 @@
             <button type="button"
                     class="btn btn-default"
                     ng-show="sandwichModeAccepted && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
-                    ng-disabled="!(scalesDetailsInfo && scalesDetailsInfo.EN_BUTTON_TARA && scalesDetailsInfo.WEIGHT_OK)"
+                    ng-disabled="!(scalesDetailsInfo && scalesDetailsInfo.EN_BUTTON_TARA && scalesDetailsInfo.WEIGHT_OK) || scalesDetailsInfo.Send_OPC_Error"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeTara','takeTaraLabel', 'marker.takeTaraButton')">
                 {{takeTaraLabel}}
             </button>
 
-            
+
 
             <button type="button"
                     class="btn btn-default specialLabelMode"
@@ -546,6 +585,13 @@
                     ng-disabled="!standard">
                 {{ 'marker.changeOrderButton' | translate }}
             </button>
+
+            <button type="button"
+                    class="btn btn-default specialLabelMode"
+                    ng-click="showToggleModalReversal()"
+                    ng-disabled="!standard">
+                {{ 'marker.reversalButton' | translate }}
+            </button>
         </div>
 
 
@@ -582,6 +628,19 @@
     </div>
 
 </div>
+
+<div class="scaleDetailInfo" ng-show="markerErrors.length > 0 && currentScaleID" style="margin-top: 2px; padding: 1px 0 1px">
+
+    <h4 class="labelTask">{{'marker.markerErrorCaption' | translate}}</h4>
+
+    <div class="markerErrors blink red" style="padding-left: 12px">
+        <p ng-repeat="error in markerErrors">
+            {{error.ErrorMessage}}
+        </p>
+    </div>
+</div>
+
+
 
 <div class="black-wrapper" ng-show="isShowModal">
     <div class="modal additional">
@@ -747,7 +806,7 @@
 </div>
 
 <div class="black-wrapper" ng-show="toggleModalOrderChange">
-    <div class="modal additional">
+    <div class="modal additional largeHeight">
 
         <h4>{{ 'marker.modalCaptions.OrderChangeMode' | translate }}</h4>
 
@@ -784,6 +843,49 @@
 
     </div>
 </div>
+
+
+
+
+
+
+
+<div class="black-wrapper" ng-show="toggleReversal">
+    <div class="modal additional">
+
+        <h4>{{ 'marker.modalCaptions.Reversal' | translate }}</h4>
+
+        <div class="formWrapper" style="margin: 10px 0 0 13px;">
+
+            <p>{{'marker.grid.reversed' | translate}}:</p>
+
+            <div id="reverseGrid">
+
+            </div>
+        </div>
+
+        <div class="control-row">
+            <button type="button"
+                    class="btn btn-default"
+                    ng-click="acceptOrderReversal()">
+                OK
+            </button>
+            <button type="button"
+                    class="btn btn-default"
+                    ng-click="cancelReversal()">
+                {{ 'marker.buttonExit' | translate }}
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
 
 <div style="position:fixed; top:0; left:0; width: 100%; height: 100%; z-index:2000;"
      class="container loading"

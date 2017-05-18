@@ -91,9 +91,12 @@
                     MATERIAL_NO: 'Material No',
                     BRIGADE_NO: 'Brigade',
                     PROD_DATE: 'Production date',
+					LABEL_PRINT_QTY: 'Number of printed labels',
                     additionalButtonCaptions: {
 
-                        testPrint: 'Test print'
+                        testPrint: 'Test print',
+                        preview: 'Preview',
+                        refresh: 'Refresh'
                     }
                 }
             },
@@ -118,6 +121,10 @@
                     upload: 'Upload',
                     update: 'Update'
                 }
+            },
+            modal: {
+                notAcceptable: 'Cannot load preview for this template!',
+                noZeroValue: 'Field "{0}" cannot be with value "0"!'
             }
 
         },
@@ -195,6 +202,7 @@
             autoMode: 'Auto Mode',
             weight: 'Weight',
             rodsQuantity: 'Rods quantity',
+            buntNo: 'Bunt number',
             rodsLeft: 'Rods left',
             scalesBlocked: 'Scales blocked',
             weightOver: 'Weight is over then maximum permissible weight',
@@ -212,7 +220,7 @@
             chartEndDate: 'End Date',
             getChartDataBtn: 'Get',
             chartNoData: 'There are no data for this period! select another period!',
-
+			markerErrorCaption: 'Errors:',
 
             CreateDialogue: {
                 CHANGE_NO: 'Change',
@@ -221,6 +229,7 @@
             },
             acceptOrderTask: 'Accept task',
             takeWeightButton: 'Take weight',
+			takeWeightButtonProcessing: 'Taking...',
             takeTaraButton: 'Take tara',
             testPrintButton: 'Test print',
             buttonExit: 'Exit',
@@ -230,6 +239,7 @@
             separateButton: 'Split pack',
             handModeButton: 'Manual input',
             changeOrderButton: 'Change order',
+			reversalButton: 'Reversal',
             statisticsButton: 'Statistics',
             errorMessages: {
 
@@ -244,6 +254,7 @@
                 handModeQuantity: 'You must enter weight!',
 				notNullable: 'Field "{0}" cannot be nullable!',
                 fieldIsRequired: 'Field "{0}" is required!',
+				scalesTypeUndefined: 'Scales type is undefined, check equipment properties',
                 fieldName: {
 
                     minMass: 'Min weight',
@@ -264,7 +275,8 @@
                 HandMode: 'Manual Mode',
                 enterQuantity: 'Enter weight',
                 getHandModeCredentials: 'Run',
-                OrderChangeMode: 'Change order',
+                OrderChangeMode: 'Change order',				
+                Reversal: 'Reversal',
                 enterNewOrder: 'Enter new order no'
             },
             grid: {
@@ -275,7 +287,8 @@
                 BUNT_NO: 'Bunt No',
                 CreateTime: 'Date',
                 Quantity: 'Quantity',
-                selected: 'Select records needed to change'
+                selected: 'Select records needed to change',
+                reversed: 'Select records needed to reverse'
             },
             monitorCaptions: {
 
@@ -478,9 +491,12 @@
                     MATERIAL_NO: '№ материала',
                     BRIGADE_NO: 'Бригада',
                     PROD_DATE: 'Производственная дата',
+					LABEL_PRINT_QTY: 'Кол-во печатаемых бирок',
                     additionalButtonCaptions: {
 
-                        testPrint: 'Тестовая печать'
+                        testPrint: 'Тестовая печать',
+                        preview: 'Превью',
+                        refresh: 'Обновить'
                     }
                 }
             },
@@ -505,6 +521,10 @@
                     upload: 'Загрузить',
                     update: 'Обновить'
                 }
+            },
+            modal: {
+                notAcceptable: 'Невозможно загрузить превью для этого шаблона!',
+                noZeroValue: 'Поле "{0}" не может иметь значение "0"!'
             }
         },
         pa: {
@@ -580,6 +600,7 @@
             autoMode: 'Автоматический режим',
             weight: 'Вес',
             rodsQuantity: 'Количество прутков',
+            buntNo: 'Номер бунта',
             rodsLeft: 'Осталось прутков',
             scalesBlocked: 'Весы заблокированы',
             weightOver: 'Масса превышает максимально допустимую',
@@ -597,6 +618,7 @@
             chartEndDate: 'Дата до',
             getChartDataBtn: 'Получить',
             chartNoData: 'Нет данных за этот период! Выберите другой период',
+			markerErrorCaption: 'Ошибки:',
 
             CreateDialogue: {
                 CHANGE_NO: 'Смена',
@@ -605,6 +627,7 @@
             },
             acceptOrderTask: 'Подтвердить задание',
             takeWeightButton: 'Взять вес',
+			takeWeightButtonProcessing: 'Взятие...',
             takeTaraButton: 'Взять тару',
             testPrintButton: 'Тест печать',
             buttonExit: 'Выход',
@@ -614,6 +637,7 @@
             separateButton: 'Разделение пачки',
             handModeButton: 'Ручной ввод',
             changeOrderButton: 'Изменить заказ',
+			reversalButton: 'Сторнирование',
             statisticsButton: 'Статистика',
             errorMessages: {
 
@@ -628,6 +652,7 @@
                 handModeQuantity: 'Вы должны ввести вес!',
 				notNullable: 'Значение поля "{0}" не должно равняться 0!',
                 fieldIsRequired: 'Поле "{0}" обязательно для заполнения!',
+				scalesTypeUndefined: 'Тип весов не указан, проверьте свойства оборудования',
                 fieldName: {
 
                     minMass: 'Масса минимум',
@@ -649,6 +674,7 @@
                 enterQuantity: 'Введите вес',
                 getHandModeCredentials: 'Run',
                 OrderChangeMode: 'Изменить заказ',
+				Reversal: 'Сторнирование',
                 enterNewOrder: 'Введите новый номер заказа'
             },
             grid: {
@@ -659,7 +685,8 @@
                 BUNT_NO: '№ бунта',
                 CreateTime: 'Дата',
                 Quantity: 'Вес',
-                selected: 'Отметьте записи, которые нужно изменить'
+                selected: 'Отметьте записи, которые нужно изменить',
+				reversed: 'Отметьте записи, которые нужно сторнировать'
             },
             monitorCaptions: {
 
@@ -863,9 +890,12 @@
                     MATERIAL_NO: '№ материала',
                     BRIGADE_NO: 'Бригада',
                     PROD_DATE: 'Виробнича дата',
+					LABEL_PRINT_QTY: 'К-сть друкуємих бирок',
                     additionalButtonCaptions: {
 
-                        testPrint: 'Тестовий друк'
+                        testPrint: 'Тестовий друк',
+                        preview: 'Прев\'ю',
+                        refresh: 'Оновити'
                     }
                 }
             },
@@ -889,6 +919,10 @@
                     upload: 'Завантажити',
                     update: 'Оновити'
                 }
+            },
+            modal: {
+                notAcceptable: 'Неможливо завантажити прев\'ю для цього шаблона!',
+                noZeroValue: 'Поле "{0}" не може мати значення "0"!'
             }
         },
         pa: {
@@ -964,6 +998,7 @@
             autoMode: 'Автоматичний режим',
             weight: 'Вага',
             rodsQuantity: 'Кількість прутків',
+            buntNo: 'Номер бунта',
             rodsLeft: 'Залишилось прутків',
             scalesBlocked: 'Ваги заблоковані',
             weightOver: 'Маса перевищує максимально допустиму',
@@ -981,6 +1016,7 @@
             chartEndDate: 'Дата до',
             getChartDataBtn: 'Отримати',
             chartNoData: 'Немає даних за цей період! Виберіть інший період',
+			markerErrorCaption: 'Помилки:',
 
             CreateDialogue: {
                 FactoryNumber: 'Номер бірки',
@@ -989,6 +1025,7 @@
             },
             acceptOrderTask: 'Підтвердити завдання',
             takeWeightButton: 'Взяти вагу',
+			takeWeightButtonProcessing: 'Взяття...',
             takeTaraButton: 'Взяти тару',
             testPrintButton: 'Тест друк',
             buttonExit: 'Вихід',
@@ -998,6 +1035,7 @@
             separateButton: 'Розділення пачки',
             handModeButton: 'Ручне введення',
             changeOrderButton: 'Змінити замовл.',
+			reversalButton: 'Сторнування',
             statisticsButton: 'Статистика',
             errorMessages: {
 
@@ -1012,6 +1050,7 @@
                 handModeQuantity: 'Ви повинні ввести вагу!',
 				notNullable: 'Значення поля "{0}" не повинно дорівнювати 0!',
                 fieldIsRequired: 'Поле "{0}" обов\'язкове для заповнення!',
+				scalesTypeUndefined: 'Тип вагів не задано, перевірте властивості обладнання',
                 fieldName: {
 
                     minMass: 'Маса мінімум',
@@ -1033,6 +1072,7 @@
                 enterQuantity: 'Введіть вагу',
                 getHandModeCredentials: 'Run',
                 OrderChangeMode: 'Змінити замовлення',
+				Reversal: 'Сторнування',
                 enterNewOrder: 'Введіть новий номер замовлення'
             },
             grid: {
@@ -1043,7 +1083,8 @@
                 BUNT_NO: '№ бунта',
                 CreateTime: 'Дата',
                 Quantity: 'Вага',
-                selected: 'Відмітьте записи, котрі необхідно змінити'
+                selected: 'Відмітьте записи, котрі необхідно змінити',
+				reversed: 'Відмітьте записи, котрі необхідно сторнувати'
             },
             monitorCaptions: {
 

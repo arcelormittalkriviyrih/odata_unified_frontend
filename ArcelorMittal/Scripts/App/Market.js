@@ -158,6 +158,30 @@
             oDataAPI.push(indexService.getInfo('v_OrderPropertiesAll?$filter=OperationsRequest eq ({0})'.format(id)))
         }
 
+        var controlList = [{
+            type: 'additional',
+            name: 'preview',
+            text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.preview'),
+            procedure: 'ins_MaterialLotForPreview',
+            procedureParams: {
+                additionalProcedureParams: {
+                    prop: 'MaterialLotID',
+                    value: 1
+                }
+            }
+        },{
+            type: 'additional',
+            name: 'testPrint',
+            text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.testPrint'),
+            procedure: 'ins_MaterialLotForTestPrint',
+            procedureParams: {
+                callBack: function () {
+                    $scope.isLoading = false;
+                    $scope.$apply();
+                }
+            }
+        }];
+
         $q.all(oDataAPI)
             .then(function (responce) {
 
@@ -170,7 +194,7 @@
                 if (id)
                     rowData = responce[1].data.value;
 
-                marketService.createForm(type, procedure, id, keyField, templateData, rowData);
+                marketService.createForm(type, procedure, id, keyField, templateData, rowData, false, controlList);
 
             });
     }
@@ -642,6 +666,31 @@
 
         $scope.loadingModalData = true;
         $scope.orderCaption = $translate.instant('market.Order.caption.{0}'.format(type));
+        var controlList = [
+            {
+                type: 'additional',
+                name: 'preview',
+                text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.preview'),
+                procedure: 'ins_MaterialLotForPreview',
+                procedureParams: {
+                    additionalProcedureParams: {
+                        prop: 'MaterialLotID',
+                        value: 1
+                    }
+                }
+            },
+            {
+                type: 'additional',
+                name: 'testPrint',
+                text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.testPrint'),
+                procedure: 'ins_MaterialLotForTestPrint',
+                procedureParams: {
+                    callBack: function () {
+                        $scope.isLoading = false;
+                        $scope.$apply();
+                    }
+                }
+        }];
 
         indexService.getInfo("Files?$filter=FileType eq 'Excel label' and Status eq '%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5'")
             .then(function (responce) {
@@ -655,7 +704,7 @@
                         Value: id.toString()
                 }];
 
-                marketService.createForm(type, procedure, id, keyField, templateData, rowData, true);
+                marketService.createForm(type, procedure, id, keyField, templateData, rowData, true, controlList);
 
         });
     };
@@ -749,14 +798,7 @@
 
 .service('marketService', ['$translate', 'sapUrl', function ($translate, sapUrl) {
 
-    this.createForm = function (type, procedure, id, keyField, templateData, rowData, hideSubmit) {
-
-        var controlList = [{
-            type: 'additional',
-            name: 'testPrint',
-            text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.testPrint'),
-            procedure: 'ins_MaterialLotForTestPrint'
-        }];
+    this.createForm = function (type, procedure, id, keyField, templateData, rowData, hideSubmit, controlList) {
 
         if (hideSubmit) {
 
@@ -1059,7 +1101,32 @@
                 translate: $translate.instant('market.Order.CreateDialogue.MATERIAL_NO'),
                 order: 18
             },
-        }, {
+        },
+
+        {
+            name: 'LABEL_PRINT_QTY',
+            properties: {
+                control: 'combo',
+                required: false,
+                show: true,
+                disable: false,
+                send: true,
+                defaultValue: 1,
+                translate: $translate.instant('market.Order.CreateDialogue.LABEL_PRINT_QTY'),
+                data: [{
+                    'ID': 1,
+                    'Name': 1
+                }, {
+                    'ID': 2,
+                    'Name': 2
+                }],
+                keyField: 'ID',
+                valueField: 'Name',
+                filter: false,
+                order: 99
+            }
+        },
+        {
             name: 'TEMPLATE',
             properties: {
                 control: 'combo',
@@ -1071,6 +1138,8 @@
                 data: templateData,
                 keyField: 'ID',
                 valueField: 'Name',
+                filter: true,
+                className: 'large',               
                 order: 99
             }
         }];
@@ -1088,7 +1157,7 @@
                     field.properties.defaultValue = data.Value;
                 else
                     field.properties.defaultValue = null;
-            }else
+            } else if (!field.properties.defaultValue)
                 field.properties.defaultValue = null;
             
         });
@@ -1105,7 +1174,9 @@
             },
             translates: {
 
+                loadingMsg: $translate.instant('loadingMsg'),
                 errorConnection: $translate.instant('errorConnection'),
+                notAcceptable: $translate.instant('market.modal.notAcceptable'),
                 fillRequired: $translate.instant('marker.errorMessages.fillRequired')
             },
             fields: fields,

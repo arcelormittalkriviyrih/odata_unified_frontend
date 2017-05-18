@@ -1,10 +1,13 @@
 ﻿<div class="row col-md-12" ng-show="!$root.showLoadingState">
-    <div class="treeContainer col-md-4">
-        <div id="hierarchy">
+    <div class="col-md-12">
+       <div class="gridWrapper">
+            <div class="disable" id="materialDefinitionDisable">
+            </div>
+            <div id="physicalAssetTable"></div>
         </div>
     </div>
 
-    <div class="cancelMarginLeft col-md-8">
+    <div class="cancelMarginLeft col-md-12">
         <div class="tabs_PhysicalAsset_css">
             <input id="tab1" type="radio" name="tabs" checked>
             <label for="tab1" title="Свойства"> {{ 'pa.PhysTabs.Property' | translate }}</label>
@@ -12,9 +15,9 @@
             <label for="tab2" title="Структура"> {{ 'pa.PhysTabs.Structure' | translate }}</label>
             <section id="content1">
                <div class="gridWrapper">
-                    <div class="disable" id="PhysicalAssetPropertyDisable">
+                    <div class="disable" id="materialDefinitionPropertyDisable">
                     </div>
-                    <div id="equipment_property"></div>
+                    <div id="physicalAssetPropertyTable"></div>
                </div>
             </section>  
             <section id="content2">

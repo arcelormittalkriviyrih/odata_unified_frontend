@@ -11,7 +11,8 @@
             controlList = options.controlList,
             translates = options.translates,
             preventEnterSubmit = options.preventEnterSubmit,
-            _fields = null;
+            _fields = null,
+            _isNoZeroValuesFields = []; //array of fieds name. There are fields must be not '0' value but still have 0
 
         vmBuildForm(self);
 
@@ -96,10 +97,13 @@
                     case 'combo':
 
 
-                        controlsControlGroup.addClass('large').append(dropBoxTmpl.format('selectedComboTextValue', 'selectedComboDataValue', 'oDataFormCombo'));
+                        controlsControlGroup.append(dropBoxTmpl.format('selectedComboTextValue', 'selectedComboDataValue', 'oDataFormCombo'));
 
-                        var selectedComboTextValue = $('#selectedComboTextValue');
-                        var selectedComboDataValue = $('#selectedComboDataValue');
+                        if (properties.className) //large
+                            controlsControlGroup.addClass(properties.className);
+
+                        var selectedComboTextValue = controlsControlGroup.find('#selectedComboTextValue');
+                        var selectedComboDataValue = controlsControlGroup.find('#selectedComboDataValue');
 
                         var ul = controlsControlGroup.find('#oDataFormCombo');
 
@@ -139,57 +143,62 @@
                                                     })
                                                     .appendTo(li);
                         });
+                        var filterField = controlsControlGroup.find('#filter');
 
-                        controlsControlGroup.find('#filter').keyup(function () {
+                        if (!properties.filter)
+                            filterField.hide();
+                        else {
+                            filterField.keyup(function () {
 
-                            var comboList = ul.find('li a');
-                            var val = $(this).val().toLowerCase();                                
-                            
-                            if (val.length > 0) {
+                                var comboList = ul.find('li a');
+                                var val = $(this).val().toLowerCase();
 
-                                var notEqual = 0;//hack for ie9
-                                var itemLength = comboList.length;//hack for ie9
+                                if (val.length > 0) {
 
-                                comboList.each(function (i, item) {
+                                    var notEqual = 0;//hack for ie9
+                                    var itemLength = comboList.length;//hack for ie9
 
-                                    $(item).parent().show();
-                                });
+                                    comboList.each(function (i, item) {
 
-                                comboList.each(function (i, item) {
+                                        $(item).parent().show();
+                                    });
 
-                                    if ($(item).text().toLowerCase().indexOf(val) == -1) {
+                                    comboList.each(function (i, item) {
 
-                                        notEqual++;//hack for ie9
-                                        $(item).parent().hide();
-                                    }
+                                        if ($(item).text().toLowerCase().indexOf(val) == -1) {
 
-                                });
+                                            notEqual++;//hack for ie9
+                                            $(item).parent().hide();
+                                        }
 
-                                if (notEqual == itemLength)//hack for ie9 
-                                    ul.addClass('zeroHeight'); //hack for ie9                              
-                                else//hack for ie9
+                                    });
+
+                                    if (notEqual == itemLength)//hack for ie9 
+                                        ul.addClass('zeroHeight'); //hack for ie9                              
+                                    else//hack for ie9
+                                        ul.removeClass('zeroHeight');//hack for ie9
+
+                                } else {
+
+                                    comboList.each(function (i, item) {
+
+                                        $(item).parent().show();
+                                    });
+
+
                                     ul.removeClass('zeroHeight');//hack for ie9
+                                }
 
-                            } else {
-
-                                comboList.each(function (i, item) {
-
-                                    $(item).parent().show();
-                                });
-
-
-                                ul.removeClass('zeroHeight');//hack for ie9
-                            }
-                            
-                        })
-
-                        
+                            })
+                        }                                               
 
                         field.input = selectedComboDataValue;
 
                         break;
 
                 }
+
+                field.input.attr('name', field.name);
 
                 if (properties.required) {
 
@@ -202,8 +211,7 @@
 
                         })
                 }
-                                       
-                    
+                                                           
                 //fill field if there is data for this field (in edit and copy mode)
                 
                 if (formType != 'create') {
@@ -218,8 +226,15 @@
                         if (defaultValue)
                             field.input.siblings('.dropdown-input').val(defaultValue.Name);
                     }
-
+                   
                     field.input.val(field.properties.defaultValue);
+                }
+
+                //set default value for combo in create form mode if available
+                if (formType == 'create' && field.input.attr('data-parent') == 'dropDown' && properties.defaultValue) {
+
+                    field.input.val(properties.defaultValue);
+                    field.input.siblings('.dropdown-input').val(properties.defaultValue);
                 }
                     
                 
@@ -254,6 +269,32 @@
                         };
                     });
 
+                if (properties.notZeroValue) {
+
+                    field.input
+                        .focus(function (e) {
+
+                            if ($(this).hasClass('wrong'))
+                                $(this).removeClass('wrong');
+
+                        })
+                        .on("keyup", function (event) {
+
+                            var indexNoZero = _isNoZeroValuesFields.indexOf(properties.translate);
+
+                            if (!vmCheckNullableField($form, field.input)) {
+                                if (indexNoZero == -1)
+                                _isNoZeroValuesFields.push(properties.translate);
+                            } else {
+                                if (indexNoZero > -1)
+                                    _isNoZeroValuesFields.splice(indexNoZero, 1);
+                            }
+                            
+
+                    })
+                }
+                    
+
                 //set keyfield as readonly if we build edit form
                 if (formType == 'edit') {
 
@@ -282,6 +323,14 @@
                     if (!vmCheckRequiredFields($form)) {
 
                         alert(translates.fillRequired);
+                        return false;
+                    }
+
+                    if (_isNoZeroValuesFields.length > 0) {
+
+                        var zeroFieldsNames = _isNoZeroValuesFields.join();
+
+                        alert(translates.noZeroValue.format(zeroFieldsNames));
                         return false;
                     }
 
@@ -334,17 +383,90 @@
                         var additionalControl = $('<button />').addClass('btn btn-default {0}'.format(control.name))
                                                                .text(control.text)
                                                                .click(function () {
-
-                                                                   if (!vmCheckRequiredFields($form)) {
+																   
+																   if (!vmCheckRequiredFields($form)) {
 
                                                                        alert(translates.fillRequired);
                                                                        return false;
                                                                    }
 
+                                                                   if (control.name == 'preview') {
+
+                                                                       var blackWrapper = $('<div />').attr({ 'id': 'fullImageModalPreview' })
+                                                                                                   .addClass('black-wrapper')
+                                                                                                   .appendTo('body').hide(),
+
+                                                                       controlsRootModal = $('<div />').addClass('modal fullImage modalPreview')
+                                                                                                .appendTo(blackWrapper),
+
+                                                                       fullImageZone = $('<div />').addClass('scaleZone')
+                                                                                                .appendTo(controlsRootModal),
+
+                                                                       loadingContainer = $('<div />').addClass('tableContainer')
+                                                                           .appendTo(fullImageZone),
+
+                                                                       loadingMsg = $('<span />').addClass('loading-msg')
+                                                                           .text(translates.loadingMsg || 'loading...').appendTo(loadingContainer),
+
+                                                                       fullImage = $('<img />').appendTo(fullImageZone).hide(),
+
+                                                                       cancelBtn = $('<button />')
+                                                                                                .addClass('btn btn-circle')
+                                                                                                .append('<span class="glyphicon glyphicon-remove"></span>')
+                                                                                                .appendTo(controlsRootModal)
+                                                                                                .click(function () {
+
+                                                                                                    //fullImage.removeAttr('src');
+                                                                                                    blackWrapper.hide();
+                                                                                                })
+                                                                   };                                                                   
+
                                                                    self.trigger('oDataForm.procedureProcessing');
 
-                                                                   vmCallAction(control.procedure)
+                                                                   var arguments = [control.procedure];
+
+                                                                   if (control.procedureParams) {
+
+                                                                       if (control.procedureParams.additionalProcedureParams) {
+                                                                           arguments.push(control.procedureParams.additionalProcedureParams);
+                                                                       }
+
+                                                                       if (control.procedureParams.escapedProcedureParam) {
+
+                                                                           arguments.push(control.procedureParams.escapedProcedureParam);
+                                                                       }
+
+                                                                   }
+                                                                   
+                                                                   vmCallAction.apply(this, arguments)
                                                                         .done(function (result) {
+
+                                                                            if (control.name == 'preview') {
+                                                                                blackWrapper.show();
+                                                                                loadingContainer.show();
+
+                                                                                var materialLotID = result.ActionParameters.find(function(item){
+                                                                                    return item.Name == "MaterialLotID"
+                                                                                });
+                                                                                var src = domainURL + '/api/MediaData/GenerateExcelPreview?materialLotID=' + materialLotID.Value;
+
+                                                                                fullImage.attr('src', src)
+                                                                                         .on('load', function () {
+
+                                                                                             loadingContainer.hide();
+                                                                                             fullImage.show();
+                                                                                         }).on('error', function () {
+
+                                                                                             loadingContainer.show();
+                                                                                             loadingMsg.text(options.translates.notAcceptable);
+                                                                                             
+                                                                                         });                                                                                                                                                                
+                                                                            }
+
+                                                                            if (control.procedureParams.callBack) {
+                                                                                control.procedureParams.callBack();
+                                                                            }
+                                                                            
 
                                                                             self.trigger('oDataForm.procedureProcessed');
                                                                         }).fail(function(err){
@@ -413,7 +535,7 @@
             })
         }
 
-        function vmCallAction(procedure) {
+        function vmCallAction(procedure, additionalParam, escapedParam) {
             
             var url = serviceUrl;
 
@@ -435,11 +557,24 @@
                     data[prop] = null;
             }
 
+            if (additionalParam)
+                data[additionalParam.prop] = additionalParam.value;
+
+            if (escapedParam) {
+                var newData = jQuery.extend({}, data);
+
+                escapedParam.forEach(function (item) {
+                    delete newData[item];
+                });
+
+                
+            }
+                
              //call service action
             return $.ajax({
                 url: url + procedure,
                 type: 'POST',
-                data: JSON.stringify(data),
+                data: newData ? JSON.stringify(newData) : JSON.stringify(data),
                 contentType: "application/json",
                 timeout: 15000
             })
