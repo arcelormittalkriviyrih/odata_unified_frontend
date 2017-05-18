@@ -30,13 +30,13 @@ angular.module('indexApp')
             url: '/create',
             templateUrl: 'Static/consigners/create.html',
             controller: 'ConsignersCreateCtrl',
-            params: { copy_id: null },
+            params: { copy_id: null, waybill_object: null },
 
         })
 
         .state('app.Consigners.Print', {
 
-            url: '/toprint/:printid?',
+            url: '/toprint/:print_id?',
             templateUrl: 'Static/consigners/waybill.html',
             controller: 'ConsignersPrintCtrl',
             params: { waybill_object: null },
@@ -56,6 +56,11 @@ angular.module('indexApp')
 }])
 
 
+
+
+
+
+
 .controller('ConsignersIndexCtrl', ['$q', '$scope', '$translate', 'indexService', 'consignersService', '$state', '$stateParams', function ($q, $scope, $translate, indexService, consignersService, $state, $stateParams) {
 
     //alert("ConsignersIndexCtrl");
@@ -63,10 +68,10 @@ angular.module('indexApp')
 
     //$state.go('app.Consigners.Index');
 
-    $scope.common_var = null;
+    //$scope.common_var = null;
     $scope.WaybillShops = [];
-    $scope.CurrentWaybill = [];
-    var WaybillList;
+    $scope.CurrentWaybill = {};
+    var WaybillList = $('#waybill_list').jstree('destroy');
     var RWStations = [];
     var CargoTypes = [];
     var CargoSenders = [];
@@ -87,7 +92,7 @@ angular.module('indexApp')
     $scope.CreateCopy = function () {
         //alert("Create");
         console.log("go to app.Consigners.Create");
-        $state.go('app.Consigners.Create', { copy_id: $scope.common_var });
+        $state.go('app.Consigners.Create', { copy_id: $scope.CurrentWaybill.ID, waybill_object: $scope.CurrentWaybill });
 
     }
 
@@ -96,7 +101,7 @@ angular.module('indexApp')
 
         if ($scope.CurrentWaybill.ID) {
             console.log("go to app.Consigners.Print");
-            $state.go('app.Consigners.Print', { printid: $scope.CurrentWaybill.ID, waybill_object: $scope.CurrentWaybill });
+            $state.go('app.Consigners.Print', { print_id: $scope.CurrentWaybill.ID, waybill_object: $scope.CurrentWaybill });
         }
         else {
             alert("$scope.CurrentWaybill.ID is null");
@@ -262,7 +267,7 @@ angular.module('indexApp')
 
                             
                             //console.log("go to app.Consigners.Print");
-                            //$state.go('app.Consigners.Print', { printid: waybill_id, waybill_object: $scope.CurrentWaybill });
+                            //$state.go('app.Consigners.Print', { print_id: waybill_id, waybill_object: $scope.CurrentWaybill });
                             
 
 
@@ -300,20 +305,19 @@ angular.module('indexApp')
     // выбор элемента в дереве отвесных
     WaybillList.on('select_node.jstree', function (e, data) {
         //alert('select_node');
+        $scope.CurrentWaybill = {};
         $scope.ArchiveWaybillSelected = false;
+        //$scope.SelectedArchiveWeightSheetID = null;
+        $scope.$applyAsync();
         if (data.node.original.DocumentationsID) {
-            $scope.SelectedArchiveWeightSheetID = data.node.original.DocumentationsID;
+            //$scope.SelectedArchiveWeightSheetID = data.node.original.DocumentationsID;
             $scope.ArchiveWaybillSelected = true;
 
-            $scope.common_var = data.node.original.DocumentationsID;
+            //$scope.common_var = data.node.original.DocumentationsID;
             //$state.params.id = data.node.original.WorkPerfomanceID;
             var waybill_id = data.node.original.DocumentationsID;
 
-            $scope.CurrentWaybill.WaybillNumber = 1000050000;
-            $scope.$apply();
-
             /* !!! get full waybill info here */
-
             $q.all([indexService.getInfo('Documentations?$filter=ID eq {0}'.format(waybill_id)),
                     indexService.getInfo("DocumentationsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
                     indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
@@ -324,18 +328,8 @@ angular.module('indexApp')
                         var resp_3 = responses[2].data.value;
                         var resp_4 = responses[3].data.value;
 
-                        var waybill_object = [];
-                        //waybill_object.ID = waybill_id;
-                        /*
-                        for (i = 0; i < resp_2.length; i++) {
-                            if (resp_2[i]['Description'] == "Приемосдатчик") {
-                                //alert("Приемосдатчик: " + resp_2[i].Value);
-                            }
-                            if (resp_2[i]['Description'] == "Цех отправления") {
-                                //alert("Цех отправления: " + resp_2[i].Value);
-                            }
-                        }
-                        */
+                        var waybill_object = {};
+
                         for (i = 0; i < resp_3.length; i++) {
                             waybill_object.WagonNumber = resp_3[i]['Description'];
                         }
@@ -370,39 +364,48 @@ angular.module('indexApp')
                             }
 
                         }
-                        alert(actual_prop_queries_array.length);
+                        //alert(actual_prop_queries_array.length);
 
                         $q.all(actual_prop_queries_array.map(function (item) { return indexService.getInfo(item['query']) }))
                         .then(function (responses) {
                             console.log("!");
                             actual_prop_queries_array.forEach(function (item, i) {
-                                console.log(item);
+                                //console.log(item);
                                 item['response'] = responses[i].data.value[0];
                                 if (item['response']) {
                                     waybill_object[actual_prop_queries_array[i]['prop']] = item['response'];
                                 }
                             })
-                            /**/
+                            
+                            /*  continue here  */
+
                             waybill_object.ID = waybill_id;
+                            if (waybill_object && waybill_object.SenderShop && waybill_object.SenderDistrict) {
+                                var CargoSenderObject = {};
+                                CargoSenderObject['ID'] = waybill_object.SenderDistrict['ID'];
+                                CargoSenderObject['Description'] = waybill_object.SenderDistrict['Description'];
+                                CargoSenderObject['ParentID'] = waybill_object.SenderShop['ID'];
+                                CargoSenderObject['ParentDescription'] = waybill_object.SenderShop['Description'];
+                                waybill_object.CargoSender = CargoSenderObject;
+                            }
+                            if (waybill_object && waybill_object.ReceiverShop && waybill_object.ReceiverDistrict) {
+                                var CargoReceiverObject = {};
+                                CargoReceiverObject['ID'] = waybill_object.ReceiverDistrict['ID'];
+                                CargoReceiverObject['Description'] = waybill_object.ReceiverDistrict['Description'];
+                                CargoReceiverObject['ParentID'] = waybill_object.ReceiverShop['ID'];
+                                CargoReceiverObject['ParentDescription'] = waybill_object.ReceiverShop['Description'];
+                                waybill_object.CargoReceiver = CargoReceiverObject;
+                            }
+
                             $scope.CurrentWaybill = waybill_object;
                         })
-
-                        var g = $scope.CurrentWaybill;
-
-                        /*  continue here  */
-
-
-
+                        
                         //console.log("go to app.Consigners.Print");
-                        //$state.go('app.Consigners.Print', { printid: waybill_id, waybill_object: $scope.CurrentWaybill });
-
-
-
-
-
+                        //$state.go('app.Consigners.Print', { print_id: waybill_id, waybill_object: $scope.CurrentWaybill });
+                        
                     })
 
-            alert(data.node.original.DocumentationsID);
+            //alert(data.node.original.DocumentationsID);
         };
     });
 
@@ -431,8 +434,25 @@ angular.module('indexApp')
         var shop = item ? item["Description"] : '';
         //alert(shop);
         WaybillList.jstree('search', shop);
+        //$scope.ArchiveWaybillSelected = false;
     }
 
+
+
+    // получение списка пользователей (поставщиков и получателей) груза
+    function vmGetCargoClient(array, unique_array) {
+        // array - массив участков
+        // unique_array - массив уникальных цехов участков (ParentID)
+        for (i = 0; i < array.length; i++) {
+            var CargoUserObject = {};
+            CargoUserObject['ID'] = array[i]['ParentID'];
+            CargoUserObject['Description'] = array[i]['ParentDescription'];
+            // выбираем уникальные ParentID
+            if (unique_array.map(function (elem) { return elem['ID']; }).indexOf(CargoUserObject['ID']) == -1) {
+                unique_array.push(CargoUserObject);
+            }
+        }
+    }
 
 
 }])
@@ -463,14 +483,29 @@ angular.module('indexApp')
     $scope.SelectedObjects = {};
 
 
-    $scope.CurrentWaybill = [];
-    $scope.CurrentWaybill.ID = null;
-    $scope.CurrentWaybill.WagonNumber = null;
-    $scope.CurrentWaybill.CargoSender = null;
-    $scope.CurrentWaybill.CargoReceiver = null;
-    $scope.CurrentWaybill.CargoType = null;
-    $scope.CurrentWaybill.SenderRWStation = null;
-    $scope.CurrentWaybill.ReceiverRWStation = null;
+    $scope.CurrentWaybill = {
+        ID: null,
+        WaybillNumber: null,
+        WagonNumber: null,
+        CargoSender: null,
+        CargoReceiver: null,
+        SenderRWStation: null,
+        ReceiverRWStation: null,
+
+        SenderArriveDT: null,
+        SenderStartLoadDT: null,
+        SenderEndLoadDT: null,
+        ReceiverArriveDT: null,
+        ReceiverStartLoadDT: null,
+        ReceiverEndLoadDT: null
+    };
+    //$scope.CurrentWaybill.ID = null;
+    //$scope.CurrentWaybill.WagonNumber = null;
+    //$scope.CurrentWaybill.CargoSender = null;
+    //$scope.CurrentWaybill.CargoReceiver = null;
+    //$scope.CurrentWaybill.CargoType = null;
+    //$scope.CurrentWaybill.SenderRWStation = null;
+    //$scope.CurrentWaybill.ReceiverRWStation = null;
     $scope.WagonNumberPattern = null;
 
     $scope.GetWagonNumberPattern = vmGetWagonNumberPattern;
@@ -722,6 +757,19 @@ angular.module('indexApp')
         });
     };
     */
+
+    // заполнение участков при выборе цеха из списка
+    function vmCargoClientShopSelect(shop) {
+        //$scope.CargoSenderDistricts = [];
+        $scope.CurrentWaybill.CargoSender = null;
+        // фильтрация в списке участков в зависимости от выбранного цеха
+        if (CargoSenders != null) {
+            $scope.CargoSenderDistricts = CargoSenders.filter(function (item) {
+                return item['ParentID'] == shop['ID'];
+            });
+        }
+    };
+
     // выбор цеха-отправителя из списка
     function vmCargoSenderShopSelect(shop) {
         $scope.CargoSenderDistricts = [];
@@ -931,7 +979,7 @@ angular.module('indexApp')
             //if (waybill_object == null) return;
             console.log("WaybillID = " + response.ID);
             console.log("go to app.Consigners.Print");
-            $state.go('app.Consigners.Print', { printid: waybill_object.ID, waybill_object: waybill_object });
+            $state.go('app.Consigners.Print', { print_id: waybill_object.ID, waybill_object: waybill_object });
 
         })
     }
@@ -959,8 +1007,8 @@ angular.module('indexApp')
         $scope.CurrentWaybill = $state.params.waybill_object;
     }
         // если ID в адресе не пуст
-    else if ($state.params.printid != null) {
-        $scope.CurrentWaybill['ID'] = $state.params.printid;
+    else if ($state.params.print_id != null) {
+        $scope.CurrentWaybill['ID'] = $state.params.print_id;
         // получаем все данные по этому ID и заполняем CurrentWaybill
         console.log("Get waybill data from DB here");
 
@@ -975,7 +1023,7 @@ angular.module('indexApp')
     //var CurrentWaybillID = $scope.common_var;
     //var common_var_from_Ctrl = $scope.$parent.common_var;
     //$scope.CurrentWaybillID = $scope.common_var;
-    //$scope.id = $state.params.printid;
+    //$scope.id = $state.params.print_id;
     //$scope.CurrentWaybill = CurrentWaybill;
     //$scope.common_var
     //alert($scope.common_var);
