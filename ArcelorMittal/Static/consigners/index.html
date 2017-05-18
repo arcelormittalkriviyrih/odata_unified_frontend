@@ -11,7 +11,15 @@
 
 <!--основная часть, когда страница прогрузилась-->
 <div ng-show="!$root.showLoadingState">
+    <div>
+        ArchiveWaybillSelected:{{ArchiveWaybillSelected}}
+    <br />
+        SelectedArchiveWeightSheetID:{{SelectedArchiveWeightSheetID}}
+    <br />
+        CurrentWaybill.ID:{{CurrentWaybill.ID}}
+    <br />
 
+    </div>
     <div class="row" style="background-color: #eeeeee; padding: 10px">
         <div class="col-md-5" style="border-right: 1px solid #d4d4d4">
             <!--.col-md-4-->
@@ -66,12 +74,17 @@
 
 
         <div class="col-md-7" align="center" style="border-left: 1px solid #d4d4d4">
-            <div ng-hide="common_var" style="display: table; width: 100%; height: 100%">
+            <div ng-hide="CurrentWaybill.ID || ArchiveWaybillSelected" style="display: table; width: 100%; height: 100%">
                 <div style="color: gray">
                     <h1>Choose a waybill...</h1>
                 </div>
             </div>
-            <div ng-show="common_var" ui-view="waybill_toprint"></div>
+            <div ng-hide="CurrentWaybill.ID || !ArchiveWaybillSelected" style="display: table; width: 100%; height: 100%">
+                <div style="color: gray">
+                    <h1>Loading...</h1>
+                </div>
+            </div>
+            <div ng-show="CurrentWaybill.ID" ui-view="waybill_toprint"></div>
         </div>
 
     </div>
