@@ -73,6 +73,18 @@ input.ng-touched.ng-invalid {
 .treeContainerConsigners {
     padding-top: 5px;
     overflow: auto;
-    height:500px;
-    border-top:1px solid #d4d4d4;
+    height: 500px;
+    border-top: 1px solid #d4d4d4;
+}
+
+.reject {
+    background-image: url("images/reject.png");
+    background-position-x: 50%;
+    background-position-y: 50%;
+    background-size: auto;
+    background-origin: padding-box;
+    background-clip: border-box;
+    background-color: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
 }

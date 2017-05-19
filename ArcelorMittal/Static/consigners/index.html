@@ -14,10 +14,7 @@
     <div>
         ArchiveWaybillSelected:{{ArchiveWaybillSelected}}
     <br />
-        SelectedArchiveWeightSheetID:{{SelectedArchiveWeightSheetID}}
-    <br />
         CurrentWaybill.ID:{{CurrentWaybill.ID}}
-    <br />
 
     </div>
     <div class="row" style="background-color: #eeeeee; padding: 10px">
@@ -35,7 +32,7 @@
                 <button type="button"
                     class="btn btn-default"
                     style="width: 44%"
-                    ng-disabled="!ArchiveWaybillSelected"
+                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected"
                     ng-click="CreateCopy()">
                     Create as a copy
                 </button>
@@ -43,24 +40,24 @@
                 <button type="button"
                     class="btn btn-default"
                     style="width: 26%"
-                    ng-disabled="!ArchiveWaybillSelected"
+                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')"
                     ng-click="Print()">
                     Print
                 </button>
             </div>
 
-            
-            <div class="treeContainerConsigners" style="height:auto">
+
+            <div class="treeContainerConsigners" style="height: auto">
                 <!--<input type="text" class="form-control" placeholder="Search node .." id="search">-->
 
-                <ui-select 
+                <ui-select
                     ng-model="SearchedWaybillShop"
-                    on-select="WaybillShopSelect($item)" 
+                    on-select="WaybillShopSelect($item)"
                     search-enabled="true"
-                    ng-required="false" 
-                    class="selectConsigners" 
-                    style="width: 100%"  
-                    theme="bootstrap"  
+                    ng-required="false"
+                    class="selectConsigners"
+                    style="width: 100%"
+                    theme="bootstrap"
                     title="Select a shop">
                         <ui-select-match allow-clear="true" placeholder="Select a shop">{{$select.selected.Description}}</ui-select-match>
                         <ui-select-choices repeat="shop in WaybillShops | propsFilter: {Description: $select.search}" position='down'>
@@ -68,6 +65,35 @@
                         </ui-select-choices>
                     </ui-select>
                 <div class="treeContainerConsigners" id="waybill_list" style="background-color: white">
+                </div>
+                <div class="" style="margin-top: 5px;">
+                    <table style="width: 100%; font-size: 12px;">
+                        <tr ng-show="CurrentWaybill.Consigner">
+                            <td>Consigner	</td>
+                            <td style="text-align: right">{{CurrentWaybill.Consigner}}</td>
+                        </tr>
+                        <tr ng-show="CurrentWaybill.Status">
+                            <td>Status	</td>
+                            <td style="text-align: right"
+                                ng-style="{'color': CurrentWaybill.Status == 'reject' ? 'red' : 'auto'}">{{CurrentWaybill.Status}}</td>
+                        </tr>
+                        <tr ng-show="CurrentWaybill.CreateDT">
+                            <td>CreateDT	</td>
+                            <td style="text-align: right">{{CurrentWaybill.CreateDT | date:'dd.MM.yyyy HH:mm'}}</td>
+                        </tr>
+                        <tr ng-show="CurrentWaybill.EditDT">
+                            <td>EditDT	</td>
+                            <td style="text-align: right">{{CurrentWaybill.EditDT | date:'dd.MM.yyyy HH:mm'}}</td>
+                        </tr>
+                    </table>
+<!--                    Consigner:{{CurrentWaybill.Consigner}}
+                    <br />
+                    Status:{{CurrentWaybill.Status}}
+                    <br />
+                    CreateDT:{{CurrentWaybill.CreateDT | date:'dd.MM.yyyy HH:mm'}}
+                    <br />
+                    EditDT:{{CurrentWaybill.EditDT | date:'dd.MM.yyyy HH:mm'}}
+                    <br />-->
                 </div>
             </div>
         </div>
@@ -84,7 +110,11 @@
                     <h1>Loading...</h1>
                 </div>
             </div>
-            <div ng-show="CurrentWaybill.ID" ui-view="waybill_toprint"></div>
+            <div ng-show="CurrentWaybill.ID"
+                ui-view="waybill_toprint"
+                ng-class="{'reject': CurrentWaybill.Status == 'reject'}"
+                style="background-color: white; padding-top: 5px;">
+            </div>
         </div>
 
     </div>
