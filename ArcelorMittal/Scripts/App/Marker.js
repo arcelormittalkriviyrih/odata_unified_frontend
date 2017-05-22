@@ -1351,9 +1351,6 @@
                                      });
                                  }
 
-
-                                 
-
                                  var controlList = [{
                                      type: 'additional',
                                      name: 'preview',
@@ -1367,7 +1364,35 @@
                                          },
                                          escapedProcedureParam: ['EquipmentID']
                                      }
-                                 }, {
+                                 },
+
+/*{
+                                     type: 'additional',
+                                     name: 'testprint',
+                                     text: $scope.testPrintLabel,
+                                     procedure: 'ins_MaterialLotByEquipment',
+                                     procedureParams: {
+                                         escapedProcedureParam: ['BRIGADE_NO', 'BUNT_DIA', 'BUNT_NO', 'BUYER_ORDER_NO',
+                                         'CHANGE_NO', 'CHEM_ANALYSIS', 'COMM_ORDER', 'CLASS', 'CONTRACT_NO', 'DIRECTION', 'LABEL_PRINT_QTY',
+                                         'LENGTH', 'MATERIAL_NO', 'MELT_NO', 'MIN_ROD', 'PART_NO', 'PRODUCT', 'PROD_DATE',
+                                         'PROD_ORDER', 'SIZE', 'STANDARD', 'STEEL_CLASS', 'TEMPLATE', 'TOLERANCE', 'UTVK']
+                                     }
+                                     
+                                 },*/
+                                {
+                                    type: 'additional',
+                                    name: 'testPrint',
+                                    text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.testPrint'),
+                                    procedure: 'ins_MaterialLotForTestPrint',
+                                    procedureParams: {
+                                        callBack: function () {
+                                            $scope.isLoading = false;
+                                            $scope.$apply();
+                                        },
+                                        escapedProcedureParam: ['EquipmentID']
+                                    }
+                                },
+                                    {
                                      type: 'additional',
                                      name: 'refresh',
                                      text: $translate.instant('market.Order.CreateDialogue.additionalButtonCaptions.refresh'),
@@ -1387,19 +1412,7 @@
 
                                              vmBuildForm();
 
-                                             //vmShowLastCommOrderValue();
-
                                              $scope.$apply();
-
-                                             //vmCreateForm($('#orderForm'),
-                                             // 'edit',
-                                             // procedure,
-                                             // fields,
-                                             // 'COMM_ORDER',
-                                             //  {
-                                             //      OK: 'OK',
-                                             //      Cancel: $translate.instant('buttonCancel')
-                                             //  }, controlList);
                                          },
                                          
 
@@ -2204,14 +2217,18 @@
         $scope.toggleReversal = false;
     }
 
-    function vmShowOuterPage(state) {
+    function vmShowOuterPage(state, newWindow) {
 
         var url = $state.href(state, {
 
             side: $scope.sideIsSelected
         });
 
-        window.open(url, '_blank');
+        if (newWindow) {
+            window.open(url, 'newwindow', 'width=800,height=600,top=0,left=0');
+        } else
+            window.open(url, '_blank');
+
     };
 
     $('.oDataForm').on('oDataForm.processing', function () {
@@ -2241,6 +2258,22 @@
 
         $scope.$apply();
     });
+
+    $('#orderForm').on('oDataForm.procedureProcessing', function (e) {
+
+        $scope.isLoading = true;
+        //$scope.processingTestPrint = true;
+        $scope.$apply();
+    });
+
+    $('#orderForm').on('oDataForm.procedureProcessed', function (e) {
+
+        $scope.isLoading = false;
+        $('#orderForm').find('button').each(function (i, item) {
+
+            $(item).blur();
+        })
+    })
 
     $('#orderForm').on('oDataForm.cancel', function (e) {
 
