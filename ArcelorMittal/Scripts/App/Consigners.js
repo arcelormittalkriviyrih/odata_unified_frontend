@@ -30,7 +30,7 @@ angular.module('indexApp')
             url: '/create',
             templateUrl: 'Static/consigners/create.html',
             controller: 'ConsignersCreateCtrl',
-            params: { copy_id: null, waybill_object: null },
+            params: { copy_id: null, modify_id: null, waybill_object: null },
 
         })
 
@@ -93,6 +93,14 @@ angular.module('indexApp')
         //alert("Create");
         console.log("go to app.Consigners.Create");
         $state.go('app.Consigners.Create', { copy_id: $scope.CurrentWaybill.ID, waybill_object: $scope.CurrentWaybill });
+
+    }
+
+    // нажатие кнопки "Редактировать"
+    $scope.Modify = function () {
+        //alert("Create");
+        console.log("go to app.Consigners.Create (modify)");
+        $state.go('app.Consigners.Create', { modify_id: $scope.CurrentWaybill.ID, waybill_object: $scope.CurrentWaybill });
 
     }
 
@@ -330,7 +338,7 @@ angular.module('indexApp')
                         var resp_4 = responses[3].data.value;
 
                         var waybill_object = {};
-                                                
+
                         for (i = 0; i < resp_1.length; i++) {
                             //var start_time = resp_1[i]['StartTime'];
                             var start_time = new Date(resp_1[i]['StartTime']);
@@ -498,12 +506,15 @@ angular.module('indexApp')
     // throw main tab change
     //$scope.$emit('mainTabChange', 'Consigners');
     var copy_id = $state.params.copy_id;
+    var modify_id = $state.params.modify_id;
     var waybill_object = $state.params.waybill_object;
     $scope.copy_id = copy_id;
-    var last_waybill_id = copy_id
+    $scope.modify_id = modify_id;
+
+    var last_waybill_id = copy_id || modify_id;
 
 
-    $scope.message = "Waybill creating";
+    $scope.message = "Waybill " + (modify_id ? "modifying" : "creating") + (copy_id ? " as copy" : "");
 
     var CargoSenders = [];          // Districts
     var CargoReceivers = [];        // Districts
@@ -724,7 +735,10 @@ angular.module('indexApp')
 
 
         $scope.CurrentWaybill = waybill_object;
-        resetWaybillNumber();
+        if (copy_id) {
+            $scope.CurrentWaybill.Status = null;
+            resetWaybillNumber();
+        }
     }
     /*
     // получение списка ЖД вагонов
@@ -1049,6 +1063,7 @@ angular.module('indexApp')
 
     // нажатие "Сохранить"
     function vmSaveOnly() {
+        if (!copy_id) return;
         vmSave().then(function (response) {
             // если возвращается NULL - выходим
             if (response === null || response === undefined || response.ID === undefined) {
@@ -1065,7 +1080,7 @@ angular.module('indexApp')
 
     // нажатие "Сохранить и печатать"
     function vmSavePrint() {
-
+        if (!copy_id) return;
         alert("Save and Print");
         vmSave().then(function (response) {
             // если возвращается NULL - выходим
@@ -1085,7 +1100,30 @@ angular.module('indexApp')
 
     // нажатие "Забраковать"
     function vmReject() {
-        alert("Reject");
+        //alert("Reject");
+        var reject = false;
+        if ($scope.CurrentWaybill.Status != 'reject') {
+            reject = true;
+        }
+
+        var confirm_string = reject ?
+            "Are you sure to reject waybill #{0}?".format($scope.CurrentWaybill.WaybillNumber) :
+            "Are you sure to discard reject waybill #{0}?".format($scope.CurrentWaybill.WaybillNumber);
+
+        if (confirm(confirm_string) && modify_id) {
+            DocumentationsID = modify_id;
+            var Status = reject ? "reject" : null;
+            indexService.sendInfo("upd_Documentations", {
+                DocumentationsID: DocumentationsID,
+                Status: Status
+            }).then(function (response) {
+                var message = reject ?
+                    "Waybill #{0} rejected succesfully.".format($scope.CurrentWaybill.WaybillNumber) :
+                    "Discard rejecting of waybill #{0} succesfully.".format($scope.CurrentWaybill.WaybillNumber);
+                $scope.CurrentWaybill.Status = Status;
+                alert(message);
+            })
+        }
         //window.open('/Static/consigners/waybill.html');
     }
 

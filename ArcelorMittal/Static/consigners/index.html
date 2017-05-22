@@ -20,7 +20,7 @@
     <div class="row" style="background-color: #eeeeee; padding: 10px">
         <div class="col-md-5" style="border-right: 1px solid #d4d4d4">
             <!--.col-md-4-->
-            <div class="controlsRowConsigners" style="width: 100%; text-align: center">
+            <div class="controlsRowConsigners" style="width: 100%; text-align: center; display:none">
                 <button type="button"
                     class="btn btn-default"
                     style="width: 26%"
@@ -45,7 +45,41 @@
                     Print
                 </button>
             </div>
+            
+            <div class="controlsRowConsigners" style="width: 100%; text-align: center">
+                <button type="button"
+                    class="btn btn-default"
+                    style="width: 48%"
+                    ng-disabled="false"
+                    ng-click="Create()">
+                    Create
+                </button>
 
+                <button type="button"
+                    class="btn btn-default"
+                    style="width: 48%"
+                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected"
+                    ng-click="CreateCopy()">
+                    Create as a copy
+                </button>
+            </div>
+            <div class="controlsRowConsigners" style="width: 100%; text-align: center">
+                <button type="button"
+                    class="btn btn-default"
+                    style="width: 48%"
+                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected"
+                    ng-click="Modify()">
+                    Modify
+                </button>
+
+                <button type="button"
+                    class="btn btn-default"
+                    style="width: 48%"
+                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')"
+                    ng-click="Print()">
+                    Print
+                </button>
+            </div>
 
             <div class="treeContainerConsigners" style="height: auto">
                 <!--<input type="text" class="form-control" placeholder="Search node .." id="search">-->
@@ -86,7 +120,7 @@
                             <td style="text-align: right">{{CurrentWaybill.EditDT | date:'dd.MM.yyyy HH:mm'}}</td>
                         </tr>
                     </table>
-<!--                    Consigner:{{CurrentWaybill.Consigner}}
+                    <!--                    Consigner:{{CurrentWaybill.Consigner}}
                     <br />
                     Status:{{CurrentWaybill.Status}}
                     <br />
@@ -96,6 +130,7 @@
                     <br />-->
                 </div>
             </div>
+
         </div>
 
 

@@ -1,5 +1,4 @@
-﻿
-<!--когда еще грузится страница-->
+﻿<!--когда еще грузится страница-->
 <div class="container loading" ng-show="$root.showLoadingState">
     <div class="loading-msg">
         <h1>Loading ...</h1>
@@ -17,11 +16,17 @@
 <!--основная часть, когда страница прогрузилась-->
 <div ng-show="!$root.showLoadingState">
     <h4>{{message}}</h4>
+
     copy_id:{{copy_id}}
+
     <div ng-form="myForm">
 
         <div class="panel panel-default">
-            <div class="panel-heading" style="text-align: center">
+            <div class="panel-heading" 
+                style="text-align: center" 
+                ng-style="(CurrentWaybill.Status == 'reject') && {'background-color':'rgb(255, 169, 169)', 'background-repeat':'repeat'}"
+                ng-class="{'reject': CurrentWaybill.Status == 'reject'}">
+
                 Waybill#
                 <input type="text" class="form-control"
                     ng-model="CurrentWaybill.WaybillNumber"
@@ -30,6 +35,7 @@
                     title="Enter waybill number"
                     ng-pattern="'[0-9]{1,4}'"
                     style="width: 80px; display: inline-block" />
+
             </div>
             <div class="panel-body">
 
@@ -233,19 +239,19 @@
 
 
 
-        <div class="controlsRowConsigners" style="width:100%; text-align:center">
-            
+        <div class="controlsRowConsigners" style="width: 100%; text-align: center">
+
             <button type="button"
                 class="btn btn-default"
-                style="width:20%"
+                style="width: 20%"
                 ng-disabled="false"
                 ng-click="Back()">
                 Back
             </button>
-                        
+
             <button type="button"
                 class="btn btn-default"
-                style="width:20%"
+                style="width: 20%"
                 ng-disabled="false"
                 ng-click="SavePrint()">
                 Save and Print
@@ -253,7 +259,7 @@
 
             <button type="button"
                 class="btn btn-default"
-                style="width:20%"
+                style="width: 20%"
                 ng-disabled="false"
                 ng-click="SaveOnly()">
                 Save
@@ -261,10 +267,10 @@
 
             <button type="button"
                 class="btn btn-default"
-                style="width:20%"
-                ng-disabled="false"
+                style="width: 20%"
+                ng-show="modify_id"
                 ng-click="Reject()">
-                Reject
+                {{CurrentWaybill.Status != 'reject' ? "Reject" : "Discard reject"}}
             </button>
         </div>
 
@@ -277,10 +283,12 @@
     <h3 ng-class="{'text-danger':myForm.$invalid, 'text-success':myForm.$valid }">Form valid? {{myForm.$valid}}</h3>
 
     <div style="font-size: xx-small">
-    <br />
+        <br />
         ID:{{CurrentWaybill.ID}}
     <br />
         WaybillNumber:{{CurrentWaybill.WaybillNumber}}
+    <br />
+        Status:{{CurrentWaybill.Status}}
     <br />
         WagonType:{{CurrentWaybill.WagonType}}
     <br />
@@ -314,9 +322,6 @@
 </div>
 
 <div>
-
-
-
 </div>
 
 
