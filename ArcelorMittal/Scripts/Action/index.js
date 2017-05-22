@@ -429,11 +429,15 @@
 
                                                                        if (control.procedureParams.additionalProcedureParams) {
                                                                            arguments.push(control.procedureParams.additionalProcedureParams);
+                                                                       } else {
+                                                                           arguments.push(null);
                                                                        }
 
                                                                        if (control.procedureParams.escapedProcedureParam) {
 
                                                                            arguments.push(control.procedureParams.escapedProcedureParam);
+                                                                       } else {
+                                                                           arguments.push(null);
                                                                        }
 
                                                                    }

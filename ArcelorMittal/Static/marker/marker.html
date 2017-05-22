@@ -80,6 +80,7 @@
                     </div>
 
                     <i class="circle"
+                       ng-if="scale.SCALES_TYPE!= 'BUNT' && scale.SCALES_TYPE!='LINEPACK'"
                        ng-hide="scale.KEY_MANU == false"
                        ng-class="{'red': scale.POCKET_LOC, 'green': !scale.POCKET_LOC}"></i>
                 </div>
@@ -335,7 +336,7 @@
                         <input type="text"
                                class="form-control"
                                ng-model="maxMass"
-                               ng-class="{'wrong': !maxMass || maxMass == 0 && standard}"
+                               ng-class="{'wrong': (!maxMass || maxMass == 0) && standard}"
                                ng-disabled="!standard"
                                my-number-check="number"
                                ng-change="enableControlOK();" />
@@ -427,13 +428,6 @@
             <button type="button"
                     class="btn btn-default"
                     ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
-                    ng-click="doAction('ins_MaterialLotByEquipment', 'testPrintLabel', 'marker.testPrintButton')">
-                {{testPrintLabel}}
-            </button>
-
-            <button type="button"
-                    class="btn btn-default"
-                    ng-show="scalesDetailsInfo.SCALES_TYPE != 'MANUAL'"
                     ng-disabled="disableButtonOKTask || scalesDetailsInfo.Send_OPC_Error"
                     ng-click="workRequest()">
                 {{OKLabel}}
@@ -468,8 +462,13 @@
 
         <p>
             <span class="msgRed"
+                  ng-if="scalesDetailsInfo.SCALES_TYPE!= 'BUNT' && scalesDetailsInfo.SCALES_TYPE!='LINEPACK'"
                   ng-show="scalesDetailsInfo.POCKET_LOC && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
                 {{ 'marker.scalesBlocked' | translate }}
+            </span>
+            <span class="statusOK"
+                  ng-if="scalesDetailsInfo.SCALES_TYPE== 'BUNT' || scalesDetailsInfo.SCALES_TYPE=='LINEPACK'">
+                {{'marker.labelPrinted' | translate}}
             </span>
             <span ng-show="sandwichMode && scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
                 {{ 'marker.firstPack' | translate }}
@@ -600,7 +599,7 @@
         <div class="buttonsGroup bottom">
             <button type="button"
                     class="btn btn-default specialLabelMode"
-                    ng-click="showOuterPage('app.Marker.Monitor')">
+                    ng-click="showOuterPage('app.Marker.Monitor', true)">
                 {{'marker.monitor' | translate}}
             </button>
 
