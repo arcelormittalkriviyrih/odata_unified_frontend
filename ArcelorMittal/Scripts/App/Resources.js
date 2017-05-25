@@ -36,17 +36,17 @@
         },
 
         gasCollection: {
-          reports: 'Reports', //Отчёты
-          gasReports: 'Gas reports', //Отчёты по газу
-          trends: 'Trends', //Тренды
-          gasTrends: 'Gas trends', //Тренды по газу
-          // Нижеследующие переводы ещё следует добавить в рус и укр варианте
-          balance: 'Balance', // Баланс
-          gasBalance: 'Gas balances', // Балансы по газу
-          selectTypeOfReports: 'Select type of reports', // Выберите тип отчёта
-          // Выберите точку отбора
-          // Получить данные
-          // Отображать полные данные
+            reports: 'Reports', //Отчёты
+            gasReports: 'Gas reports', //Отчёты по газу
+            trends: 'Trends', //Тренды
+            gasTrends: 'Gas trends', //Тренды по газу
+            // Нижеследующие переводы ещё следует добавить в рус и укр варианте
+            balance: 'Balance', // Баланс
+            gasBalance: 'Gas balances', // Балансы по газу
+            selectTypeOfReports: 'Select type of reports', // Выберите тип отчёта
+            // Выберите точку отбора
+            // Получить данные
+            // Отображать полные данные
         },
 
         market: {
@@ -91,7 +91,7 @@
                     MATERIAL_NO: 'Material No',
                     BRIGADE_NO: 'Brigade',
                     PROD_DATE: 'Production date',
-					LABEL_PRINT_QTY: 'Number of printed labels',
+                    LABEL_PRINT_QTY: 'Number of printed labels',
                     additionalButtonCaptions: {
 
                         testPrint: 'Test print',
@@ -205,7 +205,7 @@
             buntNo: 'Bunt number',
             rodsLeft: 'Rods left',
             scalesBlocked: 'Scales blocked',
-			labelPrinted: 'Label is printed',
+            labelPrinted: 'Label is printed',
             weightOver: 'Weight is over then maximum permissible weight',
             firstPack: 'First pack',
             secondPack: 'Second pack',
@@ -221,7 +221,7 @@
             chartEndDate: 'End Date',
             getChartDataBtn: 'Get',
             chartNoData: 'There are no data for this period! select another period!',
-			markerErrorCaption: 'Errors:',
+            markerErrorCaption: 'Errors:',
 
             CreateDialogue: {
                 CHANGE_NO: 'Change',
@@ -230,7 +230,7 @@
             },
             acceptOrderTask: 'Accept task',
             takeWeightButton: 'Take weight',
-			takeWeightButtonProcessing: 'Taking...',
+            takeWeightButtonProcessing: 'Taking...',
             takeTaraButton: 'Take tara',
             testPrintButton: 'Test print',
             buttonExit: 'Exit',
@@ -240,7 +240,7 @@
             separateButton: 'Split pack',
             handModeButton: 'Manual input',
             changeOrderButton: 'Change order',
-			reversalButton: 'Reversal',
+            reversalButton: 'Reversal',
             statisticsButton: 'Statistics',
             errorMessages: {
 
@@ -253,9 +253,9 @@
                 enterProdOrder: 'You must enter new prod order number!',
                 selectLabel: 'You must change label!',
                 handModeQuantity: 'You must enter weight!',
-				notNullable: 'Field "{0}" cannot be nullable!',
+                notNullable: 'Field "{0}" cannot be nullable!',
                 fieldIsRequired: 'Field "{0}" is required!',
-				scalesTypeUndefined: 'Scales type is undefined, check equipment properties',
+                scalesTypeUndefined: 'Scales type is undefined, check equipment properties',
                 fieldName: {
 
                     minMass: 'Min weight',
@@ -276,7 +276,7 @@
                 HandMode: 'Manual Mode',
                 enterQuantity: 'Enter weight',
                 getHandModeCredentials: 'Run',
-                OrderChangeMode: 'Change order',				
+                OrderChangeMode: 'Change order',
                 Reversal: 'Reversal',
                 enterNewOrder: 'Enter new order no'
             },
@@ -371,6 +371,114 @@
             Taring: 'Taring',
             Weighting: 'Weighting'
         },
+        consigners: {
+            Buttons: {
+                create: 'Create',
+                createCopy: 'Create as a copy',
+                modify: 'Modify',
+                print: 'Print',
+                back: 'Back',
+                save: 'Save',
+                savePrint: 'Save and Print',
+                reject: 'Reject',
+                discardReject: 'Discard rejecting',
+            },
+            Labels: {
+                waybill: 'Waybill',
+                ticketWaybill: 'Ticket for waybill',
+                wagon: 'Wagon',
+                wagonType: 'Wagon type',
+                wagonTypeNumber: 'Wagon type and number',
+                cargoType: 'Cargo type',
+                sender: 'Sender',
+                senderShop: 'Sender shop',
+                senderDistrict: 'Sender district',
+                cargoSender: 'Cargo sender',
+                senderStation: 'Sender station',
+                senderDT: 'Sender arrive/start load/end load datetime',
+                senderArrivingTime: 'Arriving time',
+                senderStartLoadingTime: 'Start loading time',
+                senderEndLoadingTime: 'End loading time',
+
+                receiver: 'Receiver',
+                receiverShop: 'Receiver shop',
+                receiverDistrict: 'Receiver district',
+                cargoReceiver: 'Cargo receiver',
+                receiverStation: 'Receiver station',
+                receiverDT: 'Receiver arrive/start load/end load datetime',
+                receiverArrivingTime: 'Arriving time',
+                receiverStartLoadingTime: 'Start loading time',
+                receiverEndLoadingTime: 'End loading time',
+
+                date: 'Date',
+                time: 'Time',
+                railwayShopMaster: 'Railway shop master',
+                consigner: 'Consigner',
+                signature: 'signature',
+                cargoAccepted: 'Cargo has been accepted',
+                acceptedTime: 'Accepted time',
+                amkr: 'ArcelorMittal Kriviy Rig',
+                weight: 'Weight',
+                cuttingLine: 'CUTTING LINE',
+                creatingDT: 'Creating datetime',
+                modifyingDT: 'Modifying datetime',
+                status: 'Status',
+
+            },
+            Placeholders: {
+                enterWaybillNumber: 'Enter waybill number',
+                selectWagonType: 'Select a wagon type',
+                enterWagonNumber: 'Enter wagon number',
+                selectCargoType: 'Select a cargo type',
+                selectCargoSenderShop: 'Select a cargo sender shop',
+                selectCargoSenderDistrict: 'Select a cargo sender district',
+                selectCargoSenderStation: "Select a cargo sender's station",
+                selectCargoReceiverShop: 'Select a cargo receiver shop',
+                selectCargoReceiverDistrict: 'Select a cargo receiver district',
+                selectCargoReceiverStation: "Select a cargo receiver's station",
+                selectArriveDT: 'Select arrive datetime',
+                selectStartLoadDT: 'Select start load datetime',
+                selectEndLoadDT: 'Select end load datetime',
+                arriveDT: 'Arrive datetime',
+                startLoadDT: 'Start load datetime',
+                endLoadDT: 'End load datetime',
+
+                selectShop: 'Select a shop',
+                chooseWaybill: 'Choose a waybill...',
+                loading: 'Loading...',
+
+            },
+            Messages: {
+                noWaybill: 'No waybill selected!',
+
+                emptyWaybillNumber: '-- WaybillNumber is empty \n',
+                emptyWagonType: '-- Wagon type is empty \n',
+                emptyWagonNumber: '-- Wagon number is empty or invalid \n',
+                emptyCargoType: '-- Cargo type is empty \n',
+                emptySender: '-- Sender is empty \n',
+                emptySenderStation: '-- Sender station is empty \n',
+                emptyReceiver: '-- Receiver is empty \n',
+                emptyReceiverStation: '-- Receiver station is empty \n',
+                errorsFound: 'The next errors have been found: \n',
+                noChanges: 'Nothing to modify.',
+                parametersModified: 'Parameters has been modified: ',
+                errorCreatingWagon: 'Error during creating new wagon!',
+                checkWaybillNumberConfirm:  "Waybill №{0} (created {2}) for shop '{1}' already exists!\n"+
+                                            "Do you want to create waybill anyway?\n" +
+                                            "If 'Cancel' waybill will not be created.",
+                checkWagonExistsConfirm:    "Wagon №{0} doesnt exist!\n" +
+                                            "Do you want to add this wagon to DB?\n" +
+                                            "If 'Cancel' waybill will not be created.",
+                rejectConfirm: "Are you sure to reject waybill №{0}?",
+                rejectDiscardConfirm: "Are you sure to discard reject waybill №{0}?",
+                rejectSuccess: 'Waybill №{0} rejected successfully.',
+                rejectDiscardSuccess: 'Discard rejecting of waybill №{0} is successfull.',
+                savingSuccess: 'Saving success.',
+                savingRejected: 'Saving has been rejected!',
+                updatingSuccess: 'Updating success.',
+                updatingRejected: 'Updating has been rejected!',
+            },
+        },
         error: {
             Unauthorized: 'This role is unavailable for you!'
         },
@@ -427,21 +535,21 @@
 
 
         automationlab: {
-            Income:'Прием/Выдача',
+            Income: 'Прием/Выдача',
             Material: 'Устройства',
             Repair: 'Ремонт и техобслуживание',
-        material: {
-            buttonAdd: 'Добавить',
-            addnewmaterial: 'Добавление нового устройства'
-        },
-        income: {
-            incomeoutcome: 'Прием/выдача устройств',
-            factorynumber: 'Введите заводской номер устройства:',
-            search: 'Поиск',
-            income: 'Принять',
-            outcome: 'Выдать',
-            defect: 'Брак'
-        },
+            material: {
+                buttonAdd: 'Добавить',
+                addnewmaterial: 'Добавление нового устройства'
+            },
+            income: {
+                incomeoutcome: 'Прием/выдача устройств',
+                factorynumber: 'Введите заводской номер устройства:',
+                search: 'Поиск',
+                income: 'Принять',
+                outcome: 'Выдать',
+                defect: 'Брак'
+            },
         },
 
         gasCollection: {
@@ -492,7 +600,7 @@
                     MATERIAL_NO: '№ материала',
                     BRIGADE_NO: 'Бригада',
                     PROD_DATE: 'Производственная дата',
-					LABEL_PRINT_QTY: 'Кол-во печатаемых бирок',
+                    LABEL_PRINT_QTY: 'Кол-во печатаемых бирок',
                     additionalButtonCaptions: {
 
                         testPrint: 'Тестовая печать',
@@ -570,7 +678,7 @@
                 changeSide: 'Выберите сторону',
                 equipmentName: 'Название оборудования',
                 equipmentStatus: 'Статус оборудования',
-                printSystemEnabled: 'Система печати бирок включена',                
+                printSystemEnabled: 'Система печати бирок включена',
                 printSystemOn: 'Система печати бирок включена',
                 printSystemOff: 'Система печати бирок выключена',
                 printSystemTurnOn: 'Вы уверены, что хотите включить систему печати бирок?',
@@ -604,7 +712,7 @@
             buntNo: 'Номер бунта',
             rodsLeft: 'Осталось прутков',
             scalesBlocked: 'Весы заблокированы',
-			labelPrinted: 'Бирка напечатана',
+            labelPrinted: 'Бирка напечатана',
             weightOver: 'Масса превышает максимально допустимую',
             firstPack: 'Первая пачка',
             secondPack: 'Вторая пачка',
@@ -620,7 +728,7 @@
             chartEndDate: 'Дата до',
             getChartDataBtn: 'Получить',
             chartNoData: 'Нет данных за этот период! Выберите другой период',
-			markerErrorCaption: 'Ошибки:',
+            markerErrorCaption: 'Ошибки:',
 
             CreateDialogue: {
                 CHANGE_NO: 'Смена',
@@ -629,7 +737,7 @@
             },
             acceptOrderTask: 'Подтвердить задание',
             takeWeightButton: 'Взять вес',
-			takeWeightButtonProcessing: 'Взятие...',
+            takeWeightButtonProcessing: 'Взятие...',
             takeTaraButton: 'Взять тару',
             testPrintButton: 'Тест печать',
             buttonExit: 'Выход',
@@ -639,7 +747,7 @@
             separateButton: 'Разделение пачки',
             handModeButton: 'Ручной ввод',
             changeOrderButton: 'Изменить заказ',
-			reversalButton: 'Сторнирование',
+            reversalButton: 'Сторнирование',
             statisticsButton: 'Статистика',
             errorMessages: {
 
@@ -652,9 +760,9 @@
                 enterProdOrder: 'Вы должны ввести новый номер производственного заказа!',
                 selectLabel: 'Вы должны выбрать бирку!',
                 handModeQuantity: 'Вы должны ввести вес!',
-				notNullable: 'Значение поля "{0}" не должно равняться 0!',
+                notNullable: 'Значение поля "{0}" не должно равняться 0!',
                 fieldIsRequired: 'Поле "{0}" обязательно для заполнения!',
-				scalesTypeUndefined: 'Тип весов не указан, проверьте свойства оборудования',
+                scalesTypeUndefined: 'Тип весов не указан, проверьте свойства оборудования',
                 fieldName: {
 
                     minMass: 'Масса минимум',
@@ -676,7 +784,7 @@
                 enterQuantity: 'Введите вес',
                 getHandModeCredentials: 'Run',
                 OrderChangeMode: 'Изменить заказ',
-				Reversal: 'Сторнирование',
+                Reversal: 'Сторнирование',
                 enterNewOrder: 'Введите новый номер заказа'
             },
             grid: {
@@ -688,7 +796,7 @@
                 CreateTime: 'Дата',
                 Quantity: 'Вес',
                 selected: 'Отметьте записи, которые нужно изменить',
-				reversed: 'Отметьте записи, которые нужно сторнировать'
+                reversed: 'Отметьте записи, которые нужно сторнировать'
             },
             monitorCaptions: {
 
@@ -768,6 +876,115 @@
             ton: 'т',
             Taring: 'Тарирование',
             Weighting: 'Взвешивание'
+        },
+        consigners: {
+            Buttons: {
+                create: 'Создать',
+                createCopy: 'Создать копию',
+                modify: 'Изменить',
+                print: 'Печать',
+                back: 'Назад',
+                save: 'Сохранить',
+                savePrint: 'Сохранить и печатать',
+                reject: 'Забраковать',
+                discardReject: 'Отмена брака',
+            },
+            Labels: {
+                waybill: 'Путевая',
+                ticketWaybill: 'Квитанция к путевой',
+                wagon: 'Вагон',
+                wagonType: 'Род вагона',
+                wagonTypeNumber: 'Род и номер вагона',
+                cargoType: 'Род груза',
+                sender: 'Отправитель',
+                senderShop: 'Отправитель',
+                senderDistrict: 'Точное место погрузки',
+                cargoSender: 'Цех/участок отправления',
+                senderStation: 'Станция отправления',
+                senderDT: 'Время погрузки',
+                senderArrivingTime: 'Время прибытия',
+                senderStartLoadingTime: 'Время подачи под погрузку',
+                senderEndLoadingTime: 'Время окончания погрузки',
+
+                receiver: 'Получатель',
+                receiverShop: 'Получатель',
+                receiverDistrict: 'Точное место выгрузки',
+                cargoReceiver: 'Цех/участок получения',
+                receiverStation: 'Станция получения',
+                receiverDT: 'Время выгрузки',
+                receiverArrivingTime: 'Время прибытия',
+                receiverStartLoadingTime: 'Время подачи под выгрузку',
+                receiverEndLoadingTime: 'Время окончания выгрузки',
+
+                date: 'Дата',
+                time: 'Время',
+                railwayShopMaster: 'Нарядчик ЖД цеха',
+                consigner: 'Приемосдатчик',
+                signature: 'Подпись',
+                cargoAccepted: 'Груз принят к перевозке',
+                acceptedTime: 'Дата/время',
+                amkr: 'АрселорМиттал Кривой Рог',
+                weight: 'Вес',
+                cuttingLine: 'ЛИНИЯ ОТРЕЗА',
+                creatingDT: 'Создано',
+                modifyingDT: 'Изменено',
+                status: 'Статус',
+
+            },
+            Placeholders: {
+                enterWaybillNumber: 'Введите номер путевой',
+                selectWagonType: 'Выберите род вагона',
+                enterWagonNumber: 'Введите номер вагона',
+                selectCargoType: 'Выберите род груза',
+                selectCargoSenderShop: 'Выберите цех отправления',
+                selectCargoSenderDistrict: 'Выберите место отправления',
+                selectCargoSenderStation: "Выберите ЖД станцию отправления",
+                selectCargoReceiverShop: 'Выберите цех получения',
+                selectCargoReceiverDistrict: 'Выберите место получения',
+                selectCargoReceiverStation: 'Выберите ЖД станцию получения',
+                selectArriveDT: 'Выберите время прибытия',
+                selectStartLoadDT: 'Выберите время подачи',
+                selectEndLoadDT: 'Выберите время окончания',
+                arriveDT: 'Прибытие',
+                startLoadDT: 'Подача',
+                endLoadDT: 'Окончание',
+
+                selectShop: 'Выберите цех отправления',
+                chooseWaybill: 'Выберите путевую...',
+                loading: 'Загрузка...',
+
+            },
+            Messages: {
+                noWaybill: 'Отсутствует идентификатор путевой!',
+
+                emptyWaybillNumber: '-- Номер путевой не заполнен \n',
+                emptyWagonType: '-- Род вагона не заполнен \n',
+                emptyWagonNumber: '-- Номер вагона не заполнен или неверный \n',
+                emptyCargoType: '-- Род груза не заполнен \n',
+                emptySender: '-- Отправитель не заполнен \n',
+                emptySenderStation: '-- Станция отправления не заполнена \n',
+                emptyReceiver: '-- Получатель не заполнен \n',
+                emptyReceiverStation: '-- Станция получения не заполнена \n',
+                errorsFound: 'При заполнении обнаружены ошибки: \n',
+                noChanges: 'Нет изменений.',
+                parametersModified: 'Измененных параметров: ',
+                errorCreatingWagon: 'Ошибка при создании нового вагона!',
+                checkWaybillNumberConfirm:  "Путевая №{0} (от {2}) для '{1}' уже существует!\n" +
+                                            "Вы все равно хотите ее создать?\n" +
+                                            "Если 'Отмена', путевая не будет создана.",
+                checkWagonExistsConfirm:    "Вагон №{0} не существует!\n" +
+                                            "Вы хотите добавить этот вагон в базу данных?\n" +
+                                            "Если 'Отмена', путевая не будет создана.",
+                rejectConfirm: "Вы уверены, что хотите забраковать путевую №{0}?",
+                rejectDiscardConfirm: "Вы уверены, что хотите отменить забраковку путевой №{0}?",
+                rejectSuccess: 'Путевая №{0} забракована.',
+                rejectDiscardSuccess: 'Забраковка путевой №{0} отменена.',
+                savingSuccess: 'Сохранено успешно.',
+                savingRejected: 'Сохранение отменено!',
+                updatingSuccess: 'Изменено успешно.',
+                updatingRejected: 'Изменение отменено!',
+            },
+
         },
         error: {
             Unauthorized: 'Эта роль Вам недоступна'
@@ -892,7 +1109,7 @@
                     MATERIAL_NO: '№ материала',
                     BRIGADE_NO: 'Бригада',
                     PROD_DATE: 'Виробнича дата',
-					LABEL_PRINT_QTY: 'К-сть друкуємих бирок',
+                    LABEL_PRINT_QTY: 'К-сть друкуємих бирок',
                     additionalButtonCaptions: {
 
                         testPrint: 'Тестовий друк',
@@ -1003,7 +1220,7 @@
             buntNo: 'Номер бунта',
             rodsLeft: 'Залишилось прутків',
             scalesBlocked: 'Ваги заблоковані',
-			labelPrinted: 'Бирка надрукована',
+            labelPrinted: 'Бирка надрукована',
             weightOver: 'Маса перевищує максимально допустиму',
             firstPack: 'Перша пачка',
             secondPack: 'Друга пачка',
@@ -1019,7 +1236,7 @@
             chartEndDate: 'Дата до',
             getChartDataBtn: 'Отримати',
             chartNoData: 'Немає даних за цей період! Виберіть інший період',
-			markerErrorCaption: 'Помилки:',
+            markerErrorCaption: 'Помилки:',
 
             CreateDialogue: {
                 FactoryNumber: 'Номер бірки',
@@ -1028,7 +1245,7 @@
             },
             acceptOrderTask: 'Підтвердити завдання',
             takeWeightButton: 'Взяти вагу',
-			takeWeightButtonProcessing: 'Взяття...',
+            takeWeightButtonProcessing: 'Взяття...',
             takeTaraButton: 'Взяти тару',
             testPrintButton: 'Тест друк',
             buttonExit: 'Вихід',
@@ -1038,7 +1255,7 @@
             separateButton: 'Розділення пачки',
             handModeButton: 'Ручне введення',
             changeOrderButton: 'Змінити замовл.',
-			reversalButton: 'Сторнування',
+            reversalButton: 'Сторнування',
             statisticsButton: 'Статистика',
             errorMessages: {
 
@@ -1051,9 +1268,9 @@
                 enterProdOrder: 'Ви повинні ввести новий номер виробничого замовлення!',
                 selectLabel: 'Ви повинні вибрати бірку!',
                 handModeQuantity: 'Ви повинні ввести вагу!',
-				notNullable: 'Значення поля "{0}" не повинно дорівнювати 0!',
+                notNullable: 'Значення поля "{0}" не повинно дорівнювати 0!',
                 fieldIsRequired: 'Поле "{0}" обов\'язкове для заповнення!',
-				scalesTypeUndefined: 'Тип вагів не задано, перевірте властивості обладнання',
+                scalesTypeUndefined: 'Тип вагів не задано, перевірте властивості обладнання',
                 fieldName: {
 
                     minMass: 'Маса мінімум',
@@ -1075,7 +1292,7 @@
                 enterQuantity: 'Введіть вагу',
                 getHandModeCredentials: 'Run',
                 OrderChangeMode: 'Змінити замовлення',
-				Reversal: 'Сторнування',
+                Reversal: 'Сторнування',
                 enterNewOrder: 'Введіть новий номер замовлення'
             },
             grid: {
@@ -1087,7 +1304,7 @@
                 CreateTime: 'Дата',
                 Quantity: 'Вага',
                 selected: 'Відмітьте записи, котрі необхідно змінити',
-				reversed: 'Відмітьте записи, котрі необхідно сторнувати'
+                reversed: 'Відмітьте записи, котрі необхідно сторнувати'
             },
             monitorCaptions: {
 
@@ -1165,6 +1382,115 @@
             ton: 'т',
             Taring: 'Тарування',
             Weighting: 'Зважування'
+        },
+        consigners: {
+            Buttons: {
+                create: 'Створити',
+                createCopy: 'Створити копію',
+                modify: 'Змінити',
+                print: 'Друк',
+                back: 'Назад',
+                save: 'Зберегти',
+                savePrint: 'Зберегти та друкувати',
+                reject: 'Забракувати',
+                discardReject: 'Відміна браку',
+            },
+            Labels: {
+                waybill: 'Вагова',
+                ticketWaybill: 'Квитанція до вагової',
+                wagon: 'Вагон',
+                wagonType: 'Рід вагона',
+                wagonTypeNumber: 'Рід та номер вагона',
+                cargoType: 'Рід вантажу',
+                sender: 'Відправник',
+                senderShop: 'Відправник',
+                senderDistrict: 'Точне місце погрузки',
+                cargoSender: 'Відправник',
+                senderStation: 'Станція відправлення',
+                senderDT: 'Час погрузки',
+                senderArrivingTime: 'Час прибуття',
+                senderStartLoadingTime: 'Час подачі під погрузку',
+                senderEndLoadingTime: 'Час закінчення погрузки',
+
+                receiver: 'Отримувач',
+                receiverShop: 'Отримувач',
+                receiverDistrict: 'Точне місце розвантаження',
+                cargoReceiver: 'Отримувач',
+                receiverStation: 'Станція отримання',
+                receiverDT: 'Час розвантаження',
+                receiverArrivingTime: 'Час прибуття',
+                receiverStartLoadingTime: 'Час подачі під розвантаження',
+                receiverEndLoadingTime: 'Час закінчення розвантаження',
+
+                date: 'Дата',
+                time: 'Час',
+                railwayShopMaster: 'Нарядчик залізничного цеху',
+                consigner: 'Прийомоздавач',
+                signature: 'Підпис',
+                cargoAccepted: 'Вантаж прийнято до перевезення',
+                acceptedTime: 'Дата/час',
+                amkr: 'АрселорМіттал Кривий Ріг',
+                weight: 'Вага',
+                cuttingLine: 'ЛІНІЯ ВІДРІЗУ',
+                creatingDT: 'Створено',
+                modifyingDT: 'Змінено',
+                status: 'Статус',
+
+            },
+            Placeholders: {
+                enterWaybillNumber: 'Введіть номер вагової',
+                selectWagonType: 'Виберіть рід вагону',
+                enterWagonNumber: 'Введіть номер вагону',
+                selectCargoType: 'Виберіть рід вантажу',
+                selectCargoSenderShop: 'Виберіть цех відправлення',
+                selectCargoSenderDistrict: 'Виберіть місце відправлення',
+                selectCargoSenderStation: 'Виберіть станцію відправлення',
+                selectCargoReceiverShop: 'Виберіть цех отримання',
+                selectCargoReceiverDistrict: 'Виберіть місце отримання',
+                selectCargoReceiverStation: 'Виберіть станцію отримання',
+                selectArriveDT: 'Виберіть час прибуття',
+                selectStartLoadDT: 'Виберіть час подачі',
+                selectEndLoadDT: 'Виберіть час закінчення',
+                arriveDT: 'Прибуття',
+                startLoadDT: 'Подача',
+                endLoadDT: 'Закінчення',
+
+                selectShop: 'Виберіть цех відправлення',
+                chooseWaybill: 'Виберіть вагову...',
+                loading: 'Завантаження...',
+
+            },
+            Messages: {
+                noWaybill: 'Відсутній ідентифікатор вагової!',
+
+                emptyWaybillNumber: '-- Номер вагової не введений\n',
+                emptyWagonType: '-- Рід вагону не введений \n',
+                emptyWagonNumber: '-- Номер вагону не введений або невірний \n',
+                emptyCargoType: '-- Рід вантажу не введений \n',
+                emptySender: '-- Відправник не введений \n',
+                emptySenderStation: '-- Станція відправлення не введена \n',
+                emptyReceiver: '-- Отримувач не введений \n',
+                emptyReceiverStation: '-- Станція отримання не введена \n',
+                errorsFound: 'При заповненні знайдені помилки: \n',
+                noChanges: 'Немає змін.',
+                parametersModified: 'Змінених параметрів: ',
+                errorCreatingWagon: 'Помилка при створенні нового вагону!',
+                checkWaybillNumberConfirm: "Вагова №{0} (від {2}) для '{1}' вже існує!\n" +
+                                            "Вы все одно бажаєте її створити?\n" +
+                                            "Якщо 'Відміна', вагова не буде створена.",
+                checkWagonExistsConfirm: "Вагон №{0} не існує!\n" +
+                                            "Вы бажаєте додати цей вагон до бази даних?\n" +
+                                            "Якщо 'Відміна', вагова не буде створена.",
+                rejectConfirm: "Ви впевнені, що бажаєте забракувати вагову №{0}?",
+                rejectDiscardConfirm: "Ви впевнені, що бажаєте відмінити забракування вагову №{0}?",
+                rejectSuccess: 'Вагова №{0} забракована.',
+                rejectDiscardSuccess: 'Забракування вагової №{0} відмінено.',
+                savingSuccess: 'Збереження успішне.',
+                savingRejected: 'Збереження відмінено!',
+                updatingSuccess: 'Змінення успішне.',
+                updatingRejected: 'Змінення відмінено!',
+            },
+
         },
         error: {
             Unauthorized: 'У доступі відмовлено'

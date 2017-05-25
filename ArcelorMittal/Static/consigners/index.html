@@ -52,7 +52,7 @@
                     style="width: 48%"
                     ng-disabled="false"
                     ng-click="Create()">
-                    Create
+                    {{ 'consigners.Buttons.create' | translate }}
                 </button>
 
                 <button type="button"
@@ -60,7 +60,7 @@
                     style="width: 48%"
                     ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected"
                     ng-click="CreateCopy()">
-                    Create as a copy
+                    {{ 'consigners.Buttons.createCopy' | translate }}
                 </button>
             </div>
             <div class="controlsRowConsigners" style="width: 100%; text-align: center">
@@ -69,7 +69,7 @@
                     style="width: 48%"
                     ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected"
                     ng-click="Modify()">
-                    Modify
+                    {{ 'consigners.Buttons.modify' | translate }}
                 </button>
 
                 <button type="button"
@@ -77,7 +77,7 @@
                     style="width: 48%"
                     ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')"
                     ng-click="Print()">
-                    Print
+                    {{ 'consigners.Buttons.print' | translate }}
                 </button>
             </div>
 
@@ -93,7 +93,7 @@
                     style="width: 100%"
                     theme="bootstrap"
                     title="Select a shop">
-                        <ui-select-match allow-clear="true" placeholder="Select a shop">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-match allow-clear="true" placeholder="{{ 'consigners.Placeholders.selectShop' | translate }}">{{$select.selected.Description}}</ui-select-match>
                         <ui-select-choices repeat="shop in WaybillShops | propsFilter: {Description: $select.search}" position='down'>
                         <div ng-bind-html="shop.Description | highlight: $select.search"></div>
                         </ui-select-choices>
@@ -103,20 +103,20 @@
                 <div class="" style="margin-top: 5px;">
                     <table style="width: 100%; font-size: 12px;">
                         <tr ng-show="CurrentWaybill.Consigner">
-                            <td>Consigner	</td>
+                            <td>{{ 'consigners.Labels.consigner' | translate }}	</td>
                             <td style="text-align: right">{{CurrentWaybill.Consigner}}</td>
                         </tr>
                         <tr ng-show="CurrentWaybill.Status">
-                            <td>Status	</td>
+                            <td>{{ 'consigners.Labels.status' | translate }}	</td>
                             <td style="text-align: right"
                                 ng-style="{'color': CurrentWaybill.Status == 'reject' ? 'red' : 'auto'}">{{CurrentWaybill.Status}}</td>
                         </tr>
                         <tr ng-show="CurrentWaybill.CreateDT">
-                            <td>CreateDT	</td>
+                            <td>{{ 'consigners.Labels.creatingDT' | translate }}	</td>
                             <td style="text-align: right">{{CurrentWaybill.CreateDT | date:'dd.MM.yyyy HH:mm'}}</td>
                         </tr>
                         <tr ng-show="CurrentWaybill.EditDT">
-                            <td>EditDT	</td>
+                            <td>{{ 'consigners.Labels.modifyingDT' | translate }}	</td>
                             <td style="text-align: right">{{CurrentWaybill.EditDT | date:'dd.MM.yyyy HH:mm'}}</td>
                         </tr>
                     </table>
@@ -137,12 +137,12 @@
         <div class="col-md-7" align="center" style="border-left: 1px solid #d4d4d4">
             <div ng-hide="CurrentWaybill.ID || ArchiveWaybillSelected" style="display: table; width: 100%; height: 100%">
                 <div style="color: gray">
-                    <h1>Choose a waybill...</h1>
+                    <h1>{{ 'consigners.Placeholders.chooseWaybill' | translate }}</h1>
                 </div>
             </div>
             <div ng-hide="CurrentWaybill.ID || !ArchiveWaybillSelected" style="display: table; width: 100%; height: 100%">
                 <div style="color: gray">
-                    <h1>Loading...</h1>
+                    <h1>{{ 'consigners.Placeholders.loading' | translate }}</h1>
                 </div>
             </div>
             <div ng-show="CurrentWaybill.ID"
