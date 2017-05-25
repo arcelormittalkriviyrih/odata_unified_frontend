@@ -369,7 +369,8 @@ angular.module('indexApp')
                             waybill_object.Status = resp_1[i]['Status'];
                         }
                         for (i = 0; i < resp_3.length; i++) {
-                            waybill_object.WagonNumber = resp_3[i]['Description'];
+                            if (resp_3[i]['Status'] == 'reject') continue;
+                            waybill_object.WagonNumber = resp_3[i]['Description'].trim();
                         }
 
                         var prop_queries_array = [
@@ -414,8 +415,6 @@ angular.module('indexApp')
                                     waybill_object[actual_prop_queries_array[i]['prop']] = item['response'];
                                 }
                             })
-
-                            /*  continue here  */
 
                             waybill_object.ID = waybill_id;
                             if (waybill_object && waybill_object.SenderShop && waybill_object.SenderDistrict) {
@@ -513,7 +512,7 @@ angular.module('indexApp')
 
     var last_waybill_id = copy_id || modify_id;
 
-
+    // заголовок окна
     $scope.message = "Waybill " + (modify_id ? "modifying" : "creating") + (copy_id ? " as copy" : "");
 
     var CargoSenders = [];          // Districts
@@ -525,7 +524,6 @@ angular.module('indexApp')
     $scope.WagonTypes = [];
 
     $scope.SelectedObjects = {};
-
 
     $scope.CurrentWaybill = {
         ID: null,
@@ -543,13 +541,6 @@ angular.module('indexApp')
         ReceiverStartLoadDT: null,
         ReceiverEndLoadDT: null
     };
-    //$scope.CurrentWaybill.ID = null;
-    //$scope.CurrentWaybill.WagonNumber = null;
-    //$scope.CurrentWaybill.CargoSender = null;
-    //$scope.CurrentWaybill.CargoReceiver = null;
-    //$scope.CurrentWaybill.CargoType = null;
-    //$scope.CurrentWaybill.SenderRWStation = null;
-    //$scope.CurrentWaybill.ReceiverRWStation = null;
     $scope.WagonNumberPattern = null;
 
     $scope.GetWagonNumberPattern = vmGetWagonNumberPattern;
@@ -643,6 +634,7 @@ angular.module('indexApp')
         $.datepicker.setDefaults($.datepicker.regional[lang]);
         $.timepicker.setDefaults($.timepicker.regional[lang]);
 
+        // для каждого DTP устанавливаем формат
         for (var i = 0; i < DTPs_array.length; i++) {
             $('#' + DTPs_array[i]).datetimepicker({
                 stepMinute: 10,
@@ -691,17 +683,15 @@ angular.module('indexApp')
                 // получение уникальных цехов получателей груза
                 vmGetCargoClient(CargoReceivers, $scope.CargoReceiverShops);
                 if (waybill_object) {
-                    // fill CurrentWaybill by waybill_object
+                    // заполнение CurrentWaybill из waybill_object
                     vmParseWaybillObject();
                     //alert("Create as copy");
-
-
                 }
             }
         })
     }
 
-    //
+    // заполнение CurrentWaybill из waybill_object
     function vmParseWaybillObject() {
 
         //
@@ -733,25 +723,13 @@ angular.module('indexApp')
         //    return shop_object;
         //}
 
-
-        $scope.CurrentWaybill = waybill_object;
+        $scope.CurrentWaybill = angular.copy(waybill_object);
+        // если создаем как копию - сбрасываем номер вагона и инкрементируем номер путевой
         if (copy_id) {
             $scope.CurrentWaybill.Status = null;
             resetWaybillNumber();
         }
     }
-    /*
-    // получение списка ЖД вагонов
-    function vmGetWagonTypes() {
-        var filter_str = "ЖД вагоны";
-        filter_str = encodeURI(filter_str);
-        var pathWagonTypes = "v_PackagingClass?$filter=ParentDescription eq '{0}'&$orderby=ID".format(filter_str);
-        indexService.getInfo(pathWagonTypes)
-        .then(function (response) {
-            $scope.WagonTypes = response.data.value;
-        });
-    };
-    */
 
     // получение шаблона номера вагона при выборе вида ЖД вагона
     function vmGetWagonNumberPattern(wagon) {
@@ -768,15 +746,6 @@ angular.module('indexApp')
             }
         });
     }
-    /*
-    // получение списка видов лома
-    function vmGetCargoTypes() {
-        indexService.getInfo('v_KP4_ScrapTypes')
-        .then(function (response) {
-            $scope.CargoTypes = response.data.value;
-        });
-    };
-    */
 
     // получение списка пользователей (поставщиков и получателей) груза
     function vmGetCargoClient(array, unique_array) {
@@ -793,64 +762,6 @@ angular.module('indexApp')
         }
     }
 
-    /*
-    // получение списка поставщиков груза
-    function vmGetCargoSenders() {
-        indexService.getInfo("v_WGT_Consigners?$filter=PropertyDescription eq 'CONSIGNEE'&$orderby=Description")
-        .then(function (response) {
-            CargoSenders = response.data.value;
-            $scope.CargoSenderShops = [];
-            for (i = 0; i < CargoSenders.length; i++) {
-                var CargoSenderShop = {};
-                CargoSenderShop['ID'] = CargoSenders[i]['ParentID'];
-                CargoSenderShop['Description'] = CargoSenders[i]['ParentDescription'];
-
-                if ($scope.CargoSenderShops.map(function (elem) { return elem['ID']; }).indexOf(CargoSenderShop['ID']) == -1) {
-                    $scope.CargoSenderShops.push(CargoSenderShop);
-                }
-            }
-        });
-    };
-
-    // получение списка получателей груза
-    function vmGetCargoReceivers() {
-        indexService.getInfo("v_WGT_Consigners?$filter=PropertyDescription eq 'CONSIGNER'&$orderby=Description")
-        .then(function (response) {
-            CargoReceivers = response.data.value;
-            $scope.CargoReceiverShops = [];
-            for (i = 0; i < CargoReceivers.length; i++) {
-                var CargoReceiverShop = {};
-                CargoReceiverShop['ID'] = CargoReceivers[i]['ParentID'];
-                CargoReceiverShop['Description'] = CargoReceivers[i]['ParentDescription'];
-
-                if ($scope.CargoReceiverShops.map(function (elem) { return elem['ID']; }).indexOf(CargoReceiverShop['ID']) == -1) {
-                    $scope.CargoReceiverShops.push(CargoReceiverShop);
-                }
-            }
-        });
-    };
-
-    // получение списка ЖД станций
-    function vmGetRWStations() {
-        indexService.getInfo("v_WGT_RailwayStations")
-        .then(function (response) {
-            $scope.RWStations = response.data.value;
-        });
-    };
-    */
-    /*
-    // заполнение участков при выборе цеха из списка
-    function vmCargoClientShopSelect(shop) {
-        //$scope.CargoSenderDistricts = [];
-        $scope.CurrentWaybill.CargoSender = null;
-        // фильтрация в списке участков в зависимости от выбранного цеха
-        if (CargoSenders != null) {
-            $scope.CargoSenderDistricts = CargoSenders.filter(function (item) {
-                return item['ParentID'] == shop['ID'];
-            });
-        }
-    };
-    */
     // выбор цеха-отправителя из списка
     function vmCargoSenderShopSelect(shop) {
         $scope.CargoSenderDistricts = [];
@@ -877,10 +788,10 @@ angular.module('indexApp')
 
 
     // сохранение отвесной
-    function vmSave() {
+    function vmSave(modify) {
         console.log(new Date() + ". " + "Begin vmSave.");
 
-        //
+        // корректировка UTC
         function stringToDatetimeUTCCorrect(dt_string) {
             if (!dt_string) return null;
             var DT = $.datepicker.parseDateTime("dd.mm.yy", "hh:mm", dt_string);
@@ -901,14 +812,12 @@ angular.module('indexApp')
         error_str += $scope.CurrentWaybill.CargoReceiver ? "" : "-- Receiver is empty \n";
         error_str += $scope.CurrentWaybill.ReceiverRWStation ? "" : "-- Receiver RW station is empty \n";
 
-        // если форма не валидна, возвращаем FALSE
+        // если есть ошибки, возвращаем FALSE
         if (error_str.length > 0) {
             error_str = "The next errors have been found: \n" + error_str;
             alert(error_str);
             return $q.when(false);
         }
-
-        //** !!! HERE check waybill number for shop **// 
 
         var WaybillNumber = $scope.CurrentWaybill.WaybillNumber.toString();
         var Consigner = user.toString();
@@ -951,6 +860,20 @@ angular.module('indexApp')
             });
         };
 
+        // определение изменений в путевой (возвращает массив измененных параметров)
+        function waybillComparing(orig_wb, mod_wb) {
+            var prop_array = [];
+            angular.forEach(orig_wb, function (value_orig, key_orig) {
+                var value_modify = mod_wb[key_orig];
+                if (!angular.equals(value_orig, value_modify)) {
+                    var t = {};
+                    t[key_orig] = value_modify;
+                    prop_array.push(t);
+                }
+            })
+            return prop_array;
+        }
+
         // вставка новой путевой в БД
         function insertNewWaybill() {
             return indexService.sendInfo('ins_SaveWaybill', {
@@ -975,13 +898,52 @@ angular.module('indexApp')
             });
         };
 
+        // редактирование текущей путевой в БД
+        function updateCurWaybill() {
+            var modifying_waybill = $scope.CurrentWaybill;
+            var original_waybill = waybill_object;
+            // сравниваем параметры оригинальной путевой и измененной
+            var diff_props = waybillComparing(original_waybill, modifying_waybill);
+            // если нет изменений - выходим
+            if (diff_props.length == 0) {
+                alert("Nothing to modify.");
+                return $q.when(false);
+            }
+            else {
+                alert("{0} parameters has been modified.".format(diff_props.length));
+            }
 
+            return indexService.sendInfo('upd_SaveWaybill', {
+                WaybillNumber: WaybillNumber,
+                Consigner: Consigner,
+                WagonType: WagonType,
+                WagonNumber: WagonID,
+                CargoType: CargoType,
+                SenderShop: SenderShop,
+                SenderDistrict: SenderDistrict,
+                SenderRWStation: SenderRWStation,
+                SenderArriveDT: SenderArriveDT,
+                SenderStartLoadDT: SenderStartLoadDT,
+                SenderEndLoadDT: SenderEndLoadDT,
+                ReceiverShop: ReceiverShop,
+                ReceiverDistrict: ReceiverDistrict,
+                ReceiverRWStation: ReceiverRWStation,
+                ReceiverArriveDT: ReceiverArriveDT,
+                ReceiverStartLoadDT: ReceiverStartLoadDT,
+                ReceiverEndLoadDT: ReceiverEndLoadDT,
+                DocumentationsID: $scope.CurrentWaybill['ID'],
+                DocumentationsID_returned: 0
+            });
+
+        };
+
+        // основная функция сохранения (или изменения) путевой
         function mainSaveWaybill() {
             // проверяем существование номера путевой
             return checkWaybillNumber(WaybillNumber, SenderShop).then(function (response) {
                 existing_waybill = response.data.value;
                 // если существует - предлагаем все же добавить в БД
-                if (existing_waybill[0]) {
+                if (existing_waybill[0] && !modify) {
                     nearest_DT = existing_waybill[0]['EndTime'];
                     var date = new Date(nearest_DT).toLocaleDateString();
                     sender_shop_name = $filter('filter')($scope.CargoSenderShops, { ID: SenderShop })[0]['Description'];
@@ -1010,6 +972,9 @@ angular.module('indexApp')
                                 console.log(new Date() + ". " + "New wagon has been created.");
                                 if (response.data.ActionParameters) {
                                     WagonID = response.data.ActionParameters[0]['Value'];
+                                    // если Модифицировать, то возвращаем updateCurWaybill()
+                                    if (modify) return updateCurWaybill();
+                                    // если Создать, то возвращаем insertNewWaybill()
                                     return insertNewWaybill();
                                 }
                                 else {
@@ -1025,6 +990,8 @@ angular.module('indexApp')
                     else {
                         console.log(new Date() + ". " + "checkWagonExists: Wagon exists.");
                         WagonID = Wagon[0]['ID'];
+                        // если Модифицировать, то возвращаем updateCurWaybill()
+                        if (modify) return updateCurWaybill();
                         return insertNewWaybill();
                     }
                     console.log("-----");
@@ -1033,19 +1000,32 @@ angular.module('indexApp')
             });
         };
 
+        // функция vmSave возвращает результат mainSaveWaybill()
         return mainSaveWaybill()
             .then(function (response) {
+                // если вернулся результат сохранения (ID записи), то возвращаем сохраненный объект
                 if (response.data && response.data.ActionParameters) {
-                    $scope.CurrentWaybill.ID = response.data.ActionParameters[0]['Value'];
+                    if (!modify) {
+                        $scope.CurrentWaybill.ID = response.data.ActionParameters[0]['Value'];
+                        console.log(new Date() + ". " + "Saving success.");
+                        alert('Saving success!');
+                    }
+                    else {
+                        waybill_object = angular.copy($scope.CurrentWaybill);
+                        console.log(new Date() + ". " + "Updating success.");
+                        alert('Updating success!');
+                    }
                     var returned_object = $scope.CurrentWaybill;
-                    console.log(new Date() + ". " + "Saving success.");
-                    alert('Saving success!');
-                    //alert("WaybillID = " + $scope.CurrentWaybill.ID);
-                    //resetWaybillNumber();
                     return returned_object;
                 }
+                // если вернулся false, сообщение об отмене
                 else {
-                    alert('Saving has been rejected!');
+                    if (!modify) {
+                        alert('Saving has been rejected!');
+                    }
+                    else {
+                        alert('Updating has been rejected!');
+                    }
                 }
             })
 
@@ -1061,28 +1041,32 @@ angular.module('indexApp')
         }
     };
 
+
     // нажатие "Сохранить"
-    function vmSaveOnly() {
-        if (!copy_id) return;
-        vmSave().then(function (response) {
+    function vmSaveOnly() {        
+        var modify = modify_id ? true : false;  // флаг "сохранить" или "изменить"
+        vmSave(modify).then(function (response) {
             // если возвращается NULL - выходим
             if (response === null || response === undefined || response.ID === undefined) {
                 console.log("Errors or rejected");
                 return;
             }
             last_waybill_id = $scope.CurrentWaybill.ID;
-            // при успешном сохранении отвесной очищаем номер вагона и инкрементируем номер отвесной
-            console.log("resetWaybillNumber");
-            resetWaybillNumber();
+            if (!modify) {
+                // при успешном сохранении отвесной очищаем номер вагона и инкрементируем номер отвесной
+                console.log("resetWaybillNumber");
+                resetWaybillNumber();
+            }
         })
 
     }
 
     // нажатие "Сохранить и печатать"
     function vmSavePrint() {
-        if (!copy_id) return;
+        var modify = modify_id ? true : false;  // флаг "сохранить" или "изменить"
+        //if (!copy_id) return;
         alert("Save and Print");
-        vmSave().then(function (response) {
+        vmSave(modify).then(function (response) {
             // если возвращается NULL - выходим
             if (response === null || response === undefined || response.ID === undefined) {
                 console.log("Errors or rejected");
@@ -1105,11 +1089,10 @@ angular.module('indexApp')
         if ($scope.CurrentWaybill.Status != 'reject') {
             reject = true;
         }
-
         var confirm_string = reject ?
             "Are you sure to reject waybill #{0}?".format($scope.CurrentWaybill.WaybillNumber) :
             "Are you sure to discard reject waybill #{0}?".format($scope.CurrentWaybill.WaybillNumber);
-
+        // если подтвердили забраковку и находимся в режиме редактирования
         if (confirm(confirm_string) && modify_id) {
             DocumentationsID = modify_id;
             var Status = reject ? "reject" : null;
@@ -1130,6 +1113,7 @@ angular.module('indexApp')
     // нажатие "Назад"
     function vmBack() {
         alert("Back");
+        // ID путевой для выделения в дереве при возврате на главную страницу
         var waybill_id = last_waybill_id;
         console.log("waybill_id = " + waybill_id);
         console.log("go to app.Consigners.Index");

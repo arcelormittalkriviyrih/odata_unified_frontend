@@ -252,7 +252,7 @@
             <button type="button"
                 class="btn btn-default"
                 style="width: 20%"
-                ng-disabled="false"
+                ng-disabled="myForm.$invalid"
                 ng-click="SavePrint()">
                 Save and Print
             </button>
@@ -260,7 +260,7 @@
             <button type="button"
                 class="btn btn-default"
                 style="width: 20%"
-                ng-disabled="false"
+                ng-disabled="myForm.$invalid"
                 ng-click="SaveOnly()">
                 Save
             </button>
