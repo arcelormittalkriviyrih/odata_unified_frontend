@@ -64,42 +64,42 @@
         !{{id}}!-->
         <table style="width: 100%; font-size: 8px;">
             <tr>
-                <td>AMKR	</td>
-                <td style="text-align: right">DG-102	</td>
+                <td>{{ 'consigners.Labels.amkr' | translate }}	</td>
+                <td style="text-align: right">ДГ-102	</td>
             </tr>
         </table>
 
         <table style="width: 100%">
             <tr>
-                <td style="height: 6mm; font-size: 15px; font-weight: bold; text-align: center">Waybill № {{CurrentWaybill.WaybillNumber}}	</td>
+                <td style="height: 6mm; font-size: 15px; font-weight: bold; text-align: center">{{ 'consigners.Labels.waybill' | translate }} № {{CurrentWaybill.WaybillNumber}}	</td>
             </tr>
         </table>
 
         <table class="WBrow" style="width: 100%">
             <tr>
-                <td>Wagon #		</td>
+                <td style="width:30%">{{ 'consigners.Labels.wagon' | translate }} № </td>
                 <td style="font-weight: bold;">{{CurrentWaybill.WagonNumber}}		</td>
-                <td>Wagon type	</td>
+                <td>{{ 'consigners.Labels.wagonType' | translate }}</td>
                 <td style="font-weight: bold;">{{CurrentWaybill.WagonType.Description}}</td>
             </tr>
             <tr>
-                <td>Sender shop</td>
+                <td>{{ 'consigners.Labels.senderShop' | translate }}</td>
                 <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoSender.ParentDescription}}</td>
             </tr>
             <tr>
-                <td>Sender district</td>
+                <td>{{ 'consigners.Labels.senderDistrict' | translate }}</td>
                 <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoSender.Description}}</td>
             </tr>
             <tr>
-                <td>Receiver shop</td>
+                <td>{{ 'consigners.Labels.receiverShop' | translate }}</td>
                 <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.ParentDescription}}</td>
             </tr>
             <tr>
-                <td>Receiver district</td>
+                <td>{{ 'consigners.Labels.receiverDistrict' | translate }}</td>
                 <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.Description}}</td>
             </tr>
             <tr>
-                <td>Cargo type</td>
+                <td>{{ 'consigners.Labels.cargoType' | translate }}</td>
                 <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoType.Description}}</td>
 <!--                <td>Weight</td>
                 <td></td>-->
@@ -108,18 +108,18 @@
 
         <table class="TT">
             <tr style="height: 8mm">
-                <td colspan="2" rowspan="2">Sender station		</td>
-                <td colspan="2">Arriving time		</td>
-                <td colspan="2">Start loading time	</td>
-                <td colspan="2">End loading time	</td>
+                <td colspan="2" rowspan="2">{{ 'consigners.Labels.senderStation' | translate }}</td>
+                <td colspan="2">{{ 'consigners.Labels.senderArrivingTime' | translate }}</td>
+                <td colspan="2">{{ 'consigners.Labels.senderStartLoadingTime' | translate }}</td>
+                <td colspan="2">{{ 'consigners.Labels.senderEndLoadingTime' | translate }}</td>
             </tr>
             <tr style="height: 5mm">
-                <td style="width: 12.5%">Date</td>
-                <td style="width: 12.5%">Time</td>
-                <td style="width: 12.5%">Date</td>
-                <td style="width: 12.5%">Time</td>
-                <td style="width: 12.5%">Date</td>
-                <td style="width: 12.5%">Time</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
             </tr>
             <tr style="height: 8mm; font-weight: bold;">
                 <td colspan="2">{{CurrentWaybill.SenderRWStation.Description}}</td>
@@ -134,45 +134,45 @@
 
         <table class="WBrow" style="width: 100%">
             <tr>
-                <td>RailwayShop Master</td>
+                <td>{{ 'consigners.Labels.railwayShopMaster' | translate }}</td>
                 <td class="signline" colspan="2"></td>
-                <td>(signature)</td>
+                <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
             <tr>
-                <td colspan="4">Fdvbdfbknlbkdfg ldnlndg ldnvdg nnl ndlnd kjxkjnvjvkfjvn sds nskj gk nlk g</td>
+                <td colspan="4">Расписка цеха с подтверждением времени простоя вагона под погрузкой</td>
             </tr>
             <tr>
                 <td></td>
                 <td class="signline" colspan="2"></td>
-                <td>(signature)</td>
+                <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
         </table>
 
         <table class="WBrow" style="width: 100%">
             <tr>
-                <td colspan="4">Cargo has been accepted:</td>
+                <td colspan="4">{{ 'consigners.Labels.cargoAccepted' | translate }}</td>
             </tr>
             <tr>
-                <td>Consigner</td>
+                <td>{{ 'consigners.Labels.consigner' | translate }}</td>
                 <td class="signline" colspan="2"></td>
-                <td>(signature)</td>
+                <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
         </table>
 
         <table class="TT">
             <tr style="height: 8mm">
-                <td colspan="2" rowspan="2">Receiver station	</td>
-                <td colspan="2">Arriving time		</td>
-                <td colspan="2">Start loading time	</td>
-                <td colspan="2">End loading time	</td>
+                <td colspan="2" rowspan="2">{{ 'consigners.Labels.receiverStation' | translate }}</td>
+                <td colspan="2">{{ 'consigners.Labels.receiverArrivingTime' | translate }}</td>
+                <td colspan="2">{{ 'consigners.Labels.receiverStartLoadingTime' | translate }}</td>
+                <td colspan="2">{{ 'consigners.Labels.receiverEndLoadingTime' | translate }}</td>
             </tr>
             <tr style="height: 5mm">
-                <td style="width: 12.5%">Date</td>
-                <td style="width: 12.5%">Time</td>
-                <td style="width: 12.5%">Date</td>
-                <td style="width: 12.5%">Time</td>
-                <td style="width: 12.5%">Date</td>
-                <td style="width: 12.5%">Time</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+                <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
             </tr>
             <tr style="height: 8mm; font-weight: bold;">
                 <td colspan="2">{{CurrentWaybill.ReceiverRWStation.Description}}</td>
@@ -187,72 +187,72 @@
         
         <table class="WBrow" style="width: 100%">
             <tr>
-                <td>RailwayShop Master</td>
+                <td>{{ 'consigners.Labels.railwayShopMaster' | translate }}</td>
                 <td class="signline" colspan="2"></td>
-                <td>(signature)</td>
+                <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
             <tr>
-                <td colspan="4">Fdvbdfbknlbkdfg ldnlndg ldnvdg nnl ndlnd kjxkjnvjvkfjvn sds nskj gk nlk g</td>
+                <td colspan="4">Расписка цеха-получателя в получении груза с подтверждением времени простоя </td>
             </tr>
             <tr>
-                <td></td>
+                <td>вагона под выгрузкой</td>
                 <td class="signline" colspan="2"></td>
-                <td>(signature)</td>
+                <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
         </table>
 
         <table style="width: 100%; border-bottom: 1px dotted black; border-top: 1px dotted black;">
             <tr>
-                <td style="text-align: center">Cutting line</td>
+                <td style="text-align: center">{{ 'consigners.Labels.cuttingLine' | translate }}</td>
             </tr>
         </table>
 
 
         <table style="width: 100%">
             <tr>
-                <td style="height: 5mm; font-size: 12px; font-weight: bold; text-align: center">Ticket for waybill #{{CurrentWaybill.WaybillNumber}}	</td>
+                <td style="height: 5mm; font-size: 12px; font-weight: bold; text-align: center">{{ 'consigners.Labels.ticketWaybill' | translate }} № {{CurrentWaybill.WaybillNumber}}	</td>
             </tr>
         </table>
 
         <table class="WBrow" style="width: 100%">
             <tr>
-                <td>Wagon #	</td>
+                <td style="width:30%">{{ 'consigners.Labels.wagon' | translate }} № </td>
                 <td style="font-weight: bold;">{{CurrentWaybill.WagonNumber}}	</td>
-                <td>Weight	</td>
+                <td>{{ 'consigners.Labels.weight' | translate }}</td>
                 <td style="font-weight: bold;"></td>
             </tr>
             <tr>
-                <td>Sender station</td>
+                <td>{{ 'consigners.Labels.senderStation' | translate }}</td>
                 <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.SenderRWStation.Description}}</td>
             </tr>
             <tr>
-                <td>Sender shop</td>
+                <td>{{ 'consigners.Labels.senderShop' | translate }}</td>
                 <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoSender.ParentDescription}}</td>
             </tr>
             <tr>
-                <td>Cargo type</td>
+                <td>{{ 'consigners.Labels.cargoType' | translate }}</td>
                 <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoType.Description}}</td>
             </tr>
             <tr>
-                <td>Receiver shop</td>
+                <td>{{ 'consigners.Labels.receiverShop' | translate }}</td>
                 <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.ParentDescription}}</td>
             </tr>
             <tr>
-                <td>Receiver district</td>
+                <td>{{ 'consigners.Labels.receiverDistrict' | translate }}</td>
                 <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.Description}}</td>
             </tr>
             <tr>
-                <td colspan="2">Cargo has been accepted:</td>
+                <td colspan="2">{{ 'consigners.Labels.cargoAccepted' | translate }}</td>
                 <td colspan="2" style="font-weight: bold;"></td>
             </tr>
             <tr>
-                <td>Accepted time</td>
+                <td>{{ 'consigners.Labels.acceptedTime' | translate }}</td>
                 <td colspan="3" style="font-weight: bold;"></td>
             </tr>
             <tr>
-                <td>Consigner</td>
+                <td>{{ 'consigners.Labels.consigner' | translate }}</td>
                 <td class="signline" colspan="2"></td>
-                <td>(signature)</td>
+                <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
         </table>
 

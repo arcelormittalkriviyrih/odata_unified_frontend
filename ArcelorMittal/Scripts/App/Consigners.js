@@ -112,7 +112,7 @@ angular.module('indexApp')
             $state.go('app.Consigners.Print', { print_id: $scope.CurrentWaybill.ID, waybill_object: $scope.CurrentWaybill });
         }
         else {
-            alert("$scope.CurrentWaybill.ID is null");
+            alert($translate.instant('consigners.Messages.noWaybill')); //alert("$scope.CurrentWaybill.ID is null");
         }
     }
 
@@ -179,115 +179,6 @@ angular.module('indexApp')
                 });
             };
         });
-        /*
-        // загрузка дерева отвесных
-        $WaybillList.on('loaded.jstree', function (e, data) {
-            //alert('loaded');
-            // при загрузке данные убираем выделение эл-тов и сворачиваем дерево
-            $WaybillList.jstree('close_all');
-            $WaybillList.jstree('deselect_all', true);
-
-            // при первой загрузке дерева выделяем год, содержащий последнюю путевую
-            var node = $scope.ArchiveWeightSheets.filter(function (element) {
-                return element.parent == '#' &&
-                        element.DocumentationsID == null &&
-                        !isNaN(element.text)
-            });
-            if (node[0]) {
-                node = node[0].id;
-                $WaybillList.jstree('select_node', node, false);
-                $WaybillList.jstree('open_node', node);
-            }
-        });
-        */
-        /*
-        // выбор элемента в дереве отвесных
-        $WaybillList.on('select_node.jstree', function (e, data) {
-            //alert('select_node');
-            $scope.ArchiveWaybillSelected = false;
-            if (data.node.original.DocumentationsID) {
-                $scope.SelectedArchiveWeightSheetID = data.node.original.DocumentationsID;
-                $scope.ArchiveWaybillSelected = true;
-
-                $scope.common_var = data.node.original.DocumentationsID;
-                //$state.params.id = data.node.original.WorkPerfomanceID;
-                var waybill_id = data.node.original.DocumentationsID;
-
-                $scope.CurrentWaybill.WaybillNumber = 1000050000;
-                $scope.$apply();
-
-                ///!!! get full waybill info here
-
-                $q.all([indexService.getInfo('Documentations?$filter=ID eq {0}'.format(waybill_id)),
-                        indexService.getInfo("DocumentationsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
-                        indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
-                        indexService.getInfo("v_WGT_WaybillProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id))])
-                        .then(function (responses) {
-                            var resp_1 = responses[0].data.value;
-                            var resp_2 = responses[1].data.value;
-                            var resp_3 = responses[2].data.value;
-                            var resp_4 = responses[3].data.value;
-
-                            var waybill_object = [];
-                            waybill_object.ID = waybill_id;
-
-                            for (i = 0; i < resp_2.length; i++) {
-                                if (resp_2[i]['Description'] == "Приемосдатчик") {
-                                    //alert("Приемосдатчик: " + resp_2[i].Value);
-                                }
-                                if (resp_2[i]['Description'] == "Цех отправления") {
-                                    //alert("Цех отправления: " + resp_2[i].Value);
-                                }
-                            }
-
-                            for (i = 0; i < resp_3.length; i++) {
-                                $scope.CurrentWaybill.WagonNumber = resp_3[i]['Description'];
-                            }
-
-                            for (i = 0; i < resp_4.length; i++) {
-                                //$scope.CurrentWaybill.WagonNumber = resp_3[i]['Description'];
-                                var prop = resp_4[i];
-
-
-                                switch (resp_4[i]['Description2']) {
-                                    case "ScrapType": {
-                                        var prop_id = resp_4[i]['Value'];
-                                        indexService.getInfo("v_KP4_ScrapTypes?$filter=ID eq {0} &$orderby=ID".format(prop_id))
-                                        .then(function (response) {
-                                            var uu = response.data.value;
-                                            if (uu[0]) {
-                                                waybill_object['ScrapType'] = uu[0];
-                                            }
-                                        })
-                                        break;
-                                    }
-                                    default: {
-                                        waybill_object[prop['Description2']] = resp_4[i]['Value2'];
-                                    }
-                                }
-
-                            }
-
-                            var g = $scope.CurrentWaybill;
-
-                            //  continue here  
-
-
-                            
-                            //console.log("go to app.Consigners.Print");
-                            //$state.go('app.Consigners.Print', { print_id: waybill_id, waybill_object: $scope.CurrentWaybill });
-                            
-
-
-
-
-                        })
-
-                alert(data.node.original.DocumentationsID);
-            };
-        });
-*/
-
     };
 
     // загрузка дерева отвесных
@@ -499,7 +390,7 @@ angular.module('indexApp')
 
 
 
-.controller('ConsignersCreateCtrl', ['$scope', 'indexService', 'consignersService', '$state', '$q', '$filter', 'roles', 'user', function ($scope, indexService, consignersService, $state, $q, $filter, roles, user) {
+.controller('ConsignersCreateCtrl', ['$scope', 'indexService', 'consignersService', '$state', '$q', '$filter', '$translate', 'roles', 'user', function ($scope, indexService, consignersService, $state, $q, $filter, $translate, roles, user) {
     //alert("ConsignersCreateCtrl");
     console.log("ConsignersCreateCtrl");
     // throw main tab change
@@ -803,18 +694,18 @@ angular.module('indexApp')
 
         // проверка заполнения формы
         var error_str = "";
-        error_str += $scope.CurrentWaybill.WaybillNumber ? "" : "-- WaybillNumber is empty \n";
-        error_str += $scope.CurrentWaybill.WagonType ? "" : "-- Wagon type is empty \n";
-        error_str += $scope.CurrentWaybill.WagonNumber ? "" : "-- Wagon number is empty or invalid \n";
-        error_str += $scope.CurrentWaybill.CargoType ? "" : "-- Cargo type is empty \n";
-        error_str += $scope.CurrentWaybill.CargoSender ? "" : "-- Sender is empty \n";
-        error_str += $scope.CurrentWaybill.SenderRWStation ? "" : "-- Sender RW station is empty \n";
-        error_str += $scope.CurrentWaybill.CargoReceiver ? "" : "-- Receiver is empty \n";
-        error_str += $scope.CurrentWaybill.ReceiverRWStation ? "" : "-- Receiver RW station is empty \n";
+        error_str += $scope.CurrentWaybill.WaybillNumber ? "" : $translate.instant('consigners.Messages.emptyWaybillNumber');//"-- WaybillNumber is empty \n";
+        error_str += $scope.CurrentWaybill.WagonType ? "" : $translate.instant('consigners.Messages.emptyWagonType');//"-- Wagon type is empty \n";
+        error_str += $scope.CurrentWaybill.WagonNumber ? "" : $translate.instant('consigners.Messages.emptyWagonNumber');//"-- Wagon number is empty or invalid \n";
+        error_str += $scope.CurrentWaybill.CargoType ? "" : $translate.instant('consigners.Messages.emptyCargoType');//"-- Cargo type is empty \n";
+        error_str += $scope.CurrentWaybill.CargoSender ? "" : $translate.instant('consigners.Messages.emptySender');//"-- Sender is empty \n";
+        error_str += $scope.CurrentWaybill.SenderRWStation ? "" : $translate.instant('consigners.Messages.emptySenderStation');//"-- Sender RW station is empty \n";
+        error_str += $scope.CurrentWaybill.CargoReceiver ? "" : $translate.instant('consigners.Messages.emptyReceiver');//"-- Receiver is empty \n";
+        error_str += $scope.CurrentWaybill.ReceiverRWStation ? "" : $translate.instant('consigners.Messages.emptyReceiverStation');//"-- Receiver RW station is empty \n";
 
         // если есть ошибки, возвращаем FALSE
         if (error_str.length > 0) {
-            error_str = "The next errors have been found: \n" + error_str;
+            error_str = $translate.instant('consigners.Messages.errorsFound') + error_str;//"The next errors have been found: \n" + error_str;
             alert(error_str);
             return $q.when(false);
         }
@@ -906,11 +797,11 @@ angular.module('indexApp')
             var diff_props = waybillComparing(original_waybill, modifying_waybill);
             // если нет изменений - выходим
             if (diff_props.length == 0) {
-                alert("Nothing to modify.");
+                alert($translate.instant('consigners.Messages.noChanges'));//alert("Nothing to modify.");
                 return $q.when(false);
             }
             else {
-                alert("{0} parameters has been modified.".format(diff_props.length));
+                alert($translate.instant('consigners.Messages.parametersModified') + diff_props.length);//alert("{0} parameters has been modified.".format(diff_props.length));
             }
 
             return indexService.sendInfo('upd_SaveWaybill', {
@@ -948,9 +839,10 @@ angular.module('indexApp')
                     var date = new Date(nearest_DT).toLocaleDateString();
                     sender_shop_name = $filter('filter')($scope.CargoSenderShops, { ID: SenderShop })[0]['Description'];
                     console.log(new Date() + ". " + "checkWaybillNumber: WaybillNumber already exists.");
-                    var confirm_string = "Waybill #{0} ({2}) for shop '{1}' already exists!\n".format(WaybillNumber, sender_shop_name, date) +
-                                         "Do you want to create waybill anyway?\n" +
-                                         "If 'Cancel' waybill will not be created.";
+                    var confirm_string = $translate.instant('consigners.Messages.checkWaybillNumberConfirm').format(WaybillNumber, sender_shop_name, date);
+                    //var confirm_string = "Waybill #{0} ({2}) for shop '{1}' already exists!\n".format(WaybillNumber, sender_shop_name, date) +
+                    //                     "Do you want to create waybill anyway?\n" +
+                    //                     "If 'Cancel' waybill will not be created.";
                     if (!confirm(confirm_string)) {
                         console.log("checkWaybillNumber confirm rejected");
                         return false;
@@ -963,9 +855,11 @@ angular.module('indexApp')
                     // если не существует - предлагаем добавить в БД
                     if (Wagon[0] == null) {
                         console.log(new Date() + ". " + "checkWagonExists: Wagon does not exist.");
-                        var confirm_string = "Wagon #{0} doesnt exist!\n".format(WagonNumber) +
-                                             "Do you want to add this wagon to DB?\n" +
-                                             "If 'Cancel' waybill will not be created.";
+
+                        var confirm_string = $translate.instant('consigners.Messages.checkWagonExistsConfirm').format(WagonNumber);
+                        //var confirm_string = "Wagon #{0} doesnt exist!\n".format(WagonNumber) +
+                        //                     "Do you want to add this wagon to DB?\n" +
+                        //                     "If 'Cancel' waybill will not be created.";
                         if (confirm(confirm_string)) {
                             console.log(new Date() + ". " + "checkWagonExists confirm accepted.");
                             return insertNewWagon(WagonType, WagonNumber).then(function (response) {
@@ -978,7 +872,7 @@ angular.module('indexApp')
                                     return insertNewWaybill();
                                 }
                                 else {
-                                    alert("Error during creating new wagon!");
+                                    alert($translate.instant('consigners.Messages.errorCreatingWagon'));//alert("Error during creating new wagon!");
                                 }
                             })
                         }
@@ -1008,23 +902,23 @@ angular.module('indexApp')
                     if (!modify) {
                         $scope.CurrentWaybill.ID = response.data.ActionParameters[0]['Value'];
                         console.log(new Date() + ". " + "Saving success.");
-                        alert('Saving success!');
+                        alert($translate.instant('consigners.Messages.savingSuccess')); //alert("Saving success");
                     }
                     else {
                         waybill_object = angular.copy($scope.CurrentWaybill);
                         console.log(new Date() + ". " + "Updating success.");
-                        alert('Updating success!');
+                        alert($translate.instant('consigners.Messages.updatingSuccess')); //alert('Updating success!');
                     }
                     var returned_object = $scope.CurrentWaybill;
                     return returned_object;
                 }
-                // если вернулся false, сообщение об отмене
+                    // если вернулся false, сообщение об отмене
                 else {
                     if (!modify) {
-                        alert('Saving has been rejected!');
+                        alert($translate.instant('consigners.Messages.savingRejected')); //alert('Saving has been rejected!');
                     }
                     else {
-                        alert('Updating has been rejected!');
+                        alert($translate.instant('consigners.Messages.updatingRejected')); //alert('Updating has been rejected!');
                     }
                 }
             })
@@ -1043,7 +937,7 @@ angular.module('indexApp')
 
 
     // нажатие "Сохранить"
-    function vmSaveOnly() {        
+    function vmSaveOnly() {
         var modify = modify_id ? true : false;  // флаг "сохранить" или "изменить"
         vmSave(modify).then(function (response) {
             // если возвращается NULL - выходим
@@ -1058,14 +952,13 @@ angular.module('indexApp')
                 resetWaybillNumber();
             }
         })
-
     }
 
     // нажатие "Сохранить и печатать"
     function vmSavePrint() {
         var modify = modify_id ? true : false;  // флаг "сохранить" или "изменить"
         //if (!copy_id) return;
-        alert("Save and Print");
+        //alert("Save and Print");
         vmSave(modify).then(function (response) {
             // если возвращается NULL - выходим
             if (response === null || response === undefined || response.ID === undefined) {
@@ -1089,9 +982,12 @@ angular.module('indexApp')
         if ($scope.CurrentWaybill.Status != 'reject') {
             reject = true;
         }
-        var confirm_string = reject ?
-            "Are you sure to reject waybill #{0}?".format($scope.CurrentWaybill.WaybillNumber) :
-            "Are you sure to discard reject waybill #{0}?".format($scope.CurrentWaybill.WaybillNumber);
+        var confirm_string = (reject ?
+                            $translate.instant('consigners.Messages.rejectConfirm') :
+                            $translate.instant('consigners.Messages.rejectDiscardConfirm')).format($scope.CurrentWaybill.WaybillNumber);
+        //var confirm_string = reject ?
+        //    "Are you sure to reject waybill #{0}?".format($scope.CurrentWaybill.WaybillNumber) :
+        //    "Are you sure to discard reject waybill #{0}?".format($scope.CurrentWaybill.WaybillNumber);
         // если подтвердили забраковку и находимся в режиме редактирования
         if (confirm(confirm_string) && modify_id) {
             DocumentationsID = modify_id;
@@ -1100,9 +996,12 @@ angular.module('indexApp')
                 DocumentationsID: DocumentationsID,
                 Status: Status
             }).then(function (response) {
-                var message = reject ?
-                    "Waybill #{0} rejected succesfully.".format($scope.CurrentWaybill.WaybillNumber) :
-                    "Discard rejecting of waybill #{0} succesfully.".format($scope.CurrentWaybill.WaybillNumber);
+                var message = (reject ?
+                    $translate.instant('consigners.Messages.rejectSuccess') :
+                    $translate.instant('consigners.Messages.rejectDiscardSuccess')).format($scope.CurrentWaybill.WaybillNumber);
+                //var message = reject ?
+                //    "Waybill #{0} rejected succesfully.".format($scope.CurrentWaybill.WaybillNumber) :
+                //    "Discard rejecting of waybill #{0} succesfully.".format($scope.CurrentWaybill.WaybillNumber);
                 $scope.CurrentWaybill.Status = Status;
                 alert(message);
             })
@@ -1112,7 +1011,7 @@ angular.module('indexApp')
 
     // нажатие "Назад"
     function vmBack() {
-        alert("Back");
+        //alert("Back");
         // ID путевой для выделения в дереве при возврате на главную страницу
         var waybill_id = last_waybill_id;
         console.log("waybill_id = " + waybill_id);
