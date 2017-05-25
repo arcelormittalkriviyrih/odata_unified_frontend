@@ -1366,19 +1366,6 @@
                                      }
                                  },
 
-/*{
-                                     type: 'additional',
-                                     name: 'testprint',
-                                     text: $scope.testPrintLabel,
-                                     procedure: 'ins_MaterialLotByEquipment',
-                                     procedureParams: {
-                                         escapedProcedureParam: ['BRIGADE_NO', 'BUNT_DIA', 'BUNT_NO', 'BUYER_ORDER_NO',
-                                         'CHANGE_NO', 'CHEM_ANALYSIS', 'COMM_ORDER', 'CLASS', 'CONTRACT_NO', 'DIRECTION', 'LABEL_PRINT_QTY',
-                                         'LENGTH', 'MATERIAL_NO', 'MELT_NO', 'MIN_ROD', 'PART_NO', 'PRODUCT', 'PROD_DATE',
-                                         'PROD_ORDER', 'SIZE', 'STANDARD', 'STEEL_CLASS', 'TEMPLATE', 'TOLERANCE', 'UTVK']
-                                     }
-                                     
-                                 },*/
                                 {
                                     type: 'additional',
                                     name: 'testPrint',
@@ -1389,7 +1376,6 @@
                                             $scope.isLoading = false;
                                             $scope.$apply();
                                         },
-                                        escapedProcedureParam: ['EquipmentID']
                                     }
                                 },
                                     {
