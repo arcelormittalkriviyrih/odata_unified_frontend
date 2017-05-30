@@ -423,6 +423,11 @@
                 creatingDT: 'Creating datetime',
                 modifyingDT: 'Modifying datetime',
                 status: 'Status',
+                reject: {
+                    reject: 'Reject'
+                },
+                waybillCreating: 'Waybill creating',
+                waybillModifying: 'Waybill modifying',
 
             },
             Placeholders: {
@@ -463,10 +468,10 @@
                 noChanges: 'Nothing to modify.',
                 parametersModified: 'Parameters has been modified: ',
                 errorCreatingWagon: 'Error during creating new wagon!',
-                checkWaybillNumberConfirm:  "Waybill №{0} (created {2}) for shop '{1}' already exists!\n"+
+                checkWaybillNumberConfirm: "Waybill №{0} (created {2}) for shop '{1}' already exists!\n" +
                                             "Do you want to create waybill anyway?\n" +
                                             "If 'Cancel' waybill will not be created.",
-                checkWagonExistsConfirm:    "Wagon №{0} doesnt exist!\n" +
+                checkWagonExistsConfirm: "Wagon №{0} doesnt exist!\n" +
                                             "Do you want to add this wagon to DB?\n" +
                                             "If 'Cancel' waybill will not be created.",
                 rejectConfirm: "Are you sure to reject waybill №{0}?",
@@ -881,7 +886,7 @@
             Buttons: {
                 create: 'Создать',
                 createCopy: 'Создать копию',
-                modify: 'Изменить',
+                modify: 'Редактировать',
                 print: 'Печать',
                 back: 'Назад',
                 save: 'Сохранить',
@@ -929,6 +934,11 @@
                 creatingDT: 'Создано',
                 modifyingDT: 'Изменено',
                 status: 'Статус',
+                reject: {
+                    reject: 'Брак'
+                },
+                waybillCreating: 'Создание путевой',
+                waybillModifying: 'Редактирование путевой',
 
             },
             Placeholders: {
@@ -969,10 +979,10 @@
                 noChanges: 'Нет изменений.',
                 parametersModified: 'Измененных параметров: ',
                 errorCreatingWagon: 'Ошибка при создании нового вагона!',
-                checkWaybillNumberConfirm:  "Путевая №{0} (от {2}) для '{1}' уже существует!\n" +
+                checkWaybillNumberConfirm: "Путевая №{0} (от {2}) для '{1}' уже существует!\n" +
                                             "Вы все равно хотите ее создать?\n" +
                                             "Если 'Отмена', путевая не будет создана.",
-                checkWagonExistsConfirm:    "Вагон №{0} не существует!\n" +
+                checkWagonExistsConfirm: "Вагон №{0} не существует!\n" +
                                             "Вы хотите добавить этот вагон в базу данных?\n" +
                                             "Если 'Отмена', путевая не будет создана.",
                 rejectConfirm: "Вы уверены, что хотите забраковать путевую №{0}?",
@@ -1387,7 +1397,7 @@
             Buttons: {
                 create: 'Створити',
                 createCopy: 'Створити копію',
-                modify: 'Змінити',
+                modify: 'Редагувати',
                 print: 'Друк',
                 back: 'Назад',
                 save: 'Зберегти',
@@ -1435,6 +1445,11 @@
                 creatingDT: 'Створено',
                 modifyingDT: 'Змінено',
                 status: 'Статус',
+                reject: {
+                    reject: 'Брак'
+                },
+                waybillCreating: 'Створення вагової',
+                waybillModifying: 'Редагування вагової',
 
             },
             Placeholders: {

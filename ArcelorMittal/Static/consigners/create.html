@@ -15,17 +15,17 @@
 
 <!--основная часть, когда страница прогрузилась-->
 <div ng-show="!$root.showLoadingState">
-    <h4>{{message}}</h4>
+    <h4 style="text-align:center">{{message}}</h4>
 
-    copy_id:{{copy_id}}
+<!--    copy_id:{{copy_id}}-->
 
     <div ng-form="myForm">
 
         <div class="panel panel-default">
             <div class="panel-heading" 
                 style="text-align: center" 
-                ng-style="(CurrentWaybill.Status == 'reject') && {'background-color':'rgb(255, 169, 169)', 'background-repeat':'repeat'}"
-                ng-class="{'reject': CurrentWaybill.Status == 'reject'}">
+                ng-class="{'reject': ($parent.$parent.language != 'ru' && CurrentWaybill.Status == 'reject'), 'reject ru': ($parent.$parent.language == 'ru' && CurrentWaybill.Status == 'reject')}"
+                ng-style="(CurrentWaybill.Status == 'reject') && {'background-color':'rgb(255, 169, 169)', 'background-repeat':'repeat'}">
 
                 {{ 'consigners.Labels.waybill' | translate }} №
                 <input type="text" class="form-control"
@@ -90,7 +90,7 @@
                             </ui-select-choices>
                         </ui-select>
 
-                        <ui-select ng-required="true" class="selectConsigners" ng-model="CurrentWaybill.CargoSender" theme="bootstrap" search-enabled="true" ng-disabled="!SelectedObjects.SenderShop" title="{{ 'consigners.Placeholders.selectCargoSenderDistrict' | translate }}">
+                        <ui-select ng-required="true" class="selectConsigners" ng-model="CurrentWaybill.CargoSender" on-select="DistrictSelect($item, 'Sender')" theme="bootstrap" search-enabled="true" ng-disabled="!SelectedObjects.SenderShop" title="{{ 'consigners.Placeholders.selectCargoSenderDistrict' | translate }}">
                             <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoSenderDistrict' | translate }}">{{$select.selected.Description}}</ui-select-match>
                             <ui-select-choices repeat="sender in CargoSenderDistricts | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
                             <div ng-bind-html="sender.Description | highlight: $select.search"></div>
@@ -158,7 +158,7 @@
                         </ui-select-choices>
                     </ui-select>
 
-                        <ui-select ng-required="true" class="selectConsigners" ng-model="CurrentWaybill.CargoReceiver" theme="bootstrap" search-enabled="true" ng-disabled="!SelectedObjects.ReceiverShop" title="{{ 'consigners.Placeholders.selectCargoReceiverDistrict' | translate }}">
+                        <ui-select ng-required="true" class="selectConsigners" ng-model="CurrentWaybill.CargoReceiver" on-select="DistrictSelect($item, 'Receiver')" theme="bootstrap" search-enabled="true" ng-disabled="!SelectedObjects.ReceiverShop" title="{{ 'consigners.Placeholders.selectCargoReceiverDistrict' | translate }}">
                         <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoReceiverDistrict' | translate }}">{{$select.selected.Description}}</ui-select-match>
                         <ui-select-choices repeat="sender in CargoReceiverDistricts | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
                         <div ng-bind-html="sender.Description | highlight: $select.search"></div>
@@ -284,9 +284,9 @@
 
 
 
-    <h3 ng-class="{'text-danger':myForm.$invalid, 'text-success':myForm.$valid }">Form valid? {{myForm.$valid}}</h3>
+    <!--<h3 ng-class="{'text-danger':myForm.$invalid, 'text-success':myForm.$valid }">Form valid? {{myForm.$valid}}</h3>-->
 
-    <div style="font-size: xx-small">
+    <!--<div style="font-size: xx-small">
         <br />
         ID:{{CurrentWaybill.ID}}
     <br />
@@ -321,7 +321,7 @@
         ReceiverStartLoadDT:{{CurrentWaybill.ReceiverStartLoadDT}}
     <br />
         ReceiverEndLoadDT:{{CurrentWaybill.ReceiverEndLoadDT}}
-    </div>
+    </div>-->
 
 </div>
 
