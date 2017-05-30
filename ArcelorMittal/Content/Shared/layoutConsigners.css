@@ -89,3 +89,7 @@ input.ng-touched.ng-invalid {
     background-size: contain;
     background-repeat: no-repeat;
 }
+
+    .reject.ru {
+        background-image: url("images/reject_ru.png");
+    }

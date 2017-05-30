@@ -11,12 +11,13 @@
 
 <!--основная часть, когда страница прогрузилась-->
 <div ng-show="!$root.showLoadingState">
-    <div>
+    
+<!--    <div>
         ArchiveWaybillSelected:{{ArchiveWaybillSelected}}
     <br />
         CurrentWaybill.ID:{{CurrentWaybill.ID}}
+    </div>-->
 
-    </div>
     <div class="row" style="background-color: #eeeeee; padding: 10px">
         <div class="col-md-5" style="border-right: 1px solid #d4d4d4">
             <!--.col-md-4-->
@@ -108,8 +109,10 @@
                         </tr>
                         <tr ng-show="CurrentWaybill.Status">
                             <td>{{ 'consigners.Labels.status' | translate }}	</td>
-                            <td style="text-align: right"
-                                ng-style="{'color': CurrentWaybill.Status == 'reject' ? 'red' : 'auto'}">{{CurrentWaybill.Status}}</td>
+                            <td style="text-align: right; text-transform: uppercase"
+                                ng-style="{'color': CurrentWaybill.Status == 'reject' ? 'red' : 'auto'}">
+                                {{ 'consigners.Labels.reject.'+ CurrentWaybill.Status | translate }}
+                            </td>
                         </tr>
                         <tr ng-show="CurrentWaybill.CreateDT">
                             <td>{{ 'consigners.Labels.creatingDT' | translate }}	</td>
@@ -120,14 +123,6 @@
                             <td style="text-align: right">{{CurrentWaybill.EditDT | date:'dd.MM.yyyy HH:mm'}}</td>
                         </tr>
                     </table>
-                    <!--                    Consigner:{{CurrentWaybill.Consigner}}
-                    <br />
-                    Status:{{CurrentWaybill.Status}}
-                    <br />
-                    CreateDT:{{CurrentWaybill.CreateDT | date:'dd.MM.yyyy HH:mm'}}
-                    <br />
-                    EditDT:{{CurrentWaybill.EditDT | date:'dd.MM.yyyy HH:mm'}}
-                    <br />-->
                 </div>
             </div>
 
@@ -145,13 +140,14 @@
                     <h1>{{ 'consigners.Placeholders.loading' | translate }}</h1>
                 </div>
             </div>
-            <div ng-show="CurrentWaybill.ID"
+            <div id="waybill_toprint" 
+                ng-show="CurrentWaybill.ID"
                 ui-view="waybill_toprint"
-                ng-class="{'reject': CurrentWaybill.Status == 'reject'}"
+                ng-class="{'reject': ($parent.$parent.language != 'ru' && CurrentWaybill.Status == 'reject'), 'reject ru': ($parent.$parent.language == 'ru' && CurrentWaybill.Status == 'reject')}"
                 style="background-color: white; padding-top: 5px;">
             </div>
         </div>
-
+        
     </div>
 </div>
 
