@@ -43,6 +43,7 @@
             .WBrow .signline {
                 border-bottom: 1px black solid;
                 width: 50%;
+                text-align:center;
             }
 
         .TT {
@@ -154,7 +155,7 @@
             </tr>
             <tr>
                 <td>{{ 'consigners.Labels.consigner' | translate }}</td>
-                <td class="signline" colspan="2"></td>
+                <td class="signline" colspan="2">{{CurrentWaybill.Consigner}}</td>
                 <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
         </table>
@@ -251,7 +252,7 @@
             </tr>
             <tr>
                 <td>{{ 'consigners.Labels.consigner' | translate }}</td>
-                <td class="signline" colspan="2"></td>
+                <td class="signline" colspan="2">{{CurrentWaybill.Consigner}}</td>
                 <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
         </table>

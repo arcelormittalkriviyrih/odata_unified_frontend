@@ -180,6 +180,9 @@ angular.module('indexApp')
                     e.text = e.Description;
                     if (e.DocumentationsID) {
                         e.icon = 'jstree-file';
+                        if (e.Status == 'reject') {
+                            e.icon = 'jstree-reject';
+                        }
                     };
                     delete e.ID;
                     delete e.ParentID;
