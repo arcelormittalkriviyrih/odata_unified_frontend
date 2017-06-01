@@ -121,7 +121,7 @@
 
                         <div ng-show="true">
 
-                            <h3 ng-show="true" class="indicatorsWeightanalytics">{{CurrentWeight | number:2}} {{ 'weightanalytics.ton' | translate }}
+                            <h3 ng-show="CurrentWeight" class="indicatorsWeightanalytics">{{CurrentWeight | number:2}} {{ 'weightanalytics.ton' | translate }}
                             </h3>
                             <div class="indicatorsWeightanalytics isStableScalesIndicator"
                                 style=""
@@ -129,7 +129,7 @@
                             </div>
 
                             <i class="circle indicatorsWeightanalytics"
-                                ng-class="{'red': false, 'green': true}"
+                                ng-class="{'red': CurrentWeight == null, 'green': CurrentWeight != null}"
                                 style="left: auto"></i>
                         </div>
                     </div>

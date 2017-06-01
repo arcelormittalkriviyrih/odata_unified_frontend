@@ -318,6 +318,14 @@
                     $scope.CurrentWeightOffsetY = response.H_bias_weight;
                     $scope.WeightStab = response.stabilizing_weight;
                     vmRedrawArrow();
+                }
+                else {
+                    $scope.CurrentWeight = null;
+                    $scope.CurrentWeightPlatf1 = null;
+                    $scope.CurrentWeightPlatf2 = null;
+                    $scope.CurrentWeightOffsetX = null;
+                    $scope.CurrentWeightOffsetY = null;
+                    $scope.WeightStab = null;
                 };
             });
     };

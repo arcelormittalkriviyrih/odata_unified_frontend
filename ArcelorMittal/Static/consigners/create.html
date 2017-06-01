@@ -24,7 +24,7 @@
         <div class="panel panel-default">
             <div class="panel-heading" 
                 style="text-align: center" 
-                ng-class="{'reject': ($parent.$parent.language != 'ru' && CurrentWaybill.Status == 'reject'), 'reject ru': ($parent.$parent.language == 'ru' && CurrentWaybill.Status == 'reject')}"
+                ng-class="{'reject': ($parent.$parent.language == 'en' && CurrentWaybill.Status == 'reject'), 'reject ru': ($parent.$parent.language != 'en' && CurrentWaybill.Status == 'reject')}"
                 ng-style="(CurrentWaybill.Status == 'reject') && {'background-color':'rgb(255, 169, 169)', 'background-repeat':'repeat'}">
 
                 {{ 'consigners.Labels.waybill' | translate }} №

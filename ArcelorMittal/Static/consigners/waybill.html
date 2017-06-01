@@ -9,64 +9,270 @@
 </head>
 
 <body>-->
-        <style type="text/css">
 
-        /*body {
+
+<style type="text/css">
+    
+    div > #dg_103 {
+        display: none;
+    }
+    /*body {
             padding: 0px;
             margin:5px;
         }*/
 
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-        } 
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
 
 
+    .WBrow {
+        margin-bottom: 1mm;
+    }
 
-
-
-
-
-        .WBrow {
-            margin-bottom: 1mm;
+        .WBrow tr {
+            height: 5mm;
+            overflow: hidden;
         }
 
-            .WBrow tr {
-                height: 5mm;
-                overflow: hidden;
+            .WBrow tr > td {
+                width: 25%;
             }
 
-                .WBrow tr > td {
-                    width: 25%;
-                }
-
-            .WBrow .signline {
-                border-bottom: 1px black solid;
-                width: 50%;
-                text-align:center;
-            }
-
-        .TT {
-            width: 100%;
+        .WBrow .signline {
+            border-bottom: 1px black solid;
+            width: 50%;
             text-align: center;
-            border: 1px solid black; /* Рамка вокруг таблицы */
-            border-collapse: collapse; /* Отображать только одинарные линии */
         }
 
-            .TT td {
-                border: 1px solid black; /* Граница вокруг ячеек */
-            }
-    </style>
+    .TT {
+        width: 100%;
+        text-align: center;
+        border: 1px solid black; /* Рамка вокруг таблицы */
+        border-collapse: collapse; /* Отображать только одинарные линии */
+    }
+
+        .TT td {
+            border: 1px solid black; /* Граница вокруг ячеек */
+        }
+</style>
+
+<style type="text/css">
+    /* стили для печати */
+    @media print {
+        div > #dg_103 {
+            display: block;
+            page-break-before:always;
+        }
+    }
+</style>
 
 
-
-    <div style="width: 125mm; margin-top: 1mm; margin-left: 1mm; font-size: 10px; font-family: Verdana,Arial,sans-serif;">
-<!--        {{CurrentWaybillID}}_{{common_var}}
+<div style="width: 125mm; margin-top: 1mm; margin-left: 1mm; font-size: 10px; font-family: Verdana,Arial,sans-serif;">
+    <!--        {{CurrentWaybillID}}_{{common_var}}
         !{{id}}!-->
+    <table style="width: 100%; font-size: 8px;">
+        <tr>
+            <td>{{ 'consigners.Labels.amkr' | translate }}	</td>
+            <td style="text-align: right">ДГ-102	</td>
+        </tr>
+    </table>
+
+    <table style="width: 100%">
+        <tr>
+            <td style="height: 6mm; font-size: 15px; font-weight: bold; text-align: center">{{ 'consigners.Labels.waybill' | translate }} № {{CurrentWaybill.WaybillNumber}}	</td>
+        </tr>
+    </table>
+
+    <table class="WBrow" style="width: 100%">
+        <tr>
+            <td style="width: 28%">{{ 'consigners.Labels.wagon' | translate }} № </td>
+            <td style="width: 38%; font-weight: bold;">{{CurrentWaybill.WagonNumber}}		</td>
+            <td style="width: 15%">{{ 'consigners.Labels.wagonType' | translate }}</td>
+            <td style="font-weight: bold;">{{CurrentWaybill.WagonType.Description}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.senderShop' | translate }}</td>
+            <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoSender.ParentDescription}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.senderDistrict' | translate }}</td>
+            <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoSender.Description}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.receiverShop' | translate }}</td>
+            <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.ParentDescription}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.receiverDistrict' | translate }}</td>
+            <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.Description}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.cargoType' | translate }}</td>
+            <td colspan="1" style="font-weight: bold;">{{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description | limitTo : 20}}</td>
+            <td style="width: 15%">{{ 'consigners.Labels.weight' | translate }}</td>
+            <td></td>
+        </tr>
+    </table>
+
+    <table class="TT">
+        <tr style="height: 8mm">
+            <td colspan="2" rowspan="2">{{ 'consigners.Labels.senderStation' | translate }}</td>
+            <td colspan="2">{{ 'consigners.Labels.senderArrivingTime' | translate }}</td>
+            <td colspan="2">{{ 'consigners.Labels.senderStartLoadingTime' | translate }}</td>
+            <td colspan="2">{{ 'consigners.Labels.senderEndLoadingTime' | translate }}</td>
+        </tr>
+        <tr style="height: 5mm">
+            <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+            <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
+            <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+            <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
+            <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+            <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
+        </tr>
+        <tr style="height: 8mm; font-weight: bold;">
+            <td colspan="2">{{CurrentWaybill.SenderRWStation.Description}}</td>
+            <td>{{CurrentWaybill.SenderArriveDT | limitTo : 5}}</td>
+            <td>{{CurrentWaybill.SenderArriveDT | limitTo : 5 : 11}}</td>
+            <td>{{CurrentWaybill.SenderStartLoadDT | limitTo : 5}}</td>
+            <td>{{CurrentWaybill.SenderStartLoadDT | limitTo : 5 : 11}}</td>
+            <td>{{CurrentWaybill.SenderEndLoadDT | limitTo : 5}}</td>
+            <td>{{CurrentWaybill.SenderEndLoadDT | limitTo : 5 : 11}}</td>
+        </tr>
+    </table>
+
+    <table class="WBrow" style="width: 100%">
+        <tr>
+            <td style="font-weight: bold;">{{ 'consigners.Labels.railwayShopMaster' | translate }}</td>
+            <td class="signline" colspan="2"></td>
+            <td>({{ 'consigners.Labels.signature' | translate }})</td>
+        </tr>
+        <tr>
+            <td colspan="4">Расписка цеха с подтверждением времени простоя вагона под погрузкой</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="signline" colspan="2"></td>
+            <td>({{ 'consigners.Labels.signature' | translate }})</td>
+        </tr>
+    </table>
+
+    <table class="WBrow" style="width: 100%">
+        <tr>
+            <td colspan="4">{{ 'consigners.Labels.cargoAccepted' | translate }}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">{{ 'consigners.Labels.consigner' | translate }}</td>
+            <td class="signline" colspan="2">{{CurrentWaybill.Consigner}}</td>
+            <td>({{ 'consigners.Labels.signature' | translate }})</td>
+        </tr>
+    </table>
+
+    <table class="TT">
+        <tr style="height: 8mm">
+            <td colspan="2" rowspan="2">{{ 'consigners.Labels.receiverStation' | translate }}</td>
+            <td colspan="2">{{ 'consigners.Labels.receiverArrivingTime' | translate }}</td>
+            <td colspan="2">{{ 'consigners.Labels.receiverStartLoadingTime' | translate }}</td>
+            <td colspan="2">{{ 'consigners.Labels.receiverEndLoadingTime' | translate }}</td>
+        </tr>
+        <tr style="height: 5mm">
+            <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+            <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
+            <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+            <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
+            <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
+            <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
+        </tr>
+        <tr style="height: 8mm; font-weight: bold;">
+            <td colspan="2">{{CurrentWaybill.ReceiverRWStation.Description}}</td>
+            <td>{{CurrentWaybill.ReceiverArriveDT | limitTo : 5}}</td>
+            <td>{{CurrentWaybill.ReceiverArriveDT | limitTo : 5 : 11}}</td>
+            <td>{{CurrentWaybill.ReceiverStartLoadDT | limitTo : 5}}</td>
+            <td>{{CurrentWaybill.ReceiverStartLoadDT | limitTo : 5 : 11}}</td>
+            <td>{{CurrentWaybill.ReceiverEndLoadDT | limitTo : 5}}</td>
+            <td>{{CurrentWaybill.ReceiverEndLoadDT | limitTo : 5 : 11}}</td>
+        </tr>
+    </table>
+
+    <table class="WBrow" style="width: 100%">
+        <tr>
+            <td style="font-weight: bold;">{{ 'consigners.Labels.railwayShopMaster' | translate }}</td>
+            <td class="signline" colspan="2"></td>
+            <td>({{ 'consigners.Labels.signature' | translate }})</td>
+        </tr>
+        <tr>
+            <td colspan="4">Расписка цеха-получателя в получении груза с подтверждением времени простоя </td>
+        </tr>
+        <tr>
+            <td>вагона под выгрузкой</td>
+            <td class="signline" colspan="2"></td>
+            <td>({{ 'consigners.Labels.signature' | translate }})</td>
+        </tr>
+    </table>
+
+    <table style="width: 100%; border-bottom: 1px dotted black; border-top: 1px dotted black;">
+        <tr>
+            <td style="text-align: center">{{ 'consigners.Labels.cuttingLine' | translate }}</td>
+        </tr>
+    </table>
+
+
+    <table style="width: 100%">
+        <tr>
+            <td style="height: 5mm; font-size: 12px; font-weight: bold; text-align: center">{{ 'consigners.Labels.ticketWaybill' | translate }} № {{CurrentWaybill.WaybillNumber}}	</td>
+        </tr>
+    </table>
+
+    <table class="WBrow" style="width: 100%">
+        <tr>
+            <td style="width: 30%">{{ 'consigners.Labels.wagon' | translate }} № </td>
+            <td style="font-weight: bold;">{{CurrentWaybill.WagonNumber}}	</td>
+            <td>{{ 'consigners.Labels.weight' | translate }}</td>
+            <td style="font-weight: bold;"></td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.senderStation' | translate }}</td>
+            <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.SenderRWStation.Description}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.senderShop' | translate }}</td>
+            <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoSender.ParentDescription}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.cargoType' | translate }}</td>
+            <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoType.Description}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.receiverShop' | translate }}</td>
+            <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.ParentDescription}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.receiverDistrict' | translate }}</td>
+            <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.Description}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">{{ 'consigners.Labels.cargoAccepted' | translate }}</td>
+            <td colspan="2" style="font-weight: bold;"></td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.acceptedTime' | translate }}</td>
+            <td colspan="3" style="font-weight: bold;"></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">{{ 'consigners.Labels.consigner' | translate }}</td>
+            <td class="signline" colspan="2">{{CurrentWaybill.Consigner}}</td>
+            <td>({{ 'consigners.Labels.signature' | translate }})</td>
+        </tr>
+    </table>
+
+    <hr />
+
+    <div id="dg_103">
         <table style="width: 100%; font-size: 8px;">
             <tr>
                 <td>{{ 'consigners.Labels.amkr' | translate }}	</td>
-                <td style="text-align: right">ДГ-102	</td>
+                <td style="text-align: right">ДГ-103	</td>
             </tr>
         </table>
 
@@ -78,9 +284,9 @@
 
         <table class="WBrow" style="width: 100%">
             <tr>
-                <td style="width:30%">{{ 'consigners.Labels.wagon' | translate }} № </td>
-                <td style="font-weight: bold;">{{CurrentWaybill.WagonNumber}}		</td>
-                <td>{{ 'consigners.Labels.wagonType' | translate }}</td>
+                <td style="width: 28%">{{ 'consigners.Labels.wagon' | translate }} № </td>
+                <td style="width: 38%; font-weight: bold;">{{CurrentWaybill.WagonNumber}}		</td>
+                <td style="width: 15%">{{ 'consigners.Labels.wagonType' | translate }}</td>
                 <td style="font-weight: bold;">{{CurrentWaybill.WagonType.Description}}</td>
             </tr>
             <tr>
@@ -101,62 +307,9 @@
             </tr>
             <tr>
                 <td>{{ 'consigners.Labels.cargoType' | translate }}</td>
-                <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoType.Description}}</td>
-<!--                <td>Weight</td>
-                <td></td>-->
-            </tr>
-        </table>
-
-        <table class="TT">
-            <tr style="height: 8mm">
-                <td colspan="2" rowspan="2">{{ 'consigners.Labels.senderStation' | translate }}</td>
-                <td colspan="2">{{ 'consigners.Labels.senderArrivingTime' | translate }}</td>
-                <td colspan="2">{{ 'consigners.Labels.senderStartLoadingTime' | translate }}</td>
-                <td colspan="2">{{ 'consigners.Labels.senderEndLoadingTime' | translate }}</td>
-            </tr>
-            <tr style="height: 5mm">
-                <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
-                <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
-                <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
-                <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
-                <td style="width: 12.5%">{{ 'consigners.Labels.date' | translate }}</td>
-                <td style="width: 12.5%">{{ 'consigners.Labels.time' | translate }}</td>
-            </tr>
-            <tr style="height: 8mm; font-weight: bold;">
-                <td colspan="2">{{CurrentWaybill.SenderRWStation.Description}}</td>
-                <td>{{CurrentWaybill.SenderArriveDT | limitTo : 5}}</td>
-                <td>{{CurrentWaybill.SenderArriveDT | limitTo : 5 : 11}}</td>
-                <td>{{CurrentWaybill.SenderStartLoadDT | limitTo : 5}}</td>
-                <td>{{CurrentWaybill.SenderStartLoadDT | limitTo : 5 : 11}}</td>
-                <td>{{CurrentWaybill.SenderEndLoadDT | limitTo : 5}}</td>
-                <td>{{CurrentWaybill.SenderEndLoadDT | limitTo : 5 : 11}}</td>
-            </tr>
-        </table>
-
-        <table class="WBrow" style="width: 100%">
-            <tr>
-                <td>{{ 'consigners.Labels.railwayShopMaster' | translate }}</td>
-                <td class="signline" colspan="2"></td>
-                <td>({{ 'consigners.Labels.signature' | translate }})</td>
-            </tr>
-            <tr>
-                <td colspan="4">Расписка цеха с подтверждением времени простоя вагона под погрузкой</td>
-            </tr>
-            <tr>
+                <td colspan="1" style="font-weight: bold;">{{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description | limitTo : 20}}</td>
+                <td style="width: 15%">{{ 'consigners.Labels.weight' | translate }}</td>
                 <td></td>
-                <td class="signline" colspan="2"></td>
-                <td>({{ 'consigners.Labels.signature' | translate }})</td>
-            </tr>
-        </table>
-
-        <table class="WBrow" style="width: 100%">
-            <tr>
-                <td colspan="4">{{ 'consigners.Labels.cargoAccepted' | translate }}</td>
-            </tr>
-            <tr>
-                <td>{{ 'consigners.Labels.consigner' | translate }}</td>
-                <td class="signline" colspan="2">{{CurrentWaybill.Consigner}}</td>
-                <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
         </table>
 
@@ -185,10 +338,10 @@
                 <td>{{CurrentWaybill.ReceiverEndLoadDT | limitTo : 5 : 11}}</td>
             </tr>
         </table>
-        
+
         <table class="WBrow" style="width: 100%">
             <tr>
-                <td>{{ 'consigners.Labels.railwayShopMaster' | translate }}</td>
+                <td style="font-weight: bold;">{{ 'consigners.Labels.railwayShopMaster' | translate }}</td>
                 <td class="signline" colspan="2"></td>
                 <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
@@ -201,64 +354,10 @@
                 <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
         </table>
-
-        <table style="width: 100%; border-bottom: 1px dotted black; border-top: 1px dotted black;">
-            <tr>
-                <td style="text-align: center">{{ 'consigners.Labels.cuttingLine' | translate }}</td>
-            </tr>
-        </table>
-
-
-        <table style="width: 100%">
-            <tr>
-                <td style="height: 5mm; font-size: 12px; font-weight: bold; text-align: center">{{ 'consigners.Labels.ticketWaybill' | translate }} № {{CurrentWaybill.WaybillNumber}}	</td>
-            </tr>
-        </table>
-
-        <table class="WBrow" style="width: 100%">
-            <tr>
-                <td style="width:30%">{{ 'consigners.Labels.wagon' | translate }} № </td>
-                <td style="font-weight: bold;">{{CurrentWaybill.WagonNumber}}	</td>
-                <td>{{ 'consigners.Labels.weight' | translate }}</td>
-                <td style="font-weight: bold;"></td>
-            </tr>
-            <tr>
-                <td>{{ 'consigners.Labels.senderStation' | translate }}</td>
-                <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.SenderRWStation.Description}}</td>
-            </tr>
-            <tr>
-                <td>{{ 'consigners.Labels.senderShop' | translate }}</td>
-                <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoSender.ParentDescription}}</td>
-            </tr>
-            <tr>
-                <td>{{ 'consigners.Labels.cargoType' | translate }}</td>
-                <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoType.Description}}</td>
-            </tr>
-            <tr>
-                <td>{{ 'consigners.Labels.receiverShop' | translate }}</td>
-                <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.ParentDescription}}</td>
-            </tr>
-            <tr>
-                <td>{{ 'consigners.Labels.receiverDistrict' | translate }}</td>
-                <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.Description}}</td>
-            </tr>
-            <tr>
-                <td colspan="2">{{ 'consigners.Labels.cargoAccepted' | translate }}</td>
-                <td colspan="2" style="font-weight: bold;"></td>
-            </tr>
-            <tr>
-                <td>{{ 'consigners.Labels.acceptedTime' | translate }}</td>
-                <td colspan="3" style="font-weight: bold;"></td>
-            </tr>
-            <tr>
-                <td>{{ 'consigners.Labels.consigner' | translate }}</td>
-                <td class="signline" colspan="2">{{CurrentWaybill.Consigner}}</td>
-                <td>({{ 'consigners.Labels.signature' | translate }})</td>
-            </tr>
-        </table>
-
-
     </div>
+
+
+</div>
 
 
 

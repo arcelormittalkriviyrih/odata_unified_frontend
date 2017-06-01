@@ -143,7 +143,7 @@
             <div id="waybill_toprint" 
                 ng-show="CurrentWaybill.ID"
                 ui-view="waybill_toprint"
-                ng-class="{'reject': ($parent.$parent.language != 'ru' && CurrentWaybill.Status == 'reject'), 'reject ru': ($parent.$parent.language == 'ru' && CurrentWaybill.Status == 'reject')}"
+                ng-class="{'reject': ($parent.$parent.language == 'en' && CurrentWaybill.Status == 'reject'), 'reject ru': ($parent.$parent.language != 'en' && CurrentWaybill.Status == 'reject')}"
                 style="background-color: white; padding-top: 5px;">
             </div>
         </div>
