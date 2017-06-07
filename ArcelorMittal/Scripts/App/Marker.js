@@ -2129,7 +2129,10 @@
 
                 PROD_ORDER: $scope.NewOrderNumber,
                 MaterialLotIDs: $scope.MaterialLotIDs
-            }).then(function () {                
+            }).then(function () {
+
+                $scope.MaterialLotIDs = null;
+                $scope.materialLotProdorderIDs = [];
                 
                 $('#changeOrderGrid').jsGrid('loadData', {});
 
@@ -2185,6 +2188,9 @@
 
                 MaterialLotIDs: $scope.MaterialLotIDs
             }).then(function () {
+
+                $scope.MaterialLotIDs = [];
+                $scope.materialLotProdorderIDs = [];
 
                 $('#reverseGrid').jsGrid('loadData', {});
 
