@@ -1,0 +1,90 @@
+﻿<!--когда еще грузится страница-->
+<div class="container loading" ng-show="$root.showLoadingState">
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
+    </div>
+</div>
+
+<link href="../../../Content/Shared/layoutConsigners.css" rel="stylesheet" />
+
+<!--основная часть, когда страница прогрузилась-->
+<div ng-show="!$root.showLoadingState">
+
+    <div class="row" style="background-color: #eeeeee; padding: 10px">
+        <div class="col-md-5" style="border-right: 1px solid #d4d4d4">
+            <!--.col-md-4-->
+            <div class="controlsRowConsigners" style="width: 100%; text-align: center">
+                <button type="button"
+                    class="btn btn-default"
+                    style="width: 26%"
+                    ng-disabled="false"
+                    ng-click="Create()">
+                    Create
+                </button>
+
+                <button type="button"
+                    class="btn btn-default"
+                    style="width: 44%"
+                    ng-disabled="!ArchiveWaybillSelected"
+                    ng-click="CreateCopy()">
+                    Create as a copy
+                </button>
+
+                <button type="button"
+                    class="btn btn-default"
+                    style="width: 26%"
+                    ng-disabled="!ArchiveWaybillSelected"
+                    ng-click="Print()">
+                    Print
+                </button>
+            </div>
+
+            
+            <div class="treeContainerConsigners" style="height:auto">
+                <!--<input type="text" class="form-control" placeholder="Search node .." id="search">-->
+
+                <ui-select 
+                    ng-model="SearchedWaybillShop"
+                    on-select="WaybillShopSelect($item)" 
+                    search-enabled="true"
+                    ng-required="false" 
+                    class="selectConsigners" 
+                    style="width: 100%"  
+                    theme="bootstrap"  
+                    title="Select a shop">
+                        <ui-select-match allow-clear="true" placeholder="Select a shop">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="shop in WaybillShops | propsFilter: {Description: $select.search}" position='down'>
+                        <div ng-bind-html="shop.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                <div class="treeContainerConsigners" id="waybill_list" style="background-color: white">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-7" align="center" style="border-left: 1px solid #d4d4d4">
+            <div ng-hide="common_var" style="display: table; width: 100%; height: 100%">
+                <div style="color: gray">
+                    <h1>Choose a waybill...</h1>
+                </div>
+            </div>
+            <div ng-show="common_var" ui-view="waybill_toprint"></div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -42,6 +42,7 @@ public class BundleConfig
             "~/scripts/app/pa.js",
             "~/scripts/app/workshopspecs.js",
             "~/scripts/app/weightanalytics.js",
+            "~/scripts/app/consigners.js",
             "~/scripts/app/gasCollection.js",
             "~/scripts/app/automationlab.js",
             "~/scripts/treeGrid/treeExt.js",

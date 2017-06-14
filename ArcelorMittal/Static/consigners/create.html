@@ -1,0 +1,316 @@
+﻿
+<!--когда еще грузится страница-->
+<div class="container loading" ng-show="$root.showLoadingState">
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
+    </div>
+</div>
+
+<ui-view>
+
+</ui-view>
+
+<link href="../../../Content/Shared/layoutConsigners.css" rel="stylesheet" />
+<link href="../../../Content/Shared/jquery-ui.css" rel="stylesheet" />
+
+<!--основная часть, когда страница прогрузилась-->
+<div ng-show="!$root.showLoadingState">
+    <h4>{{message}}</h4>
+    copy_id:{{copy_id}}
+    <div ng-form="myForm">
+
+        <div class="panel panel-default">
+            <div class="panel-heading" style="text-align: center">
+                Waybill#
+                <input type="text" class="form-control"
+                    ng-model="CurrentWaybill.WaybillNumber"
+                    ng-required="true"
+                    ng-disabled="false"
+                    title="Enter waybill number"
+                    ng-pattern="'[0-9]{1,4}'"
+                    style="width: 80px; display: inline-block" />
+            </div>
+            <div class="panel-body">
+
+                <div class="controlsRowConsigners">
+                    <div class="captionConsigners">Wagon type and number</div>
+                    <div class="controlConsigners">
+                        <ui-select ng-required="true" class="selectConsigners" ng-model="CurrentWaybill.WagonType" on-select="GetWagonNumberPattern($item)" theme="bootstrap" search-enabled="true" ng-disabled="false" title="Select a wagon type">
+                            <ui-select-match placeholder="Select a wagon type">{{$select.selected.Description}}</ui-select-match>
+                            <ui-select-choices repeat="type in WagonTypes | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
+                            <div ng-bind-html="type.Description | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <input type="text" class="form-control selectConsigners"
+                            ng-model="CurrentWaybill.WagonNumber"
+                            placeholder="Enter wagon number"
+                            ng-required="true"
+                            ng-disabled="false"
+                            ng-pattern="WagonNumberPattern" />
+
+                    </div>
+                </div>
+
+                <div class="controlsRowConsigners">
+                    <div class="captionConsigners">Cargo type</div>
+                    <div class="controlConsigners">
+                        <ui-select ng-required="true" class="selectConsigners" style="width: 505px" ng-model="CurrentWaybill.CargoType" theme="bootstrap" search-enabled="true" ng-disabled="false" title="Select a cargo type">
+                            <ui-select-match placeholder="Select a cargo type">{{$select.selected.ID}}.{{$select.selected.Description}}</ui-select-match>
+                            <ui-select-choices repeat="type in CargoTypes | propsFilter: {Description: $select.search, ID: $select.search}" position='auto'>
+                            <div ng-bind-html="type.ID + '.' + type.Description | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Sender</div>
+            <div class="panel-body">
+
+                <div class="controlsRowConsigners">
+                    <div class="captionConsigners">Cargo sender</div>
+                    <div class="controlConsigners">
+                        <ui-select ng-required="true" class="selectConsigners" ng-model="SelectedObjects.SenderShop" on-select="CargoSenderShopSelect($item)" theme="bootstrap" search-enabled="true" ng-disabled="false" title="Select a cargo sender shop">
+                            <ui-select-match placeholder="Select a cargo sender shop">{{$select.selected.Description}}</ui-select-match>
+                            <ui-select-choices repeat="sender in CargoSenderShops | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
+                            <div ng-bind-html="sender.Description | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <ui-select ng-required="true" class="selectConsigners" ng-model="CurrentWaybill.CargoSender" theme="bootstrap" search-enabled="true" ng-disabled="!SelectedObjects.SenderShop" title="Select a cargo sender district">
+                            <ui-select-match placeholder="Select a cargo sender district">{{$select.selected.Description}}</ui-select-match>
+                            <ui-select-choices repeat="sender in CargoSenderDistricts | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
+                            <div ng-bind-html="sender.Description | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+                <div class="controlsRowConsigners">
+                    <div class="captionConsigners">Sender RW station</div>
+                    <div class="controlConsigners">
+                        <ui-select ng-required="true" class="selectConsigners" style="width: 505px" ng-model="CurrentWaybill.SenderRWStation" theme="bootstrap" search-enabled="true" ng-disabled="false" title="Select a sender's railway station">
+                        <ui-select-match placeholder="Select a sender's railway station">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="sender_station in RWStations | propsFilter: {Description: $select.search}" position='auto'>
+                        <div ng-bind-html="sender_station.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    </div>
+                </div>
+
+                <div class="controlsRowConsigners">
+                    <div class="captionConsigners">Sender arrive DT</div>
+                    <div class="controlConsigners">
+                        <input id="dtp_sender_arrive_dt" type="text"
+                            class="ui-timepicker-input form-control selectConsigners"
+                            placeholder="Arrive DT"
+                            title="Select an arrive datetime"
+                            ng-model="CurrentWaybill.SenderArriveDT"
+                            ng-pattern="'^[0-9]{2}.[0-9]{2}.[0-9]{4} [0-9]{2}:[0-9]{2}$'"
+                            style="width: 166px">
+
+                        <input id="dtp_sender_start_load_dt" type="text"
+                            class="ui-timepicker-input form-control selectConsigners"
+                            placeholder="Start load DT"
+                            title="Select start load datetime"
+                            ng-model="CurrentWaybill.SenderStartLoadDT"
+                            ng-pattern="'^[0-9]{2}.[0-9]{2}.[0-9]{4} [0-9]{2}:[0-9]{2}$'"
+                            style="width: 166px">
+
+                        <input id="dtp_sender_end_load_dt" type="text"
+                            class="ui-timepicker-input form-control selectConsigners"
+                            placeholder="End load DT"
+                            title="Select end load datetime"
+                            ng-model="CurrentWaybill.SenderEndLoadDT"
+                            ng-pattern="'^[0-9]{2}.[0-9]{2}.[0-9]{4} [0-9]{2}:[0-9]{2}$'"
+                            style="width: 166px">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Receiver</div>
+            <div class="panel-body">
+
+                <div class="controlsRowConsigners">
+                    <div class="captionConsigners">Cargo receiver</div>
+                    <div class="controlConsigners">
+                        <ui-select ng-required="true" class="selectConsigners" ng-model="SelectedObjects.ReceiverShop" on-select="CargoReceiverShopSelect($item)" theme="bootstrap" search-enabled="true" ng-disabled="false" title="Select a cargo receiver shop">
+                        <ui-select-match placeholder="Select a cargo receiver shop">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="sender in CargoReceiverShops | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
+                        <div ng-bind-html="sender.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+
+                        <ui-select ng-required="true" class="selectConsigners" ng-model="CurrentWaybill.CargoReceiver" theme="bootstrap" search-enabled="true" ng-disabled="!SelectedObjects.ReceiverShop" title="Select a cargo receiver district">
+                        <ui-select-match placeholder="Select a cargo receiver district">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="sender in CargoReceiverDistricts | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
+                        <div ng-bind-html="sender.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    </div>
+                </div>
+
+
+                <div class="controlsRowConsigners">
+                    <div class="captionConsigners">Receiver RW station</div>
+                    <div class="controlConsigners">
+                        <ui-select ng-required="true" class="selectConsigners" style="width: 505px" ng-model="CurrentWaybill.ReceiverRWStation" theme="bootstrap" search-enabled="true" ng-disabled="false" title="Select a receiver's railway station">
+                        <ui-select-match placeholder="Select a receiver's railway station">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="sender_station in RWStations | propsFilter: {Description: $select.search}" position='auto'>
+                        <div ng-bind-html="sender_station.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    </div>
+                </div>
+
+                <div class="controlsRowConsigners">
+                    <div class="captionConsigners">Receiver arrive DT</div>
+                    <div class="controlConsigners">
+                        <input id="dtp_receiver_arrive_dt" type="text"
+                            class="ui-timepicker-input form-control selectConsigners"
+                            placeholder="Arrive DT"
+                            ng-model="CurrentWaybill.ReceiverArriveDT"
+                            ng-pattern="'^[0-9]{2}.[0-9]{2}.[0-9]{4} [0-9]{2}:[0-9]{2}$'"
+                            style="width: 166px">
+                        <!--                        <p>dirty: {{myForm.dtp_receiver_arrive_dt.$dirty}}</p>
+                        <p>invalid: {{myForm.dtp_receiver_arrive_dt.$invalid}}</p>-->
+                        <input id="dtp_receiver_start_load_dt"
+                            class="ui-timepicker-input form-control selectConsigners"
+                            placeholder="Start load DT"
+                            ng-model="CurrentWaybill.ReceiverStartLoadDT"
+                            ng-pattern="'^[0-9]{2}.[0-9]{2}.[0-9]{4} [0-9]{2}:[0-9]{2}$'"
+                            style="width: 166px">
+
+                        <input id="dtp_receiver_end_load_dt"
+                            class="ui-timepicker-input form-control selectConsigners"
+                            placeholder="End load DT"
+                            ng-model="CurrentWaybill.ReceiverEndLoadDT"
+                            ng-pattern="'^[0-9]{2}.[0-9]{2}.[0-9]{4} [0-9]{2}:[0-9]{2}$'"
+                            style="width: 166px">
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+
+
+
+        <!--    <div class="controlsRowWeightanalytics" ng-disabled="false">
+        <div style="width: 400px">
+            <ui-select ng-model="CurrentWaybill.SenderRWStation" theme="bootstrap" search-enabled="true" ng-disabled="false" title="Select a sender's railway station...">
+            <ui-select-match placeholder="Select a sender's railway station...">{{$select.selected.Description}}</ui-select-match>
+            <ui-select-choices repeat="sender_station in RWStations | propsFilter: {Description: $select.search}" position='auto'>
+            <div ng-bind-html="sender_station.Description | highlight: $select.search"></div>
+            </ui-select-choices>
+        </ui-select>
+        </div>
+    </div>
+
+    <div class="controlsRowWeightanalytics" ng-disabled="false">
+        <div style="width: 400px">
+            <ui-select ng-model="CurrentWaybill.ReceiverRWStation" theme="bootstrap" search-enabled="true" ng-disabled="false" title="Select a receiver's railway station...">
+            <ui-select-match placeholder="Select a receiver's railway station...">{{$select.selected.Description}}</ui-select-match>
+            <ui-select-choices repeat="sender_station in RWStations | propsFilter: {Description: $select.search}" position='auto'>
+            <div ng-bind-html="sender_station.Description | highlight: $select.search"></div>
+            </ui-select-choices>
+        </ui-select>
+        </div>
+    </div>-->
+
+
+
+        <div class="controlsRowConsigners" style="width:100%; text-align:center">
+            
+            <button type="button"
+                class="btn btn-default"
+                style="width:20%"
+                ng-disabled="false"
+                ng-click="SavePrint()">
+                Save and Print
+            </button>
+
+            <button type="button"
+                class="btn btn-default"
+                style="width:20%"
+                ng-disabled="false"
+                ng-click="SaveOnly()">
+                Save
+            </button>
+
+            <button type="button"
+                class="btn btn-default"
+                style="width:20%"
+                ng-disabled="false"
+                ng-click="Reject()">
+                Reject
+            </button>
+        </div>
+
+
+
+    </div>
+
+
+
+    <h3 ng-class="{'text-danger':myForm.$invalid, 'text-success':myForm.$valid }">Form valid? {{myForm.$valid}}</h3>
+
+    <div style="font-size: xx-small">
+    <br />
+        WaybillNumber:{{CurrentWaybill.WaybillNumber}}
+    <br />
+        WagonType:{{CurrentWaybill.WagonType}}
+    <br />
+        WagonNumberPattern:{{WagonNumberPattern}}
+    <br />
+        WagonNumber:{{CurrentWaybill.WagonNumber}}
+    <br />
+        CargoSender:{{CurrentWaybill.CargoSender}}
+    <br />
+        CargoReceiver:{{CurrentWaybill.CargoReceiver}}
+    <br />
+        ScrapType:{{CurrentWaybill.CargoType}}
+    <br />
+        SenderRWStation:{{CurrentWaybill.SenderRWStation}}
+    <br />
+        ReceiverRWStation:{{CurrentWaybill.ReceiverRWStation}}
+    <br />
+        SenderArriveDT:{{CurrentWaybill.SenderArriveDT}}
+    <br />
+        SenderStartLoadDT:{{CurrentWaybill.SenderStartLoadDT}}
+    <br />
+        SenderEndLoadDT:{{CurrentWaybill.SenderEndLoadDT}}
+    <br />
+        ReceiverArriveDT:{{CurrentWaybill.ReceiverArriveDT}}
+    <br />
+        ReceiverStartLoadDT:{{CurrentWaybill.ReceiverStartLoadDT}}
+    <br />
+        ReceiverEndLoadDT:{{CurrentWaybill.ReceiverEndLoadDT}}
+    </div>
+
+</div>
+
+<div>
+
+
+
+</div>
+
+
+
+
+
+
+

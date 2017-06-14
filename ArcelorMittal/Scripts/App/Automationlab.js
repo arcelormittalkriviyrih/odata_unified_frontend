@@ -137,7 +137,7 @@
             F_number: id_ss,
             Op_Type: status
          };
-       
+
         $.ajax({
             url: serviceUrl + 'ins_OperationsAcceptence',
             type: 'POST',

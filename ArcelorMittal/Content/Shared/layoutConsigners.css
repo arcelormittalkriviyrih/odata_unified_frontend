@@ -1,0 +1,78 @@
+﻿.ui-select-choices-group-label {
+    font-size: 18px;
+}
+/*
+.ui-select-bootstrap .ui-select-choices-row > a {
+    padding-left: 30px;
+}
+*/
+.ui-widget {
+    font-size: 13px!important; /*datepicker font*/
+    font-family: Verdana,Arial,sans-serif;
+}
+
+.controlsRowConsigners {
+    display: table;
+    margin-bottom: 5px;
+}
+
+div.captionConsigners {
+    width: 200px;
+    text-align: left;
+    font-size: 14px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+div.controlConsigners {
+    text-align: right;
+}
+
+.selectConsigners {
+    display: inline-block;
+    vertical-align: middle;
+    width: 250px;
+}
+
+.wrongConsigners {
+    border: 1px solid red;
+    border-radius: 4px;
+}
+
+/*Invalid border for combobox*/
+.ui-select-bootstrap.ng-touched.ng-invalid > div.ui-select-match > .btn-default {
+    border-color: #D44950;
+    border: 1px solid red;
+    border-radius: 4px;
+}
+
+/*Invalid border for input*/
+input.ng-touched.ng-invalid {
+    border-color: #D44950;
+    border: 1px solid red;
+    border-radius: 4px;
+}
+
+.panel {
+    margin-bottom: 5px;
+}
+
+.panel-body {
+    padding: 10px;
+}
+
+.panel-heading {
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+
+
+
+
+.treeContainerConsigners {
+    padding-top: 5px;
+    overflow: auto;
+    height:500px;
+    border-top:1px solid #d4d4d4;
+}
