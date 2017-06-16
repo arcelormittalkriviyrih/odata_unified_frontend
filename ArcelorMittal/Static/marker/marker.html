@@ -71,10 +71,10 @@
 
                     <div ng-show="scale.isInfoLoaded" style="margin-top: -30px;">
 
-                        <h3 ng-show="scale.weightCurrent >=0">
+                        <h3 ng-show="scale.weightCurrent || scale.weightCurrent == 0">
                             {{scale.weightCurrent}} {{ 'marker.kg' | translate }}
                         </h3>
-                        <h4 ng-show="scale.rodsQuantity > 0">
+                        <h4 ng-show="scale.rodsQuantity || scale.rodsQuantity == 0">
                             {{scale.rodsQuantity}} {{ 'marker.pcs' | translate }}
                         </h4>
                     </div>
