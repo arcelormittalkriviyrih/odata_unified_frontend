@@ -719,7 +719,7 @@
         var enteredName = $formCreate.find('[name="Name"]').val();
 
 
-        if (unFilledFields.length > 0 || $scope.fileNames.indexOf(enteredName) > -1) {
+        if (unFilledFields.length > 0 || (!($scope.fileNames === undefined) && $scope.fileNames.indexOf(enteredName) > -1)) {
 
             e.preventDefault();
 
