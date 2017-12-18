@@ -183,6 +183,7 @@
     <Content Include="Content\Shared\images\ui-icons_cc0000_256x240.png" />
     <Content Include="Content\Shared\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\Shared\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\Shared\images\weight_stable.png" />
     <Content Include="Content\Shared\jquery-ui.css" />
     <Content Include="Content\Shared\layout.css" />
     <Content Include="Content\Shared\datetimepicker.css" />
@@ -201,6 +202,7 @@
     <Content Include="Scripts\App\Consigners.js" />
     <Content Include="Scripts\App\gasCollection.js" />
     <Content Include="Scripts\App\Resources.js" />
+    <Content Include="Scripts\App\WeightAnalytics_new.js" />
     <Content Include="Scripts\Vendor\backbone.js" />
     <Content Include="Scripts\Diagram\diagramExt.js" />
     <Content Include="Scripts\Diagram\index.js" />
@@ -318,6 +320,11 @@
     <Content Include="Static\weightanalytics\toprint.html">
       <BrowseToURL>~/odata_unified_frontend/Static/weightanalytics/toprint.html</BrowseToURL>
     </Content>
+    <Content Include="Static\weightanalytics_new\index.html" />
+    <Content Include="Static\weightanalytics_new\wb_static.html" />
+    <Content Include="Static\weightanalytics_new\main.html" />
+    <Content Include="Static\weightanalytics_new\wb_dynamic.html" />
+    <Content Include="Static\weightanalytics_new\ws_table.html" />
     <Content Include="Static\workshopspecs.html" />
     <Content Include="Static\index.html" />
     <Content Include="Static\welcome.html" />

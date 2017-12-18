@@ -128,7 +128,9 @@ angular.module('indexApp')
             ".format($scope.CurrentWaybill.WaybillNumber);
             inner_html = str + inner_html + "</body></html>"
 
+            // Открыть документ в новом окне (или послать inner_html в сервис печати)
             window.open().document.write(inner_html);
+            // Открыть в app.Consigners
             //console.log("go to app.Consigners.Print");
             $state.go('app.Consigners.Print', { print_id: $scope.CurrentWaybill.ID, waybill_object: $scope.CurrentWaybill });
         }
@@ -167,8 +169,8 @@ angular.module('indexApp')
     }
 
 
-    // получение дерева архивных отвесных
-    function vmGetWaybillTree(weightsheetID) {
+    // получение дерева архивных путевых
+    function vmGetWaybillTree() {
 
         WaybillList = $('#waybill_list').jstree('destroy');
         indexService.getInfo('v_WGT_WaybillList').then(function (response) {
@@ -189,11 +191,11 @@ angular.module('indexApp')
                     delete e.Description;
                 });
 
-                $scope.ArchiveWeightSheets = response.data.value;
+                $scope.ArchiveWaybills = response.data.value;
 
                 WaybillList.jstree({
                     core: {
-                        data: $scope.ArchiveWeightSheets
+                        data: $scope.ArchiveWaybills
                     },
                     search: {
                         "case_insensitive": true,
@@ -205,7 +207,7 @@ angular.module('indexApp')
         });
     };
 
-    // загрузка дерева отвесных
+    // загрузка дерева путевых
     WaybillList.on('loaded.jstree', function (e, data) {
         //alert('loaded');
         // при загрузке данных убираем выделение эл-тов и сворачиваем дерево
@@ -213,7 +215,7 @@ angular.module('indexApp')
         WaybillList.jstree('deselect_all', true);
 
         // при первой загрузке дерева выделяем год, содержащий последнюю путевую
-        var node = $scope.ArchiveWeightSheets.filter(function (element) {
+        var node = $scope.ArchiveWaybills.filter(function (element) {
             if (enter_waybill_id) {
                 return element.parent != '#' && element.DocumentationsID == enter_waybill_id;
             }
@@ -228,7 +230,7 @@ angular.module('indexApp')
         }
     });
 
-    // выбор элемента в дереве отвесных
+    // выбор элемента в дереве путевых
     WaybillList.on('select_node.jstree', function (e, data) {
         //alert('select_node');
         $scope.CurrentWaybill = {};
@@ -242,6 +244,11 @@ angular.module('indexApp')
             var waybill_id = data.node.original.DocumentationsID;
 
             /* !!! get full waybill info here */
+            consignersService.GetWaybillObject(waybill_id)
+            .then(function (waybill_obj) {
+                $scope.CurrentWaybill = waybill_obj;
+            })
+            /*
             $q.all([indexService.getInfo('Documentations?$filter=ID eq {0}'.format(waybill_id)),
                     indexService.getInfo("DocumentationsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
                     indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
@@ -356,7 +363,7 @@ angular.module('indexApp')
                         //$state.go('app.Consigners.Print', { print_id: waybill_id, waybill_object: $scope.CurrentWaybill });
 
                     })
-
+            */
             //alert(data.node.original.DocumentationsID);
         };
     });
@@ -1215,7 +1222,7 @@ angular.module('indexApp')
     }
 })
 
-.service('consignersService', ['indexService', function (indexService) {
+.service('consignersService', ['indexService', '$q', function (indexService, $q) {
 
     this.GetCargoTypes = function () {
         var request = indexService.getInfo('v_KP4_ScrapTypes');
@@ -1283,6 +1290,121 @@ angular.module('indexApp')
     };
     */
 
+    this.GetWagonNumberPattern = function (wagon) {
+        var wagon_id = wagon['ID'];
+        var pathWagonTypes = "PackagingClassProperty?$filter=Description eq '{0}'and PackagingClassID eq {1} &$orderby=ID".format('Wagon number template', wagon_id);
+        var request = indexService.getInfo(pathWagonTypes)
+        return request
+            .then(function (response) {
+                pattern = response.data.value;
+                if (pattern[0] != null) {
+                    return pattern[0]['Value'];
+                }
+            });
+    }
+
+    this.GetWaybillObject = function (waybill_id) {
+
+        /* !!! get full waybill info here */
+        return $q.all([indexService.getInfo('Documentations?$filter=ID eq {0}'.format(waybill_id)),
+                        indexService.getInfo("DocumentationsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
+                        indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
+                        indexService.getInfo("v_WGT_WaybillProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id))])
+                .then(function (responses) {
+                    var resp_1 = responses[0].data.value;
+                    var resp_2 = responses[1].data.value;
+                    var resp_3 = responses[2].data.value;
+                    var resp_4 = responses[3].data.value;
+
+                    var waybill_object = {};
+
+                    for (i = 0; i < resp_1.length; i++) {
+                        //var start_time = resp_1[i]['StartTime'];
+                        var start_time = new Date(resp_1[i]['StartTime']);
+                        start_time.setMinutes(start_time.getMinutes() + start_time.getTimezoneOffset());
+                        waybill_object.CreateDT = start_time;
+
+                        if (resp_1[i]['EndTime'] != resp_1[i]['StartTime']) {
+                            var end_time = new Date(resp_1[i]['EndTime']);
+                            end_time.setMinutes(end_time.getMinutes() + end_time.getTimezoneOffset());
+                            waybill_object.EditDT = end_time;
+                        }
+                        waybill_object.Status = resp_1[i]['Status'];
+                    }
+                    for (i = 0; i < resp_3.length; i++) {
+                        if (resp_3[i]['Status'] == 'reject') continue;
+                        //if there is only one wagon in waybill
+                        waybill_object.WagonNumber = resp_3[i]['Description'].trim();
+                        //if there is array of wagons in waybill
+                        waybill_object.WagonNumbers = [];
+                        resp_3[i]['Description'] = resp_3[i]['Description'].trim();
+                        waybill_object.WagonNumbers.push(resp_3[i]);
+                    }
+
+                    var prop_queries_array = [
+                        { prop: "CargoType", query: "v_KP4_ScrapTypes?$filter=ID eq {0} &$orderby=ID" },
+                        { prop: "WagonType", query: "PackagingClass?$filter=ID eq {0}&$orderby=ID" },
+                        { prop: "SenderShop", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
+                        { prop: "SenderDistrict", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
+                        { prop: "SenderRWStation", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
+                        { prop: "ReceiverShop", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
+                        { prop: "ReceiverDistrict", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
+                        { prop: "ReceiverRWStation", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
+                    ];
+                    var actual_prop_queries_array = [];
+                    for (i = 0; i < resp_4.length; i++) {
+                        //$scope.CurrentWaybill.WagonNumber = resp_3[i]['Description'];
+                        var prop = resp_4[i];
+
+                        var filtered_item = prop_queries_array.filter(function (item) {
+                            return item['prop'] === prop['Description2'];
+                        })[0];
+
+                        if (filtered_item) {
+                            var query = filtered_item['query'].format(prop['Value']);
+                            var query_item = { prop: prop['Description2'], query: query };
+                            actual_prop_queries_array.push(query_item);
+                            //alert(query);
+                        }
+                        else {
+                            waybill_object[prop['Description2']] = prop['Value2'];
+                        }
+
+                    }
+                    //alert(actual_prop_queries_array.length);
+                    return $q.all(actual_prop_queries_array.map(function (item) { return indexService.getInfo(item['query']) }))
+                    .then(function (responses) {
+                        //console.log("!");
+                        actual_prop_queries_array.forEach(function (item, i) {
+                            //console.log(item);
+                            item['response'] = responses[i].data.value[0];
+                            if (item['response']) {
+                                waybill_object[actual_prop_queries_array[i]['prop']] = item['response'];
+                            }
+                        })
+
+                        waybill_object.ID = waybill_id;
+                        if (waybill_object && waybill_object.SenderShop && waybill_object.SenderDistrict) {
+                            var CargoSenderObject = {};
+                            CargoSenderObject['ID'] = waybill_object.SenderDistrict['ID'];
+                            CargoSenderObject['Description'] = waybill_object.SenderDistrict['Description'];
+                            CargoSenderObject['ParentID'] = waybill_object.SenderShop['ID'];
+                            CargoSenderObject['ParentDescription'] = waybill_object.SenderShop['Description'];
+                            waybill_object.CargoSender = CargoSenderObject;
+                        }
+                        if (waybill_object && waybill_object.ReceiverShop && waybill_object.ReceiverDistrict) {
+                            var CargoReceiverObject = {};
+                            CargoReceiverObject['ID'] = waybill_object.ReceiverDistrict['ID'];
+                            CargoReceiverObject['Description'] = waybill_object.ReceiverDistrict['Description'];
+                            CargoReceiverObject['ParentID'] = waybill_object.ReceiverShop['ID'];
+                            CargoReceiverObject['ParentDescription'] = waybill_object.ReceiverShop['Description'];
+                            waybill_object.CargoReceiver = CargoReceiverObject;
+                        }
+
+                        return waybill_object;
+                    })
+                })
+    }
 
 
 }])

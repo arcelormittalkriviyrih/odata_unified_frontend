@@ -5,9 +5,9 @@
     width: 180px;
 }
 
-.weightanalytics .dropdown-toggle {
-    width: 160px;
-}
+    .weightanalytics .dropdown-toggle {
+        width: 160px;
+    }
 
 .scaleInfo .controlsWeightanalytics {
     position: absolute;
@@ -45,17 +45,17 @@ div.controlWeightanalytics {
     font-size: 12px;
 }
 
-div.controlWeightanalytics .dropdown-toggle .dropdown-input {
-    outline: none;
-    border: none;
-    width: 90%!important;
-    height: 25px;
-    margin-top: -2px;
-}
+    div.controlWeightanalytics .dropdown-toggle .dropdown-input {
+        outline: none;
+        border: none;
+        width: 90%!important;
+        height: 25px;
+        margin-top: -2px;
+    }
 
-div.controlWeightanalytics .input-small {
-    width: 180px;
-}
+    div.controlWeightanalytics .input-small {
+        width: 180px;
+    }
 
 .scaleInfo .takeWeight {
     width: 49%;
@@ -63,7 +63,7 @@ div.controlWeightanalytics .input-small {
 
 .scaleDetailInfo .leftpanel {
     padding: 10px;
-    height:335px;
+    height: 335px;
 }
 
 .leftpanel .controls button {
@@ -107,21 +107,21 @@ div.controlWeightanalytics .input-small {
 .paramRowWeightanalytics {
     display: inline-table;
     width: 49%;
-    padding:5px;
+    padding: 5px;
 }
 
 .paramNameWeightanalytics {
     display: table-cell;
     width: 63%;
-    text-align:left;
-    font-size:12px;
+    text-align: left;
+    font-size: 12px;
     /*vertical-align:middle;*/
 }
 
 .paramValueWeightanalytics {
     display: table-cell;
-    text-align:right;
-    font-weight:bolder;
+    text-align: right;
+    font-weight: bolder;
 }
 
 .jsgrid-weight-even-row td {
@@ -135,17 +135,17 @@ div.controlWeightanalytics .input-small {
 }
 
 .jsgrid-weight-border-row {
-    border-top: 1px  double #ccc !important;
+    border-top: 1px double #ccc !important;
 }
 
 .jsgrid-bold-cell {
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .treeContainerWeightanalytics {
     padding: 0px;
     overflow: auto;
-    height:210px;
+    height: 210px;
 }
 
 .plusWeightanalytics {
@@ -174,8 +174,8 @@ div.controlWeightanalytics .input-small {
     height: 100%;
     z-index: 5;
     background: rgba(238, 238, 238, 0.5);
-    top:0; 
-    left:0;
+    top: 0;
+    left: 0;
 }
 
 .printWeightanalytics {
@@ -189,17 +189,17 @@ div.controlWeightanalytics .input-small {
 }
 
 .printValueWeightanalytics {
-    padding-top:5px;
+    padding-top: 5px;
     width: 150px;
     display: table-cell;
-    text-align:left;
+    text-align: left;
 }
 
 .printLabelWeightanalytics {
-    margin: 10px; 
-    text-align: center; 
-    font-size: 16px; 
-    font-weight: bold; 
+    margin: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
     text-decoration: underline;
 }
 
@@ -209,26 +209,360 @@ div.controlWeightanalytics .input-small {
     display: none;
 }
 
-.table-print .table {
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 20px;
+    .table-print .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
         border: 1px solid #dddddd;
-}
+    }
 
-.table-print .table tr {
-border: 1px solid #dddddd;
-}
+        .table-print .table tr {
+            border: 1px solid #dddddd;
+        }
 
-.table-print .table tr th {
-border: 1px solid #dddddd;
-}
+            .table-print .table tr th {
+                border: 1px solid #dddddd;
+            }
 
-.table-print .table tr td {
-border: 1px solid #dddddd;
-}
+            .table-print .table tr td {
+                border: 1px solid #dddddd;
+            }
 
 .otves {
     font-weight: bold;
     text-align: center;
 }
+
+
+
+
+/* new WA */
+
+.WApanels {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+/*.weightstab {
+    background-image: url("images/weight_stable.png");
+    background-size: contain;
+    height: 20px;
+    width: 38px;
+    display: inline-table;
+}*/
+
+.weightstab {
+    background-color: black;
+    width: 30px;
+    height: 15px;
+    position: relative;
+    margin: 0 auto;
+}
+
+    .weightstab::before {
+        content: "";
+        display: inline-block;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-top: 15px solid white;
+    }
+
+.plotWA {
+    height: 145px;
+    margin: 0px;
+}
+
+/*status WB circle*/
+.circleWA {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    /*display: inline-table;*/
+    margin: 0 auto;
+}
+
+
+.paramValue {
+    font-weight: bold;
+    text-align: center;
+}
+
+.platformActive {
+    background-color: lightgrey;
+    border: solid 1px black;
+}
+
+.panel-body {
+    padding: 5px;
+}
+
+/* for ui-select text overflow */
+.ui-select-match-text > span {
+    width: 85%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: absolute;
+}
+
+
+/*Invalid border for combobox*/
+.ui-select-bootstrap.ng-touched.ng-invalid > div.ui-select-match > .btn-default {
+    border-color: #D44950;
+    border: 1px solid red;
+    border-radius: 4px;
+}
+
+/*Invalid border for input*/
+input.ng-touched.ng-invalid {
+    border-color: #D44950;
+    border: 1px solid red;
+    border-radius: 4px;
+}
+
+/* width for dropdown menu of CargoType combobox*/
+#cargo_type .ui-select-bootstrap .ui-select-choices {
+    width: auto!important;
+}
+/*right align for dropdown menu of CargoType combobox*/
+#cargo_type .dropdown-menu {
+    width: auto!important;
+    right: 0px;
+    left: auto;
+}
+
+
+#main_ws_info tr {
+    height: 34px;
+}
+
+
+.param_table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0px 2px;
+}
+
+    .param_table tr {
+        height: 34px;
+    }
+
+        .param_table tr > td:first-child {
+            width: 35%;
+        }
+
+/**/
+.jstree-default .jstree-finalize {
+    background: url("../Tree/img/32px.png") -3px -68px no-repeat;
+}
+
+.jstree-default .jstree-reject {
+    background: url("../Tree/img/32px.png") -36px -68px no-repeat;
+}
+
+.jstree-anchor {
+    white-space: nowrap !important;
+}
+
+/*platform buttons*/
+.platf {
+    min-width: 30px;
+    max-width: 50px;
+    padding: 0;
+}
+
+.platf-enable {
+    background-color: lightgrey;
+    border-color: black;
+    /*width: 50px;*/
+    color: black;
+    /*padding: 0;*/
+}
+
+.platf-disable {
+    background-color: transparent;
+    border-color: lightgrey;
+    /*width: 50px;*/
+    /*padding: 0;*/
+    /*color: black;*/
+}
+
+/*.jsgrid-reject {
+    background-color: red;
+    text-decoration: line-through;
+}*/
+
+.reject {
+    background-image: url("images/reject.png");
+    background-position-x: 50%;
+    background-position-y: 50%;
+    background-size: auto;
+    background-origin: padding-box;
+    background-clip: border-box;
+    background-color: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
+    /*text-decoration: line-through;*/
+}
+
+    .reject.ru {
+        background-image: url("images/reject_ru.png");
+    }
+
+.jsgrid-reject td {
+    background: url("images/reject_ru.png");
+    background-size: contain;
+    background-color: rgb(255, 169, 169);
+    background-repeat: repeat;
+    text-decoration: line-through;
+}
+
+.jsgrid-grid-body {
+    overflow-y: initial;
+}
+
+.jsgrid-grid-header {
+    overflow-y: initial;
+}
+
+
+.loading-gif {
+    background-image: url("../Tree/img/throbber.gif");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: lightgray;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+
+
+/*bootstrap modal (because in original is missing)*/
+.modal-open {
+  overflow: hidden;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  display: none;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+  margin:auto;
+  width:auto;
+  background-color: transparent;
+}
+.modal.fade .modal-dialog {
+  -webkit-transition: -webkit-transform .3s ease-out;
+       -o-transition:      -o-transform .3s ease-out;
+          transition:         transform .3s ease-out;
+  -webkit-transform: translate(0, -25%);
+      -ms-transform: translate(0, -25%);
+       -o-transform: translate(0, -25%);
+          transform: translate(0, -25%);
+}
+.modal.in .modal-dialog {
+  -webkit-transform: translate(0, 0);
+      -ms-transform: translate(0, 0);
+       -o-transform: translate(0, 0);
+          transform: translate(0, 0);
+}
+.modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 10px;
+}
+.modal-content {
+  position: relative;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+          background-clip: padding-box;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 6px;
+  outline: 0;
+  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+          box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+}
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000;
+}
+.modal-backdrop.fade {
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+.modal-backdrop.in {
+  filter: alpha(opacity=50);
+  opacity: .5;
+}
+.modal-header {
+  padding: 15px;
+  border-bottom: 1px solid #e5e5e5;
+}
+.modal-header .close {
+  margin-top: -2px;
+}
+.modal-title {
+  margin: 0;
+  line-height: 1.42857143;
+}
+.modal-body {
+  position: relative;
+  padding: 15px;
+}
+.modal-footer {
+  padding: 15px;
+  text-align: right;
+  border-top: 1px solid #e5e5e5;
+}
+.modal-footer .btn + .btn {
+  margin-bottom: 0;
+  margin-left: 5px;
+}
+.modal-footer .btn-group .btn + .btn {
+  margin-left: -1px;
+}
+.modal-footer .btn-block + .btn-block {
+  margin-left: 0;
+}
+.modal-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll;
+}
+@media (min-width: 768px) {
+  .modal-dialog {
+    width: 600px;
+    margin: 30px auto;
+  }
+  .modal-content {
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+  }
+  .modal-sm {
+    width: 300px;
+  }
+}
+@media (min-width: 992px) {
+  .modal-lg {
+    width: 900px;
+  }
+}
+

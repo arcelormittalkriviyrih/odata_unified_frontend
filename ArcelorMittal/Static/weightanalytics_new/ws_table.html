@@ -1,0 +1,144 @@
+﻿<!--<div style="font-size: large">
+    Weightsheet # 1111
+</div>-->
+
+<style type="text/css">
+    .WBrow {
+        margin-bottom: 1mm;
+    }
+
+        .WBrow tr {
+            height: 5mm;
+            overflow: hidden;
+        }
+
+            .WBrow tr > td {
+                /*width:25%*/
+            }
+
+        .WBrow .signline {
+            border-bottom: 1px black solid;
+            width: 50%;
+        }
+
+    .TT {
+        width: 100%;
+        text-align: center;
+        border: 1px solid black; /* Рамка вокруг таблицы */
+        border-collapse: collapse; /* Отображать только одинарные линии */
+        table-layout: fixed;
+    }
+
+        .TT tr {
+            min-height: 6mm; /* Минимальная высота ячейки */
+        }
+
+        .TT thead > tr {
+            min-height: 10mm; /* Минимальная высота шапки */
+            border-bottom-style: double;
+        }
+
+        .TT td, th {
+            border: 1px solid black; /* Граница вокруг ячеек */
+            padding: 3px;
+        }
+</style>
+
+
+<div style="width: 190mm; margin-top: 3mm; margin-left: 3mm; font-size: 12px; font-family: Verdana,Arial,sans-serif;"
+    ng-style="{'width': toprint ? '190mm' : '100%'}">
+
+    <div ng-if="toprint">
+        <table style="width: 100%; font-size: 8px;">
+            <tr>
+                <td>{{ 'consigners.Labels.amkr' | translate }}</td>
+                <td style="text-align: right">ф.23</td>
+            </tr>
+        </table>
+
+        <table ng-class="{'WBrow' : toprint}" style="width: 100%">
+            <tr>
+                <td rowspan="5" style="width: 20%"></td>
+                <td style="width: 15%">{{ 'weightanalytics.Labels.weightbridge' | translate }}</td>
+                <td style="font-weight: bold; width: 40%">{{CurrentWeightSheet.WeightBridge}}</td>
+                <td rowspan="5" style="text-align: center;">М.П.</td>
+            </tr>
+            <tr>
+                <td>{{ 'weightanalytics.Labels.sender' | translate }}</td>
+                <td style="font-weight: bold;">{{CurrentWeightSheet.SenderShop ? CurrentWeightSheet.SenderShop.Description : '-'}}</td>
+            </tr>
+            <tr>
+                <td>{{ 'weightanalytics.Labels.receiver' | translate }}</td>
+                <td style="font-weight: bold;">{{CurrentWeightSheet.ReceiverShop ? CurrentWeightSheet.ReceiverShop.Description : '-'}}</td>
+            </tr>
+            <tr>
+                <td>{{ 'weightanalytics.Labels.date' | translate }}</td>
+                <td style="font-weight: bold;">{{CurrentWeightSheet.CreateDT}}</td>
+            </tr>
+            <tr>
+                <td>{{ 'weightanalytics.Labels.weigher' | translate }}</td>
+                <td style="font-weight: bold;">{{CurrentWeightSheet.Weigher}}</td>
+            </tr>
+        </table>
+
+        <table style="width: 100%">
+            <tr>
+                <td style="height: 7mm; font-size: 15px; font-weight: bold; text-align: center">{{ 'weightanalytics.Labels.weightsheet' | translate }} №{{CurrentWeightSheet.WeightSheetNumber}}	</td>
+            </tr>
+        </table>
+    </div>
+    <table class="table table-bordered" ng-class="{'TT' : toprint}"
+        ng-init="Check_()">
+        <thead>
+            <tr>
+                <th style="width: 4%">№</th>
+                <th style="width: 11%">{{ 'weightanalytics.Labels.wagon' | translate }}</th>
+                <th style="width: 10%">{{ 'weightanalytics.Labels.waybill' | translate }}</th>
+                <th style="width: 10%; word-wrap: break-word; font-size: 0.9em;">{{ 'weightanalytics.Labels.carrying' | translate }}</th>
+                <th>{{ 'weightanalytics.Labels.cargo' | translate }}</th>
+                <th style="width: 9%">{{ 'weightanalytics.Labels.brutto' | translate }}</th>
+                <th style="width: 9%">{{ 'weightanalytics.Labels.tare' | translate }}</th>
+                <th style="width: 9%">{{ 'weightanalytics.Labels.netto' | translate }}</th>
+                <th style="width: 12%">{{ 'weightanalytics.Labels.notes' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="WS in CurrentWeightSheet.Weighings | filter: (toprint || '') && { Status: '!reject' }"
+                repeat-done="toprint ? ReadyToPrint() : angular.noop()"
+                ng-class="{'reject': ($parent.$parent.language == 'en' && WS.Status == 'reject'), 'reject ru': ($parent.$parent.language != 'en' && WS.Status == 'reject')}"
+                ng-style="(WS.Status == 'reject') && {'background-color':'rgb(255, 169, 169)', 'background-repeat':'repeat', 'text-decoration': 'line-through'}">
+                <td ng-init="CurrentWeightSheet.Weighings.Totals.Count = CurrentWeightSheet.Weighings.Totals.Count + (WS.Status == 'reject' ? 0 : 1)">{{$index+1}}</td>
+                <td>{{WS.WagonNumber}}</td>
+                <td>{{WS.WaybillNumber}}</td>
+                <td>{{WS.Carrying}}</td>
+                <td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: left;">{{WS.CargoTypeID}} {{WS.CargoTypeID ? '.': '-'}} {{WS.CargoType}}</td>
+                <td>{{WS.Brutto ? WS.Brutto : '-'}}</td>
+                <td>{{WS.Tara ? WS.Tara : '-'}}</td>
+                <td ng-init="CurrentWeightSheet.Weighings.Totals.Netto = CurrentWeightSheet.Weighings.Totals.Netto +(WS.Status == 'reject' ? 0 : WS.Netto)">{{WS.Netto ? (WS.Netto | number:2) : '-'}}</td>
+                <td></td>
+            </tr>
+            <tr ng-if="!CurrentWeightSheet.Weighings.Totals.Count">
+                <td style="text-align: center; color: gray;" colspan="9">{{ 'weightanalytics.Labels.noWeighings' | translate }}</td>
+            </tr>
+            <tr ng-if="CurrentWeightSheet.Weighings.Totals.Count">
+                <td style="border: 1px solid white; text-align: right" colspan="2">{{ 'weightanalytics.Labels.wagonsCount' | translate }}</td>
+                <td style="border: 2px solid black">{{CurrentWeightSheet.Weighings.Totals.Count}}</td>
+                <td ng-if="!(['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) > -1)"
+                    style="border: 1px solid white; text-align: right"
+                    colspan="4">{{ 'weightanalytics.Labels.summaryNetto' | translate }}</td>
+                <td ng-if="!(['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) > -1)"
+                    style="border: 2px solid black">{{CurrentWeightSheet.Weighings.Totals.Netto | number:2}}</td>
+                <td style="border: 1px solid white" colspan="1"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!--</div>
+WeightSheetForPrint: 
+<br />
+{{WeightSheetForPrint}}
+<br />
+<br />
+CurrentWeightSheet:
+<br />
+{{CurrentWeightSheet}}-->

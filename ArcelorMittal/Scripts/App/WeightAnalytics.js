@@ -131,6 +131,7 @@
         $scope.CurrentWeightSheet.PairNumber = null;
         $scope.CurrentPairNumber.selected = null;
         $scope.CurrentWeightSheet.PairNumbers.length = 0;  // clear array
+
     }
 
     // получение списка доступных весов
@@ -311,7 +312,32 @@
                 var response = response.data.value[0];
                 if (response) {
                     //$scope.CurrentWeight = response.Weight;
-                    $scope.CurrentWeight = $scope.CurrentWeightSheet.WeightPlatform.ID == 1 ? response.Weight_platform_1 : response.Weight;
+
+
+                    /*test platform*/
+                    var cur_seconds = new Date().getSeconds();
+                    var iii = cur_seconds % 4;
+
+                    var ScalesPlatformProperty = "[{ WagonClassID : 2, Weight : [ 'Weight_platform_1' ] },{ WagonClassID : 3, Weight : [ 'Weight_platform_1', 'Weight_platform_2' ] },{ WagonClassID : 1, Weight : [ 'Weight_platform_1', 'Weight_platform_2' ] },{ WagonClassID : 4, Weight : [ 'Weight_platform_1', 'Weight_platform_2' ] }]";
+                    //alert(ScalesPlatformProperty.length);
+                    var ScalesPlatformPropertyArray;
+                    eval('ScalesPlatformPropertyArray = ' + ScalesPlatformProperty); // convert to array of objects
+                    ScalesPlatformPropertyArray = $filter('filter')(ScalesPlatformPropertyArray, { WagonClassID: iii+1 })[0]; // select platforms according to WagonType
+                    var platforms = ScalesPlatformPropertyArray ? ScalesPlatformPropertyArray['Weight'] : null; // convert to array (of platforms)
+                    //alert(platforms);
+
+                    var w = 0;
+                    platforms.forEach(function (item) {
+                        w += response[item];
+                    });
+                    $scope.CurrentWeight = w;
+                    /*test platform*/
+
+                    if (iii == 2) {
+                        $scope.CurrentWeight = null;
+                    }
+
+                    //$scope.CurrentWeight = $scope.CurrentWeightSheet.WeightPlatform.ID == 1 ? response.Weight_platform_1 : response.Weight;
                     $scope.CurrentWeightPlatf1 = response.Weight_platform_1;
                     $scope.CurrentWeightPlatf2 = response.Weight_platform_2;
                     $scope.CurrentWeightOffsetX = response.L_bias_weight;
@@ -835,13 +861,13 @@
 
         });
 
-    function vmprint() {        
+    function vmprint() {
         $timeout(function () {
             $scope.$apply();
             //var eeeee = angular.element(window.document);
             var inner_html = $('#WStoPrint');
             if (inner_html.length > 0) {
-                var inner_html = inner_html[0]['innerHTML'];                
+                var inner_html = inner_html[0]['innerHTML'];
             }
             //window.open().document.write(output);
             window.open().document.write(inner_html);
