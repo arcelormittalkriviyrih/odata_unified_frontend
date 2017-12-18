@@ -965,6 +965,8 @@
     indexService.getInfo('v_SAPOrderRequest').then(function (responce) {
 
         $scope.sapUrl = responce.data.value[0].Value;
+        $scope.login = responce.data.value[1].Value;
+        $scope.password = responce.data.value[2].Value;
     });
 
     function vmUpdateSAP() {
