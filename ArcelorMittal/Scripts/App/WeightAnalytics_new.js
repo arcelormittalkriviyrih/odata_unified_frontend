@@ -39,8 +39,7 @@
             },
             resolve: {
                 wb: function (indexService, $stateParams, $state, $q, $timeout) {
-                    // need to check of existing WB_ID and WS_ID
-
+                    // проверка существования WB_ID и WS_ID
                     var WB_ID = $stateParams.wb_id;
                     var WS_ID = $stateParams.ws_id;
                     return $q.all([indexService.getInfo("v_AvailableWeighbridges?$filter=ID eq {0}".format(WB_ID)),
@@ -121,7 +120,7 @@
 .controller('WeightAnalyticsNewMainCtrl', ['$scope', '$translate', 'indexService', 'consignersService', '$state', '$interval', '$filter', function ($scope, $translate, indexService, consignersService, $state, $interval, $filter) {
     var message = "WeightAnalyticsNewMainCtrl";
     //alert(message);
-
+    /*
     $scope.SelectedObjects = {};
 
     $scope.CurrentWeightSheet = [];
@@ -258,14 +257,14 @@
                 alert(msg);
             })
     }
-
+    */
 
 }])
 
 
 
 
-
+// контроллер Отвесных для статических весов
 .controller('WeightAnalyticsNewWBCtrl', ['$scope', '$translate', 'indexService', 'consignersService', 'weightanalyticsService', '$state', '$q', '$timeout', '$interval', '$filter', 'user', 'scalesRefresh', function ($scope, $translate, indexService, consignersService, weightanalyticsService, $state, $q, $timeout, $interval, $filter, user, scalesRefresh) {
 
     // Init
@@ -305,7 +304,6 @@
         SenderShop: null,
         ReceiverShop: null,
     };
-    //var weightsheet_object = {};
 
     $scope.CurrentMeasuring = {
         Weight: -99.99,
@@ -356,6 +354,7 @@
     //$scope.WagonNumberSelect = vmWagonNumberSelect;
     //$scope.WagonNumberEnter = vmWagonNumberEnter;
     $scope.TakeWeight = vmTakeWeight;
+    $scope.RejectWeighing = vmRejectWeighing;
 
     $scope.wb_id = wb_id;
     $scope.ws_id = ws_id;
@@ -490,7 +489,7 @@
                         }
                     }
                     //$scope.WaybillNumbers = weightsheet_object.WaybillNumbers;
-                    vmGetWagonTable($scope.CurrentWeightSheet.WeightSheetID);
+                    //vmGetWagonTable($scope.CurrentWeightSheet.WeightSheetID);
                 });
             }
             else {
@@ -499,7 +498,7 @@
             }
             // запускаем таймер опроса весового контроллера
             Timer = $interval(function () {
-                //vmGetScaleData();
+                vmGetScaleData();
             }, scalesRefresh);
         })
     }
@@ -677,7 +676,7 @@
             }
             //$scope.WaybillNumbers = weightsheet_object.WaybillNumbers;
             // создаем таблицу
-            vmGetWagonTable($scope.CurrentWeightSheet.WeightSheetID);
+            //vmGetWagonTable($scope.CurrentWeightSheet.WeightSheetID);
         });
         //$scope.ShowWeightSheetNumberModalWindow = true;
     }
@@ -902,6 +901,7 @@
             });
         };
 
+        // взятие веса в зависимости от вида отвесной
         function ins_TakeWeight() {
             switch ($scope.CurrentWeightSheet.WeightingMode['Description']) {
                 case 'Тарирование': {
@@ -920,7 +920,7 @@
             }
         }
 
-
+        // главная функция взятия веса
         function mainTakeWeight() {
             // проверяем существование вагона
             return checkWagonExists(WagonTypeID, WagonNumber).then(function (response) {
@@ -963,13 +963,13 @@
         }
 
         return mainTakeWeight().then(function (resp) {
-            // after creating new Weighting
-            alert('HH');
+            // после взятия веса
+            alert('Вес зарегистрирован');
 
             $scope.CurrentPairNumberTare = null;
             $scope.SelectedObjects.WagonNumber = null;
             $scope.CurrentWeightSheet.CurrentWeighting['WagonNumber'] = null;
-
+            // обновить таблицу
             vmGetWagonTable($scope.CurrentWeightSheet.WeightSheetID);
 
         })
@@ -1013,55 +1013,13 @@
             });
     };
 
-    /*
-    // выбор номера путевой
-    function vmWaybillSelect(waybill) {
-
-        $scope.SelectedObjects.WagonNumber = null;
-        $scope.WagonNumbers = null;
-        $scope.SelectedObjects.CargoType = null;
-        $scope.SelectedObjects.WagonType = null;
-        $scope.CurrentPairNumberTare = null;
-
-        consignersService.GetWaybillObject(waybill['ID'])
-        .then(function (waybill_obj) {
-            //alert('!!');
-            $scope.CurrentWeightSheet.CurrentWeighting['WaybillID'] = waybill['ID'];
-            $scope.CurrentWeightSheet.CurrentWeighting['WaybillNumber'] = waybill['WaybillNumber'];
-
-            if (waybill_obj.CargoType) {
-                $scope.SelectedObjects.CargoType = waybill_obj.CargoType;
-                $scope.CurrentWeightSheet.CurrentWeighting['CargoTypeID'] = waybill_obj.CargoType['ID'];
-            }
-            //if there is array of wagons in waybill
-            if (waybill_obj.WagonNumbers.length > 0) {
-                $scope.WagonNumbers = waybill_obj.WagonNumbers;
-                $scope.SelectedObjects.WagonNumber = $scope.WagonNumbers[0];
-                $scope.CurrentWeightSheet.CurrentWeighting['WagonNumber'] = waybill_obj.WagonNumbers[0]['Description'];
-                $scope.CurrentWeightSheet.CurrentWeighting['WagonID'] = waybill_obj.WagonNumbers[0]['ID'];
-                // get tare
-                vmWagonNumberSelect(waybill_obj.WagonNumbers[0]);
-            }
-            ////if there is only one wagon in waybill
-            //if (waybill_object.WagonNumber) {
-            //    $scope.SelectedObjects.WagonNumber = waybill_object.WagonNumber;
-            //}
-
-            if (waybill_obj.WagonType) {
-                $scope.SelectedObjects.WagonType = waybill_obj.WagonType;
-                vmWagonTypeSelect(waybill_obj.WagonType);
-            }
-
-        })
-    }
-    */
 
 
     // выбор вида вагона
     function vmWagonTypeSelect(wagon_type) {
         if (!wagon_type || !wagon_type['ID']) { return; }
 
-        //get WagonNumberPattern
+        // получение WagonNumberPattern
         consignersService.GetWagonNumberPattern(wagon_type)
         .then(function (pattern) {
             $scope.CurrentWeightSheet.CurrentWeighting.WagonNumberPattern = pattern;
@@ -1094,69 +1052,14 @@
         })
     }
 
-    /*
-    // выбор номера вагона из списка
-    function vmWagonNumberSelect(wagon) {
-        //if (!wagon || !wagon['ID']) { return; }
-        if (!wagon) { return; }
-        // очищаем выбранный вид вагона и тару
-        $scope.SelectedObjects.WagonType = null;
-        $scope.CurrentPairNumberTare = null;
-        // получаем вид вагона и тару для выбранного номера вагона
-        $q.all([indexService.getInfo("v_KP4_PackagingUnitsProperty?$filter=ID eq {0}".format(wagon['PackagingUnitsID'])),
-                indexService.getInfo("PackagingUnits?$filter=ID eq {0}".format(wagon['PackagingUnitsID']))])
-        .then(function (responses) {
-            var TareInfo = responses[0].data.value;
-            $scope.CurrentPairNumberTare = TareInfo.length ? TareInfo[0].Value : null;
-            //alert($scope.CurrentPairNumberTare);
-            var wagon_type_id = responses[1].data.value[0] ? responses[1].data.value[0]['PackagingClassID'] : null;
-            $scope.SelectedObjects.WagonType = $filter('filter')($scope.WagonTypes, { ID: wagon_type_id })[0];
 
-            $scope.isWagonTypeDisabled = true;
-            $scope.isCargoTypeDisabled = true;
-
-        });
-    }
-
-    // ввод номера вагона (в текст. поле - при тарировании) 
-    function vmWagonNumberEnter(wagon) {
-        //alert(wagon);
-        $scope.CurrentPairNumberTare = null;
-        $scope.SelectedObjects.WagonNumber = wagon;
-        $scope.CurrentWeightSheet.CurrentWeighting['WagonNumber'] = wagon;
-        $scope.CurrentWeightSheet.CurrentWeighting['WagonID'] = null;
-
-        if (!wagon) { return; }
-
-        indexService.getInfo("PackagingUnits?$filter=Description eq '{0}'".format(wagon))
-        .then(function (response) {
-            if (response.data.value[0]) {
-                var wagon_id = response.data.value[0]['ID'];
-                $scope.CurrentWeightSheet.CurrentWeighting['WagonID'] = wagon_id;
-                var wagon_type_id = response.data.value[0]['PackagingClassID'];
-                $scope.SelectedObjects.WagonType = $filter('filter')($scope.WagonTypes, { ID: wagon_type_id })[0];
-                vmWagonTypeSelect($scope.SelectedObjects.WagonType);
-                // get tare
-                indexService.getInfo("v_KP4_PackagingUnitsProperty?$filter=ID eq {0}".format(wagon_id))
-                .then(function (resp) {
-                    var TareInfo = resp.data.value;
-                    $scope.CurrentPairNumberTare = TareInfo.length ? TareInfo[0].Value : null;
-                })
-            }
-        })
-
-
-    }
-    */
-
-    /* new test */
     // получение списка номеров пар лафет-короб
     $scope.GetWagonNumbers = function (search) {
         var array = [];
         if ($scope.WagonManualEnterDisabled) {
             array = WBs_Wagons.slice();
         }
-            // if Wagon entered first
+            // если № вагона введен первым
         else if (search) {
             array.unshift(search);
         }
@@ -1165,7 +1068,7 @@
 
     // выбор номера пары лафет-короб
     $scope.SelectWagonNumber = function (selected_wagon_number) {
-        // is WagonNumber is not null
+        // если № вагона не null
         if ($scope.SelectedObjects.WagonNumber) {
             if ($scope.SelectedObjects.WBNumber == null) {
                 $scope.WBManualEnterDisabled = true;
@@ -1176,7 +1079,7 @@
                 return;
             }
 
-            // if Taring
+            // если режим Тарирование или Контроль брутто
             //if ($scope.CurrentWeightSheet.WeightingMode['Description'] == 'Тарирование') {
             if (['Тарирование', 'Контроль брутто'].indexOf($scope.CurrentWeightSheet.WeightingMode['Description']) > -1) {
                 //alert("Тарирование: " + selected_wagon_number);
@@ -1192,14 +1095,11 @@
                         var wagon_type_id = response.data.value[0]['PackagingClassID'];
                         $scope.SelectedObjects.WagonType = $filter('filter')($scope.WagonTypes, { ID: wagon_type_id })[0];
                         vmWagonTypeSelect($scope.SelectedObjects.WagonType);
-                        // get tare
+                        // получить тару
                         vmGetWagonTare(wagon_id);
                     }
                 })
-
-
                 return;
-
             }
 
             $scope.WBShowLoading = true;
@@ -1219,7 +1119,7 @@
                     $scope.WBShowLoading = false;
                 })
         }
-            // is WagonNumber is null
+            // если № вагона = null
         else {
             if ($scope.WBManualEnterDisabled) {
                 $scope.SelectedObjects.WBNumber = null;
@@ -1236,7 +1136,7 @@
         if ($scope.WBManualEnterDisabled) {
             array = WBs_Wagons.slice();
         }
-            // if WB entered first
+            // если № путевой введен первым
         else if (search) {
             array.unshift(search);
         }
@@ -1246,7 +1146,7 @@
     // выбор номера путевой
     $scope.SelectWBNumber = function (selected_wb_number) {
 
-        // is WBNumber is not null
+        // если № путевой не null
         if ($scope.SelectedObjects.WBNumber) {
             if ($scope.SelectedObjects.WagonNumber == null) {
                 $scope.WagonManualEnterDisabled = true;
@@ -1278,7 +1178,7 @@
                     $scope.WagonShowLoading = false;
                 })
         }
-            // is WBNumber is null
+            // если № путевой = null
         else {
             if ($scope.WagonManualEnterDisabled) {
                 $scope.SelectedObjects.WagonNumber = null;
@@ -1347,7 +1247,7 @@
                     $scope.CurrentWeightSheet.CurrentWeighting['WagonNumber'] = wagon['Description'];
                     $scope.CurrentWeightSheet.CurrentWeighting['WagonID'] = wagon['PackagingUnitsID'];
                 }
-                // get tare
+                // получить тару
                 vmGetWagonTare($scope.CurrentWeightSheet.CurrentWeighting['WagonID']);
 
                 //$scope.isWagonTypeDisabled = true;
@@ -1356,7 +1256,7 @@
             })
     }
 
-    // get wagon tare
+    // получение тары вагона
     function vmGetWagonTare(wagon_id) {
         if (!wagon_id) { return; }
         $scope.CurrentPairNumberTare = null;
@@ -1382,7 +1282,6 @@
 
 
 
-    /* new test */
 
 
 
@@ -1391,54 +1290,45 @@
 
 
 
-
-
-    // создать таблицу с данными по отвесной
+    // обновить таблицу с данными по отвесной
     function vmGetWagonTable(weightsheetid) {
-        if ($scope.CurrentWeightSheet && $scope.CurrentWeightSheet.Weighings) {
-            //$scope.WeightSheetForPrint = $scope.CurrentWeightSheet.Weighings;
-        }
-
-        return;
-        /*
         indexService.getInfo("v_WGT_Weightsheet?$filter=WeightsheetID eq {0}".format(weightsheetid))
         .then(function (response) {
             if (response.data.value) {
-                $scope.WeightSheetForPrint = response.data.value;
-                //$scope.$apply();
-                //!!!HERE fill CurrentWeightSheet wagons info
+                if ($scope.CurrentWeightSheet && $scope.CurrentWeightSheet.Weighings) {
+                    $scope.CurrentWeightSheet.Weighings = response.data.value;
+                }
             }
         })
-        */
-
     };
 
-    /*
-    // Print after rendering table (if it has rows)
-    $scope.ReadyToPrint = function () {
-        //alert("Ready to Print!");
 
-        var ws_toprint_html = document.getElementById('WS_toprint');
-        var inner_html = ws_toprint_html.innerHTML;
-        var str = "\n\
-            <!DOCTYPE html>\n\
-            <html>\n\
-            <head>\n\
-                <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">\n\
-                <meta name=\"viewport\" content=\"width=device-width\">\n\
-                <meta http-equiv=\"X-UA-Compatible\" content=\"IE=9\">\n\
-                <title>Отвесная № {0}</title>\n\
-            </head>\n\
-            <body>\n\
-            ".format($scope.CurrentWeightSheet.WeightSheetNumber);
-        inner_html = str + inner_html + "</body></html>"
-
-        // Открыть документ в новом окне (или послать inner_html в сервис печати)
-        window.open().document.write(inner_html);
-        // After printing remove WS_toprint ui-view
-        $scope.CreateWSToPrint = false;
+    // забраковать взвешивание
+    function vmRejectWeighing(weighing_id, wagon_number) {
+        var confirm_string = "Are you sure to reject weighing for wagon #{0}?".format(wagon_number);
+        // если подтвердили забраковку
+        if (confirm(confirm_string)) {
+            indexService.sendInfo("upd_WeightingOperations", {
+                WeightingOperationsID: weighing_id,
+                Status: 'reject'
+            }).then(function (response) {
+                //var message = $translate.instant('consigners.Messages.rejectSuccess').format($scope.CurrentWaybill.WaybillNumber);
+                var message = "Weighing for wagon #{0} rejected succesfully.".format(wagon_number);
+                vmGetWagonTable($scope.CurrentWeightSheet.WeightSheetID);
+                alert(message);
+            })
+        }
     }
-    */
+
+
+    //
+    $scope.TransferWeighing = function (weighing_id) {
+        alert(weighing_id);
+    }
+
+
+
+
 
     // при выходе из контроллера останавливаем таймер
     $scope.$on('$destroy', function () {
@@ -1450,16 +1340,17 @@
 }])
 
 
-
+// контроллер печати отвесной
 .controller('WeightAnalyticsWSPrintCtrl', ['$scope', '$translate', 'indexService', 'weightanalyticsService', '$state', '$stateParams', '$interval', function ($scope, $translate, indexService, weightanalyticsService, $state, $stateParams, $interval) {
 
     $scope.toprint = true;
-    //if ($scope.WeightSheetForPrint) {
-    //    $scope.WeightSheetForPrint.Totals = null;
-    //}
+    $scope.ReadyToPrint = vmReadyToPrint;
+
+    // если Weighings заполнена (т.е. вызываем печать из открытой отвесной)
     if ($scope.CurrentWeightSheet.Weighings.length) {
         $scope.CurrentWeightSheet.Weighings.Totals = null;
     }
+        // если Weighings не заполнена (т.е. вызываем печать из дерева отвесных)
     else {
         weightanalyticsService.GetWSInfo($scope.SelectedObjects.weightsheet_id).then(function (weightsheet_object) {
             var ttt = weightsheet_object;
@@ -1468,19 +1359,14 @@
                 //$scope.WeightSheetForPrint = weightsheet_object.Weighings;
                 //$scope.WeightSheetForPrint.Totals = null;
                 $scope.CurrentWeightSheet.Weighings.Totals = null;
-                $scope.Check();
+                vmCheckWSToPrint();
             }
 
         })
     }
 
-    $scope.Check = function () {
-        //var pppp = $scope;
-        //if ($scope.WeightSheetForPrint && !$scope.WeightSheetForPrint.length) {
-        //    if ($scope.$parent.$parent.CreateWSToPrint) {
-        //        $scope.$parent.$parent.CreateWSToPrint = false;
-        //    }
-        //}
+    // проверка отвесной на заполнение (если да - то скрываем в HTML)
+    function vmCheckWSToPrint() {
         if (!$scope.CurrentWeightSheet.Weighings.length) {
             alert("There is no wagon in Weightsheet!");
             if ($scope.$parent.$parent.CreateWSToPrint) {
@@ -1495,8 +1381,8 @@
         }
     }
 
-    // Print after rendering table
-    $scope.ReadyToPrint = function () {
+    // Печать после отрисовки таблицы!
+    function vmReadyToPrint() {
         //alert("Ready to Print!");
 
         var ws_toprint_html = document.getElementById('WS_toprint');
@@ -1516,7 +1402,7 @@
 
         // Открыть документ в новом окне (или послать inner_html в сервис печати)
         window.open().document.write(inner_html);
-        // After printing remove WS_toprint ui-view
+        // После печати удаляем WS_toprint ui-view
         $scope.$parent.$parent.CreateWSToPrint = false;
     }
 

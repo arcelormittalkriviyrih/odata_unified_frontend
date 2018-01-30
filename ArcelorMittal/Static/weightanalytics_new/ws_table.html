@@ -87,8 +87,7 @@
             </tr>
         </table>
     </div>
-    <table class="table table-bordered" ng-class="{'TT' : toprint}"
-        ng-init="Check_()">
+    <table class="table table-bordered" ng-class="{'TT' : toprint}">
         <thead>
             <tr>
                 <th style="width: 4%">№</th>
@@ -115,7 +114,16 @@
                 <td>{{WS.Brutto ? WS.Brutto : '-'}}</td>
                 <td>{{WS.Tara ? WS.Tara : '-'}}</td>
                 <td ng-init="CurrentWeightSheet.Weighings.Totals.Netto = CurrentWeightSheet.Weighings.Totals.Netto +(WS.Status == 'reject' ? 0 : WS.Netto)">{{WS.Netto ? (WS.Netto | number:2) : '-'}}</td>
-                <td></td>
+                <td style="padding: 2px; vertical-align: middle;">
+                    <div ng-if="!toprint && CurrentWeightSheet.Status == 'active' && WS.Status != 'reject'">
+                        <div style="width: 45%; text-align: center; display: inline-block;">
+                            <input title="transfer" class="transfer-button" type="button" ng-click="TransferWeighing(WS.ID)">
+                        </div>
+                        <div style="width: 45%; text-align: center; display: inline-block;">
+                            <input title="reject" class="reject-button" type="button" ng-click="RejectWeighing(WS.ID, WS.WagonNumber)">
+                        </div>
+                    </div>
+                </td>
             </tr>
             <tr ng-if="!CurrentWeightSheet.Weighings.Totals.Count">
                 <td style="text-align: center; color: gray;" colspan="9">{{ 'weightanalytics.Labels.noWeighings' | translate }}</td>
