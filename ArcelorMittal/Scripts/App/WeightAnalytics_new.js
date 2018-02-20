@@ -1485,7 +1485,7 @@
     $scope.ReadyToPrint = vmReadyToPrint;
 
     // если Weighings заполнена (т.е. вызываем печать из открытой отвесной)
-    if ($scope.CurrentWeightSheet.Weighings.length) {
+    if ($scope.CurrentWeightSheet.Weighings && $scope.CurrentWeightSheet.Weighings.length) {
         $scope.CurrentWeightSheet.Weighings.Totals = null;
     }
         // если Weighings не заполнена (т.е. вызываем печать из дерева отвесных)
