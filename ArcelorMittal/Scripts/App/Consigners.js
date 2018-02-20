@@ -226,6 +226,7 @@ angular.module('indexApp')
         if (node[0]) {
             node = node[0].id;
             WaybillList.jstree('select_node', node, false);
+            WaybillList.jstree(true).get_node(node, true).children('.jstree-anchor').focus();
             WaybillList.jstree('open_node', node);
         }
     });
@@ -1306,31 +1307,31 @@ angular.module('indexApp')
     this.GetWaybillObject = function (waybill_id) {
 
         /* !!! get full waybill info here */
-        return $q.all([indexService.getInfo('Documentations?$filter=ID eq {0}'.format(waybill_id)),
-                        indexService.getInfo("DocumentationsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
+        return $q.all([ //indexService.getInfo('Documentations?$filter=ID eq {0}'.format(waybill_id)),
+                        //indexService.getInfo("DocumentationsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
                         indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
-                        indexService.getInfo("v_WGT_WaybillProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id))])
+                        indexService.getInfo("v_WGT_DocumentsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id))])
                 .then(function (responses) {
-                    var resp_1 = responses[0].data.value;
-                    var resp_2 = responses[1].data.value;
-                    var resp_3 = responses[2].data.value;
-                    var resp_4 = responses[3].data.value;
+                    var resp_3 = responses[0].data.value;
+                    var resp_4 = responses[1].data.value;
+                    //var resp_4 = responses[2].data.value;
+                    //var resp_4 = responses[3].data.value;
 
                     var waybill_object = {};
 
-                    for (i = 0; i < resp_1.length; i++) {
-                        //var start_time = resp_1[i]['StartTime'];
-                        var start_time = new Date(resp_1[i]['StartTime']);
-                        start_time.setMinutes(start_time.getMinutes() + start_time.getTimezoneOffset());
-                        waybill_object.CreateDT = start_time;
+                    //for (i = 0; i < resp_1.length; i++) {
+                    //    //var start_time = resp_1[i]['StartTime'];
+                    //    var start_time = new Date(resp_1[i]['StartTime']);
+                    //    start_time.setMinutes(start_time.getMinutes() + start_time.getTimezoneOffset());
+                    //    //waybill_object.CreateDT = start_time;
 
-                        if (resp_1[i]['EndTime'] != resp_1[i]['StartTime']) {
-                            var end_time = new Date(resp_1[i]['EndTime']);
-                            end_time.setMinutes(end_time.getMinutes() + end_time.getTimezoneOffset());
-                            waybill_object.EditDT = end_time;
-                        }
-                        waybill_object.Status = resp_1[i]['Status'];
-                    }
+                    //    if (resp_1[i]['EndTime'] != resp_1[i]['StartTime']) {
+                    //        var end_time = new Date(resp_1[i]['EndTime']);
+                    //        end_time.setMinutes(end_time.getMinutes() + end_time.getTimezoneOffset());
+                    //        //waybill_object.EditDT = end_time;
+                    //    }
+                    //    //waybill_object.Status = resp_1[i]['Status'];
+                    //}
                     for (i = 0; i < resp_3.length; i++) {
                         if (resp_3[i]['Status'] == 'reject') continue;
                         //if there is only one wagon in waybill
@@ -1367,9 +1368,21 @@ angular.module('indexApp')
                             //alert(query);
                         }
                         else {
-                            waybill_object[prop['Description2']] = prop['Value2'];
+                            switch (prop['Description2']) {
+                                case "StartTime": {
+                                    waybill_object.CreateDT = prop['Value2'] || null;
+                                    break;
+                                }
+                                case "EndTime": {
+                                    waybill_object.EditDT = prop['Value2'] || null;
+                                    break;
+                                }
+                                default: {
+                                    waybill_object[prop['Description2']] = prop['Value2'];
+                                }
+                            }
+                            //waybill_object[prop['Description2']] = prop['Value2'];
                         }
-
                     }
                     //alert(actual_prop_queries_array.length);
                     return $q.all(actual_prop_queries_array.map(function (item) { return indexService.getInfo(item['query']) }))

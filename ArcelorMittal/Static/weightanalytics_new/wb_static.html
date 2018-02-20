@@ -14,7 +14,7 @@
 
             <!-- Subpanel with Archive WS List -->
             <div ng-show="!ShowWeightSheetNumberModalWindow && !CurrentWeightSheet.WeightSheetID">
-                <!--<div>-->
+
                 <ui-select
                     ng-model="SelectedObjects.WeightingMode"
                     on-select="WSTypeSelect($item)"
@@ -25,10 +25,9 @@
                     title="{{ 'weightanalytics.Placeholders.createWS' | translate }}">
                         <ui-select-match placeholder="{{ 'weightanalytics.Placeholders.createWS' | translate }}">{{$select.selected.Description}}</ui-select-match>
                         <ui-select-choices repeat="WSType in WSTypes" position='down'>
-                        <div ng-bind-html="WSType.Description | highlight: $select.search"></div>
+                        <div title="{{WSType.Tooltip}}" ng-bind-html="WSType.Description | highlight: $select.search"></div>
                         </ui-select-choices>
-            </ui-select>
-
+                </ui-select>
 
 
                 <div style="margin-top: 5px; padding-left: 5px">
@@ -36,6 +35,7 @@
                 </div>
                 <div id="weightsheet_tree" style="height: 225px; background-color: white; overflow: auto"></div>
 
+                <!-- Buttons table -->
                 <table style="width: 100%; text-align: center; margin-top: 3px">
                     <tr>
                         <td>
@@ -81,14 +81,23 @@
                             </td>
                         </tr>
                         <tr>
+                            <td colspan="2">
+                                <input type="checkbox"
+                                    ng-model="SelectedObjects.CreateWSAtFirstWeighing"
+                                    ng-init="SelectedObjects.CreateWSAtFirstWeighing = true"
+                                    ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode">
+                                Take Sender and Receiver from the first Waybill
+                            </td>
+                        </tr>
+                        <tr ng-disabled="SelectedObjects.CreateWSAtFirstWeighing">
                             <td>{{ 'weightanalytics.Labels.sender' | translate }}
                             </td>
                             <td>
                                 <ui-select
                                     ng-model="SelectedObjects.SenderShop"
                                     on-select=""
-                                    ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode"
-                                    ng-required="!(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1)"
+                                    ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode || SelectedObjects.CreateWSAtFirstWeighing"
+                                    ng-required="!(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) && !SelectedObjects.CreateWSAtFirstWeighing"
                                     class=""
                                     style=""
                                     theme="bootstrap"
@@ -100,15 +109,15 @@
                     </ui-select>
                             </td>
                         </tr>
-                        <tr>
+                        <tr ng-disabled="SelectedObjects.CreateWSAtFirstWeighing">
                             <td>{{ 'weightanalytics.Labels.receiver' | translate }}
                             </td>
                             <td>
                                 <ui-select
                                     ng-model="SelectedObjects.ReceiverShop"
                                     on-select=""
-                                    ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode"
-                                    ng-required="!(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1)"
+                                    ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode || SelectedObjects.CreateWSAtFirstWeighing"
+                                    ng-required="!(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) && !SelectedObjects.CreateWSAtFirstWeighing"
                                     class=""
                                     style=""
                                     theme="bootstrap"
@@ -133,8 +142,8 @@
                                 <button type="button"
                                     class="btn btn-default"
                                     style="width: 49%"
-                                    ng-disabled="WS_create.$invalid"
-                                    ng-click="CreateWS()">
+                                    ng-disabled="WS_create.$invalid || !SelectedObjects.WeightSheetNumber"
+                                    ng-click="CreateWS(SelectedObjects.CreateWSAtFirstWeighing)">
                                     {{ 'weightanalytics.Buttons.create' | translate }}
                                 </button>
                             </td>
@@ -231,7 +240,7 @@
                 </div>
 
                 <div style="text-align: center">
-                    <div class="plotWA"
+                    <div class="plotWA_del" style="height: 145px; margin: 0px;"
                         id="plot-1000">
                     </div>
                     <table style="margin-top: -25px; width: 100%;">
@@ -257,6 +266,16 @@
 
 
             <table style="width: 100%">
+                <tr>
+                    <td></td>
+                    <td style="text-align: center">
+                        <span ng-repeat="pl in PlatformsArray"
+                            class="platf"
+                            style="display: inline-block; white-space: nowrap; font-size: smaller;"
+                            ng-style="{ width: {{96/PlatformsArray.length}} + '%' }">{{(CurrentMeasuring.PlatformWeights[pl.name] | number:2) || '--- '}} {{ 'weightanalytics.ton' | translate }}
+                        </span>
+                    </td>
+                </tr>
                 <tr>
                     <td style="width: 50%; height: 34px">{{ 'weightanalytics.Labels.activePlatforms' | translate }}:
                     </td>
@@ -316,7 +335,7 @@
                                 theme="bootstrap"
                                 title="{{ 'weightanalytics.Placeholders.enterWagonNumber' | translate }}">
                                 <ui-select-match 
-                                    placeholder="{{ 'weightanalytics.Placeholders.enterWagonNumber' | translate }}" 
+                                    placeholder="{{ 'weightanalytics.Placeholders.enterWagonNumber' | translate }}"
                                     allow-clear="true">
                                     {{WagonManualEnterDisabled ? $select.selected.WagonNumber : $select.selected}}
                                 </ui-select-match>
@@ -330,33 +349,6 @@
                             <div ng-if="WagonShowLoading" class="loading-gif" style="width: 200px"></div>
                         </div>
 
-                        <!--                        <ui-select
-                            ng-model="SelectedObjects.WagonNumber"
-                            on-select="WagonNumberSelect($item)"
-                            ng-if="!(CurrentWeightSheet.WeightingMode.Description == 'Тарирование')"
-                            ng-required="true"
-                            ng-disabled="!CurrentWeightSheet.WeightSheetID || CurrentWeightSheet.Status == 'reject'"
-                            class=""
-                            style=""
-                            theme="bootstrap"
-                            title="Enter a Wagon number">
-                        <ui-select-match placeholder="Enter a Wagon number">{{$select.selected.Description}}</ui-select-match>
-                        <ui-select-choices repeat="wagonnumber in WagonNumbers" position='down'>
-                        <div ng-bind-html="wagonnumber.Description | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>
-
-                        <input type="text" class="form-control selectConsigners"
-                            ng-model="SelectedObjects.WagonNumber"
-                            ng-model-options="{updateOn : 'default blur', debounce: { 'default': 1000, 'blur': 0 }}"
-                            update-on-enter
-                            ng-change="WagonNumberEnter(SelectedObjects.WagonNumber)"
-                            ng-if="(CurrentWeightSheet.WeightingMode.Description == 'Тарирование')"
-                            placeholder="{{ 'consigners.Placeholders.enterWagonNumber' | translate }}"
-                            title="{{ 'consigners.Placeholders.enterWagonNumber' | translate }}"
-                            ng-required="true"
-                            ng-disabled="!CurrentWeightSheet.WeightSheetID || CurrentWeightSheet.Status == 'reject' || CurrentWeightSheet.Status == 'closed'"
-                            ng-pattern="CurrentWeightSheet.CurrentWeighting.WagonNumberPattern" />-->
                     </td>
                 </tr>
                 <tr>
@@ -381,7 +373,7 @@
                                         </div>
                                     </ui-select-choices>
                             </ui-select>
-                            <button
+                            <button id="wb_preview_btn"
                                 ng-if="SelectedObjects.WBNumber && SelectedObjects.WagonNumber"
                                 data-toggle="modal" data-target="#WaybillModal"
                                 class="btn btn-link jstree-default"
@@ -485,7 +477,7 @@
                         <button type="button"
                             class="btn btn-default"
                             style="width: 49%"
-                            ng-disabled="WeightData.$invalid || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1) || CurrentMeasuring.Weight <= 0 || CurrentMeasuring.Fault"
+                            ng-disabled="!CurrentWeightSheet.WeightSheetID || TakeWeightBtnDisabled || (true && (WeightData.$invalid || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1) || CurrentMeasuring.Weight <= 0 || CurrentMeasuring.Fault || !CurrentMeasuring.WeightStab))"
                             ng-click="TakeWeight()">
                             {{ 'weightanalytics.Buttons.takeWeight' | translate }}
                         </button>
@@ -498,19 +490,19 @@
 
 
 
-    <div 
+    <div
         ui-view="WS_table"
         ng-show="CurrentWeightSheet.WeightSheetID"
         style="margin-top: 5px">
     </div>
 
-    <div 
-        id="WS_toprint"        
+    <div
+        id="WS_toprint"
         ui-view="WS_toprint"
         ng-if="CreateWSToPrint"
-        ng-show="false">        
+        ng-show="false">
     </div>
-    
+
 
 </div>
 
@@ -535,10 +527,8 @@
     </div>
 </div>
 
-
 <!--<button ng-click="tttt = !tttt">!</button>
 <br />
-
 
 
 <div ng-init="tttt = false"
@@ -561,7 +551,10 @@
     <br />
     <br />
     WeightData.$invalid: {{WeightData.$invalid}}
-
+    <br />
+    WeightData.yyy: {{WeightData.yyy}}
+    <br />
+    WeightData.yyy.$error: {{WeightData.yyy.$error}}
 </div>-->
 
 

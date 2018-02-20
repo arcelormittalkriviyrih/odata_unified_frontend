@@ -268,8 +268,8 @@ div.controlWeightanalytics {
     }
 
 .plotWA {
-    height: 145px;
-    margin: 0px;
+    height: 145px!important;
+    margin: 0px!important;
 }
 
 /*status WB circle*/
@@ -616,4 +616,8 @@ input.ng-touched.ng-invalid {
     .modal-lg {
         width: 900px;
     }
+}
+
+div.open + #wb_preview_btn {
+    display: none;
 }
