@@ -208,6 +208,7 @@
     <Content Include="Scripts\Diagram\diagramExt.js" />
     <Content Include="Scripts\Diagram\index.js" />
     <Content Include="Scripts\Vendor\joint.min.js" />
+    <Content Include="Scripts\Vendor\jquery.qrcode.min.js" />
     <Content Include="Scripts\Vendor\jstree.search.js" />
     <Content Include="Scripts\Vendor\lodash.js" />
     <Content Include="Scripts\Vendor\dhtmlxscheduler.js" />

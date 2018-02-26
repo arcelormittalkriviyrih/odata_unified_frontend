@@ -58,7 +58,9 @@
 
         <table ng-class="{'WBrow' : toprint}" style="width: 100%">
             <tr>
-                <td rowspan="5" style="width: 20%"></td>
+                <td rowspan="5" style="width: 20%">
+                    <div id="WS_QR"></div>
+                </td>
                 <td style="width: 15%">{{ 'weightanalytics.Labels.weightbridge' | translate }}</td>
                 <td style="font-weight: bold; width: 40%">{{CurrentWeightSheet.WeightBridge}}</td>
                 <td rowspan="5" style="text-align: center;">М.П.</td>
@@ -110,7 +112,7 @@
                 <td>{{WS.WagonNumber}}</td>
                 <td>{{WS.WaybillNumber}}</td>
                 <td>{{WS.Carrying}}</td>
-                <td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: left;">{{WS.CargoTypeID}} {{WS.CargoTypeID ? '.': '-'}} {{WS.CargoType}}</td>
+                <td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: left;">{{WS.CargoTypeID}}{{WS.CargoTypeID ? '.': '-'}} {{WS.CargoType}}</td>
                 <td>{{WS.Brutto ? WS.Brutto : '-'}}</td>
                 <td>{{WS.Tara ? WS.Tara : '-'}}</td>
                 <td ng-init="CurrentWeightSheet.Weighings.Totals.Netto = CurrentWeightSheet.Weighings.Totals.Netto +(WS.Status == 'reject' ? 0 : WS.Netto)">{{WS.Netto ? (WS.Netto | number:2) : '-'}}</td>
@@ -141,12 +143,3 @@
         </tbody>
     </table>
 
-    <!--</div>
-WeightSheetForPrint: 
-<br />
-{{WeightSheetForPrint}}
-<br />
-<br />
-CurrentWeightSheet:
-<br />
-{{CurrentWeightSheet}}-->

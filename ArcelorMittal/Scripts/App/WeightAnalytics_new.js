@@ -293,7 +293,7 @@
     var WBs_Wagons = [];
     $scope.WagonManualEnterDisabled = false;
     $scope.WBManualEnterDisabled = false;
-    
+
     $scope.SelectedObjects = {
         weightsheet_id: ws_id,
         Status: null,
@@ -361,13 +361,7 @@
     $scope.TakeWeight = vmTakeWeight;
     $scope.RejectWeighing = vmRejectWeighing;
 
-    $scope.wb_id = wb_id;
-    $scope.ws_id = ws_id;
-
-
-
     var WeightSheetTree = $('#weightsheet_tree').jstree('destroy');
-
     vmCreatePlot();
     vmCreateWSTree();
     vmGetConsignersServiceArrays();
@@ -391,7 +385,7 @@
     // загрузка данных в дерево отвесных
     function vmLoadWSTree(data) {
         WeightSheetTree.jstree(true).settings.core.data = data;
-        WeightSheetTree.jstree(true).refresh();
+        WeightSheetTree.jstree(true).refresh(true, true);
     };
 
     // создание стрелочного индикатора
@@ -543,7 +537,7 @@
 
 
     // загрузка дерева отвесных
-    WeightSheetTree.on('model.jstree', function (e, data) {
+    WeightSheetTree.on('redraw.jstree', function (e, data) {
         // при загрузке данных убираем выделение эл-тов и сворачиваем дерево
         WeightSheetTree.jstree('close_all');
         WeightSheetTree.jstree('deselect_all', true);
@@ -558,10 +552,10 @@
             }
         });
         if (node[0]) {
-            node = node[0].id;
-            WeightSheetTree.jstree('select_node', node, false);
-            WeightSheetTree.jstree('open_node', node);
-            WeightSheetTree.jstree(true).get_node(node, true).children('.jstree-anchor').focus();
+            var node_id = node[0].id;
+            WeightSheetTree.jstree('select_node', node_id, false);
+            WeightSheetTree.jstree(true).get_node(node_id, true).children('.jstree-anchor').focus();
+            WeightSheetTree.jstree('open_node', node_id);
         }
     });
 
@@ -584,7 +578,7 @@
     WeightSheetTree.bind("dblclick.jstree", function (event) {
         var tree = $(this).jstree();
         var node = tree.get_node(event.target);
-        if (node.original.DocumentationsID) {
+        if (node.original && node.original.DocumentationsID) {
             $scope.SelectedObjects.weightsheet_id = node.original.DocumentationsID;
             vmOpenWS($scope.SelectedObjects.weightsheet_id);
         }
@@ -601,7 +595,8 @@
     // нажатие кнопки "Открыть отвесную"
     function vmOpenWS(id) {
         //alert(id);
-        $scope.ws_id = id;
+        //$scope.ws_id = id;
+        ws_id = id;
         //$scope.$applyAsync();
         $state.go('app.WeightAnalytics.WBStatic', { wb_id: wb_id, ws_id: id }, { notify: false })
         ///* !!! get full WS info here */
@@ -1479,7 +1474,7 @@
 
 
 // контроллер печати отвесной
-.controller('WeightAnalyticsWSPrintCtrl', ['$scope', '$translate', 'indexService', 'weightanalyticsService', '$state', '$stateParams', '$interval', function ($scope, $translate, indexService, weightanalyticsService, $state, $stateParams, $interval) {
+.controller('WeightAnalyticsWSPrintCtrl', ['$scope', 'weightanalyticsService', '$state', function ($scope, weightanalyticsService, $state) {
 
     $scope.toprint = true;
     $scope.ReadyToPrint = vmReadyToPrint;
@@ -1522,9 +1517,12 @@
     // Печать после отрисовки таблицы!
     function vmReadyToPrint() {
         //alert("Ready to Print!");
-
+        // add QRcode
+        QRgen();
         var ws_toprint_html = document.getElementById('WS_toprint');
         var inner_html = ws_toprint_html.innerHTML;
+        var autoprint = "";
+        autoprint = "\n\<script type=\"text/javascript\">\n\ window.print(); \n\ </script>\n";
         var str = "\n\
             <!DOCTYPE html>\n\
             <html>\n\
@@ -1535,8 +1533,8 @@
                 <title>Отвесная № {0}</title>\n\
             </head>\n\
             <body>\n\
-            ".format($scope.CurrentWeightSheet.WeightSheetNumber);
-        inner_html = str + inner_html + "</body></html>"
+        ".format($scope.CurrentWeightSheet.WeightSheetNumber);
+        inner_html = str + inner_html + "</body>" + autoprint + "</html>"
 
         // Открыть документ в новом окне (или послать inner_html в сервис печати)
         window.open().document.write(inner_html);
@@ -1544,12 +1542,31 @@
         $scope.$parent.$parent.CreateWSToPrint = false;
     }
 
+    // QR code generator
+    function QRgen() {
+        // Returns full URL
+        var url = $state.href($state.current.name, { wb_id: $scope.CurrentWeightSheet['WeightBridgeID'], ws_id: $scope.CurrentWeightSheet['WeightSheetID'] }, { absolute: true })
+        // create QR as canvas (larger dimentions for better quality)
+        var qr = $('#WS_QR').qrcode({
+            //render: "table",
+            width: "300",
+            height: "300",
+            text: url
+        });
+        var canvas = angular.element("#WS_QR > canvas");
+        if (canvas && canvas[0]) {
+            // convert canvas to PNG
+            var qr_img = canvas[0].toDataURL("image/png");
+            $("#WS_QR").replaceWith('<img style="width:120px; height:120px;" src="' + qr_img + '"/>');
+        }
+    }
+
 }])
 
 
 
 
-.controller('WaybillPreviewCtrl', ['$scope', '$translate', 'indexService', 'consignersService', '$state', '$stateParams', '$interval', function ($scope, $translate, indexService, consignersService, $state, $stateParams, $interval) {
+.controller('WaybillPreviewCtrl', ['$scope', 'consignersService', function ($scope, consignersService) {
 
     $scope.CurrentWaybill = {};
     var waybill_id = $scope.waybill_id;
