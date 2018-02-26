@@ -203,7 +203,7 @@
     <Content Include="Scripts\App\Consigners.js" />
     <Content Include="Scripts\App\gasCollection.js" />
     <Content Include="Scripts\App\Resources.js" />
-    <Content Include="Scripts\App\WeightAnalytics_new.js" />
+    <Content Include="Scripts\App\WeightAnalytics.js" />
     <Content Include="Scripts\Vendor\backbone.js" />
     <Content Include="Scripts\Diagram\diagramExt.js" />
     <Content Include="Scripts\Diagram\index.js" />
@@ -223,7 +223,7 @@
     <Content Include="Scripts\App\Market.js" />
     <Content Include="Scripts\App\PA.js" />
     <Content Include="Scripts\App\WorkshopSpecs.js" />
-    <Content Include="Scripts\App\WeightAnalytics.js" />
+    <Content Include="Scripts\App\WeightAnalytics_old.js" />
     <Content Include="Scripts\Shared\common.js" />
     <Content Include="Scripts\Shared\util.js" />
     <Content Include="Scripts\Table\index.js" />
@@ -315,18 +315,18 @@
     <Content Include="Static\pa\physicalasset.html" />
     <Content Include="Static\pa\version.html" />
     <Content Include="Static\pa\sapcommunication.html" />
-    <Content Include="Static\weightanalytics\index.html" />
-    <Content Include="Static\weightanalytics\link1.html" />
+    <Content Include="Static\weightanalytics_old\index.html" />
+    <Content Include="Static\weightanalytics_old\link1.html" />
     <Content Include="Static\root.html" />
     <Content Include="Static\templates\dropdown.html" />
-    <Content Include="Static\weightanalytics\toprint.html">
+    <Content Include="Static\weightanalytics_old\toprint.html">
       <BrowseToURL>~/odata_unified_frontend/Static/weightanalytics/toprint.html</BrowseToURL>
     </Content>
-    <Content Include="Static\weightanalytics_new\index.html" />
-    <Content Include="Static\weightanalytics_new\wb_static.html" />
-    <Content Include="Static\weightanalytics_new\main.html" />
-    <Content Include="Static\weightanalytics_new\wb_dynamic.html" />
-    <Content Include="Static\weightanalytics_new\ws_table.html" />
+    <Content Include="Static\weightanalytics\index.html" />
+    <Content Include="Static\weightanalytics\wb_static.html" />
+    <Content Include="Static\weightanalytics\main.html" />
+    <Content Include="Static\weightanalytics\wb_dynamic.html" />
+    <Content Include="Static\weightanalytics\ws_table.html" />
     <Content Include="Static\workshopspecs.html" />
     <Content Include="Static\index.html" />
     <Content Include="Static\welcome.html" />

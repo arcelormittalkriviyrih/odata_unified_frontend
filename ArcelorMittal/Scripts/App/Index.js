@@ -191,9 +191,9 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
 
 			.state('app.WeightAnalytics', {
 			    //abstract: true,
-			    url: '/weightanalytics_new',
-			    templateUrl: 'Static/weightanalytics_new/index.html',
-			    controller: 'WeightAnalyticsNewCtrl',
+			    url: '/weightanalytics',
+			    templateUrl: 'Static/weightanalytics/index.html',
+			    controller: 'WeightAnalyticsCtrl',
 			    onEnter: function ($state, roles) {
 
 			        if (!vmIsAuthorized('WeightAnalytics', roles))
