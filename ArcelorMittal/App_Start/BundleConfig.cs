@@ -42,7 +42,6 @@ public class BundleConfig
             "~/scripts/app/pa.js",
             "~/scripts/app/workshopspecs.js",
             "~/scripts/app/weightanalytics.js",
-            "~/scripts/app/weightanalytics_new.js",
             "~/scripts/app/consigners.js",
             "~/scripts/app/gasCollection.js",
             "~/scripts/app/automationlab.js",
@@ -58,7 +57,6 @@ public class BundleConfig
             "~/content/table/jsgrid-theme.css",
             "~/content/shared/datetimepicker.css",
             "~/content/shared/layout.css",
-            //"~/content/shared/layoutWA.css",
             "~/content/chart/jquery.jqplot.css",
             "~/content/shared/select.css"
         ));
