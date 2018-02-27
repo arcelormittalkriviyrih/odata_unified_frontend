@@ -89,7 +89,7 @@
 
     // получение списка доступных весов
     function vmGetAvalWeighbridges() {
-        $q.all([indexService.getInfo('v_AvailableWeighbridges')])
+        $q.all([indexService.getInfo("v_AvailableWeighbridges?$orderby=Description")])
         .then(function (responses) {
             //AvalWeighbridges - коллекция доступных весов
             $scope.AvalWeighbridges = responses[0].data.value;
@@ -359,6 +359,7 @@
     $scope.GetWagonNumbers = vmGetWagonNumbers;
     $scope.SelectWagonNumber = vmSelectWagonNumber;
     $scope.TakeWeight = vmTakeWeight;
+    $scope.UpdateTare = vmUpdateTare;
     $scope.RejectWeighing = vmRejectWeighing;
 
     var WeightSheetTree = $('#weightsheet_tree').jstree('destroy');
@@ -393,14 +394,14 @@
         var seriesDefaults = {
             renderer: $.jqplot.MeterGaugeRenderer,
             min: 0,
-            max: 100,
+            max: 150,
             rendererOptions: {
                 ringWidth: 4,
                 shadowDepth: 0,
                 intervalOuterRadius: 85,
                 intervalInnerRadius: 75,
                 hubRadius: 6,
-                intervals: [40, 90, 100],
+                intervals: [30, 120, 150],
                 intervalColors: ['#E7E658', '#66cc66', '#cc6666']
             }
         };
@@ -1094,6 +1095,22 @@
 
     }
 
+
+    // нажатие кнопки "Обновить тару в отвесной"
+    function vmUpdateTare() {
+        //alert("UpdateTare");
+        var WeightSheetID = $scope.CurrentWeightSheet.WeightSheetID;
+        indexService.sendInfo('ins_TakeWeightUnloadingTare', {
+            WeightsheetID: WeightSheetID
+        }).then(function (response) {
+            vmGetWagonTable(WeightSheetID);
+            alert("Tare updated successfully");
+        })
+
+
+
+    }
+
     // получение онлайн показаний весов
     function vmGetScaleData() {
         var pathScalesDetail = "v_AvailableWeighbridgesInfo?$filter=EquipmentID eq {0}".format(wb_id);
@@ -1425,7 +1442,7 @@
 
     // обновить таблицу с данными по отвесной
     function vmGetWagonTable(weightsheetid) {
-        indexService.getInfo("v_WGT_Weightsheet?$filter=WeightsheetID eq {0}".format(weightsheetid))
+        indexService.getInfo("v_WGT_Weightsheet?$filter=WeightsheetID eq {0} &$orderby=WaybillNumber,ID".format(weightsheetid))
         .then(function (response) {
             if (response.data.value) {
                 if ($scope.CurrentWeightSheet && $scope.CurrentWeightSheet.Weighings) {
@@ -1454,7 +1471,7 @@
     }
 
 
-    //
+    // перенести взвешивание в другую отвесную
     $scope.TransferWeighing = function (weighing_id) {
         alert(weighing_id);
     }

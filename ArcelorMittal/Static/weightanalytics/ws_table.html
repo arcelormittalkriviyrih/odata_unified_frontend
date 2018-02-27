@@ -138,8 +138,16 @@
                     colspan="4">{{ 'weightanalytics.Labels.summaryNetto' | translate }}</td>
                 <td ng-if="!(['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) > -1)"
                     style="border: 2px solid black">{{CurrentWeightSheet.Weighings.Totals.Netto | number:2}}</td>
-                <td style="border: 1px solid white" colspan="1"></td>
+                <td style="border: 1px solid white;vertical-align: middle;text-align: center;padding: 1px;" colspan="1">
+                    <button type="button"
+                        class="btn btn-default"
+                        style="font-size:inherit;"
+                        ng-if="!toprint && CurrentWeightSheet.Status == 'active' && CurrentWeightSheet.WeightingMode.Description == 'Разгрузка'"
+                        ng-disabled=""
+                        ng-click="UpdateTare()">
+                        Update Tare
+                    </button>
+                </td>
             </tr>
         </tbody>
     </table>
-
