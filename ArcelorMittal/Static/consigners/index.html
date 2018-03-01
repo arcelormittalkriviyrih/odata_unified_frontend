@@ -20,32 +20,6 @@
 
     <div class="row" style="background-color: #eeeeee; padding: 10px">
         <div class="col-md-5" style="border-right: 1px solid #d4d4d4">
-            <!--.col-md-4-->
-            <div class="controlsRowConsigners" style="width: 100%; text-align: center; display:none">
-                <button type="button"
-                    class="btn btn-default"
-                    style="width: 26%"
-                    ng-disabled="false"
-                    ng-click="Create()">
-                    Create
-                </button>
-
-                <button type="button"
-                    class="btn btn-default"
-                    style="width: 44%"
-                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected"
-                    ng-click="CreateCopy()">
-                    Create as a copy
-                </button>
-
-                <button type="button"
-                    class="btn btn-default"
-                    style="width: 26%"
-                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')"
-                    ng-click="Print()">
-                    Print
-                </button>
-            </div>
             
             <div class="controlsRowConsigners" style="width: 100%; text-align: center">
                 <button type="button"

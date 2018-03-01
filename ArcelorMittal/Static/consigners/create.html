@@ -31,7 +31,7 @@
                 <input type="text" class="form-control"
                     ng-model="CurrentWaybill.WaybillNumber"
                     ng-required="true"
-                    ng-disabled="false"
+                    ng-disabled="(CurrentWaybill.Status == 'used')"
                     title="{{ 'consigners.Placeholders.enterWaybillNumber' | translate }}"
                     ng-pattern="'[0-9]{1,4}'"
                     style="width: 80px; display: inline-block" />
@@ -42,7 +42,15 @@
                 <div class="controlsRowConsigners">
                     <div class="captionConsigners">{{ 'consigners.Labels.wagonTypeNumber' | translate }}</div>
                     <div class="controlConsigners">
-                        <ui-select ng-required="true" class="selectConsigners" ng-model="CurrentWaybill.WagonType" on-select="GetWagonNumberPattern($item)" theme="bootstrap" search-enabled="true" ng-disabled="false" title="{{ 'consigners.Placeholders.selectWagonType' | translate }}">
+                        <ui-select 
+                            ng-model="CurrentWaybill.WagonType" 
+                            on-select="GetWagonNumberPattern($item)" 
+                            ng-required="true" 
+                            ng-disabled="(CurrentWaybill.Status == 'used')" 
+                            search-enabled="true" 
+                            class="selectConsigners" 
+                            theme="bootstrap" 
+                            title="{{ 'consigners.Placeholders.selectWagonType' | translate }}">
                             <ui-select-match placeholder="{{ 'consigners.Placeholders.selectWagonType' | translate }}">{{$select.selected.Description}}</ui-select-match>
                             <ui-select-choices repeat="type in WagonTypes | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
                             <div ng-bind-html="type.Description | highlight: $select.search"></div>
@@ -54,7 +62,7 @@
                             placeholder="{{ 'consigners.Placeholders.enterWagonNumber' | translate }}"
                             title="{{ 'consigners.Placeholders.enterWagonNumber' | translate }}"
                             ng-required="true"
-                            ng-disabled="false"
+                            ng-disabled="(CurrentWaybill.Status == 'used')"
                             ng-pattern="WagonNumberPattern" />
 
                     </div>
@@ -63,7 +71,15 @@
                 <div class="controlsRowConsigners">
                     <div class="captionConsigners">{{ 'consigners.Labels.cargoType' | translate }}</div>
                     <div class="controlConsigners">
-                        <ui-select ng-required="true" class="selectConsigners" style="width: 505px" ng-model="CurrentWaybill.CargoType" theme="bootstrap" search-enabled="true" ng-disabled="false" title="{{ 'consigners.Placeholders.selectCargoType' | translate }}">
+                        <ui-select 
+                            ng-model="CurrentWaybill.CargoType"
+                            ng-required="true" 
+                            ng-disabled="(CurrentWaybill.Status == 'used')" 
+                            search-enabled="true" 
+                            class="selectConsigners" 
+                            style="width: 505px"  
+                            theme="bootstrap" 
+                            title="{{ 'consigners.Placeholders.selectCargoType' | translate }}">
                             <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoType' | translate }}">{{$select.selected.ID}}.{{$select.selected.Description}}</ui-select-match>
                             <ui-select-choices repeat="type in CargoTypes | propsFilter: {Description: $select.search, ID: $select.search}" position='auto'>
                             <div ng-bind-html="type.ID + '.' + type.Description | highlight: $select.search"></div>
@@ -83,14 +99,30 @@
                 <div class="controlsRowConsigners">
                     <div class="captionConsigners">{{ 'consigners.Labels.cargoSender' | translate }}</div>
                     <div class="controlConsigners">
-                        <ui-select ng-required="true" class="selectConsigners" ng-model="SelectedObjects.SenderShop" on-select="CargoSenderShopSelect($item)" theme="bootstrap" search-enabled="true" ng-disabled="false" title="{{ 'consigners.Placeholders.selectCargoSenderShop' | translate }}">
+                        <ui-select 
+                            ng-model="SelectedObjects.SenderShop" 
+                            on-select="CargoSenderShopSelect($item)"
+                            ng-required="true" 
+                            ng-disabled="(CurrentWaybill.Status == 'used')" 
+                            search-enabled="true" 
+                            class="selectConsigners"  
+                            theme="bootstrap" 
+                            title="{{ 'consigners.Placeholders.selectCargoSenderShop' | translate }}">
                             <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoSenderShop' | translate }}">{{$select.selected.Description}}</ui-select-match>
                             <ui-select-choices repeat="sender in CargoSenderShops | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
                             <div ng-bind-html="sender.Description | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
 
-                        <ui-select ng-required="true" class="selectConsigners" ng-model="CurrentWaybill.CargoSender" on-select="DistrictSelect($item, 'Sender')" theme="bootstrap" search-enabled="true" ng-disabled="!SelectedObjects.SenderShop" title="{{ 'consigners.Placeholders.selectCargoSenderDistrict' | translate }}">
+                        <ui-select 
+                            ng-model="CurrentWaybill.CargoSender" 
+                            on-select="DistrictSelect($item, 'Sender')" 
+                            ng-required="true" 
+                            ng-disabled="!SelectedObjects.SenderShop || (CurrentWaybill.Status == 'used')" 
+                            search-enabled="true" 
+                            class="selectConsigners" 
+                            theme="bootstrap" 
+                            title="{{ 'consigners.Placeholders.selectCargoSenderDistrict' | translate }}">
                             <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoSenderDistrict' | translate }}">{{$select.selected.Description}}</ui-select-match>
                             <ui-select-choices repeat="sender in CargoSenderDistricts | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
                             <div ng-bind-html="sender.Description | highlight: $select.search"></div>
@@ -102,7 +134,15 @@
                 <div class="controlsRowConsigners">
                     <div class="captionConsigners">{{ 'consigners.Labels.senderStation' | translate }}</div>
                     <div class="controlConsigners">
-                        <ui-select ng-required="true" class="selectConsigners" style="width: 505px" ng-model="CurrentWaybill.SenderRWStation" theme="bootstrap" search-enabled="true" ng-disabled="false" title="{{ 'consigners.Placeholders.selectCargoSenderStation' | translate }}">
+                        <ui-select 
+                            ng-required="true" 
+                            ng-model="CurrentWaybill.SenderRWStation" 
+                            ng-disabled="(CurrentWaybill.Status == 'used')"
+                            search-enabled="true"  
+                            theme="bootstrap" 
+                            class="selectConsigners" 
+                            style="width: 505px" 
+                            title="{{ 'consigners.Placeholders.selectCargoSenderStation' | translate }}">
                         <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoSenderStation' | translate }}">{{$select.selected.Description}}</ui-select-match>
                         <ui-select-choices repeat="sender_station in RWStations | propsFilter: {Description: $select.search}" position='auto'>
                         <div ng-bind-html="sender_station.Description | highlight: $select.search"></div>
@@ -151,14 +191,30 @@
                 <div class="controlsRowConsigners">
                     <div class="captionConsigners">{{ 'consigners.Labels.cargoReceiver' | translate }}</div>
                     <div class="controlConsigners">
-                        <ui-select ng-required="true" class="selectConsigners" ng-model="SelectedObjects.ReceiverShop" on-select="CargoReceiverShopSelect($item)" theme="bootstrap" search-enabled="true" ng-disabled="false" title="{{ 'consigners.Placeholders.selectCargoReceiverShop' | translate }}">
+                        <ui-select 
+                            ng-model="SelectedObjects.ReceiverShop" 
+                            on-select="CargoReceiverShopSelect($item)"
+                            ng-required="true" 
+                            ng-disabled="(CurrentWaybill.Status == 'used')"
+                            search-enabled="true"  
+                            class="selectConsigners"  
+                            theme="bootstrap" 
+                            title="{{ 'consigners.Placeholders.selectCargoReceiverShop' | translate }}">
                         <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoReceiverShop' | translate }}">{{$select.selected.Description}}</ui-select-match>
                         <ui-select-choices repeat="sender in CargoReceiverShops | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
                         <div ng-bind-html="sender.Description | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
 
-                        <ui-select ng-required="true" class="selectConsigners" ng-model="CurrentWaybill.CargoReceiver" on-select="DistrictSelect($item, 'Receiver')" theme="bootstrap" search-enabled="true" ng-disabled="!SelectedObjects.ReceiverShop" title="{{ 'consigners.Placeholders.selectCargoReceiverDistrict' | translate }}">
+                        <ui-select 
+                            ng-model="CurrentWaybill.CargoReceiver" 
+                            on-select="DistrictSelect($item, 'Receiver')" 
+                            ng-required="true" 
+                            ng-disabled="!SelectedObjects.ReceiverShop || (CurrentWaybill.Status == 'used')"
+                            search-enabled="true" 
+                            class="selectConsigners" 
+                            theme="bootstrap"  
+                            title="{{ 'consigners.Placeholders.selectCargoReceiverDistrict' | translate }}">
                         <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoReceiverDistrict' | translate }}">{{$select.selected.Description}}</ui-select-match>
                         <ui-select-choices repeat="sender in CargoReceiverDistricts | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='auto'>
                         <div ng-bind-html="sender.Description | highlight: $select.search"></div>
@@ -171,7 +227,15 @@
                 <div class="controlsRowConsigners">
                     <div class="captionConsigners">{{ 'consigners.Labels.receiverStation' | translate }}</div>
                     <div class="controlConsigners">
-                        <ui-select ng-required="true" class="selectConsigners" style="width: 505px" ng-model="CurrentWaybill.ReceiverRWStation" theme="bootstrap" search-enabled="true" ng-disabled="false" title="{{ 'consigners.Placeholders.selectCargoReceiverStation' | translate }}">
+                        <ui-select 
+                            ng-model="CurrentWaybill.ReceiverRWStation"
+                            ng-required="true" 
+                            ng-disabled="(CurrentWaybill.Status == 'used')"
+                            search-enabled="true"  
+                            class="selectConsigners" 
+                            style="width: 505px"  
+                            theme="bootstrap" 
+                            title="{{ 'consigners.Placeholders.selectCargoReceiverStation' | translate }}">
                         <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoReceiverStation' | translate }}">{{$select.selected.Description}}</ui-select-match>
                         <ui-select-choices repeat="sender_station in RWStations | propsFilter: {Description: $select.search}" position='auto'>
                         <div ng-bind-html="sender_station.Description | highlight: $select.search"></div>
@@ -273,6 +337,7 @@
                 class="btn btn-default"
                 style="width: 20%"
                 ng-show="modify_id"
+                ng-disabled="(CurrentWaybill.Status == 'used')"
                 ng-click="Reject()">
                 {{ (CurrentWaybill.Status != 'reject' ? 'consigners.Buttons.reject' : 'consigners.Buttons.discardReject')  | translate }}
             </button>

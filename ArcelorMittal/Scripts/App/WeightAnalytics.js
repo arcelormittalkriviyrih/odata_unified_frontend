@@ -627,14 +627,29 @@
     // нажатие кнопки "Закрыть отвесную"
     function vmCloseWS(id) {
         //alert(id);
-        // if WS is preliminary
+        // если флаг "CreateWSAtFirstWeighing"
         if ($scope.SelectedObjects.CreateWSAtFirstWeighing) {
             vmBack();
             return;
         }
 
-        var confirm_string = "Are you sure to close weightsheet #{0}?".format($scope.CurrentWeightSheet.WeightSheetNumber);
+        // проверка наличия Нетто у всех незабракованных вагонов
+        if (['Тарирование', 'Контроль брутто'].indexOf($scope.CurrentWeightSheet.WeightingMode['Description']) == -1) {
+            var weighings = $scope.CurrentWeightSheet.Weighings;
+            var count_no_reject = 0;
+            var count_with_netto = 0;
+            for (var i = 0; i < weighings.length; i++) {
+                if (weighings[i]['Status'] == 'reject') continue;
+                count_no_reject += 1;
+                count_with_netto += weighings[i]['Netto'] ? 1 : 0;
+            }
+            if (count_no_reject != count_with_netto) {
+                alert("Not all wagons has Netto! Action cancelled.");
+                return;
+            }
+        }
 
+        var confirm_string = "Are you sure to close weightsheet #{0}?".format($scope.CurrentWeightSheet.WeightSheetNumber);
         // если подтвердили закрытие
         if (confirm(confirm_string)) {
             DocumentationsID = id;
@@ -824,7 +839,7 @@
                                          "Do you want to create Weightsheet anyway?\n" +
                                          "If 'Cancel' Weightsheet will not be created.";
                     if (!confirm(confirm_string)) {
-                        console.log("checkWeightSheetNumber confirm rejected");
+                        //console.log("checkWeightSheetNumber confirm rejected");
                         return false;
                     }
                     //console.log(new Date() + ". " + "checkWeightSheetNumber confirm accepted.");
@@ -871,50 +886,13 @@
             }
 
         })
-
-
-
-        ///*HERE creating WS in DB, return ID of WS*/
-
-        //indexService.sendInfo('ins_CreateWeightsheet', {
-        //    WeightSheetNumber: WeightSheetNumber,
-        //    DocumentationsClassID: DocumentationsClassID,
-        //    ScalesID: ScalesID,
-        //    PersonName: user,
-        //    SenderID: SenderID,
-        //    ReceiverID: ReceiverID,
-        //    DocumentationID: 0
-        //}).then(function (response) {
-        //    //alert(response);
-        //    if (response.data.ActionParameters) {
-        //        $scope.CurrentWeightSheet.WeightSheetID = response.data.ActionParameters[0]['Value'];
-        //        /*change url - adding WS_ID*/
-        //        $state.go('app.WeightAnalytics.WBStatic', { wb_id: $scope.CurrentWeightSheet.WeightBridgeID, ws_id: $scope.CurrentWeightSheet.WeightSheetID }, { notify: false })
-        //        // because notify is false - need to add Person and Create Date
-        //        vmGetWSInfo($scope.CurrentWeightSheet.WeightSheetID).then(function (weightsheet_object) {
-        //            //weightanalyticsService.GetWSInfo($scope.SelectedObjects.weightsheet_id).then(function (weightsheet_object) {
-        //            for (key in weightsheet_object) {
-        //                if ($scope.CurrentWeightSheet.hasOwnProperty(key)) {
-        //                    $scope.CurrentWeightSheet[key] = weightsheet_object[key];
-        //                }
-        //            }
-        //            //$scope.WaybillNumbers = weightsheet_object.WaybillNumbers;
-        //            vmGetWagonTable($scope.CurrentWeightSheet.WeightSheetID);
-        //        });
-        //    }
-        //    else {
-        //        alert($translate.instant('consigners.Messages.errorCreatingWS'));//alert("Error during creating new WS!");
-        //    }
-
-        //});
-
     }
 
     // нажатие кнопки "Взять вес"
     function vmTakeWeight() {
-
+        // сделать кнопку неактивной (для исключения повторного нажатия)
         $scope.TakeWeightBtnDisabled = true;
-
+        // если был флаг "CreateWSAtFirstWeighing" - вернуть Создание отвесной
         if ($scope.SelectedObjects.CreateWSAtFirstWeighing) {
             return vmCreateWS().then(function (response) {
                 if (response === false) {
@@ -941,7 +919,7 @@
             var CurrentWeight = $scope.CurrentMeasuring.Weight;
             var WagonTypeID = $scope.SelectedObjects.WagonType.ID;
             var CargoTypeID = $scope.SelectedObjects.CargoType ? $scope.SelectedObjects.CargoType.ID : null;
-            //CurrentWeight = 51.51;
+            //CurrentWeight = 60.51;
 
             if (!(ScalesID && WeightSheetID && WagonID && WagonNumber && WagonTypeID)) {
                 alert("Errors!!!!!!");
@@ -1104,11 +1082,8 @@
             WeightsheetID: WeightSheetID
         }).then(function (response) {
             vmGetWagonTable(WeightSheetID);
-            alert("Tare updated successfully");
+            alert("Tare updated successfully.");
         })
-
-
-
     }
 
     // получение онлайн показаний весов

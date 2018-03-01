@@ -185,6 +185,9 @@ angular.module('indexApp')
                         if (e.Status == 'reject') {
                             e.icon = 'jstree-reject';
                         }
+                        if (e.Status == 'used') {
+                            e.icon = 'jstree-finalize';
+                        }
                     };
                     delete e.ID;
                     delete e.ParentID;
@@ -1039,6 +1042,9 @@ angular.module('indexApp')
     // нажатие "Забраковать"
     function vmReject() {
         //alert("Reject");
+        if ($scope.CurrentWaybill.Status != 'used') {
+            return;
+        }
         var reject = false;
         if ($scope.CurrentWaybill.Status != 'reject') {
             reject = true;
@@ -1307,15 +1313,11 @@ angular.module('indexApp')
     this.GetWaybillObject = function (waybill_id) {
 
         /* !!! get full waybill info here */
-        return $q.all([ //indexService.getInfo('Documentations?$filter=ID eq {0}'.format(waybill_id)),
-                        //indexService.getInfo("DocumentationsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
-                        indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
+        return $q.all([ indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
                         indexService.getInfo("v_WGT_DocumentsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id))])
                 .then(function (responses) {
-                    var resp_3 = responses[0].data.value;
-                    var resp_4 = responses[1].data.value;
-                    //var resp_4 = responses[2].data.value;
-                    //var resp_4 = responses[3].data.value;
+                    var resp_0 = responses[0].data.value;
+                    var resp_1 = responses[1].data.value;
 
                     var waybill_object = {};
 
@@ -1332,14 +1334,14 @@ angular.module('indexApp')
                     //    }
                     //    //waybill_object.Status = resp_1[i]['Status'];
                     //}
-                    for (i = 0; i < resp_3.length; i++) {
-                        if (resp_3[i]['Status'] == 'reject') continue;
+                    for (i = 0; i < resp_0.length; i++) {
+                        if (resp_0[i]['Status'] == 'reject') continue;
                         //if there is only one wagon in waybill
-                        waybill_object.WagonNumber = resp_3[i]['Description'].trim();
+                        waybill_object.WagonNumber = resp_0[i]['Description'].trim();
                         //if there is array of wagons in waybill
                         waybill_object.WagonNumbers = [];
-                        resp_3[i]['Description'] = resp_3[i]['Description'].trim();
-                        waybill_object.WagonNumbers.push(resp_3[i]);
+                        resp_0[i]['Description'] = resp_0[i]['Description'].trim();
+                        waybill_object.WagonNumbers.push(resp_0[i]);
                     }
 
                     var prop_queries_array = [
@@ -1353,9 +1355,9 @@ angular.module('indexApp')
                         { prop: "ReceiverRWStation", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
                     ];
                     var actual_prop_queries_array = [];
-                    for (i = 0; i < resp_4.length; i++) {
-                        //$scope.CurrentWaybill.WagonNumber = resp_3[i]['Description'];
-                        var prop = resp_4[i];
+                    for (i = 0; i < resp_1.length; i++) {
+                        //$scope.CurrentWaybill.WagonNumber = resp_0[i]['Description'];
+                        var prop = resp_1[i];
 
                         var filtered_item = prop_queries_array.filter(function (item) {
                             return item['prop'] === prop['Description2'];

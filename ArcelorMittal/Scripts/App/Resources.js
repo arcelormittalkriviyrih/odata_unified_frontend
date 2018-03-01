@@ -454,7 +454,8 @@
                 modifyingDT: 'Modifying datetime',
                 status: 'Status',
                 reject: {
-                    reject: 'Reject'
+                    reject: 'Reject',
+                    used: 'Used'
                 },
                 waybillCreating: 'Waybill creating',
                 waybillModifying: 'Waybill modifying',
@@ -995,7 +996,8 @@
                 modifyingDT: 'Изменено',
                 status: 'Статус',
                 reject: {
-                    reject: 'Брак'
+                    reject: 'Брак',
+                    used: 'Использован'
                 },
                 waybillCreating: 'Создание путевой',
                 waybillModifying: 'Редактирование путевой',
@@ -1537,7 +1539,8 @@
                 modifyingDT: 'Змінено',
                 status: 'Статус',
                 reject: {
-                    reject: 'Брак'
+                    reject: 'Брак',
+                    used: 'Використано'
                 },
                 waybillCreating: 'Створення вагової',
                 waybillModifying: 'Редагування вагової',

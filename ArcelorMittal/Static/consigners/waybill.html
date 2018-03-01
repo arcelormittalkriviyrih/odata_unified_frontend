@@ -110,9 +110,9 @@
         </tr>
         <tr>
             <td>{{ 'consigners.Labels.cargoType' | translate }}</td>
-            <td colspan="1" style="font-weight: bold;">{{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description | limitTo : 20}}</td>
+            <td style="font-weight: bold;">{{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description | limitTo : 20}}</td>
             <td style="width: 15%">{{ 'consigners.Labels.weight' | translate }}</td>
-            <td></td>
+            <td style="font-weight: bold;">{{CurrentWaybill.WeightInWeightsheet}}</td>
         </tr>
     </table>
 
@@ -229,7 +229,7 @@
             <td style="width: 30%">{{ 'consigners.Labels.wagon' | translate }} № </td>
             <td style="font-weight: bold;">{{CurrentWaybill.WagonNumber}}	</td>
             <td>{{ 'consigners.Labels.weight' | translate }}</td>
-            <td style="font-weight: bold;"></td>
+            <td style="font-weight: bold;">{{CurrentWaybill.WeightInWeightsheet}}</td>
         </tr>
         <tr>
             <td>{{ 'consigners.Labels.senderStation' | translate }}</td>
@@ -309,7 +309,7 @@
                 <td>{{ 'consigners.Labels.cargoType' | translate }}</td>
                 <td colspan="1" style="font-weight: bold;">{{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description | limitTo : 20}}</td>
                 <td style="width: 15%">{{ 'consigners.Labels.weight' | translate }}</td>
-                <td></td>
+                <td style="font-weight: bold;">{{CurrentWaybill.WeightInWeightsheet}}</td>
             </tr>
         </table>
 
