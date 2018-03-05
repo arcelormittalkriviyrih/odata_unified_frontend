@@ -746,7 +746,9 @@
         var query = "v_WGT_DocumentationsExistCheck?$top=1&$select=WeightsheetNumber &$filter=Weightbridge eq '{0}' and DocumentationsType eq '{1}' and Status ne 'reject' and year(StartTime) eq {2} &$orderby=StartTime desc".format(wb_id, encodeURI("Отвесная"), new Date().getFullYear());
         return indexService.getInfo(query)
             .then(function (response) {
-                if (response.data.value && response.data.value[0]) {
+                // проверяем поле на неиспользование (т.е. если попытка ввода вручную, не обновляем)
+                var pristine = $("#WSNumberCreation.ng-pristine");
+                if (pristine.length && response.data.value && response.data.value[0]) {
                     var last_number = response.data.value[0]['WeightsheetNumber'];
                     last_number = last_number || 0;
                     last_number++;
@@ -754,6 +756,7 @@
                         $scope.SelectedObjects.WeightSheetNumber = last_number.toString();
                     });
                 }
+                $("#WSNumberCreation").focus();
             })
     }
 
@@ -788,9 +791,13 @@
             $scope.CurrentWeightSheet.WeightingMode = $scope.SelectedObjects.WeightingMode;
             $scope.CurrentWeightSheet.Status = "preliminary";
             $scope.CurrentWeightSheet.Weigher = user;
+            $timeout(function () {
+                $("#WagonNumberSelect > .ui-select-focusser").focus();
+            }, 10);
 
             return;
         }
+
 
         if (['Тарирование', 'Контроль брутто'].indexOf($scope.SelectedObjects.WeightingMode['Description']) == -1 &&
             !($scope.SelectedObjects.SenderShop &&
@@ -919,7 +926,7 @@
             var CurrentWeight = $scope.CurrentMeasuring.Weight;
             var WagonTypeID = $scope.SelectedObjects.WagonType.ID;
             var CargoTypeID = $scope.SelectedObjects.CargoType ? $scope.SelectedObjects.CargoType.ID : null;
-            //CurrentWeight = 60.51;
+            //CurrentWeight = 49;
 
             if (!(ScalesID && WeightSheetID && WagonID && WagonNumber && WagonTypeID)) {
                 alert("Errors!!!!!!");
@@ -1388,7 +1395,15 @@
         indexService.getInfo("v_KP4_PackagingUnitsProperty?$filter=ID eq {0}".format(wagon_id))
             .then(function (resp) {
                 var TareInfo = resp.data.value;
-                $scope.CurrentPairNumberTare = TareInfo.length ? TareInfo[0].Value : null;
+                if (TareInfo.length) {
+                    var DT = null;
+                    if (TareInfo[0]['ValueTime']) {
+                        DT = new Date(TareInfo[0]['ValueTime']);
+                        DT.setMinutes(DT.getMinutes() + DT.getTimezoneOffset());
+                    }
+                    $scope.CurrentPairNumberTare = { Tare: TareInfo[0]['Value'], DT: DT };
+                }
+                //$scope.CurrentPairNumberTare = TareInfo.length ? TareInfo[0].Value : null;
             })
     }
 
@@ -1774,6 +1789,24 @@
 //        }
 //    }
 //})
+
+.directive('onEnter', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, element, attrs, ctrl) {
+            element.bind("keypress", function (ev) {
+                if (ev.keyCode == 13) {
+                    scope.$apply(function () {
+                        scope.$eval(attrs.onEnter);
+                    });
+                    ev.preventDefault();
+                }
+            });
+        }
+    }
+})
+
 
 .directive('repeatDone', function ($timeout) {
     return function (scope, element, attr) {

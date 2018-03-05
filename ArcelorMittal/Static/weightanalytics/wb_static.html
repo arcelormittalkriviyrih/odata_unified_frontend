@@ -71,8 +71,9 @@
                             <td>{{ 'weightanalytics.Labels.weightsheet' | translate }} №
                             </td>
                             <td>
-                                <input type="text" class="form-control"
+                                <input type="text" class="form-control" id="WSNumberCreation"
                                     ng-model="SelectedObjects.WeightSheetNumber"
+                                    on-enter="WS_create.$valid && CreateWS(SelectedObjects.CreateWSAtFirstWeighing)"
                                     placeholder="{{ 'weightanalytics.Placeholders.enterWSNumber' | translate }}"
                                     title="{{ 'weightanalytics.Placeholders.enterWSNumber' | translate }}"
                                     ng-required="true"
@@ -325,7 +326,7 @@
                     </td>
                     <td>
                         <div style="position: relative">
-                            <ui-select
+                            <ui-select id="WagonNumberSelect"
                                 ng-model="SelectedObjects.WagonNumber"
                                 on-select="SelectWagonNumber($item)"
                                 ng-disabled="!CurrentWeightSheet.WeightSheetID || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
@@ -362,16 +363,19 @@
                                 on-select="SelectWBNumber($item)"
                                 ng-disabled="!CurrentWeightSheet.WeightSheetID || (['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) > -1) || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
                                 ng-required="['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) == -1"
-                                style=""
                                 theme="bootstrap"
-                                title="{{ 'weightanalytics.Placeholders.enterWBNumber' | translate }}">
+                                title="{{($select.selected.Status == 'used' || SelectedObjects.WagonNumber.Status == 'used') ? ('Waybill has already used!') : ('weightanalytics.Placeholders.enterWBNumber' | translate)}}">
                                 <ui-select-match 
                                     placeholder="{{ 'weightanalytics.Placeholders.enterWBNumber' | translate }}" 
-                                    allow-clear="true">№{{WBManualEnterDisabled ? $select.selected.WaybillNumber : $select.selected}}</ui-select-match>
-                                    <ui-select-choices repeat="wb in GetWBNumbers($select.search) | filter: (WBManualEnterDisabled ? {WaybillNumber: $select.search} : $select.search)">
-                                        <div ng-bind="WBManualEnterDisabled ? ('№' + wb.WaybillNumber + ' ('+ (wb.EndTime | date:'dd.MM.yyyy HH:mm') + ')') : wb">
-                                        </div>
-                                    </ui-select-choices>
+                                    allow-clear="true">
+                                    <span ng-style="($select.selected.Status == 'used' || SelectedObjects.WagonNumber.Status == 'used') && {'color':'red'}">№{{WBManualEnterDisabled ? $select.selected.WaybillNumber : $select.selected}}</span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="wb in GetWBNumbers($select.search) | filter: (WBManualEnterDisabled ? {WaybillNumber: $select.search} : $select.search)">
+                                    <!-- menu items -->
+                                    <div ng-bind="WBManualEnterDisabled ? ('№' + wb.WaybillNumber + ' ('+ (wb.StartTime | date:'dd.MM.yyyy HH:mm') + ')') : wb"
+                                            ng-style="(wb.Status == 'used') && {'color':'red'}">
+                                    </div>
+                                </ui-select-choices>
                             </ui-select>
                             <button id="wb_preview_btn"
                                 ng-if="SelectedObjects.WBNumber && SelectedObjects.WagonNumber"
@@ -459,6 +463,7 @@
                     <td>
                         <input type="text" class="form-control"
                             ng-model="SelectedObjects.MarkedTare"
+                            on-enter="WeightData.$valid && TakeWeight()"
                             placeholder="{{ 'weightanalytics.Placeholders.enterMarkedTare' | translate }}"
                             title="{{ 'weightanalytics.Placeholders.enterMarkedTare' | translate }}"
                             ng-required="false"
@@ -469,7 +474,7 @@
                 <tr>
                     <td>{{ 'weightanalytics.Labels.currentTare' | translate }}
                     </td>
-                    <td style="padding-left: 10px" ng-show="CurrentPairNumberTare">{{CurrentPairNumberTare}} ton
+                    <td style="padding-left: 10px" ng-show="CurrentPairNumberTare">{{CurrentPairNumberTare.Tare}} {{ 'weightanalytics.ton' | translate }} ({{CurrentPairNumberTare.DT | date:'dd.MM.yyyy HH:mm'}})
                     </td>
                 </tr>
                 <tr>
@@ -493,7 +498,7 @@
     <div
         ui-view="WS_table"
         ng-show="CurrentWeightSheet.WeightSheetID"
-        style="margin-top: 5px; margin-left:-6mm;">
+        style="margin-top: 5px; margin-left: -6mm;">
     </div>
 
     <div
