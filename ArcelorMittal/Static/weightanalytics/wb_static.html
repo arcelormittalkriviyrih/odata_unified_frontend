@@ -85,7 +85,7 @@
                             <td colspan="2">
                                 <input type="checkbox"
                                     ng-model="SelectedObjects.CreateWSAtFirstWeighing"
-                                    ng-init="SelectedObjects.CreateWSAtFirstWeighing = true"
+                                    ng-init="SelectedObjects.CreateWSAtFirstWeighing = (['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) == -1)"
                                     ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode">
                                 Take Sender and Receiver from the first Waybill
                             </td>

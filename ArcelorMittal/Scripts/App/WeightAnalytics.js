@@ -777,10 +777,17 @@
         //alert(item);
         if (!$scope.SelectedObjects.WeightingMode &&
             !$scope.SelectedObjects.WeightSheetNumber) {
-            alert("Creating weightsheet failed!");
+            alert("Creating weightsheet failed! WeightingMode or WeightSheetNumber is missing!");
             return false;
         }
 
+        // если Тарирование или Брутто - предварительно создавать не нужно
+        if (['Тарирование', 'Контроль брутто'].indexOf($scope.SelectedObjects.WeightingMode['Description']) > -1) {
+            create_at_first_weighing = false;
+            $scope.SelectedObjects.CreateWSAtFirstWeighing = false;
+        }
+
+        // если Погрузка или Разгрузка и отмечено "Брать из 1-ой путевой" - фиктивно создаем "предварительную" отвесную
         if (create_at_first_weighing &&
             ['Тарирование', 'Контроль брутто'].indexOf($scope.SelectedObjects.WeightingMode['Description']) == -1) {
             //alert("Need to handle CreateWSAtFirstWeighing");
@@ -798,11 +805,11 @@
             return;
         }
 
-
+        // если Погрузка или Разгрузка и отсутствует Отправитель или Получатель - ошибка
         if (['Тарирование', 'Контроль брутто'].indexOf($scope.SelectedObjects.WeightingMode['Description']) == -1 &&
             !($scope.SelectedObjects.SenderShop &&
               $scope.SelectedObjects.ReceiverShop)) {
-            alert("Creating weightsheet failed!");
+            alert("Creating weightsheet failed! Sender or Receiver is missing!");
             return false;
         }
 
@@ -868,6 +875,7 @@
                 $scope.CurrentWeightSheet.ReceiverShop = $scope.SelectedObjects.ReceiverShop;
 
                 $scope.CurrentWeightSheet.WeightSheetID = response.data.ActionParameters[0]['Value'];
+                $scope.SelectedObjects.weightsheet_id = $scope.CurrentWeightSheet.WeightSheetID;
                 /*change url - adding WS_ID*/
                 $state.go('app.WeightAnalytics.WBStatic', { wb_id: $scope.CurrentWeightSheet.WeightBridgeID, ws_id: $scope.CurrentWeightSheet.WeightSheetID }, { notify: false })
                 // because notify is false - need to add Person and Create Date
@@ -928,8 +936,8 @@
             var CargoTypeID = $scope.SelectedObjects.CargoType ? $scope.SelectedObjects.CargoType.ID : null;
             //CurrentWeight = 49;
 
-            if (!(ScalesID && WeightSheetID && WagonID && WagonNumber && WagonTypeID)) {
-                alert("Errors!!!!!!");
+            if (!(ScalesID && WeightSheetID && WagonNumber && WagonTypeID)) {
+                alert("Error! ScalesID or WeightSheetID or WagonNumber or WagonTypeID is missing!");
                 $scope.TakeWeightBtnDisabled = false;
                 return;
             }
