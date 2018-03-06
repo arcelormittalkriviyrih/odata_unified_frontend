@@ -1042,7 +1042,7 @@ angular.module('indexApp')
     // нажатие "Забраковать"
     function vmReject() {
         //alert("Reject");
-        if ($scope.CurrentWaybill.Status != 'used') {
+        if ($scope.CurrentWaybill.Status != null && $scope.CurrentWaybill.Status != 'used') {
             return;
         }
         var reject = false;
