@@ -1241,7 +1241,34 @@ angular.module('indexApp')
         filter_str = encodeURI(filter_str);
         var pathWagonTypes = "v_PackagingClass?$filter=ParentDescription eq '{0}'&$orderby=ID".format(filter_str);
         var request = indexService.getInfo(pathWagonTypes);
-        return request;
+        //return request;
+        return request.then(function (response) {
+            if (response.data && response.data.value && response.data.value.length) {
+                for (var i = 0; i < response.data.value.length; i++) {
+                    var tooltip = "Шаблон номера: ";
+                    switch (response.data.value[i]['Description']) {
+                        case "Лафет-короб": {
+                            tooltip += "XX(X)-XX(X)";
+                            break;
+                        }
+                        case "Цистерна":
+                        case "Полувагон": {
+                            tooltip += "XXXXXXXX";
+                            break;
+                        }
+                        case "Спецвагон": {
+                            tooltip += "XXX(XXX)";
+                            break;
+                        }
+                        default: {
+                            tooltip += "отсутствует";
+                        }
+                    }
+                    response.data.value[i]['Tooltip'] = tooltip;
+                }
+            }
+            return response;
+        });
     };
 
     this.GetRWStations = function () {

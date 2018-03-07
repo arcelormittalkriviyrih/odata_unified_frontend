@@ -431,7 +431,7 @@
                             title="{{ 'weightanalytics.Placeholders.selectWagonType' | translate }}">
                         <ui-select-match placeholder="{{ 'weightanalytics.Placeholders.selectWagonType' | translate }}">{{$select.selected.Description}}</ui-select-match>
                         <ui-select-choices repeat="type in WagonTypes" position='down'>
-                        <div ng-bind-html="type.Description | highlight: $select.search"></div>
+                        <div title="{{type.Tooltip}}" ng-bind-html="type.Description | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                     </td>
