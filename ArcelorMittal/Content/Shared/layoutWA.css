@@ -279,8 +279,21 @@ div.controlWeightanalytics {
     border-radius: 10px;
     /*display: inline-table;*/
     margin: 0 auto;
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
 }
 
+    .circleWA.fault {
+        background-image: url("images/red_flash.gif");
+        background-repeat: no-repeat;
+        background-size: contain;
+        border-radius: 0;
+    }
+
+    .circleWA.normal {
+        background-color: green;
+    }
 
 .paramValue {
     font-weight: bold;

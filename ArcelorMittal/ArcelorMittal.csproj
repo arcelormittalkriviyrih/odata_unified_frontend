@@ -162,6 +162,7 @@
     <Content Include="Content\Shared\bootstrap\img\glyphicons-halflings-white.png" />
     <Content Include="Content\Shared\bootstrap\img\glyphicons-halflings.png" />
     <Content Include="Content\Shared\favicon.ico" />
+    <Content Include="Content\Shared\images\red_flash.gif" />
     <Content Include="Content\Shared\images\reject.png" />
     <Content Include="Content\Shared\images\reject_ru.png" />
     <Content Include="Content\Shared\images\transfer.png" />

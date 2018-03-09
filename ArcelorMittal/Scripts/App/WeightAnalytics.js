@@ -644,12 +644,13 @@
                 count_with_netto += weighings[i]['Netto'] ? 1 : 0;
             }
             if (count_no_reject != count_with_netto) {
-                alert("Not all wagons has Netto! Action cancelled.");
+                alert($translate.instant('weightanalytics.Messages.notAllNettoInWS'));//alert("Not all wagons has Netto! Action cancelled.");
                 return;
             }
         }
 
-        var confirm_string = "Are you sure to close weightsheet #{0}?".format($scope.CurrentWeightSheet.WeightSheetNumber);
+        //var confirm_string = "Are you sure to close weightsheet #{0}?".format($scope.CurrentWeightSheet.WeightSheetNumber);
+        var confirm_string = $translate.instant('weightanalytics.Messages.closeWSConfirm').format($scope.CurrentWeightSheet.WeightSheetNumber);
         // если подтвердили закрытие
         if (confirm(confirm_string)) {
             DocumentationsID = id;
@@ -658,7 +659,8 @@
                 DocumentationsID: DocumentationsID,
                 Status: Status
             }).then(function (response) {
-                var message = "Weightsheet #{0} closed succesfully.".format($scope.CurrentWeightSheet.WeightSheetNumber);
+                //var message = "Weightsheet #{0} closed succesfully.".format($scope.CurrentWeightSheet.WeightSheetNumber);
+                var message = $translate.instant('weightanalytics.Messages.closeWSSuccess').format($scope.CurrentWeightSheet.WeightSheetNumber);
                 $scope.CurrentWeightSheet.Status = Status;
                 $scope.SelectedObjects.Status = Status;
                 alert(message);
@@ -849,9 +851,10 @@
                     nearest_DT = existing_weightsheet[0]['StartTime'];
                     var date = new Date(nearest_DT).toLocaleDateString();
                     //console.log(new Date() + ". " + "checkWeightSheetNumber: WeightSheetNumber already exists.");
-                    var confirm_string = "Weightsheet #{0} ({1}) for weightbridge '{2}' already exists!\n".format(WeightSheetNumber, date, ScalesID) +
-                                         "Do you want to create Weightsheet anyway?\n" +
-                                         "If 'Cancel' Weightsheet will not be created.";
+                    //var confirm_string = "Weightsheet #{0} ({1}) for weightbridge '{2}' already exists!\n".format(WeightSheetNumber, date, ScalesID) +
+                    //                     "Do you want to create Weightsheet anyway?\n" +
+                    //                     "If 'Cancel' Weightsheet will not be created.";
+                    var confirm_string = $translate.instant('weightanalytics.Messages.checkWSConfirm').format(WeightSheetNumber, date, ScalesID);
                     if (!confirm(confirm_string)) {
                         //console.log("checkWeightSheetNumber confirm rejected");
                         return false;
@@ -896,7 +899,7 @@
             else {
                 //alert($translate.instant('consigners.Messages.savingRejected'));
                 $scope.SelectedObjects.WeightSheetNumber = null;
-                alert('Saving has been rejected!');
+                alert($translate.instant('weightanalytics.Messages.savingWSRejected'));//alert('Saving has been rejected!');
                 return false;
             }
 
@@ -949,7 +952,7 @@
                     return;
                 }
                 // после взятия веса
-                alert('Вес зарегистрирован.');
+                alert($translate.instant('weightanalytics.Messages.takeWeightSuccess'));//alert('Вес зарегистрирован.');
                 $scope.CurrentPairNumberTare = null;
                 $scope.SelectedObjects.WagonNumber = null;
                 $scope.SelectedObjects.WBNumber = null;
@@ -1097,7 +1100,7 @@
             WeightsheetID: WeightSheetID
         }).then(function (response) {
             vmGetWagonTable(WeightSheetID);
-            alert("Tare updated successfully.");
+            alert($translate.instant('weightanalytics.Messages.updateTareSuccess'));//alert("Tare updated successfully.");
         })
     }
 
@@ -1416,28 +1419,6 @@
     }
 
 
-
-    // открытие модального окна Путевой
-    $('#WaybillModal').on('show.bs.modal', function (e) {
-        $scope.ShowWaybillModal = true;
-        $('#ModalLoading').css("display", "block");
-    })
-
-    // закрытие модального окна Путевой
-    $('#WaybillModal').on('hide.bs.modal', function (e) {
-        $scope.ShowWaybillModal = false;
-    })
-
-
-
-
-
-
-
-
-
-
-
     // обновить таблицу с данными по отвесной
     function vmGetWagonTable(weightsheetid) {
         indexService.getInfo("v_WGT_Weightsheet?$filter=WeightsheetID eq {0} &$orderby=WaybillNumber,ID".format(weightsheetid))
@@ -1453,15 +1434,16 @@
 
     // забраковать взвешивание
     function vmRejectWeighing(weighing_id, wagon_number) {
-        var confirm_string = "Are you sure to reject weighing for wagon #{0}?".format(wagon_number);
+        //var confirm_string = "Are you sure to reject weighing for wagon #{0}?".format(wagon_number);
+        var confirm_string = $translate.instant('weightanalytics.Messages.rejectWeighingConfirm').format(wagon_number);
         // если подтвердили забраковку
         if (confirm(confirm_string)) {
             indexService.sendInfo("upd_WeightingOperations", {
                 WeightingOperationsID: weighing_id,
                 Status: 'reject'
             }).then(function (response) {
-                //var message = $translate.instant('consigners.Messages.rejectSuccess').format($scope.CurrentWaybill.WaybillNumber);
-                var message = "Weighing for wagon #{0} rejected succesfully.".format(wagon_number);
+                //var message = "Weighing for wagon #{0} rejected succesfully.".format(wagon_number);
+                var message = $translate.instant('weightanalytics.Messages.rejectWeighingSuccess').format(wagon_number);
                 vmGetWagonTable($scope.CurrentWeightSheet.WeightSheetID);
                 alert(message);
             })
@@ -1478,6 +1460,19 @@
 
 
 
+
+    // открытие модального окна Путевой
+    $('#WaybillModal').on('show.bs.modal', function (e) {
+        $scope.ShowWaybillModal = true;
+        $('#ModalLoading').css("display", "block");
+    })
+
+    // закрытие модального окна Путевой
+    $('#WaybillModal').on('hide.bs.modal', function (e) {
+        $scope.ShowWaybillModal = false;
+    })
+
+
     // при выходе из контроллера останавливаем таймер
     $scope.$on('$destroy', function () {
         $interval.cancel(Timer);
@@ -1489,14 +1484,15 @@
 
 
 // контроллер печати отвесной
-.controller('WeightAnalyticsWSPrintCtrl', ['$scope', 'weightanalyticsService', '$state', function ($scope, weightanalyticsService, $state) {
+.controller('WeightAnalyticsWSPrintCtrl', ['$scope', 'weightanalyticsService', '$state', '$translate', function ($scope, weightanalyticsService, $state, $translate) {
 
     $scope.toprint = true;
     $scope.ReadyToPrint = vmReadyToPrint;
-
+        
     // если Weighings заполнена (т.е. вызываем печать из открытой отвесной)
     if ($scope.CurrentWeightSheet.Weighings && $scope.CurrentWeightSheet.Weighings.length) {
         $scope.CurrentWeightSheet.Weighings.Totals = null;
+        CheckWagonExists();
     }
         // если Weighings не заполнена (т.е. вызываем печать из дерева отвесных)
     else {
@@ -1509,22 +1505,31 @@
                 $scope.CurrentWeightSheet.Weighings.Totals = null;
                 vmCheckWSToPrint();
             }
-
         })
     }
 
     // проверка отвесной на заполнение (если да - то скрываем в HTML)
     function vmCheckWSToPrint() {
-        if (!$scope.CurrentWeightSheet.Weighings.length) {
-            alert("There is no wagon in Weightsheet!");
+        CheckWagonExists();
+
+        if ($scope.CurrentWeightSheet.Status != 'closed') {
+            alert($translate.instant('weightanalytics.Messages.notClosedWS')); //alert("Weightsheet is not complete!");
             if ($scope.$parent.$parent.CreateWSToPrint) {
                 $scope.$parent.$parent.CreateWSToPrint = false;
             }
         }
-        if ($scope.CurrentWeightSheet.Status != 'closed') {
-            alert("Weightsheet is not complete!");
+    }
+
+    // проверяет отвесную на наличие незабрак. взвешиваний
+    function CheckWagonExists() {
+        var no_reject_wagons = $scope.CurrentWeightSheet.Weighings.filter(function (element) {
+            return element.Status != 'reject';
+        });
+        if (!no_reject_wagons.length) {
+            alert($translate.instant('weightanalytics.Messages.noWagonsInWS'));//alert("There is no wagon in Weightsheet!");            
             if ($scope.$parent.$parent.CreateWSToPrint) {
                 $scope.$parent.$parent.CreateWSToPrint = false;
+                return;
             }
         }
     }
@@ -1545,10 +1550,10 @@
                 <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">\n\
                 <meta name=\"viewport\" content=\"width=device-width\">\n\
                 <meta http-equiv=\"X-UA-Compatible\" content=\"IE=9\">\n\
-                <title>Отвесная № {0}</title>\n\
+                <title>{1} № {0}</title>\n\
             </head>\n\
             <body>\n\
-        ".format($scope.CurrentWeightSheet.WeightSheetNumber);
+        ".format($scope.CurrentWeightSheet.WeightSheetNumber, $translate.instant('weightanalytics.Table.weightsheet'));
         inner_html = str + inner_html + "</body>" + autoprint + "</html>"
 
         // Открыть документ в новом окне (или послать inner_html в сервис печати)

@@ -124,7 +124,7 @@
                 <td style="padding: 2px; vertical-align: middle;">
                     <div ng-if="!toprint && CurrentWeightSheet.Status == 'active' && WS.Status != 'reject'">
                         <div style="width: 45%; text-align: center; display: inline-block;">
-                            <input title="transfer" class="transfer-button" type="button" ng-click="TransferWeighing(WS.ID)">
+                            <input ng-disabled="true" title="transfer" class="transfer-button" type="button" ng-click="TransferWeighing(WS.ID)">
                         </div>
                         <div style="width: 45%; text-align: center; display: inline-block;">
                             <input title="reject" class="reject-button" type="button" ng-click="RejectWeighing(WS.ID, WS.WagonNumber)">

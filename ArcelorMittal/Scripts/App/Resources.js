@@ -372,6 +372,15 @@
                 noWeighings: 'No weighings',
                 wagonsCount: 'Wagons count, pcs',
                 summaryNetto: 'Summary netto, t',
+                status: {
+                    reject: 'reject',
+                    active: 'active',
+                    preliminary: 'preliminary',
+                    used: 'used',
+                    closed: 'closed',
+                    connOK: 'Connection OK',
+                    connFault: ' No connection!',
+                },
             },
             Placeholders: {
                 createWS: 'Create new weightsheet',
@@ -383,6 +392,7 @@
                 selectWagonType: 'Select a wagon type',
                 selectCargoType: 'Select a cargo type',
                 enterMarkedTare: 'Enter a marked tare weight',
+                waybillUsed: 'Waybill has already been used!',
             },
             Modal: {
                 enterWSNo: 'Enter weightsheet number'
@@ -396,6 +406,21 @@
                 tare: 'Tare',
                 netto: 'Netto',
                 weightingTime: 'Weighting time'
+            },
+            Messages: {
+                checkWSConfirm: "Weightsheet #{0} ({1}) for weightbridge '{2}' already exists!\n" +
+                                            "Do you want to create Weightsheet anyway?\n" +
+                                            "If 'Cancel' Weightsheet will not be created.",
+                takeWeightSuccess: 'Weight has been taken successfully.',
+                savingWSRejected: 'Saving has been rejected!',
+                noWagonsInWS: 'There is no wagon in Weightsheet!',
+                notClosedWS: 'Weightsheet is not closed!',
+                notAllNettoInWS: 'Not all wagons has Netto! Action cancelled.',
+                rejectWeighingConfirm: "Are you sure to reject weighing for wagon #{0}?",
+                rejectWeighingSuccess: "Weighing for wagon #{0} rejected succesfully.",
+                closeWSConfirm: "Are you sure to close weightsheet #{0}?",
+                closeWSSuccess: "Weightsheet #{0} closed succesfully.",
+                updateTareSuccess: 'Tare updated successfully.',
             },
             ton: 't',
             Taring: 'Taring',
@@ -914,6 +939,15 @@
                 noWeighings: 'Нет взвешиваний',
                 wagonsCount: 'Кол-во т/с, шт',
                 summaryNetto: 'ИТОГО нетто, т',
+                status: {
+                    reject: 'Брак',
+                    active: 'Активно',
+                    preliminary: 'Предварительно',
+                    used: 'Использовано',
+                    closed: 'Закрыто',
+                    connOK: 'Соединение OK',
+                    connFault: 'Нет соединения!',
+                },
             },
             Placeholders: {
                 createWS: 'Создать новую отвесную',
@@ -925,6 +959,7 @@
                 selectWagonType: 'Выберите род вагона',
                 selectCargoType: 'Выберите род груза',
                 enterMarkedTare: 'Введите тару с бруса',
+                waybillUsed: 'Путевая уже использована!',
             },
             Table: {
                 weightsheet: 'Отвесная',
@@ -938,6 +973,21 @@
             },
             Modal: {
                 enterWSNo: 'Введите номер отвесной'
+            },
+            Messages: {
+                checkWSConfirm: "Отвесная №{0} ({1}) для весов '{2}' уже существует!\n" +
+                                            "Вы все равно хотите ее создать?\n" +
+                                            "Если 'Отмена', отвесная не будет создана.",
+                takeWeightSuccess: 'Вес зарегистрирован.',
+                savingWSRejected: 'Сохранение не удалось!',
+                noWagonsInWS: 'Нет вагонов в отвесной!',
+                notClosedWS: 'Отвесная не закрыта!',
+                notAllNettoInWS: 'Не у всех вагонов есть вес Нетто! Действие отменено.',
+                rejectWeighingConfirm: "Вы уверены, что хотите забраковать взвешивание вагона №{0}?",
+                rejectWeighingSuccess: "Взвешивание вагона №{0} забраковано.",
+                closeWSConfirm: "Вы уверены, что хотите закрыть отвесную №{0}?",
+                closeWSSuccess: "Отвесная №{0} закрыта.",
+                updateTareSuccess: 'Тара успешно обновлена.',
             },
             ton: 'т',
             Taring: 'Тарирование',
@@ -1457,6 +1507,15 @@
                 noWeighings: 'Немає зважувань',
                 wagonsCount: 'Кількість т/з, шт',
                 summaryNetto: 'РАЗОМ нето, т',
+                status: {
+                    reject: 'Брак',
+                    active: 'Активно',
+                    preliminary: 'Попередн.',
+                    used: 'Використано',
+                    closed: 'Закрито',
+                    connOK: 'З\'єднання OK',
+                    connFault: 'Немає з\'єднання!',
+                },
             },
             Placeholders: {
                 createWS: 'Створити нову вагову',
@@ -1468,6 +1527,7 @@
                 selectWagonType: 'Виберіть рід вагону',
                 selectCargoType: 'Виберіть рід вантажу',
                 enterMarkedTare: 'Введіть тару з бруса',
+                waybillUsed: 'Путіва вже використана!',
             },
             Table: {
                 weightsheet: 'Вагова',
@@ -1481,6 +1541,21 @@
             },
             Modal: {
                 enterWSNo: 'Введіть номер вагової'
+            },
+            Messages: {
+                checkWSConfirm: "Вагова №{0} ({1}) для вагів '{2}' вже існує!\n" +
+                                            "Вы все одно бажаєте її створити?\n" +
+                                            "Якщо 'Відміна', вагова не буде створена.",
+                takeWeightSuccess: 'Вага зареєстрована.',
+                savingWSRejected: 'Зберігання невдале!',
+                noWagonsInWS: 'Немає вагонів у ваговій!',
+                notClosedWS: 'Вагова не закрита!',
+                notAllNettoInWS: 'Не всі вагони мають вагу Нетто! Дія скасована.',
+                rejectWeighingConfirm: "Ви впевнені, що бажаєте забракувати зважування вагону №{0}?",
+                rejectWeighingSuccess: "Зважування вагона №{0} забраковано.",
+                closeWSConfirm: "Ви впевнені, що бажаєте закрити вагову №{0}?",
+                closeWSSuccess: "Вагова №{0} закрита.",
+                updateTareSuccess: 'Тара успішно оновлена.',
             },
             ton: 'т',
             Taring: 'Тарування',
@@ -1499,8 +1574,8 @@
                 discardReject: 'Відміна браку',
             },
             Labels: {
-                waybill: 'Вагова',
-                ticketWaybill: 'Квитанція до вагової',
+                waybill: 'Путіва',
+                ticketWaybill: 'Квитанція до путівої',
                 wagon: 'Вагон',
                 wagonType: 'Рід вагона',
                 wagonTypeNumber: 'Рід та номер вагона',
@@ -1542,12 +1617,12 @@
                     reject: 'Брак',
                     used: 'Використано'
                 },
-                waybillCreating: 'Створення вагової',
-                waybillModifying: 'Редагування вагової',
+                waybillCreating: 'Створення путівої',
+                waybillModifying: 'Редагування путівої',
 
             },
             Placeholders: {
-                enterWaybillNumber: 'Введіть номер вагової',
+                enterWaybillNumber: 'Введіть номер путівої',
                 selectWagonType: 'Виберіть рід вагону',
                 enterWagonNumber: 'Введіть номер вагону',
                 selectCargoType: 'Виберіть рід вантажу',
@@ -1570,9 +1645,9 @@
 
             },
             Messages: {
-                noWaybill: 'Відсутній ідентифікатор вагової!',
+                noWaybill: 'Відсутній ідентифікатор путівої!',
 
-                emptyWaybillNumber: '-- Номер вагової не введений\n',
+                emptyWaybillNumber: '-- Номер путівої не введений\n',
                 emptyWagonType: '-- Рід вагону не введений \n',
                 emptyWagonNumber: '-- Номер вагону не введений або невірний \n',
                 emptyCargoType: '-- Рід вантажу не введений \n',
@@ -1584,16 +1659,16 @@
                 noChanges: 'Немає змін.',
                 parametersModified: 'Змінених параметрів: ',
                 errorCreatingWagon: 'Помилка при створенні нового вагону!',
-                checkWaybillNumberConfirm: "Вагова №{0} (від {2}) для '{1}' вже існує!\n" +
+                checkWaybillNumberConfirm: "Путіва №{0} (від {2}) для '{1}' вже існує!\n" +
                                             "Вы все одно бажаєте її створити?\n" +
-                                            "Якщо 'Відміна', вагова не буде створена.",
+                                            "Якщо 'Відміна', путіва не буде створена.",
                 checkWagonExistsConfirm: "Вагон №{0} не існує!\n" +
                                             "Вы бажаєте додати цей вагон до бази даних?\n" +
                                             "Якщо 'Відміна', вагова не буде створена.",
-                rejectConfirm: "Ви впевнені, що бажаєте забракувати вагову №{0}?",
-                rejectDiscardConfirm: "Ви впевнені, що бажаєте відмінити забракування вагової №{0}?",
-                rejectSuccess: 'Вагова №{0} забракована.',
-                rejectDiscardSuccess: 'Забракування вагової №{0} відмінено.',
+                rejectConfirm: "Ви впевнені, що бажаєте забракувати путіву №{0}?",
+                rejectDiscardConfirm: "Ви впевнені, що бажаєте відмінити забракування путівої №{0}?",
+                rejectSuccess: 'Путіва №{0} забракована.',
+                rejectDiscardSuccess: 'Забракування путівої №{0} відмінено.',
                 savingSuccess: 'Збереження успішне.',
                 savingRejected: 'Збереження відмінено!',
                 updatingSuccess: 'Змінення успішне.',

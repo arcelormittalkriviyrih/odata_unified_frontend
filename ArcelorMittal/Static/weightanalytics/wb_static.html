@@ -195,7 +195,7 @@
                         <td>{{ 'consigners.Labels.status' | translate }}
                         </td>
                         <td ng-style="{'color': CurrentWeightSheet.Status == 'reject' ? 'red' : 'auto'}"
-                            style="text-transform: uppercase">{{CurrentWeightSheet.Status}}
+                            style="text-transform: uppercase">{{ 'weightanalytics.Labels.status.'+ CurrentWeightSheet.Status | translate }}
                         </td>
                     </tr>
                     <tr>
@@ -241,7 +241,7 @@
                 </div>
 
                 <div style="text-align: center">
-                    <div class="plotWA_del" style="height: 145px; margin: 0px;"
+                    <div style="height: 145px; margin: 0px;"
                         id="plot-1000">
                     </div>
                     <table style="margin-top: -25px; width: 100%;">
@@ -254,8 +254,8 @@
                             <td style="font-size: 24px">{{CurrentMeasuring.Weight | number:2}} {{ 'weightanalytics.ton' | translate }}
                             </td>
                             <td style="width: 20%">
-                                <div class="circleWA"
-                                    ng-style="CurrentMeasuring.Fault ? {'background-color': 'red'} : {'background-color': 'green'}">
+                                <div class="circleWA" ng-class="CurrentMeasuring.Fault ? 'fault' : 'normal'"
+                                    title="{{(CurrentMeasuring.Fault ? 'weightanalytics.Labels.status.connFault' : 'weightanalytics.Labels.status.connOK') | translate}}">
                                 </div>
                             </td>
                         </tr>
@@ -364,7 +364,7 @@
                                 ng-disabled="!CurrentWeightSheet.WeightSheetID || (['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) > -1) || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
                                 ng-required="['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) == -1"
                                 theme="bootstrap"
-                                title="{{($select.selected.Status == 'used' || SelectedObjects.WagonNumber.Status == 'used') ? ('Waybill has already used!') : ('weightanalytics.Placeholders.enterWBNumber' | translate)}}">
+                                title="{{(($select.selected.Status == 'used' || SelectedObjects.WagonNumber.Status == 'used') ? ('weightanalytics.Placeholders.waybillUsed') : ('weightanalytics.Placeholders.enterWBNumber')) | translate }}">
                                 <ui-select-match 
                                     placeholder="{{ 'weightanalytics.Placeholders.enterWBNumber' | translate }}" 
                                     allow-clear="true">
