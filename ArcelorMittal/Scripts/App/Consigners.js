@@ -21,6 +21,9 @@ angular.module('indexApp')
                     templateUrl: "Static/consigners/waybill.html",
                     //controller: 'ConsignersPrintCtrl',
                     //params: { rrr: 2222 }
+                },
+                "explosion_cert@app.Consigners.Index": {
+                    templateUrl: "Static/consigners/explosion_cert.html",
                 }
             }
         })
@@ -110,11 +113,9 @@ angular.module('indexApp')
         if ($scope.CurrentWaybill.ID) {
 
             var waybill_toprint_html = document.getElementById('waybill_toprint');
+            var explosion_cert_html = document.getElementById('explosion_cert');
             var inner_html = waybill_toprint_html.innerHTML;
-            var outer_html = waybill_toprint_html.outerHTML;
-            //var inner_html = waybill_toprint_html.innerHTML;
-            //alert(inner_html);
-            //alert(outer_html);
+            var inner_html_cert = explosion_cert_html.innerHTML;
             var str = "\n\
             <!DOCTYPE html>\n\
             <html>\n\
@@ -126,7 +127,7 @@ angular.module('indexApp')
             </head>\n\
             <body>\n\
             ".format($scope.CurrentWaybill.WaybillNumber);
-            inner_html = str + inner_html + "</body></html>"
+            inner_html = str + inner_html + inner_html_cert + "</body></html>"
 
             // Открыть документ в новом окне (или послать inner_html в сервис печати)
             window.open().document.write(inner_html);
@@ -1094,7 +1095,7 @@ angular.module('indexApp')
 
 
 
-.controller('ConsignersPrintCtrl', ['$scope', '$translate', 'indexService', '$state', '$stateParams', function ($scope, $translate, indexService, $state, $stateParams) {
+.controller('ConsignersPrintCtrl', ['$scope', '$translate', 'indexService', 'consignersService', '$state', '$stateParams', function ($scope, $translate, indexService, consignersService, $state, $stateParams) {
 
     //console.log("ConsignersPrintCtrl");
 
@@ -1105,10 +1106,14 @@ angular.module('indexApp')
     }
         // если ID в адресе не пуст
     else if ($state.params.print_id != null) {
-        $scope.CurrentWaybill['ID'] = $state.params.print_id;
+        //$scope.CurrentWaybill['ID'] = $state.params.print_id;
+        waybill_id = $state.params.print_id;
         // получаем все данные по этому ID и заполняем CurrentWaybill
         //console.log("Get waybill data from DB here");
-
+        consignersService.GetWaybillObject(waybill_id)
+            .then(function (waybill_obj) {
+                $scope.CurrentWaybill = waybill_obj;
+            })
     }
         // если все значения пустые, переходим на Consigners.Index
     else {
@@ -1232,7 +1237,7 @@ angular.module('indexApp')
 .service('consignersService', ['indexService', '$q', function (indexService, $q) {
 
     this.GetCargoTypes = function () {
-        var request = indexService.getInfo('v_KP4_ScrapTypes');
+        var request = indexService.getInfo('v_WGT_ScrapTypes');
         return request;
     };
 
@@ -1340,7 +1345,7 @@ angular.module('indexApp')
     this.GetWaybillObject = function (waybill_id) {
 
         /* !!! get full waybill info here */
-        return $q.all([ indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
+        return $q.all([indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
                         indexService.getInfo("v_WGT_DocumentsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id))])
                 .then(function (responses) {
                     var resp_0 = responses[0].data.value;
@@ -1372,7 +1377,7 @@ angular.module('indexApp')
                     }
 
                     var prop_queries_array = [
-                        { prop: "CargoType", query: "v_KP4_ScrapTypes?$filter=ID eq {0} &$orderby=ID" },
+                        { prop: "CargoType", query: "v_WGT_ScrapTypes?$filter=ID eq {0} &$orderby=ID" },
                         { prop: "WagonType", query: "PackagingClass?$filter=ID eq {0}&$orderby=ID" },
                         { prop: "SenderShop", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
                         { prop: "SenderDistrict", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },

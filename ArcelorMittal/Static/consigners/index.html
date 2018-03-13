@@ -19,7 +19,7 @@
     </div>-->
 
     <div class="row" style="background-color: #eeeeee; padding: 10px">
-        <div class="col-md-5" style="border-right: 1px solid #d4d4d4">
+        <div class="col-md-5 col-sm-5 col-xs-12" style="border-right: 1px solid #d4d4d4">
             
             <div class="controlsRowConsigners" style="width: 100%; text-align: center">
                 <button type="button"
@@ -103,7 +103,7 @@
         </div>
 
 
-        <div class="col-md-7" align="center" style="border-left: 1px solid #d4d4d4">
+        <div class="col-md-7 col-sm-7 col-xs-12" align="center" style="border-left: 1px solid #d4d4d4">
             <div ng-hide="CurrentWaybill.ID || ArchiveWaybillSelected" style="display: table; width: 100%; height: 100%">
                 <div style="color: gray">
                     <h1>{{ 'consigners.Placeholders.chooseWaybill' | translate }}</h1>
@@ -114,11 +114,16 @@
                     <h1>{{ 'consigners.Placeholders.loading' | translate }}</h1>
                 </div>
             </div>
+            
             <div id="waybill_toprint" 
                 ng-show="CurrentWaybill.ID"
                 ui-view="waybill_toprint"
                 ng-class="{'reject': ($parent.$parent.language == 'en' && CurrentWaybill.Status == 'reject'), 'reject ru': ($parent.$parent.language != 'en' && CurrentWaybill.Status == 'reject')}"
                 style="background-color: white; padding-top: 5px;">
+            </div>
+            <div id="explosion_cert" 
+                ng-show="false"
+                ui-view="explosion_cert">
             </div>
         </div>
         

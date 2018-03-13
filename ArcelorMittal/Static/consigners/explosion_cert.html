@@ -1,0 +1,112 @@
+﻿<!-- <!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=9">
+
+    <title>УДОСТОВЕРЕНИЕ № 100500</title>
+</head>
+
+<body> -->
+
+
+<style type="text/css">
+    
+    #F_1553 {
+        display: none;
+    }
+
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .WBrow tr {
+        height: 5mm;
+        overflow: hidden;
+    }
+
+    .WBrow .signline {
+        border-bottom: 1px black solid;
+        text-align: center;
+    }
+
+</style>
+
+<style type="text/css">
+    /* стили для печати */
+    @media print {
+        #F_1553 {
+            display: block;
+            /*page-break-before:always;*/
+        }
+    }
+</style>
+
+
+<div id="F_1553" style="width: 125mm; margin: 1mm; font-size: 10px; font-family: Verdana,Arial,sans-serif;">
+
+    <table style="width: 100%; font-size: 8px;">
+        <tr>
+            <td>{{ 'consigners.Labels.amkr' | translate }}	</td>
+            <td style="text-align: right">Ф-1553</td>
+        </tr>
+    </table>
+
+    <table style="margin:6px; width: 100%; text-align: center">
+        <tr>
+            <td style="font-size: 15px; font-weight: bold">Удостоверение № {{CurrentWaybill.WaybillNumber}}	</td>
+        </tr>
+        <tr>
+            <td style="font-size: 12px">о взрывобезопасности лома и отходов черных металлов</td>
+        </tr>
+    </table>
+
+	<div style="text-align: right">{{CurrentWaybill.CreateDT | limitTo : 10}}</div>
+	
+    <table class="WBrow" style="width: 100%">
+        <tr>
+            <td colspan="2">Получатель лома и отходов</td>
+            <td colspan="2" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.ParentDescription}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Наименование лома и отходов</td>
+            <td colspan="2" style="font-weight: bold; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Масса, тонн</td>
+            <td colspan="2" style="font-weight: bold;">{{CurrentWaybill.WeightInWeightsheet}}</td>
+        </tr>
+        <tr>
+            <td style="width: 35%">Вагон (автомобиль) №</td>
+            <td style="width: 15%; font-weight: bold;">{{CurrentWaybill.WagonNumber}}</td>
+            <td style="width: 30%">Накладная №</td>
+            <td font-weight: bold;"></td>
+        </tr>
+    </table>
+
+	<div style="margin: 10px;font-size: 12px; text-align: justify;">
+	Указанные лом и отходы соответствуют требованиям ДСТУ4121-2002, являются взрывобезопасными
+	и могут быть допущены к переработке и использованию в качестве металлической шихты.
+	</div>
+	
+    <table class="WBrow" style="width: 100%">
+        <tr>
+            <td style="width: 50%; font-weight: bold;">Ответственный представитель предприятия-сдатчика</td>
+            <td style="text-align: left;" class="signline">{{CurrentWaybill.Consigner}}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="text-align: center">(фамилия, подпись, печать)</td>
+        </tr>
+    </table>
+    
+    <br />
+    <p style="border-bottom: 1px dotted #000;"/>
+
+</div>
+
+
+<!-- </body>
+</html> -->
