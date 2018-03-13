@@ -95,7 +95,7 @@
                 <th style="width: 4%">№</th>
                 <th style="width: 11%">{{ 'weightanalytics.Labels.wagon' | translate }}</th>
                 <th style="width: 10%">{{ 'weightanalytics.Labels.waybill' | translate }}</th>
-                <th style="width: 10%; word-wrap: break-word; font-size: 0.9em;">{{ 'weightanalytics.Labels.carrying' | translate }}</th>
+                <th style="width: 10%; word-wrap: break-word; word-break:break-all; font-size: 0.9em;">{{ 'weightanalytics.Labels.carrying' | translate }}</th>
                 <th>{{ 'weightanalytics.Labels.cargo' | translate }}</th>
                 <th style="width: 9%">{{ 'weightanalytics.Labels.brutto' | translate }}</th>
                 <th style="width: 9%">{{ 'weightanalytics.Labels.tare' | translate }}</th>
@@ -113,14 +113,14 @@
                 <td>{{WS.WaybillNumber}}</td>
                 <td>{{WS.Carrying}}</td>
                 <td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: left;">{{WS.CargoTypeID}}{{WS.CargoTypeID ? '.': '-'}} {{WS.CargoType}}</td>
-                <td style="text-align: center;">{{WS.Brutto ? WS.Brutto : '-'}}</td>
+                <td style="text-align: center;">{{WS.Brutto ? (WS.Brutto | currency:'') : '-'}}</td>
                 <td style="text-align: center; padding-bottom: 0px;">
-                    <div>{{WS.Tara ? WS.Tara : '-'}}</div>
+                    <div>{{WS.Tara ? (WS.Tara | currency:'') : '-'}}</div>
                     <div ng-if="!toprint && WS.TaringTime" style="font-size: xx-small; color: gray;">({{WS.TaringTime}})</div>
 
                 </td>
                 <td ng-init="CurrentWeightSheet.Weighings.Totals.Netto = CurrentWeightSheet.Weighings.Totals.Netto +(WS.Status == 'reject' ? 0 : WS.Netto)"
-                     style="text-align: center;">{{WS.Netto ? (WS.Netto | number:2) : '-'}}</td>
+                    style="text-align: center;">{{WS.Netto ? (WS.Netto | currency:'') : '-'}}</td>
                 <td style="padding: 2px; vertical-align: middle;">
                     <div ng-if="!toprint && CurrentWeightSheet.Status == 'active' && WS.Status != 'reject'">
                         <div style="width: 45%; text-align: center; display: inline-block;">
@@ -142,7 +142,7 @@
                     style="border: 1px solid white; text-align: right"
                     colspan="4">{{ 'weightanalytics.Labels.summaryNetto' | translate }}</td>
                 <td ng-if="!(['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) > -1)"
-                    style="text-align: center; border: 2px solid black">{{CurrentWeightSheet.Weighings.Totals.Netto | number:2}}</td>
+                    style="text-align: center; border: 2px solid black">{{CurrentWeightSheet.Weighings.Totals.Netto | currency:''}}</td>
                 <td style="border: 1px solid white; vertical-align: middle; text-align: center; padding: 1px;" colspan="1">
                     <button type="button"
                         class="btn btn-default"
