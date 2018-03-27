@@ -1542,8 +1542,8 @@
         var ws_toprint_html = document.getElementById('WS_toprint');
         var inner_html = ws_toprint_html.innerHTML;
         var autoprint = "";
-        autoprint = "\n\<script type=\"text/javascript\">\n\ window.print(); \n\ </script>\n";
-        var str = "\n\
+        autoprint = "\n\<script type=\"text/javascript\">\n\window.onload=function(){window.print();window.close();} \n\ </script>\n";
+        var str = "\
             <!DOCTYPE html>\n\
             <html>\n\
             <head>\n\
@@ -1557,7 +1557,11 @@
         inner_html = str + inner_html + "</body>" + autoprint + "</html>"
 
         // Открыть документ в новом окне (или послать inner_html в сервис печати)
-        window.open().document.write(inner_html);
+        var printWindow = window.open('', '_blank');
+        //window.open('', '_blank').document.write(inner_html);
+        printWindow.document.open();
+        printWindow.document.write(inner_html);
+        printWindow.document.close();
         // После печати удаляем WS_toprint ui-view
         $scope.$parent.$parent.CreateWSToPrint = false;
     }

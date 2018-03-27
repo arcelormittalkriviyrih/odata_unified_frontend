@@ -150,7 +150,7 @@
                         ng-if="!toprint && CurrentWeightSheet.Status == 'active' && CurrentWeightSheet.WeightingMode.Description == 'Разгрузка'"
                         ng-disabled=""
                         ng-click="UpdateTare()">
-                        Update Tare
+                        {{ 'weightanalytics.Buttons.updateTare' | translate }}
                     </button>
                 </td>
             </tr>

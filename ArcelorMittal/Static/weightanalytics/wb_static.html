@@ -87,7 +87,7 @@
                                     ng-model="SelectedObjects.CreateWSAtFirstWeighing"
                                     ng-init="SelectedObjects.CreateWSAtFirstWeighing = (['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) == -1)"
                                     ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode">
-                                Take Sender and Receiver from the first Waybill
+                                {{ 'weightanalytics.Placeholders.takeFirstWB' | translate }}
                             </td>
                         </tr>
                         <tr ng-disabled="SelectedObjects.CreateWSAtFirstWeighing">

@@ -343,6 +343,7 @@
                 back: 'Back',
                 close: 'Close',
                 cancel: 'Cancel',
+                updateTare: 'Update Tare',
 
             },
             Labels: {
@@ -393,6 +394,7 @@
                 selectCargoType: 'Select a cargo type',
                 enterMarkedTare: 'Enter a marked tare weight',
                 waybillUsed: 'Waybill has already been used!',
+                takeFirstWB: ' Take Sender and Receiver from the first Waybill',
             },
             Modal: {
                 enterWSNo: 'Enter weightsheet number'
@@ -910,6 +912,7 @@
                 back: 'Назад',
                 close: 'Закрыть',
                 cancel: 'Отмена',
+                updateTare: 'Обновить тару',
 
             },
             Labels: {
@@ -960,6 +963,7 @@
                 selectCargoType: 'Выберите род груза',
                 enterMarkedTare: 'Введите тару с бруса',
                 waybillUsed: 'Путевая уже использована!',
+                takeFirstWB: 'Выбрать отправителя и получателя из первой путевой',
             },
             Table: {
                 weightsheet: 'Отвесная',
@@ -1479,6 +1483,7 @@
                 back: 'Назад',
                 close: 'Закрити',
                 cancel: 'Відміна',
+                updateTare: 'Обновити тару',
             },
             Labels: {
                 archiveWS: 'Архівні вагові',
@@ -1528,6 +1533,7 @@
                 selectCargoType: 'Виберіть рід вантажу',
                 enterMarkedTare: 'Введіть тару з бруса',
                 waybillUsed: 'Путіва вже використана!',
+                takeFirstWB: 'Вибрати відправника та отримувача з першої путівої',
             },
             Table: {
                 weightsheet: 'Вагова',
