@@ -462,6 +462,7 @@ angular.module('indexApp')
         CargoReceiver: null,
         SenderRWStation: null,
         ReceiverRWStation: null,
+        CargoTypeNotes: null,
 
         SenderArriveDT: null,
         SenderStartLoadDT: null,
@@ -783,6 +784,7 @@ angular.module('indexApp')
         var SenderShop = $scope.CurrentWaybill.CargoSender ? $scope.CurrentWaybill.CargoSender['ParentID'] : null;
         var SenderDistrict = $scope.CurrentWaybill.CargoSender ? $scope.CurrentWaybill.CargoSender['ID'] : null;
         var SenderRWStation = $scope.CurrentWaybill.SenderRWStation ? $scope.CurrentWaybill.SenderRWStation['ID'] : null;
+        var CargoTypeNotes = $scope.CurrentWaybill.CargoTypeNotes ? $scope.CurrentWaybill.CargoTypeNotes.toString() : null;
         var SenderArriveDT = stringToDatetimeUTCCorrect($scope.CurrentWaybill.SenderArriveDT);//$.datepicker.parseDateTime("dd.mm.yy", "hh:mm", $scope.CurrentWaybill.SenderArriveDT || "");
         var SenderStartLoadDT = stringToDatetimeUTCCorrect($scope.CurrentWaybill.SenderStartLoadDT);//$.datepicker.parseDateTime("dd.mm.yy", "hh:mm", $scope.CurrentWaybill.SenderStartLoadDT || "");
         var SenderEndLoadDT = stringToDatetimeUTCCorrect($scope.CurrentWaybill.SenderEndLoadDT);//$.datepicker.parseDateTime("dd.mm.yy", "hh:mm", $scope.CurrentWaybill.SenderEndLoadDT || "");
@@ -819,11 +821,19 @@ angular.module('indexApp')
         // определение изменений в путевой (возвращает массив измененных параметров)
         function waybillComparing(orig_wb, mod_wb) {
             var prop_array = [];
-            angular.forEach(orig_wb, function (value_orig, key_orig) {
-                var value_modify = mod_wb[key_orig];
-                if (!angular.equals(value_orig, value_modify)) {
+            //angular.forEach(orig_wb, function (value_orig, key_orig) {
+            //    var value_modify = mod_wb[key_orig];
+            //    if (!angular.equals(value_orig, value_modify)) {
+            //        var t = {};
+            //        t[key_orig] = value_modify;
+            //        prop_array.push(t);
+            //    }
+            //})
+            angular.forEach(mod_wb, function (value_mod, key_mod) {
+                var value_orig = orig_wb[key_mod];
+                if (!angular.equals(value_orig, value_mod)) {
                     var t = {};
-                    t[key_orig] = value_modify;
+                    t[key_mod] = value_mod;
                     prop_array.push(t);
                 }
             })
@@ -838,6 +848,7 @@ angular.module('indexApp')
                 WagonType: WagonType,
                 WagonNumber: WagonID,
                 CargoType: CargoType,
+                CargoTypeNotes: CargoTypeNotes,
                 SenderShop: SenderShop,
                 SenderDistrict: SenderDistrict,
                 SenderRWStation: SenderRWStation,
@@ -875,6 +886,7 @@ angular.module('indexApp')
                 WagonType: WagonType,
                 WagonNumber: WagonID,
                 CargoType: CargoType,
+                CargoTypeNotes: CargoTypeNotes,
                 SenderShop: SenderShop,
                 SenderDistrict: SenderDistrict,
                 SenderRWStation: SenderRWStation,
