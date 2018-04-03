@@ -92,7 +92,9 @@
         </tr>
         <tr>
             <td>{{ 'consigners.Labels.senderShop' | translate }}</td>
-            <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoSender.ParentDescription}}</td>
+            <td style="font-weight: bold;">{{CurrentWaybill.CargoSender.ParentDescription}}</td>
+            <td style="width: 15%">{{ 'consigners.Labels.weight' | translate }}</td>
+            <td style="font-weight: bold;">{{CurrentWaybill.WeightInWeightsheet}}</td>
         </tr>
         <tr>
             <td>{{ 'consigners.Labels.senderDistrict' | translate }}</td>
@@ -107,10 +109,11 @@
             <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.Description}}</td>
         </tr>
         <tr>
-            <td>{{ 'consigners.Labels.cargoType' | translate }}</td>
-            <td style="font-weight: bold;">{{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description | limitTo : 20}}</td>
-            <td style="width: 15%">{{ 'consigners.Labels.weight' | translate }}</td>
-            <td style="font-weight: bold;">{{CurrentWaybill.WeightInWeightsheet}}</td>
+            <td style="vertical-align: top; padding-top: 3px;">{{ 'consigners.Labels.cargoType' | translate }}</td>
+            <td colspan="3" style="font-weight: bold; vertical-align: top; padding-top: 3px;">
+                {{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description | limitTo : 50}} 
+                <span ng-show="CurrentWaybill.CargoTypeNotes">({{CurrentWaybill.CargoTypeNotes}})</span>
+            </td>
         </tr>
     </table>
 
