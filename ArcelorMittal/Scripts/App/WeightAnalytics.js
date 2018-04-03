@@ -945,6 +945,11 @@
                 return;
             }
 
+            if ($scope.CurrentPairNumberTare.Tare && CurrentWeight < $scope.CurrentPairNumberTare.Tare) {
+                alert("Тара превышает текущий вес!");
+                return;
+            }
+
             return mainTakeWeight().then(function (resp) {
                 $scope.TakeWeightBtnDisabled = false;
                 // if checkWagonExists was rejected

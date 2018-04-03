@@ -3,6 +3,10 @@
 </div>-->
 
 <style type="text/css">
+    table td {
+        vertical-align: middle!important;
+    }
+
     .WBrow {
         margin-bottom: 1mm;
     }
@@ -42,6 +46,10 @@
             border: 1px solid black; /* Граница вокруг ячеек */
             padding: 3px;
         }
+
+    .ng-hide {
+        display: none;
+    }
 </style>
 
 
@@ -93,13 +101,13 @@
         <thead>
             <tr>
                 <th style="width: 4%">№</th>
-                <th style="width: 11%">{{ 'weightanalytics.Labels.wagon' | translate }}</th>
+                <th style="width: 10%">{{ 'weightanalytics.Labels.wagon' | translate }}</th>
                 <th style="width: 10%">{{ 'weightanalytics.Labels.waybill' | translate }}</th>
-                <th style="width: 10%; word-wrap: break-word; word-break:break-all; font-size: 0.9em;">{{ 'weightanalytics.Labels.carrying' | translate }}</th>
+                <th style="width: 10%; word-wrap: break-word; word-break: break-all; font-size: 0.9em;">{{ 'weightanalytics.Labels.carrying' | translate }}</th>
                 <th>{{ 'weightanalytics.Labels.cargo' | translate }}</th>
-                <th style="width: 9%">{{ 'weightanalytics.Labels.brutto' | translate }}</th>
-                <th style="width: 9%">{{ 'weightanalytics.Labels.tare' | translate }}</th>
-                <th style="width: 9%">{{ 'weightanalytics.Labels.netto' | translate }}</th>
+                <th style="width: 8%">{{ 'weightanalytics.Labels.brutto' | translate }}</th>
+                <th style="width: 8%">{{ 'weightanalytics.Labels.tare' | translate }}</th>
+                <th style="width: 8%">{{ 'weightanalytics.Labels.netto' | translate }}</th>
                 <th style="width: 12%">{{ 'weightanalytics.Labels.notes' | translate }}</th>
             </tr>
         </thead>
@@ -112,7 +120,7 @@
                 <td>{{WS.WagonNumber}}</td>
                 <td>{{WS.WaybillNumber}}</td>
                 <td>{{WS.Carrying}}</td>
-                <td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: left;">{{WS.CargoTypeID}}{{WS.CargoTypeID ? '.': '-'}} {{WS.CargoType}}</td>
+                <td style="overflow: hidden; /*white-space: nowrap; text-overflow: ellipsis; */ text-align: left;">{{WS.CargoTypeID}}{{WS.CargoTypeID ? '.': '-'}} {{WS.CargoType}}<span ng-show="WS.CargoTypeNotes"> ({{WS.CargoTypeNotes}})</span></td>
                 <td style="text-align: center;">{{WS.Brutto ? (WS.Brutto | currency:'') : '-'}}</td>
                 <td style="text-align: center; padding-bottom: 0px;">
                     <div>{{WS.Tara ? (WS.Tara | currency:'') : '-'}}</div>
