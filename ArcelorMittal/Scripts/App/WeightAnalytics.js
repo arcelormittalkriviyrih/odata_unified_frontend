@@ -809,8 +809,7 @@
 
         // если Погрузка или Разгрузка и отсутствует Отправитель или Получатель - ошибка
         if (['Тарирование', 'Контроль брутто'].indexOf($scope.SelectedObjects.WeightingMode['Description']) == -1 &&
-            !($scope.SelectedObjects.SenderShop &&
-              $scope.SelectedObjects.ReceiverShop)) {
+            !($scope.SelectedObjects.SenderShop && $scope.SelectedObjects.ReceiverShop)) {
             alert("Creating weightsheet failed! Sender or Receiver is missing!");
             return false;
         }
@@ -945,8 +944,10 @@
                 return;
             }
 
-            if ($scope.CurrentPairNumberTare.Tare && CurrentWeight < $scope.CurrentPairNumberTare.Tare) {
+            if (['Погрузка'].indexOf($scope.SelectedObjects.WeightingMode['Description']) > 1 &&
+                $scope.CurrentPairNumberTare.Tare && CurrentWeight < $scope.CurrentPairNumberTare.Tare) {
                 alert("Тара превышает текущий вес!");
+                $scope.TakeWeightBtnDisabled = false;
                 return;
             }
 
