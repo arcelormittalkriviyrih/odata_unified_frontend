@@ -944,7 +944,7 @@
                 return;
             }
 
-            if (['Погрузка'].indexOf($scope.SelectedObjects.WeightingMode['Description']) > 1 &&
+            if (['Погрузка'].indexOf($scope.CurrentWeightSheet.WeightingMode['Description']) > 1 &&
                 $scope.CurrentPairNumberTare.Tare && CurrentWeight < $scope.CurrentPairNumberTare.Tare) {
                 alert("Тара превышает текущий вес!");
                 $scope.TakeWeightBtnDisabled = false;
