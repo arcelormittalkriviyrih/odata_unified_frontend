@@ -1268,11 +1268,13 @@ angular.module('indexApp')
                             tooltip += "XX(X)-XX(X)";
                             break;
                         }
-                        case "Цистерна":
-                        case "Полувагон": {
+                        case "Цистерна УЗ":
+                        case "Платформа УЗ":
+                        case "Полувагон УЗ": {
                             tooltip += "XXXXXXXX";
                             break;
                         }
+                        case "Платформа":
                         case "Спецвагон": {
                             tooltip += "XXX(XXX)";
                             break;
