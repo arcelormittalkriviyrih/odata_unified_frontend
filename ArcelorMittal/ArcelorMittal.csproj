@@ -195,8 +195,11 @@
     <Content Include="Content\Table\jsgrid-theme.css" />
     <Content Include="Content\Table\jsgrid.css" />
     <Content Include="Content\Table\style.css" />
+    <Content Include="Content\Tree\32px.png" />
     <Content Include="Content\Tree\img\32px.png" />
     <Content Include="Content\Tree\img\throbber.gif" />
+    <Content Include="Content\Tree\style.min.css" />
+    <Content Include="Content\Tree\throbber.gif" />
     <Content Include="Content\Tree\tree.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
@@ -211,6 +214,8 @@
     <Content Include="Scripts\Vendor\joint.min.js" />
     <Content Include="Scripts\Vendor\jquery.qrcode.min.js" />
     <Content Include="Scripts\Vendor\jstree.search.js" />
+    <Content Include="Scripts\Vendor\jstree\jstree.min.js" />
+    <Content Include="Scripts\Vendor\jstree\jstree.search.js" />
     <Content Include="Scripts\Vendor\lodash.js" />
     <Content Include="Scripts\Vendor\dhtmlxscheduler.js" />
     <Content Include="Scripts\Vendor\dhtmlxscheduler_year_view.js" />
