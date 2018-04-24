@@ -784,14 +784,15 @@
         }
 
         // если Тарирование или Брутто - предварительно создавать не нужно
-        if (['Тарирование', 'Контроль брутто'].indexOf($scope.SelectedObjects.WeightingMode['Description']) > -1) {
+            // TEST Preliminary for all types of WS
+        if (['Контроль брутто'].indexOf($scope.SelectedObjects.WeightingMode['Description']) > -1) {
             create_at_first_weighing = false;
             $scope.SelectedObjects.CreateWSAtFirstWeighing = false;
         }
 
         // если Погрузка или Разгрузка и отмечено "Брать из 1-ой путевой" - фиктивно создаем "предварительную" отвесную
         if (create_at_first_weighing &&
-            ['Тарирование', 'Контроль брутто'].indexOf($scope.SelectedObjects.WeightingMode['Description']) == -1) {
+            ['Контроль брутто'].indexOf($scope.SelectedObjects.WeightingMode['Description']) == -1) {
             //alert("Need to handle CreateWSAtFirstWeighing");
             //create_at_first_weighing = false;
 

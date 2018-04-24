@@ -85,7 +85,7 @@
                             <td colspan="2">
                                 <input type="checkbox"
                                     ng-model="SelectedObjects.CreateWSAtFirstWeighing"
-                                    ng-init="SelectedObjects.CreateWSAtFirstWeighing = (['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) == -1)"
+                                    ng-init="SelectedObjects.CreateWSAtFirstWeighing = (['Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) == -1)"
                                     ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode">
                                 {{ 'weightanalytics.Placeholders.takeFirstWB' | translate }}
                             </td>
