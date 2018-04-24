@@ -1428,7 +1428,7 @@
 
     // обновить таблицу с данными по отвесной
     function vmGetWagonTable(weightsheetid) {
-        indexService.getInfo("v_WGT_Weightsheet?$filter=WeightsheetID eq {0} &$orderby=OperationTime desc,ID desc".format(weightsheetid))
+        indexService.getInfo("v_WGT_Weightsheet?$filter=WeightsheetID eq {0} &$orderby=ID desc".format(weightsheetid))
         .then(function (response) {
             if (response.data.value) {
                 if ($scope.CurrentWeightSheet && $scope.CurrentWeightSheet.Weighings) {
@@ -1707,7 +1707,7 @@
         if (!id) return;
         var weightsheet_object = {};
         return $q.all([indexService.getInfo("v_WGT_DocumentsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(id)),
-                       indexService.getInfo("v_WGT_Weightsheet?$filter=WeightsheetID eq {0} &$orderby=OperationTime desc,ID desc".format(id)),
+                       indexService.getInfo("v_WGT_Weightsheet?$filter=WeightsheetID eq {0} &$orderby=ID desc".format(id)),
         ])
         .then(function (responses) {
             var resp_1 = responses[0].data.value;
