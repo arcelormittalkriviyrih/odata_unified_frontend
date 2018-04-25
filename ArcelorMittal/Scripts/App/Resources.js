@@ -487,6 +487,7 @@
                 },
                 waybillCreating: 'Waybill creating',
                 waybillModifying: 'Waybill modifying',
+                printCert: 'Print explosive certificate'
 
             },
             Placeholders: {
@@ -1057,6 +1058,7 @@
                 },
                 waybillCreating: 'Создание путевой',
                 waybillModifying: 'Редактирование путевой',
+                printCert: 'Печатать сертификат взрывобезопасности',
 
             },
             Placeholders: {
@@ -1628,6 +1630,7 @@
                 },
                 waybillCreating: 'Створення путівої',
                 waybillModifying: 'Редагування путівої',
+                printCert: 'Друкувати сертифікат вибухобезпечності',
 
             },
             Placeholders: {

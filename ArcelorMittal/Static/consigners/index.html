@@ -77,6 +77,14 @@
                 </div>
                 <div class="" style="margin-top: 5px;">
                     <table style="width: 100%; font-size: 12px;">
+                        <tr ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')">
+                            <td colspan="2">	
+                                <input type="checkbox"
+                                    ng-model="ckbx.PrintExplCert"
+                                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')">
+                                {{ 'consigners.Labels.printCert' | translate }}
+                                </td>
+                        </tr>
                         <tr ng-show="CurrentWaybill.Consigner">
                             <td>{{ 'consigners.Labels.consigner' | translate }}	</td>
                             <td style="text-align: right">{{CurrentWaybill.Consigner}}</td>

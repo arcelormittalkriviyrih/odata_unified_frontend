@@ -40,8 +40,20 @@ angular.module('indexApp')
         .state('app.Consigners.Print', {
 
             url: '/toprint/:print_id?',
-            templateUrl: 'Static/consigners/waybill.html',
-            controller: 'ConsignersPrintCtrl',
+            //templateUrl: 'Static/consigners/waybill.html',
+            views: {
+                "": {
+                    template: "<div><div ui-view=\"waybill_toprint\"></div><div ng-if=\"ckbx.PrintExplCert\" ui-view=\"explosion_cert\"></div></div>",
+                    controller: 'ConsignersPrintCtrl',
+                },
+                "waybill_toprint@app.Consigners.Print": {
+                    templateUrl: "Static/consigners/waybill.html",
+                },
+                "explosion_cert@app.Consigners.Print": {
+                    templateUrl: "Static/consigners/explosion_cert.html",
+                }
+            },
+            //controller: 'ConsignersPrintCtrl',
             params: { waybill_object: null },
 
         })
@@ -64,7 +76,7 @@ angular.module('indexApp')
 
 
 
-.controller('ConsignersIndexCtrl', ['$q', '$scope', '$translate', 'indexService', 'consignersService', '$state', '$stateParams', function ($q, $scope, $translate, indexService, consignersService, $state, $stateParams) {
+.controller('ConsignersIndexCtrl', ['$q', '$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', '$state', '$stateParams', function ($q, $scope, $translate, indexService, consignersService, LocalStorageService, $state, $stateParams) {
 
     //alert("ConsignersIndexCtrl");
     //console.log("ConsignersIndexCtrl");
@@ -79,6 +91,10 @@ angular.module('indexApp')
     var CargoTypes = [];
     var CargoSenders = [];
     var CargoReceivers = [];
+
+    $scope.ckbx = {};
+    $scope.ckbx.PrintExplCert = LocalStorageService.getData("PrintExplCert") == "true" ? true : false;
+    //$scope.$applyAsync();
 
     vmGetConsignersServiceArrays();
     vmGetWaybillTree();
@@ -113,9 +129,13 @@ angular.module('indexApp')
         if ($scope.CurrentWaybill.ID) {
 
             var waybill_toprint_html = document.getElementById('waybill_toprint');
+            // !!!! HERE Checking print sert or not!!!!
+            //LocalStorageService.getData();
+            var print_cert = $scope.ckbx.PrintExplCert || false;
+            LocalStorageService.setData("PrintExplCert", print_cert);
             var explosion_cert_html = document.getElementById('explosion_cert');
             var inner_html = waybill_toprint_html.innerHTML;
-            var inner_html_cert = explosion_cert_html.innerHTML;
+            var inner_html_cert = print_cert ? explosion_cert_html.innerHTML : "";
             var str = "\n\
             <!DOCTYPE html>\n\
             <html>\n\
@@ -426,7 +446,7 @@ angular.module('indexApp')
 
 
 
-.controller('ConsignersCreateCtrl', ['$scope', 'indexService', 'consignersService', '$state', '$q', '$filter', '$translate', 'roles', 'user', function ($scope, indexService, consignersService, $state, $q, $filter, $translate, roles, user) {
+.controller('ConsignersCreateCtrl', ['$scope', 'indexService', 'consignersService', 'LocalStorageService', '$state', '$q', '$filter', '$translate', 'roles', 'user', function ($scope, indexService, consignersService, LocalStorageService, $state, $q, $filter, $translate, roles, user) {
     //alert("ConsignersCreateCtrl");
     //console.log("ConsignersCreateCtrl");
     // throw main tab change
@@ -443,6 +463,8 @@ angular.module('indexApp')
     //$scope.message = "Waybill " + (modify_id ? "modifying" : "creating") + (copy_id ? " as copy" : "");
     $scope.message = modify_id ? $translate.instant('consigners.Labels.waybillModifying') : $translate.instant('consigners.Labels.waybillCreating');
 
+    $scope.ckbx = {};
+    $scope.ckbx.PrintExplCert = LocalStorageService.getData("PrintExplCert") == "true" ? true : false;
 
     var CargoSenders = [];          // Districts
     var CargoReceivers = [];        // Districts
@@ -1047,6 +1069,8 @@ angular.module('indexApp')
             //if (waybill_object == null) return;
             //console.log("WaybillID = " + response.ID);
             //console.log("go to app.Consigners.Print");
+            var print_cert = $scope.ckbx.PrintExplCert || false;
+            LocalStorageService.setData("PrintExplCert", print_cert);
             $state.go('app.Consigners.Print', { print_id: waybill_object.ID, waybill_object: waybill_object });
 
         })
@@ -1107,9 +1131,11 @@ angular.module('indexApp')
 
 
 
-.controller('ConsignersPrintCtrl', ['$scope', '$translate', 'indexService', 'consignersService', '$state', '$stateParams', function ($scope, $translate, indexService, consignersService, $state, $stateParams) {
+.controller('ConsignersPrintCtrl', ['$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', '$state', '$stateParams', function ($scope, $translate, indexService, consignersService, LocalStorageService, $state, $stateParams) {
 
     //console.log("ConsignersPrintCtrl");
+    $scope.ckbx = {};
+    $scope.ckbx.PrintExplCert = LocalStorageService.getData("PrintExplCert") == "true" ? true : false;
 
     $scope.CurrentWaybill = [];
     // если переданный объект отвесной не пуст
@@ -1244,6 +1270,19 @@ angular.module('indexApp')
             });
         }
     }
+})
+
+
+.factory('LocalStorageService', function ($window, $rootScope) {
+    return {
+        setData: function (name, val) {
+            $window.localStorage && $window.localStorage.setItem(name, val);
+            return this;
+        },
+        getData: function (name) {
+            return $window.localStorage && $window.localStorage.getItem(name);
+        }
+    };
 })
 
 .service('consignersService', ['indexService', '$q', function (indexService, $q) {
