@@ -265,7 +265,7 @@
 
 
 // контроллер Отвесных для статических весов
-.controller('WeightAnalyticsWBCtrl', ['$scope', '$translate', 'indexService', 'consignersService', 'weightanalyticsService', '$state', '$q', '$timeout', '$interval', '$filter', 'user', 'scalesRefresh', function ($scope, $translate, indexService, consignersService, weightanalyticsService, $state, $q, $timeout, $interval, $filter, user, scalesRefresh) {
+.controller('WeightAnalyticsWBCtrl', ['$scope', '$translate', 'indexService', 'consignersService', 'weightanalyticsService', 'LocalStorageService', '$state', '$q', '$timeout', '$interval', '$filter', 'user', 'scalesRefresh', function ($scope, $translate, indexService, consignersService, weightanalyticsService, LocalStorageService, $state, $q, $timeout, $interval, $filter, user, scalesRefresh) {
 
     // Init
     var wb_id = $state.params.wb_id;
@@ -361,8 +361,13 @@
     $scope.TakeWeight = vmTakeWeight;
     $scope.UpdateTare = vmUpdateTare;
     $scope.RejectWeighing = vmRejectWeighing;
+    $scope.ckbxShowOnlyActiveWS = vmCkbxShowOnlyActiveWS;
+
+    $scope.ckbx = {};
+    $scope.ckbx.ShowOnlyActiveWS = LocalStorageService.getData("ShowOnlyActiveWS") == "true" ? true : false;
 
     var WeightSheetTree = $('#weightsheet_tree').jstree('destroy');
+
     vmCreatePlot();
     vmCreateWSTree();
     vmGetConsignersServiceArrays();
@@ -388,6 +393,13 @@
         WeightSheetTree.jstree(true).settings.core.data = data;
         WeightSheetTree.jstree(true).refresh(true, true);
     };
+
+    // выбор чекбокса "Показать активные отвесные"
+    function vmCkbxShowOnlyActiveWS() {
+        var show_active_ws = $scope.ckbx.ShowOnlyActiveWS || false;
+        LocalStorageService.setData("ShowOnlyActiveWS", show_active_ws);
+        vmGetWSTree();
+    }
 
     // создание стрелочного индикатора
     function vmCreatePlot() {
@@ -530,7 +542,7 @@
     // получение дерева архивных отвесных
     function vmGetWSTree() {
         //WeightSheetTree = $('#weightsheet_tree').jstree('destroy', true);
-        weightanalyticsService.GetWSList(wb_id).then(function (list) {
+        weightanalyticsService.GetWSList(wb_id, $scope.ckbx.ShowOnlyActiveWS).then(function (list) {
             ArchiveWeightSheets = list;
             vmLoadWSTree(ArchiveWeightSheets);
         })
@@ -1672,8 +1684,12 @@
     };
 
     // возвращает список отвесных для заданных весов
-    this.GetWSList = function (wb_id) {
-        return indexService.getInfo("v_WGT_WeightsheetList?$filter=WeightbridgeID eq '{0}' or WeightbridgeID eq null &$orderby=ID".format(wb_id))
+    this.GetWSList = function (wb_id, show_active) {
+        var pathGetWSList = "v_WGT_WeightsheetList";
+        pathGetWSList = pathGetWSList + (show_active ? "?$filter=(WeightbridgeID eq '{0}' or WeightbridgeID eq null) and (Status eq 'active' or ParentID eq '%23')" : "?$filter=WeightbridgeID eq '{0}' or WeightbridgeID eq null");
+        pathGetWSList = pathGetWSList + " &$orderby=ID";
+        //return indexService.getInfo("v_WGT_WeightsheetList?$filter=WeightbridgeID eq '{0}' or WeightbridgeID eq null &$orderby=ID".format(wb_id))
+        return indexService.getInfo(pathGetWSList.format(wb_id))
         .then(function (response) {
             var list = response.data.value;
             if (list.length) {

@@ -58,9 +58,12 @@
 
             <div class="treeContainerConsigners" style="height: auto">
                 <!--<input type="text" class="form-control" placeholder="Search node .." id="search">-->
-
+                <input type="checkbox" 
+                       ng-model="ckbx.HideUsedRejectWB"
+                       ng-change="ckbxHideUsedRejectWB()">  {{ 'consigners.Labels.hideUsedRejectWB' | translate }}
+                
                 <ui-select
-                    ng-model="SearchedWaybillShop"
+                    ng-model="search.SearchedWaybillShop"
                     on-select="WaybillShopSelect($item)"
                     search-enabled="true"
                     ng-required="false"

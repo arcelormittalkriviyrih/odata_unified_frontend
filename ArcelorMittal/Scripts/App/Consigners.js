@@ -92,12 +92,34 @@ angular.module('indexApp')
     var CargoSenders = [];
     var CargoReceivers = [];
 
+    $scope.search = {};
     $scope.ckbx = {};
     $scope.ckbx.PrintExplCert = LocalStorageService.getData("PrintExplCert") == "true" ? true : false;
+    $scope.ckbx.HideUsedRejectWB = LocalStorageService.getData("HideUsedRejectWB") == "true" ? true : false;
     //$scope.$applyAsync();
 
     vmGetConsignersServiceArrays();
+    vmCreateWaybillListTree();
     vmGetWaybillTree();
+
+    // создание дерева путевых
+    function vmCreateWaybillListTree() {
+        WaybillList.jstree({
+            search: {
+                "case_insensitive": true,
+                "show_only_matches": true
+            },
+            plugins: ["search"]
+        });
+    };
+
+    // загрузка данных в дерево путевых
+    function vmLoadWaybillListTree(data) {
+        WaybillList.jstree(true).settings.core.data = data;
+        WaybillList.jstree(true).refresh(true, true);
+        $scope.WaybillShopSelect($scope.search.SearchedWaybillShop);
+    };
+
 
     // нажатие кнопки "Создать"
     $scope.Create = function () {
@@ -159,7 +181,13 @@ angular.module('indexApp')
             alert($translate.instant('consigners.Messages.noWaybill')); //alert("$scope.CurrentWaybill.ID is null");
         }
     }
-
+    
+    // выбор чекбокса "Скрыть исп. и брак. путевые"
+    $scope.ckbxHideUsedRejectWB = function () {
+        var hide_used_wb = $scope.ckbx.HideUsedRejectWB || false;
+        LocalStorageService.setData("HideUsedRejectWB", hide_used_wb);
+        vmGetWaybillTree();
+    }
 
     // получение списков отправителей, получателей, станция, видов груза
     function vmGetConsignersServiceArrays() {
@@ -193,8 +221,10 @@ angular.module('indexApp')
     // получение дерева архивных путевых
     function vmGetWaybillTree() {
 
-        WaybillList = $('#waybill_list').jstree('destroy');
-        indexService.getInfo('v_WGT_WaybillList').then(function (response) {
+        //WaybillList = $('#waybill_list').jstree('destroy');
+        var pathWaybillList = "v_WGT_WaybillList";
+        pathWaybillList = pathWaybillList + ($scope.ckbx.HideUsedRejectWB ? "?$filter=Status eq null" : "");
+        indexService.getInfo(pathWaybillList).then(function (response) {
 
             if (response.data.value.length) {
                 response.data.value.forEach(function (e) {
@@ -216,23 +246,26 @@ angular.module('indexApp')
                 });
 
                 $scope.ArchiveWaybills = response.data.value;
+                vmLoadWaybillListTree($scope.ArchiveWaybills);
 
-                WaybillList.jstree({
-                    core: {
-                        data: $scope.ArchiveWaybills
-                    },
-                    search: {
-                        "case_insensitive": true,
-                        "show_only_matches": true
-                    },
-                    plugins: ["search"]
-                });
+                //WaybillList.jstree({
+                //    core: {
+                //        data: $scope.ArchiveWaybills
+                //    },
+                //    search: {
+                //        "case_insensitive": true,
+                //        "show_only_matches": true
+                //    },
+                //    plugins: ["search"]
+                //});
+                ////WaybillList.jstree(true).redraw(true);
+                ////WaybillList.jstree('redraw');
             };
         });
     };
 
     // загрузка дерева путевых
-    WaybillList.on('loaded.jstree', function (e, data) {
+    WaybillList.on('redraw.jstree', function (e, data) {
         //alert('loaded');
         // при загрузке данных убираем выделение эл-тов и сворачиваем дерево
         WaybillList.jstree('close_all');
@@ -273,123 +306,6 @@ angular.module('indexApp')
             .then(function (waybill_obj) {
                 $scope.CurrentWaybill = waybill_obj;
             })
-            /*
-            $q.all([indexService.getInfo('Documentations?$filter=ID eq {0}'.format(waybill_id)),
-                    indexService.getInfo("DocumentationsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
-                    indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
-                    indexService.getInfo("v_WGT_WaybillProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id))])
-                    .then(function (responses) {
-                        var resp_1 = responses[0].data.value;
-                        var resp_2 = responses[1].data.value;
-                        var resp_3 = responses[2].data.value;
-                        var resp_4 = responses[3].data.value;
-
-                        var waybill_object = {};
-
-                        for (i = 0; i < resp_1.length; i++) {
-                            //var start_time = resp_1[i]['StartTime'];
-                            var start_time = new Date(resp_1[i]['StartTime']);
-                            start_time.setMinutes(start_time.getMinutes() + start_time.getTimezoneOffset());
-                            waybill_object.CreateDT = start_time;
-                            //waybill_object.CreateDT = resp_1[i]['StartTime'];
-
-                            //var tttt = new Date(resp_1[i]['StartTime']);
-                            //var qqq = tttt.toGMTString();
-                            //var www = tttt.toISOString();
-                            //var eee = tttt.toJSON();
-                            //var rrr = tttt.toLocaleString();
-                            //var yyy = tttt.toUTCString();
-                            //var uuu = tttt.getUTCDate();
-                            //var iii = tttt.toString();
-                            //var ooo = tttt.getUTCHours();
-                            //var ppp = tttt.getTimezoneOffset();
-                            //var kkk = tttt.setMinutes(tttt.getMinutes() + tttt.getTimezoneOffset());
-                            //var utc = DT.getTimezoneOffset();
-                            //DT.setMinutes(DT.getMinutes() - utc);
-
-                            if (resp_1[i]['EndTime'] != resp_1[i]['StartTime']) {
-                                var end_time = new Date(resp_1[i]['EndTime']);
-                                end_time.setMinutes(end_time.getMinutes() + end_time.getTimezoneOffset());
-                                waybill_object.EditDT = end_time;
-                                //waybill_object.EditDT = resp_1[i]['EndTime'];
-                            }
-                            waybill_object.Status = resp_1[i]['Status'];
-                        }
-                        for (i = 0; i < resp_3.length; i++) {
-                            if (resp_3[i]['Status'] == 'reject') continue;
-                            waybill_object.WagonNumber = resp_3[i]['Description'].trim();
-                        }
-
-                        var prop_queries_array = [
-                            { prop: "CargoType", query: "v_KP4_ScrapTypes?$filter=ID eq {0} &$orderby=ID" },
-                            { prop: "WagonType", query: "PackagingClass?$filter=ID eq {0}&$orderby=ID" },
-                            { prop: "SenderShop", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
-                            { prop: "SenderDistrict", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
-                            { prop: "SenderRWStation", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
-                            { prop: "ReceiverShop", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
-                            { prop: "ReceiverDistrict", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
-                            { prop: "ReceiverRWStation", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
-                        ];
-                        var actual_prop_queries_array = [];
-                        for (i = 0; i < resp_4.length; i++) {
-                            //$scope.CurrentWaybill.WagonNumber = resp_3[i]['Description'];
-                            var prop = resp_4[i];
-
-                            var filtered_item = prop_queries_array.filter(function (item) {
-                                return item['prop'] === prop['Description2'];
-                            })[0];
-
-                            if (filtered_item) {
-                                var query = filtered_item['query'].format(prop['Value']);
-                                var query_item = { prop: prop['Description2'], query: query };
-                                actual_prop_queries_array.push(query_item);
-                                //alert(query);
-                            }
-                            else {
-                                waybill_object[prop['Description2']] = prop['Value2'];
-                            }
-
-                        }
-                        //alert(actual_prop_queries_array.length);
-
-                        $q.all(actual_prop_queries_array.map(function (item) { return indexService.getInfo(item['query']) }))
-                        .then(function (responses) {
-                            //console.log("!");
-                            actual_prop_queries_array.forEach(function (item, i) {
-                                //console.log(item);
-                                item['response'] = responses[i].data.value[0];
-                                if (item['response']) {
-                                    waybill_object[actual_prop_queries_array[i]['prop']] = item['response'];
-                                }
-                            })
-
-                            waybill_object.ID = waybill_id;
-                            if (waybill_object && waybill_object.SenderShop && waybill_object.SenderDistrict) {
-                                var CargoSenderObject = {};
-                                CargoSenderObject['ID'] = waybill_object.SenderDistrict['ID'];
-                                CargoSenderObject['Description'] = waybill_object.SenderDistrict['Description'];
-                                CargoSenderObject['ParentID'] = waybill_object.SenderShop['ID'];
-                                CargoSenderObject['ParentDescription'] = waybill_object.SenderShop['Description'];
-                                waybill_object.CargoSender = CargoSenderObject;
-                            }
-                            if (waybill_object && waybill_object.ReceiverShop && waybill_object.ReceiverDistrict) {
-                                var CargoReceiverObject = {};
-                                CargoReceiverObject['ID'] = waybill_object.ReceiverDistrict['ID'];
-                                CargoReceiverObject['Description'] = waybill_object.ReceiverDistrict['Description'];
-                                CargoReceiverObject['ParentID'] = waybill_object.ReceiverShop['ID'];
-                                CargoReceiverObject['ParentDescription'] = waybill_object.ReceiverShop['Description'];
-                                waybill_object.CargoReceiver = CargoReceiverObject;
-                            }
-
-                            $scope.CurrentWaybill = waybill_object;
-                        })
-
-                        //console.log("go to app.Consigners.Print");
-                        //$state.go('app.Consigners.Print', { print_id: waybill_id, waybill_object: $scope.CurrentWaybill });
-
-                    })
-            */
-            //alert(data.node.original.DocumentationsID);
         };
     });
 

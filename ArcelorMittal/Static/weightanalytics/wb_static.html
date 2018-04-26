@@ -33,7 +33,10 @@
                 <div style="margin-top: 5px; padding-left: 5px">
                     <span>{{ 'weightanalytics.Labels.archiveWS' | translate }}</span>:
                 </div>
-                <div id="weightsheet_tree" style="height: 225px; background-color: white; overflow: auto"></div>
+                <input type="checkbox" 
+                       ng-model="ckbx.ShowOnlyActiveWS"
+                       ng-change="ckbxShowOnlyActiveWS()">  {{ 'weightanalytics.Labels.showOnlyActiveWS' | translate }}
+                <div id="weightsheet_tree" style="height: 205px; background-color: white; overflow: auto"></div>
 
                 <!-- Buttons table -->
                 <table style="width: 100%; text-align: center; margin-top: 3px">

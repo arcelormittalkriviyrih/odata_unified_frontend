@@ -382,6 +382,7 @@
                     connOK: 'Connection OK',
                     connFault: ' No connection!',
                 },
+                showOnlyActiveWS: 'Show only active weightsheets',
             },
             Placeholders: {
                 createWS: 'Create new weightsheet',
@@ -487,7 +488,8 @@
                 },
                 waybillCreating: 'Waybill creating',
                 waybillModifying: 'Waybill modifying',
-                printCert: 'Print explosive certificate'
+                printCert: 'Print explosive certificate',
+                hideUsedRejectWB: 'Hide used and rejected waybills',
 
             },
             Placeholders: {
@@ -953,6 +955,7 @@
                     connOK: 'Соединение OK',
                     connFault: 'Нет соединения!',
                 },
+                showOnlyActiveWS: 'Показать только активные отвесные',
             },
             Placeholders: {
                 createWS: 'Создать новую отвесную',
@@ -1059,6 +1062,7 @@
                 waybillCreating: 'Создание путевой',
                 waybillModifying: 'Редактирование путевой',
                 printCert: 'Печатать сертификат взрывобезопасности',
+                hideUsedRejectWB: 'Скрыть использованные и забракованные путевые',
 
             },
             Placeholders: {
@@ -1525,6 +1529,7 @@
                     connOK: 'З\'єднання OK',
                     connFault: 'Немає з\'єднання!',
                 },
+                showOnlyActiveWS: 'Показати тільки активні вагові',
             },
             Placeholders: {
                 createWS: 'Створити нову вагову',
@@ -1631,6 +1636,7 @@
                 waybillCreating: 'Створення путівої',
                 waybillModifying: 'Редагування путівої',
                 printCert: 'Друкувати сертифікат вибухобезпечності',
+                hideUsedRejectWB: 'Сховати використані та забраковані путіві',
 
             },
             Placeholders: {
