@@ -47,11 +47,11 @@
                     {{scale.Description}}
                 </label>
 
-                <span class="autoManuMsg" ng-show="(!scale.AUTO_MANU && scale.SCALES_TYPE != 'MANUAL') || scale.KEY_MANU == false">
+                <span class="autoManuMsg" ng-show="((!scale.AUTO_MANU) || scale.KEY_MANU == false)&& scale.SCALES_TYPE != 'MANUAL'">
                     {{'marker.byAcceptShort' | translate}}
                 </span>
 
-                <span class="autoManuMsg" ng-show="!((!scale.AUTO_MANU && scale.SCALES_TYPE != 'MANUAL') || scale.KEY_MANU == false)">
+                <span class="autoManuMsg" ng-show="!((!scale.AUTO_MANU) || scale.KEY_MANU == false)&& scale.SCALES_TYPE != 'MANUAL'">
                     {{'marker.autoModeShort' | translate}}
                 </span>
 
@@ -452,7 +452,7 @@
             {{ 'marker.autoMode' | translate }}
         </span>
 
-        <span class="autoManuMsg" ng-show="(scalesDetailsInfo && !scalesDetailsInfo.AUTO_MANU && scalesDetailsInfo.SCALES_TYPE != 'MANUAL') || scalesDetailsInfo.KEY_MANU == false">
+        <span class="autoManuMsg" ng-show="((scalesDetailsInfo && !scalesDetailsInfo.AUTO_MANU) || scalesDetailsInfo.KEY_MANU == false)&& scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
             {{ 'marker.byAccept' | translate }}
         </span>
 
@@ -461,26 +461,26 @@
         </p>
 
         <p>
-		  <span class="msgRed"
-				ng-if="scalesDetailsInfo.SCALES_TYPE!= 'BUNT' && scalesDetailsInfo.SCALES_TYPE!='LINEPACK'"
-				ng-show="scalesDetailsInfo.POCKET_LOC && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
-			{{ 'marker.scalesBlocked' | translate }}
-		  </span>
-		  <span class="msgRed"
-				ng-if="(scalesDetailsInfo.SCALES_TYPE== 'BUNT' || scalesDetailsInfo.SCALES_TYPE=='LINEPACK') && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && !scalesDetailsInfo.WEIGHT_OK">
-			{{'marker.newLabel' | translate}}
-		  </span>
-		  <span class="statusOK text-center center-block"
-				ng-if="(scalesDetailsInfo.SCALES_TYPE== 'BUNT' || scalesDetailsInfo.SCALES_TYPE=='LINEPACK') && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.WEIGHT_OK">
-			{{'marker.labelPrinted' | translate}}
-		  </span>
-		  <span ng-show="sandwichMode && scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
-			{{ 'marker.firstPack' | translate }}
-		  </span>
-		  <span ng-show="sandwichMode && scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
-			{{ 'marker.secondPack' | translate }}
-		  </span>
-		</p>
+            <span class="msgRed"
+                  ng-if="scalesDetailsInfo.SCALES_TYPE!= 'BUNT' && scalesDetailsInfo.SCALES_TYPE!='LINEPACK'"
+                  ng-show="scalesDetailsInfo.POCKET_LOC && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
+                {{ 'marker.scalesBlocked' | translate }}
+            </span>
+            <span class="msgRed"
+                  ng-if="(scalesDetailsInfo.SCALES_TYPE== 'BUNT' || scalesDetailsInfo.SCALES_TYPE=='LINEPACK') && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && !scalesDetailsInfo.WEIGHT_OK">
+                {{'marker.newLabel' | translate}}
+            </span>
+            <span class="statusOK text-center center-block"
+                  ng-if="(scalesDetailsInfo.SCALES_TYPE== 'BUNT' || scalesDetailsInfo.SCALES_TYPE=='LINEPACK') && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.WEIGHT_OK">
+                {{'marker.labelPrinted' | translate}}
+            </span>
+            <span ng-show="sandwichMode && scalesDetailsInfo && !scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
+                {{ 'marker.firstPack' | translate }}
+            </span>
+            <span ng-show="sandwichMode && scalesDetailsInfo.PACK_SANDWICH && scalesDetailsInfo.SCALES_TYPE != 'MANUAL'">
+                {{ 'marker.secondPack' | translate }}
+            </span>
+        </p>
 
         <p class="scaleInfoContainer" ng-hide="scalesDetailsInfo.SCALES_TYPE == 'MANUAL'">
             <span class="description">{{ 'marker.weight' | translate }}:</span>
@@ -511,7 +511,7 @@
             </span>
             <span class="value rodsValue">
                 {{buntNo}}
-            </span>                 
+            </span>
         </p>
 
         <div class="controls">
