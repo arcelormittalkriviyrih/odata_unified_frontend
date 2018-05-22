@@ -14,8 +14,10 @@ public class BundleConfig
             "~/scripts/vendor/jquery-ui.min.js",
             "~/scripts/vendor/jquery-ui-timepicker-addon.js",
             "~/scripts/vendor/jsgrid.js",
-            "~/scripts/vendor/jstree.js",
-            "~/scripts/vendor/jstree.search.js",
+            //"~/scripts/vendor/jstree.js",
+            //"~/scripts/vendor/jstree.search.js",
+            "~/scripts/vendor/jstree/jstree.min.js",
+            "~/scripts/vendor/jstree/jstree.search.js",
             "~/scripts/vendor/jqplot/jquery.jqplot.min.js",
             "~/scripts/vendor/jqplot/plugins/jqplot.meterGaugeRenderer.js",
             "~/scripts/vendor/jqplot/plugins/jqplot.barRenderer.js",
@@ -57,7 +59,6 @@ public class BundleConfig
             "~/content/table/jsgrid-theme.css",
             "~/content/shared/datetimepicker.css",
             "~/content/shared/layout.css",
-            "~/content/shared/layoutWA.css",
             "~/content/chart/jquery.jqplot.css",
             "~/content/shared/select.css"
         ));

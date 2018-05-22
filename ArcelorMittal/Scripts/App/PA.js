@@ -101,6 +101,13 @@
             controller: 'diagnosticsCtrl',
         })
 
+        .state('app.PA.PhysicalAsset', {
+
+            url: '/physicalasset',
+            templateUrl: 'Static/pa/physicalasset.html',
+            controller: 'PAphysicalassetCtrl'
+        })
+
 
 }])
 
@@ -1112,4 +1119,235 @@
             $scope.printSystemEnabled = !state;
         };
     };
+}])
+
+.controller('PAphysicalassetCtrl', ['$scope', '$translate', 'indexService', '$q', function ($scope, $translate, indexService, $q) {
+
+    var sales_action_json;
+
+    var PAid;
+
+
+    var db = {
+
+        loadData: function (filter) {
+
+            //alert(JSON.stringify(filter));
+            var d = $.Deferred();
+
+            $.ajax({
+                url: serviceUrl + "v_PhysicalAssetTab ",
+                dataType: "json"
+            }).done(function (response) {
+
+                if (filter.Description == "" && filter.FixedAssetID == 0 && filter.PhysicalAssetClassID == 0) {
+
+                    d.resolve(response.value);
+                    sort_grid();
+                }
+                else {
+                    result = $.grep(response.value, function (item) {
+                        return (!filter.Description || item.Description.toLowerCase().indexOf(filter.Description.toLowerCase()) > -1)
+                         && (!filter.FixedAssetID || item.FixedAssetID === filter.FixedAssetID)
+                        && (!filter.PhysicalAssetClassID || item.PhysicalAssetClassID === filter.PhysicalAssetClassID);
+                    });
+                    d.resolve(result);
+                    sort_grid();
+                }
+
+                sort_grid();
+            });
+
+            return d.promise();
+        },
+
+        insertItem: function (item) {
+            if (item.Description == "" && item.PhysicalAssetClassID == 0) {
+                alert("Заполните поля Название и ClassID");
+            }
+            else {
+                return $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: serviceUrl + "ins_ForGridPhysicalAsset",
+                    data: JSON.stringify(item)
+                }).done(function () {
+                    $("#physicalAssetTable").jsGrid("loadData");
+                    $materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
+                });
+            }
+
+        },
+
+        updateItem: function (item) {
+            return $.ajax({
+                xhrFields: {
+                    withCredentials: true
+                },
+                type: "POST",
+                contentType: "application/json;odata=verbose",
+                url: serviceUrl + "upd_ForGridPhysicalAsset",
+                data: JSON.stringify(item)
+            }).done(function () {
+
+                $("#physicalAssetTable").jsGrid("loadData");
+                $materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
+
+            }).fail(handleError);
+        },
+
+        deleteItem: function (item) {
+            return $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: serviceUrl + "del_ForGridPhysicalAsset",
+                data: JSON.stringify(item)
+            }).done(function () {
+                $("#physicalAssetTable").jsGrid("loadData");
+                $materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
+            });
+        }
+    };
+    //window.db = db;
+    //$materialDefinitionDisable = $('#materialDefinitionDisable').show();
+    $materialDefinitionPropertyDisable = $('#materialDefinitionPropertyDisable').show();
+
+    //$('div#physicalAssetTable').jsGrid("destroy");
+    //$('div#physicalAssetPropertyTable').jsGrid("destroy");
+    //$('div#physicalAssetTable').on('oDataGrid.removed', function (e) {
+
+    //    $('div#physicalAssetPropertyTable').jsGrid('loadOdata', {
+    //        defaultFilter: 'ID eq -1'
+    //    });
+    //})
+    function sort_grid() {
+        $("#physicalAssetTable").jsGrid("sort", { field: "ID", order: "desc" });
+    }
+
+    $.ajax({
+        url: serviceUrl + "PhysicalAssetClass",
+        dataType: "json"
+    }).done(function (response) {
+        response.value.unshift({ ID: 0, Description: "" });
+
+        var a = response.value;
+        //alert(a);
+        //a.sort(); // сортируем массив
+        //for (var i = a.length - 1; i > 0; i--) {
+        //    if (a[i].Description == a[i - 1].Description) a.splice(i, 1);
+        //}
+        $("#physicalAssetTable").jsGrid({
+            height: "auto",
+            width: "100%",
+
+            filtering: true,
+            paging: true,
+            editing: true,
+            autoload: true,
+            inserting: true,
+            deleteConfirm: "Вы действительно хотите удалить эту запись?",
+
+            rowClick: function (args) {
+                vmActiveRow(args);
+
+                $materialDefinitionPropertyDisable.hide();
+
+                $('div#physicalAssetPropertyTable').jsGrid('loadOdata', {
+                    defaultFilter: 'PhysicalAssetID eq ({0})'.format(args.item.ID),
+
+                    //set field 'EquipmentID' from parent grid which will be included in JSON for inserting
+                    insertedAdditionalFields: [{
+                        name: 'PhysicalAssetID',
+                        value: args.item.ID
+                    }]
+                });
+            },
+
+            pageSize: 10,
+            pageButtonCount: 5,
+
+            controller: db,
+
+            fields: [
+                { name: "ID", title: "ID", type: "number", width: "50px", readOnly: true },
+                { name: "Description", title: "Название", type: "text", width: "150px" },
+                { name: "FixedAssetID", title: "Номер", type: "number", align: "center", width: "50px" },
+                { name: "PAClassID", title: "ClassID", type: "number", align: "center", width: "50px", readOnly: true },
+                {
+
+
+                    name: "PhysicalAssetClassID", title: "Класс", type: "select", align: "center",
+                    width: "150px", filtering: true, items: a,
+                    valueField: "ID", textField: "Description"
+                },
+                 {
+                     type: 'control',
+                     editButton: true,
+                     deleteButton: true,
+                     clearFilterButton: true,
+                     modeSwitchButton: true
+                 }
+            ]
+        });
+
+        sort_grid();
+    });
+
+
+
+    $('div#physicalAssetPropertyTable').jsGrid({
+        height: "auto",
+        width: "100%",
+
+        sorting: false,
+        paging: true,
+        editing: true,
+        filtering: true,
+        autoload: true,
+        pageLoading: true,
+        inserting: true,
+        pageIndex: 1,
+        pageSize: 10,
+
+        rowClick: vmActiveRow
+
+    }).jsGrid('initOdata', {
+        serviceUrl: serviceUrl,
+        table: 'PhysicalAssetProperty',
+
+        fields: [{
+            id: 'ID',
+            name: 'ID',
+            title: 'ID',
+            readonly: true,
+            type: 'number',
+            order: 1
+        }, {
+            id: 'Description',
+            name: 'Description',
+            title: $translate.instant('pa.grid.material.description'),
+            width: 150,
+            order: 2
+        },
+        {
+            id: 'Value',
+            name: 'Value',
+            title: $translate.instant('grid.common.value'),
+
+            order: 3
+        }],
+        controlProperties: {
+            type: 'control',
+            editButton: true,
+            deleteButton: true,
+            clearFilterButton: true,
+            modeSwitchButton: true
+        }
+    }).jsGrid('loadOdata', {
+        defaultFilter: 'ID eq -1'
+    });
+
+
+
+
 }]);

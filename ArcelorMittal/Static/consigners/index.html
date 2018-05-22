@@ -19,33 +19,7 @@
     </div>-->
 
     <div class="row" style="background-color: #eeeeee; padding: 10px">
-        <div class="col-md-5" style="border-right: 1px solid #d4d4d4">
-            <!--.col-md-4-->
-            <div class="controlsRowConsigners" style="width: 100%; text-align: center; display:none">
-                <button type="button"
-                    class="btn btn-default"
-                    style="width: 26%"
-                    ng-disabled="false"
-                    ng-click="Create()">
-                    Create
-                </button>
-
-                <button type="button"
-                    class="btn btn-default"
-                    style="width: 44%"
-                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected"
-                    ng-click="CreateCopy()">
-                    Create as a copy
-                </button>
-
-                <button type="button"
-                    class="btn btn-default"
-                    style="width: 26%"
-                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')"
-                    ng-click="Print()">
-                    Print
-                </button>
-            </div>
+        <div class="col-md-5 col-sm-5 col-xs-12" style="border-right: 1px solid #d4d4d4">
             
             <div class="controlsRowConsigners" style="width: 100%; text-align: center">
                 <button type="button"
@@ -84,9 +58,12 @@
 
             <div class="treeContainerConsigners" style="height: auto">
                 <!--<input type="text" class="form-control" placeholder="Search node .." id="search">-->
-
+                <input type="checkbox" 
+                       ng-model="ckbx.HideUsedRejectWB"
+                       ng-change="ckbxHideUsedRejectWB()">  {{ 'consigners.Labels.hideUsedRejectWB' | translate }}
+                
                 <ui-select
-                    ng-model="SearchedWaybillShop"
+                    ng-model="search.SearchedWaybillShop"
                     on-select="WaybillShopSelect($item)"
                     search-enabled="true"
                     ng-required="false"
@@ -103,6 +80,14 @@
                 </div>
                 <div class="" style="margin-top: 5px;">
                     <table style="width: 100%; font-size: 12px;">
+                        <tr ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')">
+                            <td colspan="2">	
+                                <input type="checkbox"
+                                    ng-model="ckbx.PrintExplCert"
+                                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')">
+                                {{ 'consigners.Labels.printCert' | translate }}
+                                </td>
+                        </tr>
                         <tr ng-show="CurrentWaybill.Consigner">
                             <td>{{ 'consigners.Labels.consigner' | translate }}	</td>
                             <td style="text-align: right">{{CurrentWaybill.Consigner}}</td>
@@ -129,7 +114,7 @@
         </div>
 
 
-        <div class="col-md-7" align="center" style="border-left: 1px solid #d4d4d4">
+        <div class="col-md-7 col-sm-7 col-xs-12" align="center" style="border-left: 1px solid #d4d4d4">
             <div ng-hide="CurrentWaybill.ID || ArchiveWaybillSelected" style="display: table; width: 100%; height: 100%">
                 <div style="color: gray">
                     <h1>{{ 'consigners.Placeholders.chooseWaybill' | translate }}</h1>
@@ -140,11 +125,16 @@
                     <h1>{{ 'consigners.Placeholders.loading' | translate }}</h1>
                 </div>
             </div>
+
             <div id="waybill_toprint" 
                 ng-show="CurrentWaybill.ID"
                 ui-view="waybill_toprint"
                 ng-class="{'reject': ($parent.$parent.language == 'en' && CurrentWaybill.Status == 'reject'), 'reject ru': ($parent.$parent.language != 'en' && CurrentWaybill.Status == 'reject')}"
                 style="background-color: white; padding-top: 5px;">
+            </div>
+            <div id="explosion_cert" 
+                ng-show="false"
+                ui-view="explosion_cert">
             </div>
         </div>
         

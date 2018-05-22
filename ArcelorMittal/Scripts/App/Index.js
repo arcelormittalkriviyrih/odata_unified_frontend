@@ -20,7 +20,7 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
                 }, { reload: true });
 
                 return $q.reject(rejection);
-            }                        
+            }
         },
 
         'responseError': function (rejection) {
@@ -147,15 +147,15 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
 
             .state('app.AutomationLab', {
 
-                 url: '/AutomationLab',
-                 templateUrl: 'Static/automationlab/index.html',
-                 controller: 'AutomationlabCtrl',
+                url: '/AutomationLab',
+                templateUrl: 'Static/automationlab/index.html',
+                controller: 'AutomationlabCtrl',
                 onEnter: function ($state, roles) {
 
                     if (!vmIsAuthorized('AutomationLab', roles))
-                     $state.go('app.error', { code: 'unauthorized' });
-                 }   
-             })
+                        $state.go('app.error', { code: 'unauthorized' });
+                }
+            })
 
             .state('app.WorkshopSpecs', {
 
@@ -168,25 +168,38 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
                         $state.go('app.error', { code: 'unauthorized' });
                 }
             })
-			
+
+			//.state('app.WeightAnalytics', {
+
+            //    url: '/weightanalytics',
+            //    templateUrl: 'Static/weightanalytics/index.html',
+            //    controller: 'WeightAnalyticsCtrl',
+            //    onEnter: function ($state, roles) {
+
+            //        if (!vmIsAuthorized('WeightAnalytics', roles))
+            //            $state.go('app.error', { code: 'unauthorized' });
+            //    },
+            //    onExit: function ($state, $injector) {
+
+            //        var $interval = $injector.get('$interval');
+            //        var $rootScope = $injector.get('$rootScope');
+
+            //        $interval.cancel($rootScope.intervalScales);
+            //        $interval.cancel($rootScope.intervalWorkRequest);
+            //    }
+			//})
+
 			.state('app.WeightAnalytics', {
+			    //abstract: true,
+			    url: '/weightanalytics',
+			    templateUrl: 'Static/weightanalytics/index.html',
+			    controller: 'WeightAnalyticsCtrl',
+			    onEnter: function ($state, roles) {
 
-                url: '/weightanalytics',
-                templateUrl: 'Static/weightanalytics/index.html',
-                controller: 'WeightAnalyticsCtrl',
-                onEnter: function ($state, roles) {
+			        if (!vmIsAuthorized('WeightAnalytics', roles))
+			            $state.go('app.error', { code: 'unauthorized' });
+			    },
 
-                    if (!vmIsAuthorized('WeightAnalytics', roles))
-                        $state.go('app.error', { code: 'unauthorized' });
-                },
-                onExit: function ($state, $injector) {
-
-                    var $interval = $injector.get('$interval');
-                    var $rootScope = $injector.get('$rootScope');
-
-                    $interval.cancel($rootScope.intervalScales);
-                    $interval.cancel($rootScope.intervalWorkRequest);
-                }
 			})
 
 			.state('app.Consigners', {
@@ -195,7 +208,7 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
 			    //templateUrl: 'Static/consigners/index.html',
 			    template: '<div ui-view>app.Consigners</div>',
 			    controller: 'ConsignersCtrl',
-                
+
 			    onEnter: function ($state, roles) {
 
 			        if (!vmIsAuthorized('Consigners', roles))
@@ -440,7 +453,7 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
     $scope.back = params.back;
 
     if (responseText && typeof responseText == 'object')
-        responseText = responseText.error.innererror.message;
+        responseText = responseText.error ? responseText.error.innererror.message : params.responseText.message;
 
     $scope.errorCode = error.status + ' ' + error.statusText + '\n' + responseText;
 
@@ -599,7 +612,7 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
         });
 
         return grouppedData;
-    };    
+    };
 
 }])
 
@@ -623,14 +636,14 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
 
             });
         }
-              
+
         function vmChangeDropBoxValue(item) {
 
             $scope.description = item.Description || item.Value || item;
             $scope.model = item.ID || item;
             if ($scope.side)
                 item.side = $scope.side;
-            
+
         };
     };
 
@@ -644,7 +657,7 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
             wrongExpr: '=?',
             description: '=?',
             model: '=?',
-            methodOnClick: '=?',            
+            methodOnClick: '=?',
             standard: '=?',
             showDisableDiv: '=?',
             side: '=?',

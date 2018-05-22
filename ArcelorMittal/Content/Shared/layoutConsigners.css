@@ -82,6 +82,10 @@ input.ng-touched.ng-invalid {
   background: url("../Tree/img/32px.png") -36px -68px no-repeat;
 }
 
+.jstree-default .jstree-finalize {
+    background: url("../Tree/img/32px.png") -3px -68px no-repeat;
+}
+
 .reject {
     background-image: url("images/reject.png");
     background-position-x: 50%;

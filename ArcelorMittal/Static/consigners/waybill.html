@@ -12,7 +12,6 @@
 
 
 <style type="text/css">
-    
     div > #dg_103 {
         display: none;
     }
@@ -63,15 +62,14 @@
     @media print {
         div > #dg_103 {
             display: block;
-            page-break-before:always;
+            page-break-before: always;
         }
     }
 </style>
 
 
-<div style="width: 125mm; margin-top: 1mm; margin-left: 1mm; font-size: 10px; font-family: Verdana,Arial,sans-serif;">
-    <!--        {{CurrentWaybillID}}_{{common_var}}
-        !{{id}}!-->
+<div style="width: 125mm; margin: 1mm; font-size: 10px; font-family: Verdana,Arial,sans-serif;">
+
     <table style="width: 100%; font-size: 8px;">
         <tr>
             <td>{{ 'consigners.Labels.amkr' | translate }}	</td>
@@ -94,7 +92,9 @@
         </tr>
         <tr>
             <td>{{ 'consigners.Labels.senderShop' | translate }}</td>
-            <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoSender.ParentDescription}}</td>
+            <td style="font-weight: bold;">{{CurrentWaybill.CargoSender.ParentDescription}}</td>
+            <td style="width: 15%">{{ 'consigners.Labels.weight' | translate }}</td>
+            <td style="font-weight: bold;">{{CurrentWaybill.WeightInWeightsheet}}</td>
         </tr>
         <tr>
             <td>{{ 'consigners.Labels.senderDistrict' | translate }}</td>
@@ -109,10 +109,11 @@
             <td colspan="3" style="font-weight: bold;">{{CurrentWaybill.CargoReceiver.Description}}</td>
         </tr>
         <tr>
-            <td>{{ 'consigners.Labels.cargoType' | translate }}</td>
-            <td colspan="1" style="font-weight: bold;">{{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description | limitTo : 20}}</td>
-            <td style="width: 15%">{{ 'consigners.Labels.weight' | translate }}</td>
-            <td></td>
+            <td style="vertical-align: top; padding-top: 3px;">{{ 'consigners.Labels.cargoType' | translate }}</td>
+            <td colspan="3" style="font-weight: bold; vertical-align: top; padding-top: 3px;">
+                {{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description | limitTo : 50}} 
+                <span ng-show="CurrentWaybill.CargoTypeNotes">({{CurrentWaybill.CargoTypeNotes}})</span>
+            </td>
         </tr>
     </table>
 
@@ -164,7 +165,7 @@
         </tr>
         <tr>
             <td style="font-weight: bold;">{{ 'consigners.Labels.consigner' | translate }}</td>
-            <td class="signline" colspan="2">{{CurrentWaybill.Consigner}}</td>
+            <td class="signline" style="text-align: left;" colspan="2">{{CurrentWaybill.Consigner}}</td>
             <td>({{ 'consigners.Labels.signature' | translate }})</td>
         </tr>
     </table>
@@ -229,7 +230,7 @@
             <td style="width: 30%">{{ 'consigners.Labels.wagon' | translate }} № </td>
             <td style="font-weight: bold;">{{CurrentWaybill.WagonNumber}}	</td>
             <td>{{ 'consigners.Labels.weight' | translate }}</td>
-            <td style="font-weight: bold;"></td>
+            <td style="font-weight: bold;">{{CurrentWaybill.WeightInWeightsheet}}</td>
         </tr>
         <tr>
             <td>{{ 'consigners.Labels.senderStation' | translate }}</td>
@@ -261,12 +262,12 @@
         </tr>
         <tr>
             <td style="font-weight: bold;">{{ 'consigners.Labels.consigner' | translate }}</td>
-            <td class="signline" colspan="2">{{CurrentWaybill.Consigner}}</td>
+            <td class="signline" style="text-align: left;" colspan="2">{{CurrentWaybill.Consigner}}</td>
             <td>({{ 'consigners.Labels.signature' | translate }})</td>
         </tr>
     </table>
 
-    <hr />
+    <p style="border-bottom: 1px dotted #000;" />
 
     <div id="dg_103">
         <table style="width: 100%; font-size: 8px;">
@@ -309,7 +310,7 @@
                 <td>{{ 'consigners.Labels.cargoType' | translate }}</td>
                 <td colspan="1" style="font-weight: bold;">{{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description | limitTo : 20}}</td>
                 <td style="width: 15%">{{ 'consigners.Labels.weight' | translate }}</td>
-                <td></td>
+                <td style="font-weight: bold;">{{CurrentWaybill.WeightInWeightsheet}}</td>
             </tr>
         </table>
 
@@ -354,8 +355,11 @@
                 <td>({{ 'consigners.Labels.signature' | translate }})</td>
             </tr>
         </table>
-    </div>
 
+        <br />
+        <p style="border-bottom: 1px dotted #000;" />
+        <p style="border-bottom: 1px dotted #000;" />
+    </div>
 
 </div>
 

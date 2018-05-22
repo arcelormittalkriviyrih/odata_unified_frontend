@@ -2383,7 +2383,7 @@
             this._height = this.target.height();
             this._width = this.target.width();
             
-            if (this._height <=0 || this._width <=0 || !this._height || !this._width) {
+            if (this._height <= 0 || this._width <= 0 || !this._height || !this._width) {
                 throw new Error("Target dimension not set");
             }
             

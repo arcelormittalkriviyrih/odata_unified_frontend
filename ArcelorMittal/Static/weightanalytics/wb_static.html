@@ -1,0 +1,568 @@
+﻿<!--когда еще грузится страница-->
+<div class="container loading" ng-show="$root.showLoadingState">
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
+    </div>
+</div>
+
+
+<!--основная часть, когда страница прогрузилась-->
+<div ng-show="!$root.showLoadingState">
+    <div class="row" style="background-color: #eeeeee; padding: 5px; margin-top: 0px">
+
+        <div class="col-sm-4 col-md-4 WApanels" style="">
+
+            <!-- Subpanel with Archive WS List -->
+            <div ng-show="!ShowWeightSheetNumberModalWindow && !CurrentWeightSheet.WeightSheetID">
+
+                <ui-select
+                    ng-model="SelectedObjects.WeightingMode"
+                    on-select="WSTypeSelect($item)"
+                    ng-required="false"
+                    class=""
+                    style=""
+                    theme="bootstrap"
+                    title="{{ 'weightanalytics.Placeholders.createWS' | translate }}">
+                        <ui-select-match placeholder="{{ 'weightanalytics.Placeholders.createWS' | translate }}">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="WSType in WSTypes" position='down'>
+                        <div title="{{WSType.Tooltip}}" ng-bind-html="WSType.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                </ui-select>
+
+
+                <div style="margin-top: 5px; padding-left: 5px">
+                    <span>{{ 'weightanalytics.Labels.archiveWS' | translate }}</span>:
+                </div>
+                <input type="checkbox" 
+                       ng-model="ckbx.ShowOnlyActiveWS"
+                       ng-change="ckbxShowOnlyActiveWS()">  {{ 'weightanalytics.Labels.showOnlyActiveWS' | translate }}
+                <div id="weightsheet_tree" style="height: 205px; background-color: white; overflow: auto"></div>
+
+                <!-- Buttons table -->
+                <table style="width: 100%; text-align: center; margin-top: 3px">
+                    <tr>
+                        <td>
+                            <button type="button"
+                                class="btn btn-default"
+                                style="width: 49%"
+                                ng-disabled="!SelectedObjects.weightsheet_id || (['reject', 'active'].indexOf(SelectedObjects.Status) > -1)"
+                                ng-click="PrintWS(SelectedObjects.weightsheet_id)">
+                                {{ 'weightanalytics.Buttons.print' | translate }}
+                            </button>
+
+                            <button type="button"
+                                class="btn btn-default"
+                                style="width: 49%"
+                                ng-disabled="!SelectedObjects.weightsheet_id"
+                                ng-click="OpenWS(SelectedObjects.weightsheet_id)">
+                                {{ 'weightanalytics.Buttons.open' | translate }}
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Modal panel for creating WS -->
+            <div ng-if="ShowWeightSheetNumberModalWindow && !CurrentWeightSheet.WeightSheetID" class="panel panel-default" style="margin-bottom: 5px">
+                <div class="panel-heading" style="text-align: center; height: 30px; padding: 5px 5px">
+                    {{SelectedObjects.WeightingMode.Description}} - {{ 'weightanalytics.Labels.enterWSData' | translate }}:
+                </div>
+                <div class="panel-body" ng-form="WS_create">
+
+                    <table class="param_table">
+                        <tr>
+                            <td>{{ 'weightanalytics.Labels.weightsheet' | translate }} №
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" id="WSNumberCreation"
+                                    ng-model="SelectedObjects.WeightSheetNumber"
+                                    on-enter="WS_create.$valid && CreateWS(SelectedObjects.CreateWSAtFirstWeighing)"
+                                    placeholder="{{ 'weightanalytics.Placeholders.enterWSNumber' | translate }}"
+                                    title="{{ 'weightanalytics.Placeholders.enterWSNumber' | translate }}"
+                                    ng-required="true"
+                                    ng-disabled="CurrentWeightSheet.WeightingMode"
+                                    ng-pattern="'[0-9]{1,4}'" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="checkbox"
+                                    ng-model="SelectedObjects.CreateWSAtFirstWeighing"
+                                    ng-init="SelectedObjects.CreateWSAtFirstWeighing = (['Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) == -1)"
+                                    ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode">
+                                {{ 'weightanalytics.Placeholders.takeFirstWB' | translate }}
+                            </td>
+                        </tr>
+                        <tr ng-disabled="SelectedObjects.CreateWSAtFirstWeighing">
+                            <td>{{ 'weightanalytics.Labels.sender' | translate }}
+                            </td>
+                            <td>
+                                <ui-select
+                                    ng-model="SelectedObjects.SenderShop"
+                                    on-select=""
+                                    ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode || SelectedObjects.CreateWSAtFirstWeighing"
+                                    ng-required="!(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) && !SelectedObjects.CreateWSAtFirstWeighing"
+                                    class=""
+                                    style=""
+                                    theme="bootstrap"
+                                    title="{{ 'weightanalytics.Placeholders.selectSender' | translate }}">
+                        <ui-select-match title="{{c.Description}}" placeholder="{{ 'weightanalytics.Placeholders.selectSender' | translate }}">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="shop in CargoSenderShops | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='down'>
+                        <div ng-bind-html="shop.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                            </td>
+                        </tr>
+                        <tr ng-disabled="SelectedObjects.CreateWSAtFirstWeighing">
+                            <td>{{ 'weightanalytics.Labels.receiver' | translate }}
+                            </td>
+                            <td>
+                                <ui-select
+                                    ng-model="SelectedObjects.ReceiverShop"
+                                    on-select=""
+                                    ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode || SelectedObjects.CreateWSAtFirstWeighing"
+                                    ng-required="!(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) && !SelectedObjects.CreateWSAtFirstWeighing"
+                                    class=""
+                                    style=""
+                                    theme="bootstrap"
+                                    title="{{ 'weightanalytics.Placeholders.selectReceiver' | translate }}">
+                        <ui-select-match placeholder="{{ 'weightanalytics.Placeholders.selectReceiver' | translate }}">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="shop in CargoReceiverShops | orderBy: 'Description' | propsFilter: {Description: $select.search}" position='down'>
+                        <div ng-bind-html="shop.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-top: 10px; text-align: center">
+                                <button type="button"
+                                    class="btn btn-default"
+                                    style="width: 49%"
+                                    ng-disabled="false"
+                                    ng-click="CreateWSCancel()">
+                                    {{ 'weightanalytics.Buttons.cancel' | translate }}
+                                </button>
+
+                                <button type="button"
+                                    class="btn btn-default"
+                                    style="width: 49%"
+                                    ng-disabled="WS_create.$invalid || !SelectedObjects.WeightSheetNumber"
+                                    ng-click="CreateWS(SelectedObjects.CreateWSAtFirstWeighing)">
+                                    {{ 'weightanalytics.Buttons.create' | translate }}
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+
+            <!-- Main panel for created WS -->
+            <div ng-if="CurrentWeightSheet.WeightSheetID">
+
+                <div class="panel panel-default" style="margin-bottom: 5px">
+                    <div class="panel-heading"
+                        style="text-align: center; height: 30px; padding: 5px 5px; font-weight: bold"
+                        ng-class="{'reject': ($parent.$parent.language == 'en' && CurrentWeightSheet.Status == 'reject'), 'reject ru': ($parent.$parent.language != 'en' && CurrentWeightSheet.Status == 'reject')}"
+                        ng-style="(CurrentWeightSheet.Status == 'reject') && {'background-color':'rgb(255, 169, 169)', 'background-repeat':'repeat', 'text-decoration': 'line-through'}">
+                        {{ 'weightanalytics.Labels.weightsheet' | translate }} №{{CurrentWeightSheet.WeightSheetNumber}}
+                    </div>
+                </div>
+
+                <table id="main_ws_info" class="param_table">
+                    <tr>
+                        <td>{{ 'weightanalytics.Labels.sender' | translate }}
+                        </td>
+                        <td>{{CurrentWeightSheet.SenderShop ? CurrentWeightSheet.SenderShop.Description : '---'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'weightanalytics.Labels.receiver' | translate }}
+                        </td>
+                        <td>{{CurrentWeightSheet.ReceiverShop ? CurrentWeightSheet.ReceiverShop.Description : '---'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'weightanalytics.Labels.weigher' | translate }}
+                        </td>
+                        <td>{{CurrentWeightSheet.Weigher}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'consigners.Labels.creatingDT' | translate }}
+                        </td>
+                        <td>{{CurrentWeightSheet.CreateDT}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'consigners.Labels.status' | translate }}
+                        </td>
+                        <td ng-style="{'color': CurrentWeightSheet.Status == 'reject' ? 'red' : 'auto'}"
+                            style="text-transform: uppercase">{{ 'weightanalytics.Labels.status.'+ CurrentWeightSheet.Status | translate }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-top: 67px; text-align: center">
+                            <button type="button"
+                                class="btn btn-default"
+                                style="width: 32%"
+                                ng-disabled="false"
+                                ng-click="Back()">
+                                &lt; {{ 'weightanalytics.Buttons.back' | translate }}
+                            </button>
+
+                            <button type="button"
+                                class="btn btn-default"
+                                style="width: 32%"
+                                ng-disabled="WS_create.$invalid || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
+                                ng-click="CloseWS(SelectedObjects.weightsheet_id)">
+                                {{ 'weightanalytics.Buttons.close' | translate }}
+                            </button>
+                            <button type="button"
+                                class="btn btn-default"
+                                style="width: 32%"
+                                ng-disabled="(['reject', 'active'].indexOf(CurrentWeightSheet.Status) > -1) || !CurrentWeightSheet.Weighings.length"
+                                ng-click="PrintWS(SelectedObjects.weightsheet_id)">
+                                {{ 'weightanalytics.Buttons.print' | translate }}
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+
+        </div>
+
+
+        <!----Center panel---->
+        <div class="col-sm-4 col-md-4 WApanels" style="height: 320px; border-right: 1px solid #d4d4d4; border-left: 1px solid #d4d4d4;">
+
+            <div class="panel panel-default" style="margin-bottom: 5px">
+                <div class="panel-heading" style="text-align: center; height: 30px; padding: 5px 5px; background-color: navajowhite; text-transform: uppercase">
+                    -- {{CurrentWeightSheet.WeightingMode.Description}} --
+                </div>
+
+                <div style="text-align: center">
+                    <div style="height: 145px; margin: 0px;"
+                        id="plot-1000">
+                    </div>
+                    <table style="margin-top: -25px; width: 100%;">
+                        <tr>
+                            <td style="width: 20%">
+                                <div class="weightstab"
+                                    ng-show="CurrentMeasuring.WeightStab">
+                                </div>
+                            </td>
+                            <td style="font-size: 24px">{{CurrentMeasuring.Weight | number:2}} {{ 'weightanalytics.ton' | translate }}
+                            </td>
+                            <td style="width: 20%">
+                                <div class="circleWA" ng-class="CurrentMeasuring.Fault ? 'fault' : 'normal'"
+                                    title="{{(CurrentMeasuring.Fault ? 'weightanalytics.Labels.status.connFault' : 'weightanalytics.Labels.status.connOK') | translate}}">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div>
+                    </div>
+                </div>
+            </div>
+
+
+            <table style="width: 100%">
+                <tr>
+                    <td></td>
+                    <td style="text-align: center">
+                        <span ng-repeat="pl in PlatformsArray"
+                            class="platf"
+                            style="display: inline-block; white-space: nowrap; font-size: smaller;"
+                            ng-style="{ width: {{96/PlatformsArray.length}} + '%' }">{{(CurrentMeasuring.PlatformWeights[pl.name] | number:2) || '--- '}} {{ 'weightanalytics.ton' | translate }}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%; height: 34px">{{ 'weightanalytics.Labels.activePlatforms' | translate }}:
+                    </td>
+                    <td style="text-align: center">
+                        <button ng-repeat="pl in PlatformsArray"
+                            class="btn platf"
+                            ng-style="{ width: {{96/PlatformsArray.length}} + '%' }"
+                            ng-class="{true: 'platf-enable', false: 'platf-disable'}[SelectedObjects.Platforms[pl.name]]"
+                            ng-model="SelectedObjects.Platforms[pl.name]"
+                            ng-init="SelectedObjects.Platforms[pl.name]=true"
+                            ng-click="SelectedObjects.Platforms[pl.name]=!SelectedObjects.Platforms[pl.name]"
+                            ng-disabled="SelectedObjects.WagonType && false">
+                            {{pl.value}}</button>
+                    </td>
+                </tr>
+            </table>
+
+            <table style="width: 100%">
+                <tr>
+                    <td>{{ 'weightanalytics.Labels.offset' | translate }} X:
+                    </td>
+                    <td class="paramValue">{{(CurrentMeasuring.OffsetX | number:2) || '--- '}} {{ 'weightanalytics.ton' | translate }}
+                    </td>
+                    <td>{{ 'weightanalytics.Labels.offset' | translate }} Y:
+                    </td>
+                    <td class="paramValue">{{(CurrentMeasuring.OffsetY | number:2) || '--- '}} {{ 'weightanalytics.ton' | translate }}
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+
+
+        <!----Right panel---->
+        <div class="col-sm-4 col-md-4 WApanels" ng-form="WeightData" ng-disabled="!CurrentWeightSheet.WeightSheetID">
+
+            <div class="panel panel-default" style="margin-bottom: 5px">
+                <div class="panel-heading" style="text-align: center; height: 30px; padding: 5px 5px">
+                    {{ 'weightanalytics.Labels.enterWData' | translate }}:
+                </div>
+            </div>
+
+            <table class="param_table">
+                <tr>
+                    <td>{{ 'weightanalytics.Labels.wagon' | translate }}
+                    </td>
+                    <td>
+                        <div style="position: relative">
+                            <ui-select id="WagonNumberSelect"
+                                ng-model="SelectedObjects.WagonNumber"
+                                on-select="SelectWagonNumber($item)"
+                                ng-disabled="!CurrentWeightSheet.WeightSheetID || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
+                                ng-required="true"
+                                ng-pattern="!WagonManualEnterDisabled ? CurrentWeightSheet.CurrentWeighting.WagonNumberPattern : ''"
+                                style=""
+                                theme="bootstrap"
+                                title="{{ 'weightanalytics.Placeholders.enterWagonNumber' | translate }}">
+                                <ui-select-match 
+                                    placeholder="{{ 'weightanalytics.Placeholders.enterWagonNumber' | translate }}"
+                                    allow-clear="true">
+                                    {{WagonManualEnterDisabled ? $select.selected.WagonNumber : $select.selected}}
+                                </ui-select-match>
+                                <ui-select-choices 
+                                    repeat="wagon in GetWagonNumbers($select.search) | filter: (WagonManualEnterDisabled ? {WagonNumber: $select.search} : $select.search)"
+                                    position='down'>
+                                    <div ng-bind="WagonManualEnterDisabled ? wagon.WagonNumber : wagon">
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div ng-if="WagonShowLoading" class="loading-gif" style="width: 200px"></div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'weightanalytics.Labels.waybill' | translate }}
+                    </td>
+                    <td>
+
+                        <div style="position: relative">
+                            <ui-select
+                                ng-model="SelectedObjects.WBNumber"
+                                on-select="SelectWBNumber($item)"
+                                ng-disabled="!CurrentWeightSheet.WeightSheetID || (['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) > -1) || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
+                                ng-required="['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) == -1"
+                                theme="bootstrap"
+                                title="{{(($select.selected.Status == 'used' || SelectedObjects.WagonNumber.Status == 'used') ? ('weightanalytics.Placeholders.waybillUsed') : ('weightanalytics.Placeholders.enterWBNumber')) | translate }}">
+                                <ui-select-match 
+                                    placeholder="{{ 'weightanalytics.Placeholders.enterWBNumber' | translate }}" 
+                                    allow-clear="true">
+                                    <span ng-style="($select.selected.Status == 'used' || SelectedObjects.WagonNumber.Status == 'used') && {'color':'red'}">№{{WBManualEnterDisabled ? $select.selected.WaybillNumber : $select.selected}}</span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="wb in GetWBNumbers($select.search) | filter: (WBManualEnterDisabled ? {WaybillNumber: $select.search} : $select.search)">
+                                    <!-- menu items -->
+                                    <div ng-bind="WBManualEnterDisabled ? ('№' + wb.WaybillNumber + ' ('+ (wb.StartTime | date:'dd.MM.yyyy HH:mm') + ')') : wb"
+                                            ng-style="(wb.Status == 'used') && {'color':'red'}">
+                                    </div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <button id="wb_preview_btn"
+                                ng-if="SelectedObjects.WBNumber && SelectedObjects.WagonNumber"
+                                data-toggle="modal" data-target="#WaybillModal"
+                                class="btn btn-link jstree-default"
+                                style="top: 2px; right: 68px; padding: 0; position: absolute;">
+                                <span class="jstree-file" style="width: 24px; height: 24px; position: absolute;"></span>
+                            </button>
+                            <div ng-if="WBShowLoading" class="loading-gif" style="width: 200px"></div>
+
+                        </div>
+
+
+                        <!--                        <input type="text" class="form-control"
+                            ng-model="SelectedObjects.WaybillNumber" ng-model-options="{updateOn : 'default blur', debounce: { 'default': 1000, 'blur': 0 }}"
+                            update-on-enter
+                            ng-change="WBNumberEnter(SelectedObjects.WaybillNumber)"
+                            placeholder="Select a Waybill number"
+                            title="Select a Waybill number"
+                            ng-required="true"
+                            ng-disabled="!CurrentWeightSheet.WeightSheetID"
+                            ng-pattern="'[0-9]{1,4}'" />-->
+
+                        <!--                        <ui-select
+                            ng-model="SelectedObjects.WaybillNumber"
+                            on-select="WaybillSelect($item)"
+                            ng-required="!(CurrentWeightSheet.WeightingMode.Description == 'Тарирование')"
+                            ng-disabled="!CurrentWeightSheet.WeightSheetID || (CurrentWeightSheet.WeightingMode.Description == 'Тарирование') || CurrentWeightSheet.Status == 'reject'"
+                            ng-pattern=""
+                            class=""
+                            style=""
+                            theme="bootstrap"
+                            title="Select a Waybill number">
+                        <ui-select-match placeholder="Select a Waybill number">№{{$select.selected.WaybillNumber}}</ui-select-match>
+                        <ui-select-choices repeat="waybill in WaybillNumbers | propsFilter: {WaybillNumber: $select.search}" position='down'>
+                        <div ng-bind-html="('№' + waybill.WaybillNumber + ' ('+ (waybill.EndTime | date:'dd.MM.yyyy HH:mm') + ')') | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>-->
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'weightanalytics.Labels.wagonType' | translate }}
+                    </td>
+                    <td>
+                        <ui-select
+                            ng-model="SelectedObjects.WagonType"
+                            on-select="WagonTypeSelect($item)"
+                            ng-required="true"
+                            ng-disabled="!CurrentWeightSheet.WeightSheetID || isWagonTypeDisabled || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
+                            class=""
+                            style=""
+                            theme="bootstrap"
+                            title="{{ 'weightanalytics.Placeholders.selectWagonType' | translate }}">
+                        <ui-select-match placeholder="{{ 'weightanalytics.Placeholders.selectWagonType' | translate }}">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="type in WagonTypes" position='down'>
+                        <div title="{{type.Tooltip}}" ng-bind-html="type.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'weightanalytics.Labels.cargo' | translate }}
+                    </td>
+                    <td>
+                        <ui-select
+                            ng-model="SelectedObjects.CargoType"
+                            on-select=""
+                            ng-required="!(CurrentWeightSheet.WeightingMode.Description == 'Тарирование')"
+                            ng-disabled="!CurrentWeightSheet.WeightSheetID || (CurrentWeightSheet.WeightingMode.Description == 'Тарирование') || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1) || isCargoTypeDisabled"
+                            class=""
+                            style=""
+                            theme="bootstrap"
+                            title="{{ 'weightanalytics.Placeholders.selectCargoType' | translate }}"
+                            id="cargo_type">
+                        <ui-select-match placeholder="{{ 'weightanalytics.Placeholders.selectCargoType' | translate }}">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="type in CargoTypes | propsFilter: {Description: $select.search, ID: $select.search}" position='down'>
+                        <div ng-bind-html="type.ID + '.' + type.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'weightanalytics.Labels.markedTare' | translate }}
+                    </td>
+                    <td>
+                        <input type="text" class="form-control"
+                            ng-model="SelectedObjects.MarkedTare"
+                            on-enter="WeightData.$valid && TakeWeight()"
+                            placeholder="{{ 'weightanalytics.Placeholders.enterMarkedTare' | translate }}"
+                            title="{{ 'weightanalytics.Placeholders.enterMarkedTare' | translate }}"
+                            ng-required="false"
+                            ng-disabled="!CurrentWeightSheet.WeightSheetID || !(CurrentWeightSheet.WeightingMode.Description == 'Тарирование') || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
+                            ng-pattern="'([0-9]{1,2}[.])?([0-9]{1,2})'" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'weightanalytics.Labels.currentTare' | translate }}
+                    </td>
+                    <td style="padding-left: 10px" ng-show="CurrentPairNumberTare">{{CurrentPairNumberTare.Tare}} {{ 'weightanalytics.ton' | translate }} ({{CurrentPairNumberTare.DT | date:'dd.MM.yyyy HH:mm'}})
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-top: 31px; text-align: center">
+                        <button type="button"
+                            class="btn btn-default"
+                            style="width: 49%"
+                            ng-disabled="!CurrentWeightSheet.WeightSheetID || TakeWeightBtnDisabled || (true && (WeightData.$invalid || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1) || CurrentMeasuring.Weight <= 0 || CurrentMeasuring.Fault || !CurrentMeasuring.WeightStab))"
+                            ng-click="TakeWeight()">
+                            {{ 'weightanalytics.Buttons.takeWeight' | translate }}
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+
+
+    <div
+        ui-view="WS_table"
+        ng-show="CurrentWeightSheet.WeightSheetID"
+        style="margin-top: 5px; margin-left: -6mm;">
+    </div>
+
+    <div
+        id="WS_toprint"
+        ui-view="WS_toprint"
+        ng-if="CreateWSToPrint"
+        ng-show="false">
+    </div>
+
+
+</div>
+
+
+
+<!-- Modal for Waybill Preview -->
+<div class="modal" id="WaybillModal" role="dialog">
+    <div class="modal-dialog" style="width: auto; display: table">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body" style="max-height: 100%">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div id="ModalLoading" class="loading-gif" style="width: 100%;"></div>
+                <div
+                    ng-init="waybill_id = CurrentWeightSheet.CurrentWeighting.WaybillID"
+                    ng-if="ShowWaybillModal"
+                    ng-show="WaybillInfoReady"
+                    ui-view="waybill_toprint">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<button ng-click="tttt = !tttt">!</button>
+<br />
+
+
+<div ng-init="tttt = false"
+    ng-show="tttt">
+    <br />
+    ShowWeightSheetNumberModalWindow: {{ShowWeightSheetNumberModalWindow}}
+    <br />
+    wb_id: {{wb_id}}
+    <br />
+    ws_id: {{ws_id}}
+    <br />
+    <br />
+    SelectedObjects: {{SelectedObjects}}
+    <br />
+    <br />
+    CurrentWeightSheet: {{CurrentWeightSheet}}
+    <br />
+    <br />
+    CurrentMeasuring: {{CurrentMeasuring}}
+    <br />
+    <br />
+    WeightData.$invalid: {{WeightData.$invalid}}
+    <br />
+    WeightData.yyy: {{WeightData.yyy}}
+    <br />
+    WeightData.yyy.$error: {{WeightData.yyy.$error}}
+</div>-->
+
+

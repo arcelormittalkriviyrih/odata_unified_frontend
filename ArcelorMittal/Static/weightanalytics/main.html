@@ -1,0 +1,60 @@
+﻿Main tab content
+
+<!--<br />
+<br />
+Enter or select wagon number:
+<br />
+
+<div style="position: relative">
+    <ui-select
+        ng-model="SelectedObjects.WagonNumber"
+        on-select="SelectWagonNumber($item)"
+        ng-disabled="false"
+        ng-required="true"
+        style="width: 200px">
+    <ui-select-match placeholder="Wagon" allow-clear="true">{{WagonManualEnterDisabled ? $select.selected.WagonNumber : $select.selected}}</ui-select-match>
+    <ui-select-choices repeat="wagon in GetWagonNumbers($select.search) | filter: (WagonManualEnterDisabled ? {WagonNumber: $select.search} : $select.search)">
+        <div ng-bind="WagonManualEnterDisabled ? wagon.WagonNumber : wagon">
+        </div>
+    </ui-select-choices>
+</ui-select>
+    <div ng-if="WagonShowLoading" class="loading-gif" style="width: 200px"></div>
+</div>
+
+
+<br />
+Enter or select waybill number:
+<br />
+<div style="position: relative">
+    <ui-select
+        ng-model="SelectedObjects.WBNumber"
+        on-select="SelectWBNumber($item)"
+        ng-disabled="false"
+        ng-required="true"
+        style="width: 200px">
+    <ui-select-match placeholder="Waybill" allow-clear="true">№{{WBManualEnterDisabled ? $select.selected.WaybillNumber : $select.selected}}</ui-select-match>
+        <ui-select-choices repeat="wb in GetWBNumbers($select.search) | filter: (WBManualEnterDisabled ? {WaybillNumber: $select.search} : $select.search)">
+        <div ng-bind="WBManualEnterDisabled ? ('№' + wb.WaybillNumber + ' ('+ (wb.EndTime | date:'dd.MM.yyyy HH:mm') + ')') : wb">
+        </div>
+    </ui-select-choices>
+    </ui-select>
+    <div ng-if="WBShowLoading" class="loading-gif" style="width: 200px"></div>
+</div>
+
+<br />
+<br />
+WagonManualEnterDisabled: {{WagonManualEnterDisabled}}
+<br />
+WBManualEnterDisabled: {{WBManualEnterDisabled}}
+
+<br />
+<br />
+SelectedWagonNumber:
+<br /> 
+{{SelectedObjects.WagonNumber}}
+<br />
+<br />
+SelectedWBNumber: 
+<br />
+{{SelectedObjects.WBNumber}}
+-->

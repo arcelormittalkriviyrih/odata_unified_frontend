@@ -162,8 +162,10 @@
     <Content Include="Content\Shared\bootstrap\img\glyphicons-halflings-white.png" />
     <Content Include="Content\Shared\bootstrap\img\glyphicons-halflings.png" />
     <Content Include="Content\Shared\favicon.ico" />
+    <Content Include="Content\Shared\images\red_flash.gif" />
     <Content Include="Content\Shared\images\reject.png" />
     <Content Include="Content\Shared\images\reject_ru.png" />
+    <Content Include="Content\Shared\images\transfer.png" />
     <Content Include="Content\Shared\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\Shared\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\Shared\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -192,8 +194,11 @@
     <Content Include="Content\Table\jsgrid-theme.css" />
     <Content Include="Content\Table\jsgrid.css" />
     <Content Include="Content\Table\style.css" />
+    <Content Include="Content\Tree\32px.png" />
     <Content Include="Content\Tree\img\32px.png" />
     <Content Include="Content\Tree\img\throbber.gif" />
+    <Content Include="Content\Tree\style.min.css" />
+    <Content Include="Content\Tree\throbber.gif" />
     <Content Include="Content\Tree\tree.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Action\index.js" />
@@ -201,11 +206,15 @@
     <Content Include="Scripts\App\Consigners.js" />
     <Content Include="Scripts\App\gasCollection.js" />
     <Content Include="Scripts\App\Resources.js" />
+    <Content Include="Scripts\App\WeightAnalytics.js" />
     <Content Include="Scripts\Vendor\backbone.js" />
     <Content Include="Scripts\Diagram\diagramExt.js" />
     <Content Include="Scripts\Diagram\index.js" />
     <Content Include="Scripts\Vendor\joint.min.js" />
+    <Content Include="Scripts\Vendor\jquery.qrcode.min.js" />
     <Content Include="Scripts\Vendor\jstree.search.js" />
+    <Content Include="Scripts\Vendor\jstree\jstree.min.js" />
+    <Content Include="Scripts\Vendor\jstree\jstree.search.js" />
     <Content Include="Scripts\Vendor\lodash.js" />
     <Content Include="Scripts\Vendor\dhtmlxscheduler.js" />
     <Content Include="Scripts\Vendor\dhtmlxscheduler_year_view.js" />
@@ -219,7 +228,7 @@
     <Content Include="Scripts\App\Market.js" />
     <Content Include="Scripts\App\PA.js" />
     <Content Include="Scripts\App\WorkshopSpecs.js" />
-    <Content Include="Scripts\App\WeightAnalytics.js" />
+    <Content Include="Scripts\App\WeightAnalytics_old.js" />
     <Content Include="Scripts\Shared\common.js" />
     <Content Include="Scripts\Shared\util.js" />
     <Content Include="Scripts\Table\index.js" />
@@ -283,6 +292,7 @@
     <Content Include="Static\automationlab\repair.html" />
     <Content Include="Static\consigners\consigners.html" />
     <Content Include="Static\consigners\create.html" />
+    <Content Include="Static\consigners\explosion_cert.html" />
     <Content Include="Static\consigners\index.html" />
     <Content Include="Static\consigners\waybill.html" />
     <Content Include="Static\error.html" />
@@ -308,15 +318,21 @@
     <Content Include="Static\market\labeltemplate.html" />
     <Content Include="Static\market\order.html" />
     <Content Include="Static\pa\diagnostics.html" />
+    <Content Include="Static\pa\physicalasset.html" />
     <Content Include="Static\pa\version.html" />
     <Content Include="Static\pa\sapcommunication.html" />
-    <Content Include="Static\weightanalytics\index.html" />
-    <Content Include="Static\weightanalytics\link1.html" />
+    <Content Include="Static\weightanalytics_old\index.html" />
+    <Content Include="Static\weightanalytics_old\link1.html" />
     <Content Include="Static\root.html" />
     <Content Include="Static\templates\dropdown.html" />
-    <Content Include="Static\weightanalytics\toprint.html">
+    <Content Include="Static\weightanalytics_old\toprint.html">
       <BrowseToURL>~/odata_unified_frontend/Static/weightanalytics/toprint.html</BrowseToURL>
     </Content>
+    <Content Include="Static\weightanalytics\index.html" />
+    <Content Include="Static\weightanalytics\wb_static.html" />
+    <Content Include="Static\weightanalytics\main.html" />
+    <Content Include="Static\weightanalytics\wb_dynamic.html" />
+    <Content Include="Static\weightanalytics\ws_table.html" />
     <Content Include="Static\workshopspecs.html" />
     <Content Include="Static\index.html" />
     <Content Include="Static\welcome.html" />
