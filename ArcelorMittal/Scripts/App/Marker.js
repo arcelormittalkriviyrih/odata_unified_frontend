@@ -170,7 +170,7 @@
 
 }])
 
-.controller('markerIndexCtrl', ['$scope', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$timeout', '$http', function ($scope, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $timeout, $http) {
+.controller('markerIndexCtrl', ['$scope', 'sapUrl', '$rootScope', 'indexService', '$state', 'roles', '$q', '$translate', 'scalesRefresh', 'workRequestRefresh', '$interval', '$timeout', '$http', function ($scope, sapUrl, $rootScope, indexService, $state, roles, $q, $translate, scalesRefresh, workRequestRefresh, $interval, $timeout, $http) {
 
     //properties
     $scope.filter = [];
@@ -1415,13 +1415,86 @@
                                                    Cancel: $translate.instant('buttonCancel')
                                                }, controlList);
                              } else {
+                                if(creatingOrder !== $scope.commOrder) { // we need this to avoid inserting twice.
+                                    // By some reason our method vmBuildForm called 2 times on ENTER event
+                                    creatingOrder = $scope.commOrder;
 
-                                 vmShowLastCommOrderValue();
-
-                                 alert($translate.instant('marker.errorMessages.noOrders'));
+                                    vmGetSapInfo($scope.commOrder).then(function(data){
+                                        vmOnGetSapInfoResult($scope.commOrder, data.value);
+                                    }, function( jqXHR, textStatus, errorThrown ){
+                                        console.log('[vmGetSapInfo() failed] Status: ' + textStatus + '; Error: ' + errorThrown);
+                                        vmOnGetSapInfoResult($scope.commOrder);
+                                    })
+                                }
                              }
-
                          })
+
+    }
+
+    var creatingOrder = null;    
+
+    function vmGetSapInfo(orderNumber){
+        return $.ajax({
+            url: sapUrl + orderNumber,
+            contentType: "application/json",
+            timeout: 15000
+        })
+    }
+
+    function vmOnGetSapInfoResult(orderNum, sapData){
+        var orderData = sapData ? vmSapDataToOrder(sapData) : null;
+
+        vmTryCreateOrder(orderNum, orderData).then(
+            function() {
+                vmBuildForm();
+            },
+            function() {
+                creatingOrder = null;
+            }
+        );
+    }
+
+    function vmSapDataToOrder(sapData){
+        return {
+            STANDARD: vmGetSapField(sapData,'DSTU'),
+            LENGTH: vmGetSapField(sapData,'Lenght'), 
+            MIN_ROD: vmGetSapField(sapData,'Quantity'),
+            CONTRACT_NO: vmGetSapField(sapData,'Contract'),
+            DIRECTION: vmGetSapField(sapData,'CountryName'),
+            PRODUCT: vmGetSapField(sapData,'ProductName'),
+            CLASS: vmGetSapField(sapData,'ProductClass'),
+            STEEL_CLASS: vmGetSapField(sapData,'SteelGrade'), 
+            COMM_ORDER: vmGetSapField(sapData,'SelesOrder'),
+            SIZE: vmGetSapField(sapData,'Size'), 
+            BUYER_ORDER_NO: vmGetSapField(sapData,'Order')
+        };
+    }
+
+    function vmGetSapField(sapData, fieldName) {
+        var param = sapData.filter(function(val){
+            return val.Name === fieldName;
+        });
+
+        return param.length ? param[0].Value : null;
+    }
+
+    function vmTryCreateOrder(orderNumber, orderData) {
+        var url = serviceUrl;
+        var data =  { COMM_ORDER: orderNumber/*parseInt(orderNumber, 10)*/ };
+        if(orderData) {
+            data = angular.extend(orderData, data);
+        }
+
+        var params = {
+            url: url + 'ins_Order',
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            timeout: 15000
+        };
+        
+        //call service action
+        return $.ajax(params);
 
     }
 
