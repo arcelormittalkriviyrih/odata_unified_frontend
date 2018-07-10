@@ -549,12 +549,23 @@
 
                                      name: 'LABEL_PRINT_QTY',
                                      properties: {
-                                         control: 'text',
-                                         required: false,
+                                         control: 'combo',
+                                         required: true,
                                          show: true,
-                                         disable: true,
+                                         disable: false,
                                          send: true,
+                                         defaultValue: 1,
                                          translate: $translate.instant('market.Order.CreateDialogue.LABEL_PRINT_QTY'),
+                                         data: [{
+                                           'ID': 1,
+                                           'Name': 1
+                                         }, {
+                                           'ID': 2,
+                                           'Name': 2
+                                         }],
+                                         keyField: 'ID',
+                                         valueField: 'Name',
+                                         filter: false,
                                          order: 98
                                      },
                                  }, {
