@@ -399,7 +399,7 @@ function vmShowUnfilledRequiredFields(form, unFilledFields) {
 
         if ($(item).attr('data-parent') == 'dropDown') {
 
-            form.find('.dropdown').addClass('wrong');
+            $(item).siblings('.dropdown').addClass('wrong');
         } else
             $(item).addClass('wrong');
 
