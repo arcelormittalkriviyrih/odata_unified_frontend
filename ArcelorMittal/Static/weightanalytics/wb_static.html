@@ -33,9 +33,10 @@
                 <div style="margin-top: 5px; padding-left: 5px">
                     <span>{{ 'weightanalytics.Labels.archiveWS' | translate }}</span>:
                 </div>
-                <input type="checkbox" 
-                       ng-model="ckbx.ShowOnlyActiveWS"
-                       ng-change="ckbxShowOnlyActiveWS()">  {{ 'weightanalytics.Labels.showOnlyActiveWS' | translate }}
+                <input type="checkbox"
+                    ng-model="ckbx.ShowOnlyActiveWS"
+                    ng-change="ckbxShowOnlyActiveWS()">
+                {{ 'weightanalytics.Labels.showOnlyActiveWS' | translate }}
                 <div id="weightsheet_tree" style="height: 205px; background-color: white; overflow: auto"></div>
 
                 <!-- Buttons table -->
@@ -194,6 +195,12 @@
                         <td>{{CurrentWeightSheet.CreateDT}}
                         </td>
                     </tr>
+                    <tr ng-show="CurrentWeightSheet.EditDT">
+                        <td>{{ 'consigners.Labels.closingDT' | translate }}
+                        </td>
+                        <td>{{CurrentWeightSheet.EditDT}}
+                        </td>
+                    </tr>
                     <tr>
                         <td>{{ 'consigners.Labels.status' | translate }}
                         </td>
@@ -250,9 +257,8 @@
                     <table style="margin-top: -25px; width: 100%;">
                         <tr>
                             <td style="width: 20%">
-                                <div class="weightstab"
-                                    ng-show="CurrentMeasuring.WeightStab">
-                                </div>
+                                <div class="weightstab" ng-show="CurrentMeasuring.WeightStab && CurrentMeasuring.Weight"></div>
+                                <div style="font-weight: bold;" ng-show="!CurrentMeasuring.Weight"> &gt;0&lt; </div>
                             </td>
                             <td style="font-size: 24px">{{CurrentMeasuring.Weight | number:2}} {{ 'weightanalytics.ton' | translate }}
                             </td>

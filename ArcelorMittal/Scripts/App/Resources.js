@@ -481,6 +481,7 @@
                 cuttingLine: 'CUTTING LINE',
                 creatingDT: 'Creating datetime',
                 modifyingDT: 'Modifying datetime',
+                closingDT: 'Closing datetime',
                 status: 'Status',
                 reject: {
                     reject: 'Reject',
@@ -1054,6 +1055,7 @@
                 cuttingLine: 'ЛИНИЯ ОТРЕЗА',
                 creatingDT: 'Создано',
                 modifyingDT: 'Изменено',
+                closingDT: 'Закрыто',
                 status: 'Статус',
                 reject: {
                     reject: 'Брак',
@@ -1628,6 +1630,7 @@
                 cuttingLine: 'ЛІНІЯ ВІДРІЗУ',
                 creatingDT: 'Створено',
                 modifyingDT: 'Змінено',
+                closingDT: 'Закрито',
                 status: 'Статус',
                 reject: {
                     reject: 'Брак',
