@@ -12,8 +12,9 @@
     }
 
         .WBrow tr {
-            height: 5mm;
-            overflow: hidden;
+            min-height: 5mm;
+            /*overflow-x: hidden;
+            overflow-y: visible;*/
         }
 
             .WBrow tr > td {
@@ -66,7 +67,7 @@
 
         <table ng-class="{'WBrow' : toprint}" style="width: 100%">
             <tr>
-                <td rowspan="5" style="width: 20%">
+                <td rowspan="5" style="width: 20%;">
                     <div id="WS_QR"></div>
                 </td>
                 <td style="width: 15%">{{ 'weightanalytics.Labels.weightbridge' | translate }}</td>

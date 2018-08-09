@@ -796,7 +796,7 @@
         }
 
         // если Тарирование или Брутто - предварительно создавать не нужно
-            // TEST Preliminary for all types of WS
+        // TEST Preliminary for all types of WS
         if (['Контроль брутто'].indexOf($scope.SelectedObjects.WeightingMode['Description']) > -1) {
             create_at_first_weighing = false;
             $scope.SelectedObjects.CreateWSAtFirstWeighing = false;
@@ -1503,11 +1503,11 @@
 
 
 // контроллер печати отвесной
-.controller('WeightAnalyticsWSPrintCtrl', ['$scope', 'weightanalyticsService', '$state', '$translate', function ($scope, weightanalyticsService, $state, $translate) {
+.controller('WeightAnalyticsWSPrintCtrl', ['$http', '$scope', 'weightanalyticsService', '$state', '$translate', 'user', function ($http, $scope, weightanalyticsService, $state, $translate, user) {
 
     $scope.toprint = true;
     $scope.ReadyToPrint = vmReadyToPrint;
-        
+
     // если Weighings заполнена (т.е. вызываем печать из открытой отвесной)
     if ($scope.CurrentWeightSheet.Weighings && $scope.CurrentWeightSheet.Weighings.length) {
         $scope.CurrentWeightSheet.Weighings.Totals = null;
@@ -1583,6 +1583,7 @@
         printWindow.document.close();
         // После печати удаляем WS_toprint ui-view
         $scope.$parent.$parent.CreateWSToPrint = false;
+        SendToPrintService(inner_html, $scope.CurrentWeightSheet);
     }
 
     // QR code generator
@@ -1602,6 +1603,35 @@
             var qr_img = canvas[0].toDataURL("image/png");
             $("#WS_QR").replaceWith('<img style="width:120px; height:120px;" src="' + qr_img + '"/>');
         }
+    }
+
+    // функция отправки на сервис печати
+    function SendToPrintService(content, ws) {
+        var printServiceUrl = "http://krr-tst-padev02/PrintServiceUI/api/Service/";
+        var id = ws.WeightSheetID;
+        //var user = ws.Weigher;
+        var data = { ID: id, DocumentName: "Отвесная №" + ws.WeightSheetNumber, Content: content, User: user };
+        $http({
+            method: 'post',
+            //headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            url: printServiceUrl,
+            data: data,
+            withCredentials: true,
+            timeout: 5000,
+        })
+            .then(function (response) {
+                var result = response.data;
+                if (result && result["StatusCode"] == 0) {
+                    alert("Document has been added to PrintService queue.");
+                }
+                else {
+                    alert("Error during sending to PrintService" + ((result && result["StatusMessage"]) ? (":\n"+result["StatusMessage"]+ ".") : "!"));
+                }
+
+            }, function (error) {
+                alert("Error during sending to PrintService!");
+            });
     }
 
 }])
