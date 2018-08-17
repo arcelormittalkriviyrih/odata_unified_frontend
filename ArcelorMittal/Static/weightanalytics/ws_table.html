@@ -1,7 +1,4 @@
-﻿<!--<div style="font-size: large">
-    Weightsheet # 1111
-</div>-->
-
+﻿
 <style type="text/css">
     table td {
         vertical-align: middle!important;
@@ -45,7 +42,7 @@
 
         .TT td, th {
             border: 1px solid black; /* Граница вокруг ячеек */
-            padding: 3px;
+            padding: 2px;
         }
 
     .ng-hide {
@@ -54,7 +51,7 @@
 </style>
 
 
-<div style="width: 190mm; margin-top: 3mm; margin-left: 3mm; font-size: 12px; font-family: Verdana,Arial,sans-serif;"
+<div style="width: 190mm; margin-top: 1mm; margin-left: 1mm; font-size: 12px; font-family: Verdana,Arial,sans-serif;"
     ng-style="{'width': toprint ? '190mm' : '100%'}">
 
     <div ng-if="toprint">
@@ -94,7 +91,7 @@
 
         <table style="width: 100%">
             <tr>
-                <td style="height: 7mm; font-size: 15px; font-weight: bold; text-align: center">{{ 'weightanalytics.Labels.weightsheet' | translate }} №{{CurrentWeightSheet.WeightSheetNumber}}	</td>
+                <td style="height: 6mm; font-size: 15px; font-weight: bold; text-align: center">{{ 'weightanalytics.Labels.weightsheet' | translate }} №{{CurrentWeightSheet.WeightSheetNumber}}	</td>
             </tr>
         </table>
     </div>
@@ -109,7 +106,7 @@
                 <th style="width: 8%">{{ 'weightanalytics.Labels.brutto' | translate }}</th>
                 <th style="width: 8%">{{ 'weightanalytics.Labels.tare' | translate }}</th>
                 <th style="width: 8%">{{ 'weightanalytics.Labels.netto' | translate }}</th>
-                <th style="width: 12%">{{ 'weightanalytics.Labels.notes' | translate }}</th>
+                <th style="width: 10%">{{ 'weightanalytics.Labels.notes' | translate }}</th>
             </tr>
         </thead>
         <tbody>
