@@ -630,9 +630,11 @@
     }
 
     // нажатие кнопки "Печать отвесной"
-    function vmPrintWS(id) {
+    function vmPrintWS(id, remotePrint) {
+        //alert("Remote print flag: " + remotePrint);
         //alert(id);
         if (!id || ($scope.SelectedObjects.Status != 'closed' && $scope.SelectedObjects.Status)) return;
+        $scope.RemotePrint = remotePrint;
         $scope.CreateWSToPrint = true;
     }
 
@@ -673,8 +675,9 @@
             }).then(function (response) {
                 //var message = "Weightsheet #{0} closed succesfully.".format($scope.CurrentWeightSheet.WeightSheetNumber);
                 var message = $translate.instant('weightanalytics.Messages.closeWSSuccess').format($scope.CurrentWeightSheet.WeightSheetNumber);
-                $scope.CurrentWeightSheet.Status = Status;
+                //$scope.CurrentWeightSheet.Status = Status;
                 $scope.SelectedObjects.Status = Status;
+                vmOpenWS(id);
                 alert(message);
             })
         }
@@ -1503,7 +1506,7 @@
 
 
 // контроллер печати отвесной
-.controller('WeightAnalyticsWSPrintCtrl', ['$http', '$scope', 'weightanalyticsService', '$state', '$translate', 'user', function ($http, $scope, weightanalyticsService, $state, $translate, user) {
+.controller('WeightAnalyticsWSPrintCtrl', ['$http', '$scope', 'weightanalyticsService', 'printService', '$state', '$translate', 'user', function ($http, $scope, weightanalyticsService, printService, $state, $translate, user) {
 
     $scope.toprint = true;
     $scope.ReadyToPrint = vmReadyToPrint;
@@ -1561,7 +1564,11 @@
         var ws_toprint_html = document.getElementById('WS_toprint');
         var inner_html = ws_toprint_html.innerHTML;
         var autoprint = "";
+        var fix_print = "";
         autoprint = "\n\<script type=\"text/javascript\">\n\window.onload=function(){window.print();window.close();} \n\ </script>\n";
+        fix_print = "\n\<script type=\"text/javascript\">\n" +
+            'var heightImage = document.getElementById("qr").clientHeight; var row_count = document.getElementsByClassName("WBrow")[0].rows.length; var new_height_tr = heightImage/row_count;' +
+            'for(var i=0; i<row_count; i++) {document.getElementsByClassName("WBrow")[0].getElementsByTagName("tr")[i].style.height = new_height_tr + "px";} \n\ </script>\n';
         var str = "\
             <!DOCTYPE html>\n\
             <html>\n\
@@ -1573,17 +1580,22 @@
             </head>\n\
             <body>\n\
         ".format($scope.CurrentWeightSheet.WeightSheetNumber, $translate.instant('weightanalytics.Table.weightsheet'));
-        inner_html = str + inner_html + "</body>" + autoprint + "</html>"
+        inner_html = str + inner_html + "</body>" + autoprint + fix_print + "</html>"
 
-        // Открыть документ в новом окне (или послать inner_html в сервис печати)
-        var printWindow = window.open('', '_blank');
-        //window.open('', '_blank').document.write(inner_html);
-        printWindow.document.open();
-        printWindow.document.write(inner_html);
-        printWindow.document.close();
+        // Проверка на удаленную или локальную печать
+        if ($scope.RemotePrint) {
+            SendToPrintService(inner_html, $scope.CurrentWeightSheet, $state.params["wb_id"]);
+        }
+        else {
+            // Открыть документ в новом окне (или послать inner_html в сервис печати)
+            var printWindow = window.open('', '_blank');
+            printWindow.document.open();
+            printWindow.document.write(inner_html);
+            printWindow.document.close();
+        }
         // После печати удаляем WS_toprint ui-view
         $scope.$parent.$parent.CreateWSToPrint = false;
-        SendToPrintService(inner_html, $scope.CurrentWeightSheet);
+
     }
 
     // QR code generator
@@ -1601,34 +1613,19 @@
         if (canvas && canvas[0]) {
             // convert canvas to PNG
             var qr_img = canvas[0].toDataURL("image/png");
-            $("#WS_QR").replaceWith('<img style="width:120px; height:120px;" src="' + qr_img + '"/>');
+            $("#WS_QR").replaceWith('<img id="qr" style="height:26mm;" src="' + qr_img + '"/>');
         }
     }
 
     // функция отправки на сервис печати
-    function SendToPrintService(content, ws) {
-        var printServiceUrl = "http://krr-tst-padev02/PrintServiceUI/api/Service/";
+    function SendToPrintService(content, ws, equip_id) {
         var id = ws.WeightSheetID;
-        //var user = ws.Weigher;
         var data = { ID: id, DocumentName: "Отвесная №" + ws.WeightSheetNumber, Content: content, User: user };
-        $http({
-            method: 'post',
-            //headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
-            url: printServiceUrl,
-            data: data,
-            withCredentials: true,
-            timeout: 5000,
-        })
+        //printService.Print(data)
+        printService.Print(equip_id, data)
             .then(function (response) {
-                var result = response.data;
-                if (result && result["StatusCode"] == 0) {
-                    alert("Document has been added to PrintService queue.");
-                }
-                else {
-                    alert("Error during sending to PrintService" + ((result && result["StatusMessage"]) ? (":\n"+result["StatusMessage"]+ ".") : "!"));
-                }
-
+                alert(response);
+                return;
             }, function (error) {
                 alert("Error during sending to PrintService!");
             });
@@ -1844,6 +1841,50 @@
 
 }])
 
+
+
+.service('printService', ['$http', 'indexService', '$q', '$filter', 'printServiceUrl', function ($http, indexService, $q, $filter, printServiceUrl) {
+
+    // отправка на сервис печати
+    this.Print = function (equip_id, data) {
+        return indexService.getInfo("v_PrinterSettings?$filter=EquipmentID eq {0}".format(equip_id))
+        .then(function (response) {
+            var settings = response.data.value;
+            var query_array = [];
+            settings.forEach(function (el, i) {
+                var printSettings = { PaperSize: el['PAPER_SIZE'], Landscape: el['PAPER_ORIENTATION_LANDSCAPE'], Copies: el['COPIES'] };
+                var dataToSend = angular.copy(data);
+                dataToSend['PrinterName'] = el['PRINTER_NAME'];
+                dataToSend['PrintSettings'] = JSON.stringify(printSettings);
+                var query =
+                    $http({
+                        method: 'post',
+                        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                        url: printServiceUrl,
+                        data: dataToSend,
+                        withCredentials: true,
+                        timeout: 5000,
+                    });
+                query_array.push(query);
+            })
+            return $q.all(query_array)
+            .then(function (responses) {
+                var answer = "";
+                responses.forEach(function (elem) {
+                    if (elem.data["StatusCode"] == 0) {
+                        answer += elem.data["PrinterName"] + ": OK"
+                    }
+                    else {
+                        answer += elem.data["PrinterName"] + ": Error (" + elem.data["StatusMessage"] + ")";
+                    }
+                    answer += "\n";
+                });
+                return answer;
+            });
+        });
+
+    }
+}])
 
 //.directive('updateOnEnter', function () {
 //    return {

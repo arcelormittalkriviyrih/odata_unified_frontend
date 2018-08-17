@@ -43,13 +43,29 @@
                 <table style="width: 100%; text-align: center; margin-top: 3px">
                     <tr>
                         <td>
-                            <button type="button"
+                            <!--<button type="button"
                                 class="btn btn-default"
                                 style="width: 49%"
                                 ng-disabled="!SelectedObjects.weightsheet_id || (['reject', 'active'].indexOf(SelectedObjects.Status) > -1)"
                                 ng-click="PrintWS(SelectedObjects.weightsheet_id)">
                                 {{ 'weightanalytics.Buttons.print' | translate }}
-                            </button>
+                            </button>-->
+
+                            <div class="dropdown"
+                                style="width: 49%; display: inline-block">
+                                <button
+                                    class="btn btn-default dropdown-toggle" style="width: 100%"
+                                    type="button" id="printDropdownMenu_1"
+                                    ng-disabled="!SelectedObjects.weightsheet_id || (['reject', 'active'].indexOf(SelectedObjects.Status) > -1)"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    {{ 'weightanalytics.Buttons.print' | translate }}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="printDropdownMenu_1">
+                                    <li><a href="javascript:void(0)" ng-click="PrintWS(SelectedObjects.weightsheet_id, false)">{{ 'weightanalytics.Buttons.localPrint' | translate }}</a></li>
+                                    <li><a href="javascript:void(0)" ng-click="PrintWS(SelectedObjects.weightsheet_id, true)">{{ 'weightanalytics.Buttons.remotePrint' | translate }}</a></li>
+                                </ul>
+                            </div>
 
                             <button type="button"
                                 class="btn btn-default"
@@ -225,13 +241,30 @@
                                 ng-click="CloseWS(SelectedObjects.weightsheet_id)">
                                 {{ 'weightanalytics.Buttons.close' | translate }}
                             </button>
-                            <button type="button"
+                            <!--<button type="button"
                                 class="btn btn-default"
+                                ng-if="false"
                                 style="width: 32%"
                                 ng-disabled="(['reject', 'active'].indexOf(CurrentWeightSheet.Status) > -1) || !CurrentWeightSheet.Weighings.length"
-                                ng-click="PrintWS(SelectedObjects.weightsheet_id)">
+                                ng-click="PrintWS(SelectedObjects.weightsheet_id, false)">
                                 {{ 'weightanalytics.Buttons.print' | translate }}
-                            </button>
+                            </button>-->
+
+                            <div class="dropdown"
+                                style="width: 32%; display: inline-block">
+                                <button
+                                    class="btn btn-default dropdown-toggle" style="width: 100%"
+                                    type="button" id="printDropdownMenu_2"
+                                    ng-disabled="(['reject', 'active'].indexOf(CurrentWeightSheet.Status) > -1) || !CurrentWeightSheet.Weighings.length"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    {{ 'weightanalytics.Buttons.print' | translate }}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="printDropdownMenu_2">
+                                    <li><a href="javascript:void(0)" ng-click="PrintWS(SelectedObjects.weightsheet_id, false)">{{ 'weightanalytics.Buttons.localPrint' | translate }}</a></li>
+                                    <li><a href="javascript:void(0)" ng-click="PrintWS(SelectedObjects.weightsheet_id, true)">{{ 'weightanalytics.Buttons.remotePrint' | translate }}</a></li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                 </table>
@@ -258,7 +291,7 @@
                         <tr>
                             <td style="width: 20%">
                                 <div class="weightstab" ng-show="CurrentMeasuring.WeightStab && CurrentMeasuring.Weight"></div>
-                                <div style="font-weight: bold;" ng-show="!CurrentMeasuring.Weight"> &gt;0&lt; </div>
+                                <div style="font-weight: bold;" ng-show="!CurrentMeasuring.Weight">&gt;0&lt; </div>
                             </td>
                             <td style="font-size: 24px">{{CurrentMeasuring.Weight | number:2}} {{ 'weightanalytics.ton' | translate }}
                             </td>
@@ -507,7 +540,7 @@
     <div
         ui-view="WS_table"
         ng-show="CurrentWeightSheet.WeightSheetID"
-        style="margin-top: 5px; margin-left: -6mm;">
+        style="margin-top: 5px; margin-left: -2mm;">
     </div>
 
     <div
