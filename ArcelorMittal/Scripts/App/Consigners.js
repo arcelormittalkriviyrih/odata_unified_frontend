@@ -1275,12 +1275,12 @@ angular.module('indexApp')
     };
 
     this.GetCargoSenders = function () {
-        var request = indexService.getInfo("v_WGT_Consigners?$filter=PropertyDescription eq 'CONSIGNEE'&$orderby=Description");
+        var request = indexService.getInfo("v_WGT_Consigners?$filter=PropertyDescription eq 'CONSIGNER'&$orderby=Description");
         return request;
     };
 
     this.GetCargoReceivers = function () {
-        var request = indexService.getInfo("v_WGT_Consigners?$filter=PropertyDescription eq 'CONSIGNER'&$orderby=Description");
+        var request = indexService.getInfo("v_WGT_Consigners?$filter=PropertyDescription eq 'CONSIGNEE'&$orderby=Description");
         return request;
     };
 

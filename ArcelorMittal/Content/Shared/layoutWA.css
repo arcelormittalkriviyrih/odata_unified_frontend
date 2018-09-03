@@ -376,6 +376,14 @@ input.ng-touched.ng-invalid {
     white-space: nowrap !important;
 }
 
+/**/
+.zero-button {
+    position: absolute;
+    padding: 0px 3px;
+    top: 10px;
+    left:15px;
+}
+
 /*platform buttons*/
 .platf {
     min-width: 30px;
