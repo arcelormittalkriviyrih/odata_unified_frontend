@@ -295,7 +295,7 @@
                                     title="{{ 'weightanalytics.Labels.zeroWB' | translate }}"
                                     ng-click="ZeroingScales()"
                                     ng-if="CurrentMeasuring.ZeroingEnable"
-                                    ng-disabled="CurrentMeasuring.Weight > 1 || CurrentMeasuring.Weight < -1 || CurrentMeasuring.Weight == 0">=0=
+                                    ng-disabled="CurrentMeasuring.Weight > 1 || CurrentMeasuring.Weight < -1 || CurrentMeasuring.Weight == 0 || CurrentMeasuring.Fault">=0=
                                 </button>
                                 <div class="weightstab" ng-show="CurrentMeasuring.WeightStab && CurrentMeasuring.Weight"></div>
                                 <div style="font-weight: bold;" ng-show="!CurrentMeasuring.Weight">&gt;0&lt; </div>
