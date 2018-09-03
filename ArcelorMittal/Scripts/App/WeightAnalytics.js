@@ -1141,7 +1141,7 @@
 
     // обнулить весы
     function vmZeroingScales() {
-        if ($scope.CurrentMeasuring.Weight == 0 || abs($scope.CurrentMeasuring.Weight) > 1) return;
+        if ($scope.CurrentMeasuring.Weight == 0 || Math.abs($scope.CurrentMeasuring.Weight) > 1) return;
         if (confirm($translate.instant('weightanalytics.Messages.zeroWBConfirm'))) {
             indexService.sendInfo("ins_JobOrderOPCCommandZeroingScales", {
                 ScalesID: wb_id
