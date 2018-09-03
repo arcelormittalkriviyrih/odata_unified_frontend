@@ -1130,7 +1130,7 @@
     }
 
 
-    //
+    // проверка, доступна ли функция обнуления весов
     function vmCheckZeroingEnable() {
         indexService.getInfo("v_EquipmentProperty?$filter=EquipmentID eq {0} and Property eq '{1}'".format(wb_id, "ZEROING_TAG"))
         .then(function (response) {
