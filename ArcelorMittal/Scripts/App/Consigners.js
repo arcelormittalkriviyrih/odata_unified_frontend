@@ -77,7 +77,7 @@ angular.module('indexApp')
 
 
 
-.controller('ConsignersIndexCtrl', ['$q', '$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', '$state', '$stateParams', function ($q, $scope, $translate, indexService, consignersService, LocalStorageService, $state, $stateParams) {
+.controller('ConsignersIndexCtrl', ['$q', '$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', 'printService', '$state', 'user', function ($q, $scope, $translate, indexService, consignersService, LocalStorageService, printService, $state, user) {
 
     //alert("ConsignersIndexCtrl");
     //console.log("ConsignersIndexCtrl");
@@ -176,6 +176,7 @@ angular.module('indexApp')
 
             // Открыть документ в новом окне (или послать inner_html в сервис печати)
             window.open().document.write(inner_html);
+            //SendToPrintService(inner_html, $scope.CurrentWaybill);
             // Открыть в app.Consigners
             //console.log("go to app.Consigners.Print");
             $state.go('app.Consigners.Print', { print_id: $scope.CurrentWaybill.ID, waybill_object: $scope.CurrentWaybill });
@@ -183,8 +184,27 @@ angular.module('indexApp')
         else {
             alert($translate.instant('consigners.Messages.noWaybill')); //alert("$scope.CurrentWaybill.ID is null");
         }
+    }    
+
+    // функция отправки на сервис печати
+    function SendToPrintService(content, wb) {
+        var id = wb.ID;
+        var data = { ID: id, DocumentName: "Путевая №" + wb.WaybillNumber, Content: content, User: user };
+        printService.Print(data)
+            .then(function (response) {
+                var result = response.data;
+                if (result && result["StatusCode"] == 0) {
+                    alert("Document has been added to PrintService queue.");
+                }
+                else {
+                    alert("Error during sending to PrintService" + ((result && result["StatusMessage"]) ? (":\n" + result["StatusMessage"] + ".") : "!"));
+                }
+
+            }, function (error) {
+                alert("Error during sending to PrintService!");
+            });
     }
-    
+
     // выбор чекбокса "Скрыть исп. и брак. путевые"
     $scope.ckbxHideUsedRejectWB = function () {
         var hide_used_wb = $scope.ckbx.HideUsedRejectWB || false;
@@ -1051,7 +1071,7 @@ angular.module('indexApp')
 
 
 
-.controller('ConsignersPrintCtrl', ['$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', '$state', '$stateParams', function ($scope, $translate, indexService, consignersService, LocalStorageService, $state, $stateParams) {
+.controller('ConsignersPrintCtrl', ['$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', '$state', function ($scope, $translate, indexService, consignersService, LocalStorageService, $state) {
 
     //console.log("ConsignersPrintCtrl");
     $scope.ckbx = {};

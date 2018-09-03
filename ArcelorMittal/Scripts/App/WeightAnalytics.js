@@ -316,6 +316,7 @@
         PlatformWeights: [],
         WeightStab: false,
         Fault: true,
+        ZeroingEnable: false,
     };
 
     $scope.CurrentWeightSheet = {
@@ -362,6 +363,7 @@
     $scope.UpdateTare = vmUpdateTare;
     $scope.RejectWeighing = vmRejectWeighing;
     $scope.ckbxShowOnlyActiveWS = vmCkbxShowOnlyActiveWS;
+    $scope.ZeroingScales = vmZeroingScales;
 
     $scope.ckbx = {};
     $scope.ckbx.ShowOnlyActiveWS = LocalStorageService.getData("ShowOnlyActiveWS") == "true" ? true : false;
@@ -371,6 +373,7 @@
     vmCreatePlot();
     vmCreateWSTree();
     vmGetConsignersServiceArrays();
+    vmCheckZeroingEnable();
     //vmGetWSTree();
 
 
@@ -630,9 +633,11 @@
     }
 
     // нажатие кнопки "Печать отвесной"
-    function vmPrintWS(id) {
+    function vmPrintWS(id, remotePrint) {
+        //alert("Remote print flag: " + remotePrint);
         //alert(id);
         if (!id || ($scope.SelectedObjects.Status != 'closed' && $scope.SelectedObjects.Status)) return;
+        $scope.RemotePrint = remotePrint;
         $scope.CreateWSToPrint = true;
     }
 
@@ -673,8 +678,9 @@
             }).then(function (response) {
                 //var message = "Weightsheet #{0} closed succesfully.".format($scope.CurrentWeightSheet.WeightSheetNumber);
                 var message = $translate.instant('weightanalytics.Messages.closeWSSuccess').format($scope.CurrentWeightSheet.WeightSheetNumber);
-                $scope.CurrentWeightSheet.Status = Status;
+                //$scope.CurrentWeightSheet.Status = Status;
                 $scope.SelectedObjects.Status = Status;
+                vmOpenWS(id);
                 alert(message);
             })
         }
@@ -796,7 +802,7 @@
         }
 
         // если Тарирование или Брутто - предварительно создавать не нужно
-            // TEST Preliminary for all types of WS
+        // TEST Preliminary for all types of WS
         if (['Контроль брутто'].indexOf($scope.SelectedObjects.WeightingMode['Description']) > -1) {
             create_at_first_weighing = false;
             $scope.SelectedObjects.CreateWSAtFirstWeighing = false;
@@ -1122,6 +1128,30 @@
             alert($translate.instant('weightanalytics.Messages.updateTareSuccess'));//alert("Tare updated successfully.");
         })
     }
+
+
+    //
+    function vmCheckZeroingEnable() {
+        indexService.getInfo("v_EquipmentProperty?$filter=EquipmentID eq {0} and Property eq '{1}'".format(wb_id, "ZEROING_TAG"))
+        .then(function (response) {
+            var zeroingEnable = response.data.value.length > 0 ? true : false;
+            $scope.CurrentMeasuring.ZeroingEnable = zeroingEnable;
+        })
+    }
+
+    // обнулить весы
+    function vmZeroingScales() {
+        if ($scope.CurrentMeasuring.Weight == 0 || Math.abs($scope.CurrentMeasuring.Weight) > 1) return;
+        if (confirm($translate.instant('weightanalytics.Messages.zeroWBConfirm'))) {
+            indexService.sendInfo("ins_JobOrderOPCCommandZeroingScales", {
+                ScalesID: wb_id
+            })
+            .then(function (response) {
+                alert($translate.instant('weightanalytics.Messages.zeroWBSuccess'));
+            });
+        }
+    }
+
 
     // получение онлайн показаний весов
     function vmGetScaleData() {
@@ -1503,11 +1533,11 @@
 
 
 // контроллер печати отвесной
-.controller('WeightAnalyticsWSPrintCtrl', ['$scope', 'weightanalyticsService', '$state', '$translate', function ($scope, weightanalyticsService, $state, $translate) {
+.controller('WeightAnalyticsWSPrintCtrl', ['$http', '$scope', 'weightanalyticsService', 'printService', '$state', '$translate', 'user', function ($http, $scope, weightanalyticsService, printService, $state, $translate, user) {
 
     $scope.toprint = true;
     $scope.ReadyToPrint = vmReadyToPrint;
-        
+
     // если Weighings заполнена (т.е. вызываем печать из открытой отвесной)
     if ($scope.CurrentWeightSheet.Weighings && $scope.CurrentWeightSheet.Weighings.length) {
         $scope.CurrentWeightSheet.Weighings.Totals = null;
@@ -1561,7 +1591,11 @@
         var ws_toprint_html = document.getElementById('WS_toprint');
         var inner_html = ws_toprint_html.innerHTML;
         var autoprint = "";
+        var fix_print = "";
         autoprint = "\n\<script type=\"text/javascript\">\n\window.onload=function(){window.print();window.close();} \n\ </script>\n";
+        fix_print = "\n\<script type=\"text/javascript\">\n" +
+            'var heightImage = document.getElementById("qr").clientHeight; var row_count = document.getElementsByClassName("WBrow")[0].rows.length; var new_height_tr = heightImage/row_count;' +
+            'for(var i=0; i<row_count; i++) {document.getElementsByClassName("WBrow")[0].getElementsByTagName("tr")[i].style.height = new_height_tr + "px";} \n\ </script>\n';
         var str = "\
             <!DOCTYPE html>\n\
             <html>\n\
@@ -1573,16 +1607,22 @@
             </head>\n\
             <body>\n\
         ".format($scope.CurrentWeightSheet.WeightSheetNumber, $translate.instant('weightanalytics.Table.weightsheet'));
-        inner_html = str + inner_html + "</body>" + autoprint + "</html>"
+        inner_html = str + inner_html + "</body>" + autoprint + fix_print + "</html>"
 
-        // Открыть документ в новом окне (или послать inner_html в сервис печати)
-        var printWindow = window.open('', '_blank');
-        //window.open('', '_blank').document.write(inner_html);
-        printWindow.document.open();
-        printWindow.document.write(inner_html);
-        printWindow.document.close();
+        // Проверка на удаленную или локальную печать
+        if ($scope.RemotePrint) {
+            SendToPrintService(inner_html, $scope.CurrentWeightSheet, $state.params["wb_id"]);
+        }
+        else {
+            // Открыть документ в новом окне (или послать inner_html в сервис печати)
+            var printWindow = window.open('', '_blank');
+            printWindow.document.open();
+            printWindow.document.write(inner_html);
+            printWindow.document.close();
+        }
         // После печати удаляем WS_toprint ui-view
         $scope.$parent.$parent.CreateWSToPrint = false;
+
     }
 
     // QR code generator
@@ -1600,8 +1640,22 @@
         if (canvas && canvas[0]) {
             // convert canvas to PNG
             var qr_img = canvas[0].toDataURL("image/png");
-            $("#WS_QR").replaceWith('<img style="width:120px; height:120px;" src="' + qr_img + '"/>');
+            $("#WS_QR").replaceWith('<img id="qr" style="height:26mm;" src="' + qr_img + '"/>');
         }
+    }
+
+    // функция отправки на сервис печати
+    function SendToPrintService(content, ws, equip_id) {
+        var id = ws.WeightSheetID;
+        var data = { ID: id, DocumentName: "Отвесная №" + ws.WeightSheetNumber, Content: content, User: user };
+        //printService.Print(data)
+        printService.Print(equip_id, data)
+            .then(function (response) {
+                alert(response);
+                return;
+            }, function (error) {
+                alert("Error during sending to PrintService!");
+            });
     }
 
 }])
@@ -1814,6 +1868,50 @@
 
 }])
 
+
+
+.service('printService', ['$http', 'indexService', '$q', '$filter', 'printServiceUrl', function ($http, indexService, $q, $filter, printServiceUrl) {
+
+    // отправка на сервис печати
+    this.Print = function (equip_id, data) {
+        return indexService.getInfo("v_PrinterSettings?$filter=EquipmentID eq {0}".format(equip_id))
+        .then(function (response) {
+            var settings = response.data.value;
+            var query_array = [];
+            settings.forEach(function (el, i) {
+                var printSettings = { PaperSize: el['PAPER_SIZE'], Landscape: el['PAPER_ORIENTATION_LANDSCAPE'], Copies: el['COPIES'] };
+                var dataToSend = angular.copy(data);
+                dataToSend['PrinterName'] = el['PRINTER_NAME'];
+                dataToSend['PrintSettings'] = JSON.stringify(printSettings);
+                var query =
+                    $http({
+                        method: 'post',
+                        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                        url: printServiceUrl,
+                        data: dataToSend,
+                        withCredentials: true,
+                        timeout: 5000,
+                    });
+                query_array.push(query);
+            })
+            return $q.all(query_array)
+            .then(function (responses) {
+                var answer = "";
+                responses.forEach(function (elem) {
+                    if (elem.data["StatusCode"] == 0) {
+                        answer += elem.data["PrinterName"] + ": OK"
+                    }
+                    else {
+                        answer += elem.data["PrinterName"] + ": Error (" + elem.data["StatusMessage"] + ")";
+                    }
+                    answer += "\n";
+                });
+                return answer;
+            });
+        });
+
+    }
+}])
 
 //.directive('updateOnEnter', function () {
 //    return {

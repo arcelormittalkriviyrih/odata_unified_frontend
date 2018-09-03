@@ -263,6 +263,8 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
     $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 }])
 
+.value('printServiceUrl', printServiceUrl)
+
 .value('serviceUrl', serviceUrl)
 
 .value('withCredentials', true)
