@@ -316,6 +316,7 @@
         PlatformWeights: [],
         WeightStab: false,
         Fault: true,
+        ZeroingEnable: false,
     };
 
     $scope.CurrentWeightSheet = {
@@ -362,6 +363,7 @@
     $scope.UpdateTare = vmUpdateTare;
     $scope.RejectWeighing = vmRejectWeighing;
     $scope.ckbxShowOnlyActiveWS = vmCkbxShowOnlyActiveWS;
+    $scope.ZeroingScales = vmZeroingScales;
 
     $scope.ckbx = {};
     $scope.ckbx.ShowOnlyActiveWS = LocalStorageService.getData("ShowOnlyActiveWS") == "true" ? true : false;
@@ -371,6 +373,7 @@
     vmCreatePlot();
     vmCreateWSTree();
     vmGetConsignersServiceArrays();
+    vmCheckZeroingEnable();
     //vmGetWSTree();
 
 
@@ -1125,6 +1128,30 @@
             alert($translate.instant('weightanalytics.Messages.updateTareSuccess'));//alert("Tare updated successfully.");
         })
     }
+
+
+    //
+    function vmCheckZeroingEnable() {
+        indexService.getInfo("v_EquipmentProperty?$filter=EquipmentID eq {0} and Property eq '{1}'".format(wb_id, "ZEROING_TAG"))
+        .then(function (response) {
+            var zeroingEnable = response.data.value.length > 0 ? true : false;
+            $scope.CurrentMeasuring.ZeroingEnable = zeroingEnable;
+        })
+    }
+
+    // обнулить весы
+    function vmZeroingScales() {
+        if ($scope.CurrentMeasuring.Weight == 0 || Math.abs($scope.CurrentMeasuring.Weight) > 1) return;
+        if (confirm($translate.instant('weightanalytics.Messages.zeroWBConfirm'))) {
+            indexService.sendInfo("ins_JobOrderOPCCommandZeroingScales", {
+                ScalesID: wb_id
+            })
+            .then(function (response) {
+                alert($translate.instant('weightanalytics.Messages.zeroWBSuccess'));
+            });
+        }
+    }
+
 
     // получение онлайн показаний весов
     function vmGetScaleData() {
