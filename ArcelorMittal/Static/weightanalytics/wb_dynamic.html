@@ -1,3 +1,510 @@
-﻿This is wb_dynamic view
-<br />
-Weightbridge_id = {{id}}
+﻿<!--когда еще грузится страница-->
+<div class="container loading" ng-show="$root.showLoadingState">
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
+    </div>
+</div>
+
+
+<!--основная часть, когда страница прогрузилась-->
+<div ng-show="!$root.showLoadingState">
+    <div class="row" style="background-color: #eeeeee; padding: 5px; margin-top: 0px">
+        <div ng-hide="ShowFinalizeViewerWS">
+            <!----Дерево составов и отвесных---->
+            <div class="col-sm-4 col-md-4" style="height: 362px;" ng-hide="ShowCreatorWS">
+                <div id="tabs_wad_app">
+                    <input id="tab1" type="radio" name="tabs" checked>
+                    <label ng-click="RefreshTrainsList()" for="tab1">&nbsp;<span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp; Составы</label>
+                    <input id="tab2" type="radio" name="tabs">
+                    <label ng-click="RefreshWeightSheetList()" for="tab2">&nbsp;<span class="glyphicon glyphicon-file"></span>&nbsp;&nbsp;Отвесные</label>
+                    <section id="content1" style="position: relative;">
+                        <div id="refreshTree" style="width: 100%; margin-bottom: 10px;">
+                            <button ng-click="RefreshTrainsList()" style="width: 100%;" class="btn btn-default" type="button" id="">
+                                <span class="glyphicon glyphicon-refresh" style="font-size: 12px;"></span>&nbsp;Обновить список составов 
+                            </button>
+                        </div>
+                        <div id="Trains_tree" class="SpecialListWAD SpecialListWADTrains"></div>
+                    </section>
+
+                    <section id="content2">
+                        <div id="weightsheet_tree" class="SpecialListWAD">
+                        </div>
+                        <div style="margin-top: 12px; text-align:center;">
+                             <button ng-click="WS_Print_Fin(false)" type="button"
+                                class="btn btn-default"
+                                style="width: 32%; font-size:12px;">
+                                <span class="glyphicon glyphicon-print" style="font-size: 12px;"></span>&nbsp;Печать
+                            </button>
+                            <button ng-click="WS_open_to_view()" type="button"
+                                class="btn btn-default"
+                                style="width: 32%; font-size:12px;">
+                                <span class="glyphicon glyphicon-eye-open" style="font-size: 12px;"></span>&nbsp;Открыть
+                            </button>
+                            <button type="button"
+                                class="btn btn-default"
+                                ng-click="RefreshWeightSheetList()"
+                                style="width: 32%; font-size:12px;">
+                                <span class="glyphicon glyphicon-refresh" style="font-size: 12px;"></span>&nbsp;Обновить
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!----Выберите состав для просмотра---->
+            <div class="col-sm-8 col-md-8" ng-hide="ShowPreviewTrains || ShowCreatorWS" style="border-left: 1px solid #d4d4d4; border-right: 1px solid #d4d4d4; height: 362px; position: relative;">
+                <div class="PreviewText">
+                    <span style="top: 3px !important;" class="glyphicon glyphicon-eye-open"></span>&nbsp;Выберите состав или отвесную для просмотра
+                </div>
+            </div>
+
+            <!----Предпросмотр состава---->
+            <div class="col-sm-8 col-md-8" style="border-left: 1px solid #d4d4d4; min-height: 362px;" ng-show="ShowPreviewTrains && !ShowCreatorWS">
+                <div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span><b>Предпросмотр состава №{{CurrentTrainNumber}}</b></span>
+                            <span style="float: right;">
+                                <span ng-click="ShowVideos()" title="Посмотреть видео (состав)" class="glyphicon glyphicon-facetime-video" style="font-size: 20px; cursor: pointer; margin-left: 15px;"></span>
+                            </span>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped WD-table-view" style="margin-bottom: 0px;">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input ng-model="SelectAllWagonsFlag" type="checkbox" ng-click="SelectAll($event)" style="cursor: pointer;"></th>
+                                        <th>№п/п</th>
+                                        <th>Номер вагона</th>
+                                        <th>Вес</th>
+                                        <th>Дата</th>
+                                        <th>Фото</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="text-align: center;" ng-repeat="value in CurrentWagonsList" ng-class="value.active ? 'activeXR':''">
+                                        <td>
+                                            <input ng-if="!value.CheckerWagonID" style="cursor: pointer;" type="checkbox" ng-model="value.check">
+                                            <span style="font-size:15px; cursor:pointer;" ng-if="value.CheckerWagonID" title="Вагон уже добавлен в отвесную ({{value.Document}})" class="glyphicon glyphicon-info-sign"></span>
+                                        </td>
+                                        <td>{{value.Number}}</td>
+                                        <td>{{value.RecNumber}}</td>
+                                        <td>{{value.Weight}}</td>
+                                        <td>{{value.dispDT}}</td>
+                                        <td><span ng-click="ShowImages(value)" title="Посмотреть галерею изображений" class="glyphicon glyphicon-camera WD-table-view-rows" style="font-size: 20px; cursor: pointer;"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel-footer" style="text-align: right;">
+                            <button ng-click="HidePreviewTable()" type="button" class="btn btn-default">
+                                <span class="glyphicon glyphicon-eye-close" style="font-size: 12px;"></span>&nbsp;Скрыть
+                            </button>
+                           <!-- <button ng-click="HidePreviewTable()" type="button" class="btn btn-default disabled">
+                                <span class="glyphicon glyphicon-plus" style="font-size: 12px;"></span>&nbsp;Добавить к отвесной
+                            </button>-->
+                            <div class="dropdown"
+                                style="display: inline-block">
+                                <button
+                                    class="btn btn-default dropdown-toggle" style="width: 100%"
+                                    type="button" id="CreateWS"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <span class="glyphicon glyphicon-file" style="font-size: 12px;"></span>&nbsp;Создать отвесную 
+                                        <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="printDropdownMenu_1">
+                                    <li ng-repeat="wst in WSTypes">
+                                        <a ng-click="CreateWS(wst)" href="javascript:void(0)">{{wst.Description}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!----Создание отвесной------>
+        <div style="padding: 0 !important;" class="col-sm-12 col-md-12" ng-if="ShowCreatorWS">
+            <div style="margin-bottom:20px;" ng-class="SizeTable ? 'col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3' : 'col-sm-4 col-md-4'" class="">
+                <div class="WApanels" style="padding: 0px !important; height: 315px;">
+                    <div class="panel panel-default" style="margin-bottom: 5px;">
+                        <div class="panel-heading" style="text-align: center; padding: 5px 5px; position:relative;">
+                            <b>Отвесная ({{WeightSheet.WS_Type_Mode.Description}}) №&nbsp;<input style="width:70px; display:inline; text-align:center;" ng-model="WeightSheet.WS_Number" class="form-control" type="text" value="" id="WSNumberCreation" ng-required="true"
+                                    ng-pattern="'[0-9]{1,4}'" maxlength="4" /></b>
+                        </div>
+                        <div class="panel-body" style="padding: 5px 5px">
+                            <table id="wd_param_table" class="param_table">
+                                <tr>
+                                    <td>Отправитель:
+                                    </td>
+                                    <td>
+                                        <ui-select
+                                                ng-model="WeightSheet.WS_SenderShop"
+                                                ng-required="true"
+                                                ng-disabled="CheckField(WeightSheet.WS_Type_Mode,'selecsr')"
+                                                style="min-width:160px"
+                                                theme="bootstrap">
+                                                <ui-select-match>{{$select.selected.Description}}</ui-select-match>
+                                                <ui-select-choices repeat="type in CargoSenders | filter: $select.search" position='down'>
+                                                    <div class="ui-select-choices" ng-bind-html="type.Description | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                         </ui-select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Получатель:
+                                    </td>
+                                    <td>
+                                        <ui-select
+                                                ng-model="WeightSheet.WS_ReceiverShop"
+                                                ng-required="true"
+                                                ng-disabled="CheckField(WeightSheet.WS_Type_Mode,'selecsr')"
+                                                style="min-width:160px"
+                                                theme="bootstrap">
+                                                <ui-select-match>{{$select.selected.Description}}</ui-select-match>
+                                                <ui-select-choices repeat="type in CargoReceivers | filter: $select.search" position='down'>
+                                                    <div class="ui-select-choices" ng-bind-html="type.Description | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                         </ui-select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Весовщик:
+                                    </td>
+                                    <td>{{WeightSheet.WS_Creater}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="panel-footer" style="padding: 10px 5px">
+                            <div style="padding-bottom: 5px; text-align: center;">
+                                <button ng-class="DisableAllButtons ? 'disabled' : '' " style="width: 49%;" ng-click="WS_Exit()" type="button" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-log-out" style="font-size: 12px;"></span>&nbsp;Выйти
+                                </button>
+                               <!-- <button ng-class="DisableAllButtons ? 'disabled' : '' " style="width: 49%;" ng-click="WS_Save()" type="button" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-floppy-disk" style="font-size: 12px;"></span>&nbsp;Сохранить
+                                </button>-->
+                                <button ng-class="DisableAllButtons ? 'disabled' : '' " style="width: 49%; /*margin-top: 10px;*/" ng-click="WS_Finalize()" type="button" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-floppy-saved" style="font-size: 12px;"></span>&nbsp;Сохранить
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-class="SizeTable ? 'col-sm-12 col-md-12 MargTop' : 'col-sm-8 col-md-8'" class="" style="border-left: 1px solid #d4d4d4; border-right: 1px solid #d4d4d4; position: relative;">
+                <div class="clearfix" ng-if="CheckField(WeightSheet.WS_Type_Mode,'wb')" style="margin: 5px 2px;">
+                    <div style="float:left;">
+                        <span style="vertical-align:middle;">Установить отправителя и получателя с первой путевой:&nbsp;&nbsp;</span>
+                        <input type="checkbox" ng-change="SetSenderAndReceiverWB()" ng-model="SetSRWB_box" style="width:15px; height: 15px; vertical-align:middle; cursor:pointer;" />
+                    </div>
+                    <div style="float:right;">
+                         <button ng-class="DisableAllButtons ? 'disabled' : '' " style="" ng-click="WS_List_RefreshTara()" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-refresh" style="font-size: 12px;"></span>&nbsp;Обновить тару
+                         </button>
+                    </div>
+                </div>
+                <div style="min-height: 315px;">
+                    <div class="panel panel-default" style="margin-bottom: 0px !important;">
+                        <div class="panel-heading" style="font-size: 13px !important; position:relative;">
+                            <span><b>Cостава № {{WeightSheet.WS_TrainNumber}}</b></span>
+                            <span style="float: right;">
+                                <span ng-click="ShowVideos()" title="Посмотреть видео (состав)" class="glyphicon glyphicon-facetime-video" style="font-size: 20px; cursor: pointer; margin-left: 15px;"></span>
+                            </span>
+                        </div>
+                        <div class="panel-body" style="font-size: 13px !important;">
+                            <table class="table table-bordered WD-table-view" style="margin-bottom: 0px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35px;">№ п/п</th>
+                                        <th>Номер вагона</th>
+                                        <th ng-if="CheckField(WeightSheet.WS_Type_Mode,'wb')">Путевая</th>
+                                        <th ng-if="CheckField(WeightSheet.WS_Type_Mode,'mat')">Род груза</th>
+                                        <th ng-if="CheckField(WeightSheet.WS_Type_Mode,'br')">Брутто</th>
+                                        <th ng-if="CheckField(WeightSheet.WS_Type_Mode,'tr')">Тара</th>
+                                        <th ng-if="CheckField(WeightSheet.WS_Type_Mode,'nt')">Нетто</th>
+                                        <th>Тип вагона</th>
+                                        <th style="width: 60px;">Дата</th>
+                                        <th style="width: 40px;">Фото</th>
+                                        <th style="width: 40px;">*</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="value in WeightSheet.WS_WagonsList" style="text-align: center;">
+                                        <td>{{value.Number}}</td>
+                                        <td style="position: relative;">
+                                            <div style="display:inline-block; width: 100%; position:relative;">
+                                                <input class="inp{{value.WagonOriginalID}} form-control" ng-class="value.WS_ReadyToAdd ? '' : 'BadRecNumber'" ng-change="ChangeRecNumber(value)" style="text-align: center;" ng-model="value.NewRecNumber" ng-model-options='{ debounce: 500 }' ng-pattern="value.WagonNumberPattern" type="text" name="name" value=" " />
+                                                <div class="hideXbutton"></div>
+                                            </div>
+                                            <span ng-show="value.ShowHelper" ng-click="SetOldRecNumber(value)" class="OldRecognizeNumber"><span style="font-size: 10px;" class="glyphicon glyphicon-arrow-down"></span>&nbsp;{{value.OldRecNumber}}</span>
+                                        </td>
+                                        <td ng-if="CheckField(WeightSheet.WS_Type_Mode,'wb')">
+                                            <button ng-click="SelectWayBillForWagon(value)" type="button" class="btn btn-default">
+                                                <span ng-if="value.WayBill == null" class="glyphicon glyphicon-search"></span>
+                                                <span ng-if="value.WayBill != null">
+                                                    {{value.WayBill.WaybillNumber}}
+                                                </span>
+                                            </button>
+                                        </td>
+                                        <td class="MatSelSel" ng-if="CheckField(WeightSheet.WS_Type_Mode,'mat')">
+                                            {{value.Material.Name}}
+                                            <ui-select
+                                                ng-model="value.Material"
+                                                ng-required="true"
+                                                ng-disabled="CheckField(WeightSheet.WS_Type_Mode,'selecttf')"
+                                                style="min-width:160px"
+                                                theme="bootstrap">
+                                                <ui-select-match><span title="{{$select.selected.Description}}">{{$select.selected.Description}}</span></ui-select-match>
+                                                <ui-select-choices repeat="type in CargoTypes | filter: $select.search" position='down'>
+                                                    <div class="ui-select-choices" ng-bind-html="type.Description | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </td>
+                                        <td style="width:50px" ng-if="CheckField(WeightSheet.WS_Type_Mode,'br')">{{value.Brutto}}</td>
+                                        <td style="width:50px" ng-if="CheckField(WeightSheet.WS_Type_Mode,'tr')">
+                                            {{value.Tara}}<br />
+                                            <span style="font-size: 10px; color: gray;" ng-if="value.TaraTime != undefined && value.TaraTime != null">({{value.TaraTime}})</span>
+                                        </td>
+                                        <td style="width:50px" ng-if="CheckField(WeightSheet.WS_Type_Mode,'nt')">{{value.Netto}}</td>
+                                        <td class="specialINPUT">
+                                            <ui-select
+                                                ng-model="value.WagonType"
+                                                on-select="SelectWagonType(value,$item)"
+                                                ng-required="true"
+                                                ng-disabled="CheckField(WeightSheet.WS_Type_Mode,'selecttf')"
+                                                style="width:130px"
+                                                theme="bootstrap">
+                                                <ui-select-match>{{$select.selected.Description}}</ui-select-match>
+                                                <ui-select-choices repeat="type in WagonTypes | filter: $select.search" position='down'>
+                                                    <div class="ui-select-choices" title="{{type.Tooltip}}" ng-bind-html="type.Description | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </td>
+                                        <td>{{value.dispDT}}</td>
+                                        <td><span ng-click="ShowImages(value)" title="Посмотреть галерею изображений" class="glyphicon glyphicon-camera" style="font-size: 18px; cursor: pointer;"></span></td>
+                                        <td><span ng-click="WSDeleteWagon(value)" title="Удалить этот вагон из отвесной" class="glyphicon glyphicon-remove" style="font-size: 18px; cursor: pointer;"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!----Просмотр финализированной отвесной------>
+        <div style="padding: 0 !important;" class="col-sm-12 col-md-12" ng-if="ShowFinalizeViewerWS">
+            <div class="col-sm-12 col-md-12" style="border-left: 1px solid #d4d4d4; border-right: 1px solid #d4d4d4; position: relative;">
+                <div style="min-height: 315px;">
+                    <div class="panel panel-default" style="margin-bottom: 10px !important; background-color: transparent;">
+                        <div class="panel-body" style="font-size: 13px !important;">
+                            <table class="WD-table-head-view" style="margin-bottom: 0px;">
+                                <tr>
+                                    <td>Отправитель:</td>
+                                    <td>{{CurrentWeightSheet.SenderShop.Description}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Получатель:</td>
+                                    <td>{{CurrentWeightSheet.ReceiverShop.Description}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Весовщик:</td>
+                                    <td>{{CurrentWeightSheet.Weigher}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Дата создания:</td>
+                                    <td>{{CurrentWeightSheet.CreateDT}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Дата изменения:</td>
+                                    <td>{{CurrentWeightSheet.EditDT}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="panel panel-default" style="margin-bottom: 0px !important;">
+                        <div class="panel-heading" style="font-size: 13px !important; text-align:center;">
+                            <span style="float: left;"><b>Cостав №{{WeightSheet.WS_TrainNumber}}</b></span>
+                            <span><b>Отвесная №{{CurrentWeightSheet.WeightSheetNumber}}</b></span>
+                            <span style="float: right;">
+                                <span ng-if="!DetectViewerWS" ng-click="ShowVideos()" title="Посмотреть видео (состав)" class="glyphicon glyphicon-facetime-video" style="font-size: 20px; cursor: pointer; margin-left: 15px;"></span>
+                                <span ng-if="DetectViewerWS" ng-click="ShowVideosFin()" title="Посмотреть видео (состав)" class="glyphicon glyphicon-facetime-video" style="font-size: 20px; cursor: pointer; margin-left: 15px;"></span>
+                            </span>
+                        </div>
+                        <div class="panel-body" style="font-size: 13px !important;">
+                            <table class="table table-bordered WD-table-view" style="margin-bottom: 0px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35px;">№ п/п</th>
+                                        <th>Номер вагона</th>
+                                        <th>Путевая</th>
+                                        <th>Род груза</th>
+                                        <th>Брутто</th>
+                                        <th>Тара</th>
+                                        <th>Нетто</th>
+                                        <th style="">Дата</th>
+                                        <th style="width: 40px;">Фото</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="value in CurrentWeightSheet.Weighings" style="text-align: center;">
+                                        <td>{{$index+1}}</td>
+                                        <td style="position: relative; text-align:center;">
+                                            {{value.WagonNumber}}
+                                        </td>
+                                        <td>
+                                            {{value.WaybillNumber}}
+                                        </td>
+                                        <td>{{value.CargoType}}</td>
+                                        <td>{{value.Brutto}}</td>
+                                        <td>{{value.Tara}}</td>
+                                        <td>{{value.Netto}}</td>
+                                        <td>{{value.OriginalDate}}</td>
+                                        <td><span ng-click="ShowImagesFin(value)" title="Посмотреть галерею изображений" class="glyphicon glyphicon-camera" style="font-size: 18px; cursor: pointer;"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="TotalField" colspan="4" style="text-align:right;">Общее:</td>
+                                        <td class="TotalValue" style="text-align:center;">{{CurrentWeightSheetTotals.TotalBrutto.toFixed(2)}}</td>
+                                        <td class="TotalValue" style="text-align:center;">{{CurrentWeightSheetTotals.TotalTara.toFixed(2)}}</td>
+                                        <td class="TotalValue" style="text-align:center;">{{CurrentWeightSheetTotals.TotalNetto.toFixed(2)}}</td>
+                                        <td class="TotalField" colspan="2"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="panel panel-default" style="margin-bottom: 10px !important; background-color: transparent;">
+                        <div class="panel-body" style="font-size: 13px !important; text-align:right;">
+                            <button type="button"
+                                class="btn btn-default"
+                                ng-click="WS_Exit_Fin()"
+                                style="font-size:12px;">
+                                <span class="glyphicon glyphicon-eye-close" style="font-size: 12px;"></span>&nbsp;Выйти
+                            </button>
+                            <button type="button"
+                                class="btn btn-default"
+                                ng-click="WS_Print_Fin(true)"
+                                style="font-size:12px;">
+                                <span class="glyphicon glyphicon-print" style="font-size: 12px;"></span>&nbsp;Печать
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div
+        id="WS_toprint"
+        ui-view="WS_toprint"
+        ng-if="CreateWSToPrint"
+        ng-show="false">
+    </div>
+
+    <div ng-show="ShowImagesMarkup" ng-style="{'width': FullSizeImageViewer ? '800px' : '420px'}" style="overflow: hidden;" id="draggable" class="ui-widget-content">
+        <div style="padding: 10px; border: 1px solid black; background-color: #fff;">
+            <span class="glyphicon glyphicon-picture"></span>&nbsp;Состав - <b>{{CurrentTrainNumberForImageViewer}}</b>; № вагона <b>{{CurrentWagonNumberRecognize}}</b> п/п - <b>{{CurrentWagonNumberPP}}</b>
+            <div style="float: right;">
+                <span ng-click="FullScreenControll()" style="font-size: 17px; margin-right: 9px; top: 0px; cursor: pointer;" class="glyphicon" ng-class="FullSizeImageViewer ? 'glyphicon-resize-small' : 'glyphicon-fullscreen'"></span>
+                <span ng-click="HideImagesMarkup()" style="font-size: 19px; cursor: pointer;" class="glyphicon glyphicon-remove"></span>
+            </div>
+
+        </div>
+        <div style="position: relative; border: 1px solid black; min-height: 60px; background-color: #fff;" ng-style="{'max-height': FullSizeImageViewer ? '700px' : '320px'}">
+            <img ng-repeat="x in ShowImagesLinks" repeat-done="RepeatDoneImage()" class="mySlides" src="{{x}}" style="width: 100%">
+            <button class="mySlider-button mySlider-display-left" ng-click="plusDivs(-1)">&#10094;</button>
+            <button class="mySlider-button mySlider-display-right" ng-click="plusDivs(1)">&#10095;</button>
+            <span class="mySlider-camera">Камера - <span id="CameraNumberInd"></span></span>
+            <!--http://krr-app-dvmia04/images/2018/08/28/3551/npp01_cam1.jpg-->
+        </div>
+    </div>
+
+    <div ng-show="ShowVideosMarkup" ng-style="{'width': FullSizeVideosViewer ? '800px' : '420px'}" style="overflow: hidden;" id="draggableVideos" class="ui-widget-content">
+        <div style="padding: 10px; border: 1px solid black; background-color: #fff;">
+            <span class="glyphicon glyphicon-facetime-video"></span>&nbsp;Состав - <b>{{CurrentTrainNumberForVideosViewer}}</b>
+            <div style="float: right;">
+                <span ng-click="FullScreenControllVideos()" style="font-size: 17px; margin-right: 9px; top: 0px; cursor: pointer;" class="glyphicon" ng-class="FullSizeVideosViewer ? 'glyphicon-resize-small' : 'glyphicon-fullscreen'"></span>
+                <span ng-click="HideVideosMarkup()" style="font-size: 19px; cursor: pointer;" class="glyphicon glyphicon-remove"></span>
+            </div>
+
+        </div>
+        <div style="position: relative; border: 1px solid black; min-height: 60px; background-color: #fff;" ng-style="{'max-height': FullSizeVideosViewer ? '600px' : '316px'}">
+            <div style="position: relative;" class="mySlidesVideos" ng-repeat="xv in ShowVideosLinks" repeat-done="RepeatDoneVideos()" style="width: 100%">
+                <video style="width: 100%" controls="controls">
+                    <source src="" dynamic-url dynamic-url-src="{{xv}}" type='video/mp4'>
+                    Просмотр видео не поддерживается вашим браузером. 
+                </video>
+                <a class="mySlider-camera-videos-download" href="{{xv}}">Скачать видео</a>
+            </div>
+            <button class="mySlider-button mySlider-display-left" ng-click="plusDivsVideos(-1)">&#10094;</button>
+            <button class="mySlider-button mySlider-display-right" ng-click="plusDivsVideos(1)">&#10095;</button>
+            <span class="mySlider-camera-videos">Камера - <span id="CameraNumberIndVideos"></span></span>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="InformationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <b>
+                        <h5 style="float: left;" class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;Внимание!</h5>
+                    </b>
+                    <button style="float: right;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{InformationMessage}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="SelectWayBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <b>
+                        <h5 style="float: left;" class="modal-title" id=""><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp;Доступные путевые для вагона № {{SelectionWagonNunber}}</h5>
+                    </b>
+                    <button style="float: right;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div style="position:relative;min-height: 70px;" class="col-md-4">
+                        <ul ng-if="CurrentWagonWayBillList.length > 0" class="list-group">
+                            <li style="cursor:pointer !important;" ng-repeat="wbcw in CurrentWagonWayBillList" ng-click="ViewSelectWayBill(wbcw)" class="list-group-item"><span class="glyphicon glyphicon-minus"></span>&nbsp;&nbsp;№ {{wbcw.WaybillNumber}} от {{wbcw.StartTime}}</li>
+                        </ul>
+                        <div ng-if="CurrentWagonWayBillList.length == 0" style="text-align:center;" class="PreviewText">
+                            Список пуст
+                        </div>
+                    </div>
+                    <div style="position:relative;min-height: 70px;" class="col-md-8">
+                        <div ng-if="SelectionWaybillID == null" class="PreviewText">
+                            <span style="top: 3px !important;" class="glyphicon glyphicon-eye-open"></span>&nbsp;Выберите путевую из списка для просмотра
+                        </div>
+                        <div ng-show="ShowWaybillModal" class="PreViewWayBill">
+                            <div
+                                ng-init="waybill_id = SelectionWaybillID"
+                                ng-if="ShowWaybillModal"
+                                ng-show="true"
+                                ui-view="waybill_toprint">
+                            </div>
+                            <div style="text-align:right;">
+                                <button ng-click="AddWBtoCurrentWagon()" type="button" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-ok" style="font-size: 12px;"></span>&nbsp;Выбрать
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
