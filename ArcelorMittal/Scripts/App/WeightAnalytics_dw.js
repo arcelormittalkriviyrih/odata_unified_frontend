@@ -365,7 +365,7 @@
         .then(function (response) {
             var res = response.data.value;
             if (res.length > 0) {
-                var ScalesSerial = res[0].Value;
+                var ScalesSerial = "TSR"+res[0].Value;
                 indexService.getInfo(pathGetTrainList.format(ScalesSerial))
                     .then(function (response) {
                         var list = response.data.value;
