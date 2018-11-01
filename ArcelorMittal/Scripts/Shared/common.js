@@ -1,6 +1,6 @@
-var domainURL = 'http://krr-tst-palbp01/odata_unified_svc';
+//var domainURL = 'http://krr-tst-palbp01/odata_unified_svc';
 //var domainURL = 'http://localhost:30371';
-//var domainURL = '../../odata_unified_svc';
+var domainURL = '../../odata_unified_svc';
 var serviceUrl = domainURL + '/api/Dynamic/';
 //var domainURL = 'http://mssql2014srv/odata_unified_svc';
 //var serviceUrl = 'http://localhost:30371/api/Dynamic/';

@@ -1975,6 +1975,7 @@
     }
 }])
 
+/*
 // контроллер печати отвесной
 .controller('WeightAnalyticsWSPrintCtrl', ['$http', '$scope', 'weightanalyticsService', 'printService', '$state', '$translate', 'user', function ($http, $scope, weightanalyticsService, printService, $state, $translate, user) {
 
@@ -2102,13 +2103,14 @@
     }
 
 }])
+*/
 
+/*
 .controller('WaybillPreviewCtrl', ['$scope', 'consignersService', function ($scope, consignersService) {
 
     $scope.CurrentWaybill = {};
     var waybill_id = $scope.waybill_id;
     //$scope.$parent.WaybillInfoReady = false;
-    /* !!! get full waybill info here */
     consignersService.GetWaybillObject(waybill_id)
     .then(function (waybill_obj) {
         $scope.CurrentWaybill = waybill_obj;
@@ -2118,6 +2120,7 @@
 
 
 }])
+*/
 
 .directive('dynamicUrl', function () {
     return {

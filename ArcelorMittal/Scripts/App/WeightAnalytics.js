@@ -481,7 +481,7 @@
                 // получение платформ для весов
                 if (resp_6.length > 0) {
                     var PlatformsArray = resp_6[0]['Value'];
-                    eval('PlatformsArray = ' + PlatformsArray); // convert to array of objects
+                    PlatformsArray = JSON.parse(PlatformsArray); // convert to array of objects
                     for (var i = 0; i < PlatformsArray.length; i++) {
                         var obj = {};
                         obj['name'] = PlatformsArray[i];
@@ -493,7 +493,7 @@
             if (resp_7) {
                 // получение соответствия платформ и видов вагонов
                 PlatformWagonClassArray = resp_7[0]['Value'];
-                eval('PlatformWagonClassArray = ' + PlatformWagonClassArray); // convert to array of objects
+                PlatformWagonClassArray = JSON.parse(PlatformWagonClassArray); // convert to array of objects
 
             }
 
@@ -1171,7 +1171,7 @@
         var pathScalesDetail = "v_AvailableWeighbridgesInfo?$filter=EquipmentID eq {0}".format(wb_id);
         indexService.getInfo(pathScalesDetail)
             .then(function (response) {
-                var response = response.data.value[0];
+                var response = (response && response.data.value.length) ? response.data.value[0] : null;
                 // проверка isExit и plot, чтобы исключить ошибку plotа "Target dimension is not set"
                 if (!isExit && plot && response) {
                     // если есть ответ, обновляем переменные новыми значениями
@@ -1476,7 +1476,6 @@
                     }
                     $scope.CurrentPairNumberTare = { Tare: TareInfo[0]['Value'], DT: DT };
                 }
-                //$scope.CurrentPairNumberTare = TareInfo.length ? TareInfo[0].Value : null;
             })
     }
 
@@ -1908,8 +1907,8 @@
                         headers: { 'Content-Type': 'application/json; charset=utf-8' },
                         url: printServiceUrl,
                         data: dataToSend,
-                        withCredentials: true,
-                        timeout: 5000,
+                        //withCredentials: true,
+                        timeout: 10000,
                     });
                 query_array.push(query);
             })
@@ -1917,6 +1916,7 @@
             .then(function (responses) {
                 var answer = "";
                 responses.forEach(function (elem) {
+                    if (!elem) return
                     if (elem.data["StatusCode"] == 0) {
                         answer += elem.data["PrinterName"] + ": OK"
                     }
