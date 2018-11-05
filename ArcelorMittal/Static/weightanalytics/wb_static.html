@@ -336,8 +336,8 @@
                             ng-class="{true: 'platf-enable', false: 'platf-disable'}[SelectedObjects.Platforms[pl.name]]"
                             ng-model="SelectedObjects.Platforms[pl.name]"
                             ng-init="SelectedObjects.Platforms[pl.name]=true"
-                            ng-click="SelectedObjects.Platforms[pl.name]=!SelectedObjects.Platforms[pl.name]"
-                            ng-disabled="SelectedObjects.WagonType && false">
+                            ng-click="!SelectedObjects.WagonType && (SelectedObjects.Platforms[pl.name]=!SelectedObjects.Platforms[pl.name])"
+                            ng-disabled="SelectedObjects.WagonType && true">
                             {{pl.value}}</button>
                     </td>
                 </tr>
@@ -436,33 +436,6 @@
                             <div ng-if="WBShowLoading" class="loading-gif" style="width: 200px"></div>
 
                         </div>
-
-
-                        <!--                        <input type="text" class="form-control"
-                            ng-model="SelectedObjects.WaybillNumber" ng-model-options="{updateOn : 'default blur', debounce: { 'default': 1000, 'blur': 0 }}"
-                            update-on-enter
-                            ng-change="WBNumberEnter(SelectedObjects.WaybillNumber)"
-                            placeholder="Select a Waybill number"
-                            title="Select a Waybill number"
-                            ng-required="true"
-                            ng-disabled="!CurrentWeightSheet.WeightSheetID"
-                            ng-pattern="'[0-9]{1,4}'" />-->
-
-                        <!--                        <ui-select
-                            ng-model="SelectedObjects.WaybillNumber"
-                            on-select="WaybillSelect($item)"
-                            ng-required="!(CurrentWeightSheet.WeightingMode.Description == 'Тарирование')"
-                            ng-disabled="!CurrentWeightSheet.WeightSheetID || (CurrentWeightSheet.WeightingMode.Description == 'Тарирование') || CurrentWeightSheet.Status == 'reject'"
-                            ng-pattern=""
-                            class=""
-                            style=""
-                            theme="bootstrap"
-                            title="Select a Waybill number">
-                        <ui-select-match placeholder="Select a Waybill number">№{{$select.selected.WaybillNumber}}</ui-select-match>
-                        <ui-select-choices repeat="waybill in WaybillNumbers | propsFilter: {WaybillNumber: $select.search}" position='down'>
-                        <div ng-bind-html="('№' + waybill.WaybillNumber + ' ('+ (waybill.EndTime | date:'dd.MM.yyyy HH:mm') + ')') | highlight: $select.search"></div>
-                        </ui-select-choices>
-                    </ui-select>-->
                     </td>
                 </tr>
                 <tr>
@@ -473,7 +446,7 @@
                             ng-model="SelectedObjects.WagonType"
                             on-select="WagonTypeSelect($item)"
                             ng-required="true"
-                            ng-disabled="!CurrentWeightSheet.WeightSheetID || isWagonTypeDisabled || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
+                            ng-disabled="!CurrentWeightSheet.WeightSheetID || isWagonTypeDisabled || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1) || !(['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) > -1)"
                             class=""
                             style=""
                             theme="bootstrap"
@@ -581,11 +554,8 @@
     </div>
 </div>
 
-<!--<button ng-click="tttt = !tttt">!</button>
-<br />
 
-
-<div ng-init="tttt = false"
+<!--<div ng-init="tttt = true"
     ng-show="tttt">
     <br />
     ShowWeightSheetNumberModalWindow: {{ShowWeightSheetNumberModalWindow}}
