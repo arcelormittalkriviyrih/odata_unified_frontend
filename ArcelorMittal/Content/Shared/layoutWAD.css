@@ -1,0 +1,264 @@
+﻿#tabs_wad_app {
+  width: 100%;
+  margin: 0 auto;
+  background: transparent;
+}
+
+#tabs_wad_app section {
+  display: none;
+  padding: 10px 0 10px 0;
+  border-top: 1px solid #ddd;
+  background-color: #eeeeee;
+}
+
+#tabs_wad_app input {
+  display: none;
+}
+
+#tabs_wad_app label {
+  position:relative;
+  z-index: 999;
+  display: inline-block;
+  margin: 0 0 -1px;
+  padding: 10px 10px;
+  font-weight: 600;
+  font-size: 13px;
+  text-align: center;
+  color: #bbb;
+  background-color: #eeeeee;
+  border: 1px solid transparent;
+  border-bottom: 1px solid #ddd;
+}
+
+#tabs_wad_app label:hover {
+  color: #888;
+  cursor: pointer;
+}
+
+#tabs_wad_app input:checked + label {
+  color: #555;
+  border: 1px solid #ddd;
+  border-top: 2px solid #000;
+  border-bottom: 1px solid #eee;
+}
+ #tab1:checked ~  #content1,
+ #tab2:checked ~  #content2 {
+  display: block;
+}
+
+.SpecialListWAD {
+    width: 100%;
+    height: 261px;
+    background-color: #fff;
+    overflow: auto;
+}
+
+.SpecialListWADTrains {
+    height: 261px !important;
+}
+
+.jstree-default .jstree-trains {
+    background-image: url("../Tree/img/wagon.png");
+    background-repeat: no-repeat;
+    background-position:center center;
+    background-size: contain;
+}
+
+.jstree-default .jstree-trains-list {
+    background-image: url("../Tree/img/list.png");
+    background-repeat: no-repeat;
+    background-position:center center;
+    background-size: 24px;
+}
+
+#draggable { 
+    position:fixed; 
+    left:0; 
+    top:0;
+    z-index:9999;
+}
+
+#draggableVideos { 
+    position:fixed; 
+    right:0; 
+    top:0;
+    z-index:9998;
+}
+
+.mySlides {display:none;}
+
+.mySlider-button {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    width: 35px;
+    text-align: center;
+    background-color: rgba(0,0,0,0.2);
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.activeXR td {
+    background-color: lightGrey;
+}
+
+.mySlider-button:hover {
+    background-color: rgba(255,255,255,0.7);
+    border: 1px solid #000;
+    color: #000;
+}
+
+.mySlider-display-left {
+    left:0;
+}
+
+.mySlider-display-right {
+    right:0;
+}
+
+.mySlider-camera {
+    display:block;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    background-color: rgba(0,0,0,0.7);
+    border: 1px solid #fff;
+    color: #fff;
+    padding:2px;
+}
+
+.mySlider-camera-videos {
+    display:block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    background-color: rgba(0,0,0,0.7);
+    border: 1px solid #fff;
+    color: #fff;
+    padding:2px;
+}
+
+.mySlider-camera-videos-download {
+    display:block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 3;
+    text-align: center;
+    background-color: rgba(0,0,0,0.7);
+    border: 1px solid #fff;
+    color: #fff;
+    padding:2px;
+}
+
+.mySlider-camera-videos-download:hover, .mySlider-camera-videos-download:visited {
+    text-decoration: underline;
+    color: #fff;
+}
+
+
+#refreshTree {
+
+}
+
+.PreviewText {
+    position: absolute;
+    top: 50%;
+    left: 0px;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+#wd_param_table tbody tr td {
+    padding: 14px 2px;
+    vertical-align:middle !important;
+}
+
+
+.WD-table-view tbody tr td {
+    vertical-align:middle !important;
+}
+
+.WD-table-view thead tr th {
+    vertical-align:middle !important;
+}
+
+.OldRecognizeNumber {
+    position: absolute;
+    top: -6px;
+    right: 20px;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    padding: 1px 6px;
+    line-height: 12px;
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer !important;
+}
+
+input[type=text]::-ms-clear {  display: none; width : 0; height: 0; }
+input[type=text]::-ms-reveal {  display: none; width : 0; height: 0; }
+
+::-ms-clear {
+  display: none;
+}
+
+.BadRecNumber:focus {
+    border-color:red !important;
+}
+
+.BadRecNumber {
+    border-color:red !important;
+}
+
+.hideXbutton{
+    position: absolute;
+    width: 22px;
+    z-index: 999;
+    height: 25px;
+    background-color: #fff;
+    top: 5px;
+    right: 6px;
+}
+
+.specialINPUT input {
+    width:100% !important;
+}
+
+.TotalField {
+    border: 1px solid transparent !important;
+}
+
+.TotalValue {
+     border: 2px solid #ddd !important;
+}
+
+.WD-table-head-view td {
+    padding: 5px;
+
+}
+
+.MargTop {
+    margin-top:10px;
+}
+
+.MatSelSel .ui-select-bootstrap > .ui-select-choices, .ui-select-bootstrap > .ui-select-no-choice {
+    width: 242% !important;
+    height: auto;
+    max-height: 300px;
+    overflow-x: hidden;
+    margin-top: -1px;
+}
+
+#SelectWayBillModal .modal-body {
+    max-height: 100% !important;
+}
+
+#SelectWayBillModal {
+    top: 1% !important;
+}

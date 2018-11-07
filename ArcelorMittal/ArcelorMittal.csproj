@@ -189,6 +189,7 @@
     <Content Include="Content\Shared\layout.css" />
     <Content Include="Content\Shared\datetimepicker.css" />
     <Content Include="Content\Shared\layoutConsigners.css" />
+    <Content Include="Content\Shared\layoutWAD.css" />
     <Content Include="Content\Shared\select.css" />
     <Content Include="Content\Shared\layoutWA.css" />
     <Content Include="Content\Table\jsgrid-theme.css" />
@@ -196,7 +197,9 @@
     <Content Include="Content\Table\style.css" />
     <Content Include="Content\Tree\32px.png" />
     <Content Include="Content\Tree\img\32px.png" />
+    <Content Include="Content\Tree\img\list.png" />
     <Content Include="Content\Tree\img\throbber.gif" />
+    <Content Include="Content\Tree\img\wagon.png" />
     <Content Include="Content\Tree\style.min.css" />
     <Content Include="Content\Tree\throbber.gif" />
     <Content Include="Content\Tree\tree.css" />
@@ -207,10 +210,12 @@
     <Content Include="Scripts\App\gasCollection.js" />
     <Content Include="Scripts\App\Resources.js" />
     <Content Include="Scripts\App\WeightAnalytics.js" />
+    <Content Include="Scripts\App\WeightAnalytics_dw.js" />
     <Content Include="Scripts\Vendor\backbone.js" />
     <Content Include="Scripts\Diagram\diagramExt.js" />
     <Content Include="Scripts\Diagram\index.js" />
     <Content Include="Scripts\Vendor\joint.min.js" />
+    <Content Include="Scripts\Vendor\jquery.blueimp-gallery.js" />
     <Content Include="Scripts\Vendor\jquery.qrcode.min.js" />
     <Content Include="Scripts\Vendor\jstree.search.js" />
     <Content Include="Scripts\Vendor\jstree\jstree.min.js" />
@@ -284,6 +289,7 @@
     <Content Include="Scripts\Vendor\jsgrid.min.js" />
     <Content Include="Scripts\TreeGrid\treeExt.js" />
     <Content Include="Scripts\Vendor\jstree.js" />
+    <Content Include="Scripts\Vendor\moment.js" />
     <Content Include="Scripts\Vendor\printPreview.js" />
     <Content Include="Scripts\Vendor\select.js" />
     <Content Include="Static\automationlab\device.html" />
