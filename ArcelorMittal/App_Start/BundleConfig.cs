@@ -26,7 +26,8 @@ public class BundleConfig
             "~/scripts/vendor/jqplot/plugins/jqplot.highlighter.js",
             "~/scripts/vendor/dhtmlxscheduler.js",
             "~/scripts/vendor/dhtmlxscheduler_year_view.js",
-            "~/scripts/vendor/select.js"
+            "~/scripts/vendor/select.js",
+            "~/scripts/vendor/moment.js"
             //"~/scripts/vendor/printPreview.js"
             //"~/scripts/vendor/backbone.js",
             //"~/scripts/vendor/joint.min.js",
@@ -44,6 +45,7 @@ public class BundleConfig
             "~/scripts/app/pa.js",
             "~/scripts/app/workshopspecs.js",
             "~/scripts/app/weightanalytics.js",
+            "~/scripts/app/weightanalytics_dw.js",
             "~/scripts/app/consigners.js",
             "~/scripts/app/gasCollection.js",
             "~/scripts/app/automationlab.js",
@@ -59,6 +61,7 @@ public class BundleConfig
             "~/content/table/jsgrid-theme.css",
             "~/content/shared/datetimepicker.css",
             "~/content/shared/layout.css",
+            "~/content/shared/layoutWAD.css",
             "~/content/chart/jquery.jqplot.css",
             "~/content/shared/select.css"
         ));

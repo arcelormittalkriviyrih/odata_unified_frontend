@@ -88,6 +88,7 @@ angular.module('indexApp')
     $scope.WaybillShops = [];
     $scope.CurrentWaybill = {};
     var WaybillList = $('#waybill_list').jstree('destroy');
+    var ArchiveWaybills = [];
     var RWStations = [];
     var CargoTypes = [];
     var CargoSenders = [];
@@ -248,7 +249,7 @@ angular.module('indexApp')
         var pathWaybillList = "v_WGT_WaybillList";
         pathWaybillList = pathWaybillList + ($scope.ckbx.HideUsedRejectWB ? "?$filter=Status eq null" : "");
         indexService.getInfo(pathWaybillList).then(function (response) {
-
+            var months = ['December', 'November', 'October', 'September', 'August', 'July', 'June', 'May', 'April', 'March', 'February', 'January'];
             if (response.data.value.length) {
                 response.data.value.forEach(function (e) {
                     e.id = e.ID;
@@ -262,18 +263,23 @@ angular.module('indexApp')
                         if (e.Status == 'used') {
                             e.icon = 'jstree-finalize';
                         }
+                    }
+                    else {
+                        if (months.indexOf(e.Description) != -1) {
+                            e.text = $translate.instant('weightanalytics.Months.' + e.Description);
+                        }
                     };
                     delete e.ID;
                     delete e.ParentID;
                     delete e.Description;
                 });
 
-                $scope.ArchiveWaybills = response.data.value;
-                vmLoadWaybillListTree($scope.ArchiveWaybills);
+                ArchiveWaybills = response.data.value;
+                vmLoadWaybillListTree(ArchiveWaybills);
 
                 //WaybillList.jstree({
                 //    core: {
-                //        data: $scope.ArchiveWaybills
+                //        data: ArchiveWaybills
                 //    },
                 //    search: {
                 //        "case_insensitive": true,
@@ -296,17 +302,30 @@ angular.module('indexApp')
         WaybillList.jstree('deselect_all', true);
 
         // при первой загрузке дерева выделяем год, содержащий последнюю путевую
-
-        var node = $scope.ArchiveWaybills.filter(function (element) {
-            if (enter_waybill_id) {
-                return element.parent != '#' && element.DocumentationsID == enter_waybill_id;
+        //var node = ArchiveWaybills.filter(function (element) {
+        //    if (enter_waybill_id) {
+        //        return element.parent != '#' && element.DocumentationsID == enter_waybill_id;
+        //    }
+        //    else {
+        //        return element.parent == '#' && element.DocumentationsID == null && !isNaN(element.text);
+        //    }
+        //});
+        //if (node[0]) {
+        //    node = node[0].id;
+        //    WaybillList.jstree('select_node', node, false);
+        //    WaybillList.jstree(true).get_node(node, true).children('.jstree-anchor').focus();
+        //    WaybillList.jstree('open_node', node);
+        //}
+        var node = null;
+        for (var i = 0; i < ArchiveWaybills.length; i++) {
+            var element = ArchiveWaybills[i];
+            if (element.parent != '#' && element.DocumentationsID == null && isNaN(element.text)) {
+                node = element;
+                break;
             }
-            else {
-                return element.parent == '#' && element.DocumentationsID == null && !isNaN(element.text);
-            }
-        });
-        if (node[0]) {
-            node = node[0].id;
+        }
+        if (node) {
+            node = node['id'];
             WaybillList.jstree('select_node', node, false);
             WaybillList.jstree(true).get_node(node, true).children('.jstree-anchor').focus();
             WaybillList.jstree('open_node', node);

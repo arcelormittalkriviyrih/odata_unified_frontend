@@ -15,13 +15,13 @@
         <a>{{Weighbridge.Description}} {{$state}}</a>
     </li>-->
 
-    <li class="tab" ui-sref-active="active">
+     <li class="tab" ui-sref-active="active">
         <a ui-sref="app.WeightAnalytics.Main" ui-sref-opts="{reload: true}">Main</a>
     </li>
 
     <li ng-repeat="Weighbridge in AvalWeighbridges"
         class="tab" ui-sref-active="active">
-        <a ui-sref=".WBStatic ({ wb_id: Weighbridge.ID, ws_id: null })">{{Weighbridge.Description}}</a>
+        <a ui-sref=".{{Weighbridge.ScaleType}} ({ wb_id: Weighbridge.ID, ws_id: null })">{{Weighbridge.Description}}</a>
     </li>
 
 

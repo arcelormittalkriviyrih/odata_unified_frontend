@@ -117,147 +117,145 @@
 
 
 
-.controller('WeightAnalyticsMainCtrl', ['$scope', '$translate', 'indexService', 'consignersService', '$state', '$interval', '$filter', function ($scope, $translate, indexService, consignersService, $state, $interval, $filter) {
+.controller('WeightAnalyticsMainCtrl', ['$scope', '$translate', 'indexService', 'weightanalyticsService', 'consignersService', '$state', '$interval', '$filter', function ($scope, $translate, indexService, weightanalyticsService, consignersService, $state, $interval, $filter) {
     var message = "WeightAnalyticsMainCtrl";
     //alert(message);
-    /*
-    $scope.SelectedObjects = {};
 
-    $scope.CurrentWeightSheet = [];
-    //$scope.CurrentWeightSheet.SelectedWagonNumber = null;
-    //$scope.CurrentWeightSheet.SelectedWBNumber = null;
-    var WBs_Wagons = [];
-    $scope.WagonManualEnterDisabled = false;
-    $scope.WBManualEnterDisabled = false;
+    var ArchiveWeightSheets = [];
+    var ArchiveWaybills = [];
+    var WeightSheetTree = $('#weightsheet_tree').jstree('destroy');
+    var WaybillList = $('#waybill_list').jstree('destroy');
 
+    //vmCreateWSTree();
+    //vmGetWSTree();
 
-    // получение списка номеров пар лафет-короб
-    $scope.GetWagonNumbers = function (search) {
-        var array = [];
-        if ($scope.WagonManualEnterDisabled) {
-            array = WBs_Wagons.slice();
-        }
-            // if Wagon entered first
-        else if (search) {
-            array.unshift(search);
-        }
-        return array;
-    }
+    //vmCreateWaybillListTree();
+    //vmGetWaybillTree();
 
-    // выбор номера пары лафет-короб
-    $scope.SelectWagonNumber = function (selected_wagon_number) {
-        // is WagonNumber is not null
-        if ($scope.SelectedObjects.WagonNumber) {
-            if ($scope.SelectedObjects.WBNumber == null) {
-                $scope.WBManualEnterDisabled = true;
-            }
-            else if ($scope.WagonManualEnterDisabled) {
-                //alert(selected_wagon_number['WagonNumber']);
-                vmGetWB(selected_wagon_number['WaybillID']);
-                return;
-            }
-
-            $scope.WBShowLoading = true;
-            var query = "v_WGT_test?$filter= WagonNumber eq '{0}' &$orderby=ID desc".format(selected_wagon_number);
-            indexService.getInfo(query)
-                .then(function (response) {
-                    WBs_Wagons = response.data.value;
-                    if (WBs_Wagons.length) {
-                        $scope.SelectedObjects.WBNumber = WBs_Wagons[0];
-                        //alert($scope.SelectedObjects.WBNumber['WaybillNumber']);
-                        vmGetWB($scope.SelectedObjects.WBNumber['WaybillID']);
-                    }
-                    else {
-                        $scope.SelectedObjects.WBNumber = null;
-                    }
-                    //$scope.SelectedObjects.WBNumber = WBs_Wagons.length ? WBs_Wagons[0] : null;
-                    $scope.WBShowLoading = false;
-                })
-        }
-            // is WagonNumber is null
-        else {
-            if ($scope.WBManualEnterDisabled) {
-                $scope.SelectedObjects.WBNumber = null;
-                WBs_Wagons.length = 0;
-
-                $scope.WagonManualEnterDisabled = false;
-                $scope.WBManualEnterDisabled = false;
-            }
-        }
+    // создание дерева путевых
+    function vmCreateWaybillListTree() {
+        WaybillList.jstree({
+            search: {
+                "case_insensitive": true,
+                "show_only_matches": true
+            },
+            plugins: ["search"]
+        });
     };
 
+    // загрузка данных в дерево путевых
+    function vmLoadWaybillListTree(data) {
+        WaybillList.jstree(true).settings.core.data = data;
+        WaybillList.jstree(true).refresh(true, true);
+    };
+    // получение дерева архивных путевых
+    function vmGetWaybillTree() {
+        var pathWaybillList = "v_WGT_WaybillList";
+        pathWaybillList = pathWaybillList + (false ? "?$filter=Status eq null" : "");
+        indexService.getInfo(pathWaybillList).then(function (response) {
 
+            if (response.data.value.length) {
+                response.data.value.forEach(function (e) {
+                    e.id = e.ID;
+                    e.parent = e.ParentID;
+                    e.text = e.Description;
+                    if (e.DocumentationsID) {
+                        e.icon = 'jstree-file';
+                        if (e.Status == 'reject') {
+                            e.icon = 'jstree-reject';
+                        }
+                        if (e.Status == 'used') {
+                            e.icon = 'jstree-finalize';
+                        }
+                    };
+                    delete e.ID;
+                    delete e.ParentID;
+                    delete e.Description;
+                });
 
-    // получение списка путевых (при заполнении комбобоксов №путевой и №вагона)
-    $scope.GetWBNumbers = function (search) {
-        var array = [];
-        if ($scope.WBManualEnterDisabled) {
-            array = WBs_Wagons.slice();
-        }
-            // if WB entered first
-        else if (search) {
-            array.unshift(search);
-        }
-        return array;
-    }
-
-    // выбор номера путевой в комбобоксе
-    $scope.SelectWBNumber = function (selected_wb_number) {
-
-        // is WBNumber is not null
-        if ($scope.SelectedObjects.WBNumber) {
-            if ($scope.SelectedObjects.WagonNumber == null) {
-                $scope.WagonManualEnterDisabled = true;
-            }
-            else if ($scope.WBManualEnterDisabled) {
-                //alert(selected_wb_number['WaybillNumber']);
-                vmGetWB(selected_wb_number['WaybillID']);
-                return;
-            }
-            $scope.WagonShowLoading = true;
-            var query = "v_WGT_test?$filter= WaybillNumber eq '{0}' &$orderby=ID desc".format(selected_wb_number);
-            indexService.getInfo(query)
-                .then(function (response) {
-                    WBs_Wagons = response.data.value;
-                    if (WBs_Wagons.length) {
-                        $scope.SelectedObjects.WagonNumber = WBs_Wagons[0];
-                        //alert($scope.SelectedObjects.WagonNumber['WagonNumber']);
-                        vmGetWB($scope.SelectedObjects.WagonNumber['WaybillID']);
-                    }
-                    else {
-                        $scope.SelectedObjects.WagonNumber = null;
-                    }
-                    //$scope.SelectedObjects.WagonNumber = WBs_Wagons.length ? WBs_Wagons[0] : null;
-                    $scope.WagonShowLoading = false;
-                })
-        }
-            // is WBNumber is null
-        else {
-            if ($scope.WagonManualEnterDisabled) {
-                $scope.SelectedObjects.WagonNumber = null;
-                WBs_Wagons.length = 0;
-
-                $scope.WagonManualEnterDisabled = false;
-                $scope.WBManualEnterDisabled = false;
-            }
-        }
+                ArchiveWaybills = response.data.value;
+                vmLoadWaybillListTree(ArchiveWaybills);
+            };
+        });
     };
 
-    vmGetWB = function (waybill_id) {
-        consignersService.GetWaybillObject(waybill_id)
-            .then(function (waybill_obj) {
-                var msg = '';
-                msg += 'WaybillNumber: ' + waybill_obj['WaybillNumber'] + '\n';
-                msg += 'Created: ' + waybill_obj['CreateDT'] + '\n';
-                msg += 'SenderShop: ' + waybill_obj.SenderShop['Description'] + '\n';
-                msg += 'ReceiverShop: ' + waybill_obj.ReceiverShop['Description'] + '\n';
-                msg += 'WagonType: ' + waybill_obj.WagonType['Description'] + '\n';
-                msg += 'WagonNumber: ' + waybill_obj['WagonNumber'] + '\n';
+    // загрузка дерева путевых
+    WaybillList.on('redraw.jstree', function (e, data) {
 
-                alert(msg);
-            })
-    }
-    */
+        //alert('loaded');
+        // при загрузке данных убираем выделение эл-тов и сворачиваем дерево
+        WaybillList.jstree('close_all');
+        WaybillList.jstree('deselect_all', true);
+
+        var node = null;
+        for (var i = 0; i < ArchiveWaybills.length; i++) {
+            var element = ArchiveWaybills[i];
+            if (element.parent != '#' && element.DocumentationsID == null && isNaN(element.text)) {
+                node = element;
+                break;
+            }
+        }
+        if (node) {
+            node = node['id'];
+            WaybillList.jstree('select_node', node, false);
+            WaybillList.jstree(true).get_node(node, true).children('.jstree-anchor').focus();
+            WaybillList.jstree('open_node', node);
+        }
+    });
+
+
+
+    // создание дерева отвесных
+    function vmCreateWSTree() {
+        WeightSheetTree.jstree({
+            //core: {
+            //    data: data
+            //},
+            search: {
+                "case_insensitive": true,
+                "show_only_matches": true
+            },
+            plugins: ["search"]
+        });
+    };
+
+    // получение дерева архивных отвесных
+    function vmGetWSTree() {
+        //WeightSheetTree = $('#weightsheet_tree').jstree('destroy', true);
+        weightanalyticsService.GetWSList(185, false).then(function (list) {
+            ArchiveWeightSheets = list;
+            vmLoadWSTree(ArchiveWeightSheets);
+        })
+    };
+
+    // загрузка данных в дерево отвесных
+    function vmLoadWSTree(data) {
+        WeightSheetTree.jstree(true).settings.core.data = data;
+        WeightSheetTree.jstree(true).refresh(true, true);
+    };
+
+    // загрузка дерева отвесных
+    WeightSheetTree.on('redraw.jstree', function (e, data) {
+        // при загрузке данных убираем выделение эл-тов и сворачиваем дерево
+        WeightSheetTree.jstree('close_all');
+        WeightSheetTree.jstree('deselect_all', true);
+
+        // при первой загрузке дерева выделяем или отвесную (если задан ID) или год, содержащий последнюю отвесную
+        var node = null;
+        for (var i = 0; i < ArchiveWeightSheets.length; i++) {
+            var element = ArchiveWeightSheets[i];
+            if (element.parent != '#' && element.DocumentationsID == null && isNaN(element.text)) {
+                node = element;
+                break;
+            }
+        }
+        if (node) {
+            var node_id = node['id'];
+            WeightSheetTree.jstree('select_node', node_id, false);
+            WeightSheetTree.jstree(true).get_node(node_id, true).children('.jstree-anchor').focus();
+            WeightSheetTree.jstree('open_node', node_id);
+        }
+    });
 
 }])
 
@@ -483,7 +481,7 @@
                 // получение платформ для весов
                 if (resp_6.length > 0) {
                     var PlatformsArray = resp_6[0]['Value'];
-                    eval('PlatformsArray = ' + PlatformsArray); // convert to array of objects
+                    PlatformsArray = JSON.parse(PlatformsArray); // convert to array of objects
                     for (var i = 0; i < PlatformsArray.length; i++) {
                         var obj = {};
                         obj['name'] = PlatformsArray[i];
@@ -495,7 +493,7 @@
             if (resp_7) {
                 // получение соответствия платформ и видов вагонов
                 PlatformWagonClassArray = resp_7[0]['Value'];
-                eval('PlatformWagonClassArray = ' + PlatformWagonClassArray); // convert to array of objects
+                PlatformWagonClassArray = JSON.parse(PlatformWagonClassArray); // convert to array of objects
 
             }
 
@@ -558,17 +556,32 @@
         WeightSheetTree.jstree('close_all');
         WeightSheetTree.jstree('deselect_all', true);
 
-        // при первой загрузке дерева выделяем или отвесную (если задан ID) или год, содержащий последнюю отвесную
-        var node = ArchiveWeightSheets.filter(function (element) {
-            if (ws_id) {
-                return element.parent != '#' && element.DocumentationsID == ws_id;
+        //// при первой загрузке дерева выделяем или отвесную (если задан ID) или год, содержащий последнюю отвесную
+        //var node = ArchiveWeightSheets.filter(function (element) {
+        //    if (ws_id) {
+        //        return element.parent != '#' && element.DocumentationsID == ws_id;
+        //    }
+        //    else {
+        //        return element.parent == '#' && element.DocumentationsID == null && !isNaN(element.text);
+        //    }
+        //});
+        //if (node[0]) {
+        //    var node_id = node[0].id;
+        //    WeightSheetTree.jstree('select_node', node_id, false);
+        //    WeightSheetTree.jstree(true).get_node(node_id, true).children('.jstree-anchor').focus();
+        //    WeightSheetTree.jstree('open_node', node_id);
+        //}
+
+        var node = null;
+        for (var i = 0; i < ArchiveWeightSheets.length; i++) {
+            var element = ArchiveWeightSheets[i];
+            if (element.parent != '#' && element.DocumentationsID == ws_id) {
+                node = element;
+                break;
             }
-            else {
-                return element.parent == '#' && element.DocumentationsID == null && !isNaN(element.text);
-            }
-        });
-        if (node[0]) {
-            var node_id = node[0].id;
+        }
+        if (node) {
+            var node_id = node['id'];
             WeightSheetTree.jstree('select_node', node_id, false);
             WeightSheetTree.jstree(true).get_node(node_id, true).children('.jstree-anchor').focus();
             WeightSheetTree.jstree('open_node', node_id);
@@ -1158,7 +1171,7 @@
         var pathScalesDetail = "v_AvailableWeighbridgesInfo?$filter=EquipmentID eq {0}".format(wb_id);
         indexService.getInfo(pathScalesDetail)
             .then(function (response) {
-                var response = response.data.value[0];
+                var response = (response && response.data.value.length) ? response.data.value[0] : null;
                 // проверка isExit и plot, чтобы исключить ошибку plotа "Target dimension is not set"
                 if (!isExit && plot && response) {
                     // если есть ответ, обновляем переменные новыми значениями
@@ -1463,7 +1476,6 @@
                     }
                     $scope.CurrentPairNumberTare = { Tare: TareInfo[0]['Value'], DT: DT };
                 }
-                //$scope.CurrentPairNumberTare = TareInfo.length ? TareInfo[0].Value : null;
             })
     }
 
@@ -1683,7 +1695,7 @@
 
 
 
-.service('weightanalyticsService', ['indexService', '$q', '$filter', function (indexService, $q, $filter) {
+.service('weightanalyticsService', ['indexService', '$translate', '$q', '$filter', function (indexService, $translate, $q, $filter) {
 
     // возвращает виды отвесных
     this.GetWSTypes = function () {
@@ -1740,11 +1752,12 @@
     // возвращает список отвесных для заданных весов
     this.GetWSList = function (wb_id, show_active) {
         var pathGetWSList = "v_WGT_WeightsheetList";
-        pathGetWSList = pathGetWSList + (show_active ? "?$filter=(WeightbridgeID eq '{0}' or WeightbridgeID eq null) and (Status eq 'active' or ParentID eq '%23')" : "?$filter=WeightbridgeID eq '{0}' or WeightbridgeID eq null");
+        //pathGetWSList = pathGetWSList + (show_active ? "?$filter=(WeightbridgeID eq '{0}' or WeightbridgeID eq null) and (Status eq 'active' or ParentID eq '%23')" : "?$filter=WeightbridgeID eq '{0}' or WeightbridgeID eq null");
+        pathGetWSList = pathGetWSList + (show_active ? "?$filter=(WeightbridgeID eq '{0}' or WeightbridgeID eq null) and (Status eq 'active' or Status eq null)" : "?$filter=WeightbridgeID eq '{0}' or WeightbridgeID eq null");
         pathGetWSList = pathGetWSList + " &$orderby=ID";
-        //return indexService.getInfo("v_WGT_WeightsheetList?$filter=WeightbridgeID eq '{0}' or WeightbridgeID eq null &$orderby=ID".format(wb_id))
         return indexService.getInfo(pathGetWSList.format(wb_id))
         .then(function (response) {
+            var months = ['December','November','October','September','August','July','June','May','April','March','February','January'];
             var list = response.data.value;
             if (list.length) {
                 list.forEach(function (e) {
@@ -1760,6 +1773,11 @@
                         }
                         if (e.Status == 'closed') {
                             e.icon = 'jstree-finalize';
+                        }
+                    }
+                    else {
+                        if (months.indexOf(e.Description) != -1) {
+                            e.text = $translate.instant('weightanalytics.Months.' + e.Description);
                         }
                     };
                     delete e.ID;
@@ -1889,8 +1907,8 @@
                         headers: { 'Content-Type': 'application/json; charset=utf-8' },
                         url: printServiceUrl,
                         data: dataToSend,
-                        withCredentials: true,
-                        timeout: 5000,
+                        //withCredentials: true,
+                        timeout: 10000,
                     });
                 query_array.push(query);
             })
@@ -1898,6 +1916,7 @@
             .then(function (responses) {
                 var answer = "";
                 responses.forEach(function (elem) {
+                    if (!elem) return
                     if (elem.data["StatusCode"] == 0) {
                         answer += elem.data["PrinterName"] + ": OK"
                     }
