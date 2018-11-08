@@ -353,7 +353,6 @@ input.ng-touched.ng-invalid {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0px 2px;
-    overflow: hidden;
 }
 
     .param_table tr {

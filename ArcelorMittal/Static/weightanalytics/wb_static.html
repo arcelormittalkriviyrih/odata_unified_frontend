@@ -225,7 +225,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-top: 67px; text-align: center">
+                        <td colspan="2" style="/*padding-top: 31px;*/ text-align: center" ng-style="{'padding-top': CurrentWeightSheet.EditDT ? '31px' : '67px'}">
                             <button type="button"
                                 class="btn btn-default"
                                 style="width: 32%"
@@ -369,7 +369,7 @@
                 </div>
             </div>
 
-            <table class="param_table">
+            <table class="param_table" style="overflow: hidden;">
                 <tr>
                     <td>{{ 'weightanalytics.Labels.wagon' | translate }}
                     </td>
