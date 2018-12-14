@@ -299,6 +299,7 @@
     <Content Include="Static\consigners\consigners.html" />
     <Content Include="Static\consigners\create.html" />
     <Content Include="Static\consigners\explosion_cert.html" />
+    <Content Include="Static\consigners\find.html" />
     <Content Include="Static\consigners\index.html" />
     <Content Include="Static\consigners\waybill.html" />
     <Content Include="Static\error.html" />

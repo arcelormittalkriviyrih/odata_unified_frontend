@@ -305,6 +305,8 @@
         CargoType: null,
         WagonType: null,
         CreateWSAtFirstWeighing: false,
+        Carrying: null,
+        MarkedTare: null,
     };
 
     $scope.CurrentMeasuring = {
@@ -969,6 +971,9 @@
             var WagonTypeID = $scope.SelectedObjects.WagonType.ID;
             var CargoTypeID = $scope.SelectedObjects.CargoType ? $scope.SelectedObjects.CargoType.ID : null;
             //CurrentWeight = 49;
+            var Carrying = $scope.SelectedObjects.Carrying || null;
+            var MarkedTare = $scope.SelectedObjects.MarkedTare || null;
+
 
             if (!(ScalesID && WeightSheetID && WagonNumber && WagonTypeID)) {
                 alert("Error! ScalesID or WeightSheetID or WagonNumber or WagonTypeID is missing!");
@@ -977,7 +982,8 @@
             }
 
             if (['Погрузка'].indexOf($scope.CurrentWeightSheet.WeightingMode['Description']) > 1 &&
-                $scope.CurrentPairNumberTare.Tare && CurrentWeight < $scope.CurrentPairNumberTare.Tare) {
+                //$scope.CurrentPairNumberTare.Tare && CurrentWeight < $scope.CurrentPairNumberTare.Tare) {
+                $scope.CurrentWagonProperties && $scope.CurrentWagonProperties.Tare && CurrentWeight < $scope.CurrentWagonProperties.Tare) {
                 alert("Тара превышает текущий вес!");
                 $scope.TakeWeightBtnDisabled = false;
                 return;
@@ -991,7 +997,10 @@
                 }
                 // после взятия веса
                 alert($translate.instant('weightanalytics.Messages.takeWeightSuccess'));//alert('Вес зарегистрирован.');
-                $scope.CurrentPairNumberTare = null;
+                //$scope.CurrentPairNumberTare = null;
+                $scope.CurrentWagonProperties = null;
+                $scope.SelectedObjects.Carrying = null;
+                $scope.SelectedObjects.MarkedTare = null;
                 $scope.SelectedObjects.WagonNumber = null;
                 $scope.SelectedObjects.WBNumber = null;
                 $scope.CurrentWeightSheet.CurrentWeighting['WagonNumber'] = null;
@@ -1028,6 +1037,8 @@
                     ScalesID: ScalesID,
                     PackagingUnitsID: WagonID,
                     WeightTare: CurrentWeight,
+                    Carrying: Carrying,
+                    MarkedTare: MarkedTare,
                     PackagingUnitsDocsID: 0
                 });
             };
@@ -1189,6 +1200,7 @@
                     }
                     // округляем вес до сотых
                     $scope.CurrentMeasuring.Weight = (Math.round(sum_weight * 100)) / 100;
+                    $scope.CurrentMeasuring.Weight = 50.50;
                     vmRedrawArrow(sum_weight);
                 }
                 else {
@@ -1272,7 +1284,10 @@
             //if ($scope.CurrentWeightSheet.WeightingMode['Description'] == 'Тарирование') {
             if (['Тарирование', 'Контроль брутто'].indexOf($scope.CurrentWeightSheet.WeightingMode['Description']) > -1) {
                 //alert("Тарирование: " + selected_wagon_number);
-                $scope.CurrentPairNumberTare = null;
+                //$scope.CurrentPairNumberTare = null;
+                $scope.CurrentWagonProperties = null;
+                $scope.SelectedObjects.Carrying = null;
+                $scope.SelectedObjects.MarkedTare = null;
                 $scope.CurrentWeightSheet.CurrentWeighting['WagonNumber'] = selected_wagon_number;
                 $scope.CurrentWeightSheet.CurrentWeighting['WagonID'] = null;
                 if (!selected_wagon_number) { return; }
@@ -1314,7 +1329,10 @@
                 $scope.SelectedObjects.WBNumber = null;
                 vmClearSelected();
             }
-            $scope.CurrentPairNumberTare = null;
+            //$scope.CurrentPairNumberTare = null;
+            $scope.CurrentWagonProperties = null;
+            $scope.SelectedObjects.Carrying = null;
+            $scope.SelectedObjects.MarkedTare = null;
         }
     };
 
@@ -1358,7 +1376,10 @@
                     else {
                         $scope.SelectedObjects.WagonNumber = null;
 
-                        $scope.CurrentPairNumberTare = null;
+                        //$scope.CurrentPairNumberTare = null;
+                        $scope.CurrentWagonProperties = null;
+                        $scope.SelectedObjects.Carrying = null;
+                        $scope.SelectedObjects.MarkedTare = null;
                         angular.forEach($scope.CurrentWeightSheet.CurrentWeighting, function (value, key) {
                             $scope.CurrentWeightSheet.CurrentWeighting[key] = null;
                         });
@@ -1384,7 +1405,10 @@
 
         $scope.SelectedObjects.CargoType = null;
         $scope.SelectedObjects.WagonType = null;
-        $scope.CurrentPairNumberTare = null;
+        $scope.SelectedObjects.Carrying = null;
+        $scope.SelectedObjects.MarkedTare = null;
+        //$scope.CurrentPairNumberTare = null;
+        $scope.CurrentWagonProperties = null;
 
         angular.forEach($scope.CurrentWeightSheet.CurrentWeighting, function (value, key) {
             $scope.CurrentWeightSheet.CurrentWeighting[key] = null;
@@ -1398,7 +1422,10 @@
     function vmGetWB(waybill_id) {
         $scope.SelectedObjects.CargoType = null;
         $scope.SelectedObjects.WagonType = null;
-        $scope.CurrentPairNumberTare = null;
+        $scope.SelectedObjects.Carrying = null;
+        $scope.SelectedObjects.MarkedTare = null;
+        //$scope.CurrentPairNumberTare = null;
+        $scope.CurrentWagonProperties = null;
 
         // имея ID путевой, получаем инфу по ней
         consignersService.GetWaybillObject(waybill_id)
@@ -1460,12 +1487,14 @@
 
             })
     }
-
+/*
     // получение тары вагона
     function vmGetWagonTare(wagon_id) {
         if (!wagon_id) { return; }
         $scope.CurrentPairNumberTare = null;
-        indexService.getInfo("v_KP4_PackagingUnitsProperty?$filter=ID eq {0}".format(wagon_id))
+        var filter_str = "Вес тары";
+        filter_str = encodeURI(filter_str);
+        indexService.getInfo("v_KP4_PackagingUnitsProperty?$filter=ID eq {0} and Parameter eq '{1}'".format(wagon_id, filter_str))
             .then(function (resp) {
                 var TareInfo = resp.data.value;
                 if (TareInfo.length) {
@@ -1478,7 +1507,44 @@
                 }
             })
     }
+*/
 
+    // получение тары, тары с бруса и грузоподъемности вагона
+    function vmGetWagonTare(wagon_id) {
+        if (!wagon_id) { return; }
+        //$scope.CurrentPairNumberTare = null;
+        $scope.SelectedObjects.Carrying = null;
+        $scope.SelectedObjects.MarkedTare = null;
+        $scope.CurrentWagonProperties = {};
+        //$scope.CurrentWagonProperties = { Tare: null, TareDT: null, Carrying: null, CarryingDT: null, MarkedTare: null, MarkedTareDT: null };
+        indexService.getInfo("v_WGT_PackagingUnitsProperty?$filter=PackagingUnitsID eq {0}".format(wagon_id))
+            .then(function (resp) {
+                var WagonProps = resp.data.value;
+                WagonProps.forEach(function (e) {
+                    var DT = null;
+                    if (e['ValueTime']) {
+                        DT = new Date(e['ValueTime']);
+                        DT.setMinutes(DT.getMinutes() + DT.getTimezoneOffset());
+                    }
+                    switch (e['Parameter']) {
+                        case "Вес тары":
+                            $scope.CurrentWagonProperties['Tare'] = e['Value'];
+                            $scope.CurrentWagonProperties['TareDT'] = DT;
+                            break;
+                        case "Грузоподъемность":
+                            $scope.CurrentWagonProperties['Carrying'] = e['Value'];
+                            $scope.CurrentWagonProperties['CarryingDT'] = DT;
+                            break;
+                        case "Тара с бруса":
+                            $scope.CurrentWagonProperties['MarkedTare'] = e['Value'];
+                            $scope.CurrentWagonProperties['MarkedTareDT'] = DT;
+                            break;
+                    }
+                })
+                $scope.SelectedObjects.Carrying = $scope.CurrentWagonProperties ? $scope.CurrentWagonProperties.Carrying : null;
+                $scope.SelectedObjects.MarkedTare = $scope.CurrentWagonProperties ? $scope.CurrentWagonProperties.MarkedTare : null;
+            })
+    }
 
     // обновить таблицу с данными по отвесной
     function vmGetWagonTable(weightsheetid) {
