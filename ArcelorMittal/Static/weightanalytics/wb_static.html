@@ -1,4 +1,6 @@
-﻿<!--когда еще грузится страница-->
+﻿﻿<link href="Content/Shared/layoutWA.css" rel="stylesheet" />
+
+<!--когда еще грузится страница-->
 <div class="container loading" ng-show="$root.showLoadingState">
     <div class="loading-msg">
         <h1>Loading ...</h1>
@@ -8,7 +10,7 @@
 
 <!--основная часть, когда страница прогрузилась-->
 <div ng-show="!$root.showLoadingState">
-    <div class="row" style="background-color: #eeeeee; padding: 5px; margin-top: 0px">
+    <div class="row" style="background-color: #eeeeee; padding: 5px; margin-top: 0px;">
 
         <div class="col-sm-4 col-md-4 WApanels" style="">
 
@@ -37,7 +39,7 @@
                     ng-model="ckbx.ShowOnlyActiveWS"
                     ng-change="ckbxShowOnlyActiveWS()">
                 {{ 'weightanalytics.Labels.showOnlyActiveWS' | translate }}
-                <div id="weightsheet_tree" style="height: 205px; background-color: white; overflow: auto"></div>
+                <div id="weightsheet_tree" style="height: 215px; background-color: white; overflow: auto"></div>
 
                 <!-- Buttons table -->
                 <table style="width: 100%; text-align: center; margin-top: 3px">
@@ -369,7 +371,7 @@
                 </div>
             </div>
 
-            <table class="param_table" style="overflow: hidden;">
+            <table class="param_table">
                 <tr>
                     <td>{{ 'weightanalytics.Labels.wagon' | translate }}
                     </td>
@@ -485,7 +487,6 @@
                     <td>
                         <input type="text" class="form-control"
                             ng-model="SelectedObjects.MarkedTare"
-                            on-enter="WeightData.$valid && TakeWeight()"
                             placeholder="{{ 'weightanalytics.Placeholders.enterMarkedTare' | translate }}"
                             title="{{ 'weightanalytics.Placeholders.enterMarkedTare' | translate }}"
                             ng-required="false"
@@ -494,13 +495,28 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>{{ 'weightanalytics.Labels.currentTare' | translate }}
+                    <td>{{ 'weightanalytics.Labels.carrying' | translate }}
                     </td>
-                    <td style="padding-left: 10px" ng-show="CurrentPairNumberTare">{{CurrentPairNumberTare.Tare}} {{ 'weightanalytics.ton' | translate }} ({{CurrentPairNumberTare.DT | date:'dd.MM.yyyy HH:mm'}})
+                    <td>
+                        <input type="text" class="form-control"
+                            ng-model="SelectedObjects.Carrying"
+                            placeholder="{{ 'weightanalytics.Placeholders.enterCarrying' | translate }}"
+                            title="{{ 'weightanalytics.Placeholders.enterCarrying' | translate }}"
+                            ng-required="false"
+                            ng-disabled="!CurrentWeightSheet.WeightSheetID || !(CurrentWeightSheet.WeightingMode.Description == 'Тарирование') || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
+                            ng-pattern="'([0-9]{1,2,3}[.])?([0-9]{1,2})'" />
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding-top: 31px; text-align: center">
+                    <td>{{ 'weightanalytics.Labels.currentTare' | translate }}
+                    </td>
+<!--                    <td style="padding-left: 10px" ng-show="CurrentPairNumberTare">{{CurrentPairNumberTare.Tare}} {{ 'weightanalytics.ton' | translate }} ({{CurrentPairNumberTare.DT | date:'dd.MM.yyyy HH:mm'}})
+                    </td>-->
+                    <td style="padding-left: 10px" ng-show="CurrentWagonProperties">{{CurrentWagonProperties.Tare}} {{ 'weightanalytics.ton' | translate }} ({{CurrentWagonProperties.TareDT | date:'dd.MM.yyyy HH:mm'}})
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-top: 5px; text-align: center">
                         <button type="button"
                             class="btn btn-default"
                             style="width: 49%"
@@ -581,4 +597,10 @@
     WeightData.yyy.$error: {{WeightData.yyy.$error}}
 </div>-->
 
+<!--    <br />
+    <br />
+    WeightData.$invalid: {{WeightData.$invalid}}
+    <br />
+    <br />
+    SelectedObjects.MarkedTare: {{SelectedObjects.MarkedTare}}-->
 

@@ -37,6 +37,14 @@ angular.module('indexApp')
 
         })
 
+        .state('app.Consigners.Find', {
+
+            url: '/find',
+            templateUrl: 'Static/consigners/find.html',
+            controller: 'ConsignersFindCtrl',
+
+        })
+
         .state('app.Consigners.Print', {
 
             url: '/toprint/:print_id?',
@@ -63,10 +71,10 @@ angular.module('indexApp')
 
 .controller('ConsignersCtrl', ['$scope', '$translate', 'indexService', '$state', function ($scope, $translate, indexService, $state) {
 
-    //console.log("ConsignersCtrl");
+    console.log("ConsignersCtrl");
 
     //console.log("go to app.Consigners.Index");
-    $state.go('app.Consigners.Index');
+    //$state.go('app.Consigners.Index');
 
 }])
 
@@ -80,7 +88,7 @@ angular.module('indexApp')
 .controller('ConsignersIndexCtrl', ['$q', '$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', 'printService', '$state', 'user', function ($q, $scope, $translate, indexService, consignersService, LocalStorageService, printService, $state, user) {
 
     //alert("ConsignersIndexCtrl");
-    //console.log("ConsignersIndexCtrl");
+    console.log("ConsignersIndexCtrl");
 
     //$state.go('app.Consigners.Index');
     var enter_waybill_id = $state.params.waybill_id;
@@ -408,7 +416,7 @@ angular.module('indexApp')
 
 .controller('ConsignersCreateCtrl', ['$scope', 'indexService', 'consignersService', 'LocalStorageService', '$state', '$q', '$filter', '$translate', 'roles', 'user', function ($scope, indexService, consignersService, LocalStorageService, $state, $q, $filter, $translate, roles, user) {
     //alert("ConsignersCreateCtrl");
-    //console.log("ConsignersCreateCtrl");
+    console.log("ConsignersCreateCtrl");
     // throw main tab change
     //$scope.$emit('mainTabChange', 'Consigners');
     var copy_id = $state.params.copy_id;
@@ -780,7 +788,8 @@ angular.module('indexApp')
 
         // проверка существования номера путевой
         function checkWaybillNumber(waybill_number, sender_shop) {
-            var query = "v_WGT_WaybillExistCheck?$filter=WaybillNumber eq '{0}' and SenderShop eq '{1}' &$orderby=EndTime desc".format(waybill_number, sender_shop);
+            //var query = "v_WGT_WaybillExistCheck?$filter=WaybillNumber eq '{0}' and SenderShop eq '{1}' &$orderby=EndTime desc".format(waybill_number, sender_shop);
+            var query = "v_WGT_DocumentationsExistCheck?$filter=WaybillNumber eq {0} and SenderShop eq '{1}' &$orderby=EndTime desc".format(waybill_number, sender_shop);
             return indexService.getInfo(query);
         }
 
@@ -1090,6 +1099,20 @@ angular.module('indexApp')
 
 
 
+.controller('ConsignersFindCtrl', ['$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', '$state', function ($scope, $translate, indexService, consignersService, LocalStorageService, $state) {
+
+    console.log("ConsignersFindCtrl");
+
+    $scope.CurrentWaybill = [];
+
+    $scope.WaybillShops = [{ Description: "kfbf kjbsfjksbd fjbsfbf jbjksk fg jn   kljdb kj  kj  jf" }, { Description: "kfbf kjbsfjksbd fjbsfbf1117y18714784 y8778 4y4y2f" }];
+
+}])
+
+
+
+
+
 .controller('ConsignersPrintCtrl', ['$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', '$state', function ($scope, $translate, indexService, consignersService, LocalStorageService, $state) {
 
     //console.log("ConsignersPrintCtrl");
@@ -1247,7 +1270,7 @@ angular.module('indexApp')
 .service('consignersService', ['indexService', '$q', function (indexService, $q) {
 
     this.GetCargoTypes = function () {
-        var request = indexService.getInfo('v_WGT_ScrapTypes');
+        var request = indexService.getInfo('v_WGT_Materials');
         return request;
     };
 
@@ -1389,7 +1412,8 @@ angular.module('indexApp')
                     }
 
                     var prop_queries_array = [
-                        { prop: "CargoType", query: "v_WGT_ScrapTypes?$filter=ID eq {0} &$orderby=ID" },
+                        //{ prop: "CargoType", query: "v_WGT_ScrapTypes?$filter=ID eq {0} &$orderby=ID" },
+                        { prop: "CargoType", query: "v_WGT_Materials?$filter=ID eq {0} &$orderby=ID" },
                         { prop: "WagonType", query: "PackagingClass?$filter=ID eq {0}&$orderby=ID" },
                         { prop: "SenderShop", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },
                         { prop: "SenderDistrict", query: "Equipment?$filter=ID eq {0}&$orderby=ID" },

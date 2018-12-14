@@ -1,31 +1,46 @@
-﻿
-
-CONSIGNERS
-
-<!--когда еще грузится страница-->
-<div class="container loading" ng-show="$root.showLoadingState">
+﻿<!--когда еще грузится страница-->
+<!--<div class="container loading" ng-show="$root.showLoadingState">
     <div class="loading-msg">
         <h1>Loading ...</h1>
     </div>
+</div>-->
+
+
+<ul class="nav nav-tabs">
+
+    <li class="tab" ui-sref-active="active">
+        <a ui-sref="app.Consigners.Index" ui-sref-opts="{reload: true}">Main</a>
+    </li>
+    <li class="tab" ui-sref-active="active">
+        <a ui-sref="app.Consigners.Find" ui-sref-opts="{reload: true}">Find</a>
+    </li>
+</ul>
+
+
+<div ui-view>
+    app.Consigners content here
 </div>
 
-<ui-view>
+
+
+<!--<ui-view>
     442423423432432
 </ui-view>
 
 <link href="../../../Content/Shared/layoutConsigners.css" rel="stylesheet" />
 
-  <div class="row">
+<div class="row">
     <div class="span6">
-      <div class="well" ui-view="viewA"></div>        
+        <div class="well" ui-view="viewA"></div>
     </div>
     <div class="span6">
-      <div class="well" ui-view="viewB"></div>        
+        <div class="well" ui-view="viewB"></div>
     </div>
-  </div> 
-
+</div>
+-->
 
 <!--основная часть, когда страница прогрузилась-->
+<!--
 <div ng-show="!$root.showLoadingState">
 
     <div class="row" style="background-color: #eeeeee;">
@@ -50,19 +65,6 @@ CONSIGNERS
         <div class="col-md-8">.col-md-8</div>
 
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
+</div>-->
 
 

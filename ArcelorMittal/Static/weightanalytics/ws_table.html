@@ -117,7 +117,7 @@
                 <td ng-init="CurrentWeightSheet.Weighings.Totals.Count = CurrentWeightSheet.Weighings.Totals.Count + (WS.Status == 'reject' ? 0 : 1)">{{$index+1}}</td>
                 <td>{{WS.WagonNumber}}</td>
                 <td>{{WS.WaybillNumber}}</td>
-                <td>{{WS.Carrying}}</td>
+                <td style="text-align: center;">{{WS.Carrying}}</td>
                 <td style="overflow: hidden; /*white-space: nowrap; text-overflow: ellipsis; */ text-align: left;">{{WS.CargoTypeID}}{{WS.CargoTypeID ? '.': '-'}} {{WS.CargoType}}<span ng-show="WS.CargoTypeNotes"> ({{WS.CargoTypeNotes}})</span></td>
                 <td style="text-align: center; padding-bottom: 0px;">
                     <div>{{WS.Brutto ? (WS.Brutto | currency:'') : '-'}}</div>

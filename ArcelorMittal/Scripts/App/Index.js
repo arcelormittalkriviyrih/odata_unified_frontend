@@ -169,26 +169,6 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
                 }
             })
 
-			//.state('app.WeightAnalytics', {
-
-            //    url: '/weightanalytics',
-            //    templateUrl: 'Static/weightanalytics/index.html',
-            //    controller: 'WeightAnalyticsCtrl',
-            //    onEnter: function ($state, roles) {
-
-            //        if (!vmIsAuthorized('WeightAnalytics', roles))
-            //            $state.go('app.error', { code: 'unauthorized' });
-            //    },
-            //    onExit: function ($state, $injector) {
-
-            //        var $interval = $injector.get('$interval');
-            //        var $rootScope = $injector.get('$rootScope');
-
-            //        $interval.cancel($rootScope.intervalScales);
-            //        $interval.cancel($rootScope.intervalWorkRequest);
-            //    }
-			//})
-
 			.state('app.WeightAnalytics', {
 			    //abstract: true,
 			    url: '/weightanalytics',
@@ -206,7 +186,8 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
 			    //abstract: true,
 			    url: '/consigners',
 			    //templateUrl: 'Static/consigners/index.html',
-			    template: '<div ui-view>app.Consigners</div>',
+			    templateUrl: 'Static/consigners/consigners.html',
+			    //template: '<div ui-view>app.Consigners</div>',
 			    controller: 'ConsignersCtrl',
 
 			    onEnter: function ($state, roles) {
