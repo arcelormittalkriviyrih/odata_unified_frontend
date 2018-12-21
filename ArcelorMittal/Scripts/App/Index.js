@@ -505,7 +505,7 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
             url: serviceUrl + url,
             data: data,
             withCredentials: withCredentials,
-            timeout: 15000
+            timeout: 60000
 
         });
 

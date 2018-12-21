@@ -1448,7 +1448,7 @@
         return $.ajax({
             url: sapUrl + orderNumber,
             contentType: "application/json",
-            timeout: 15000
+            timeout: 60000
         })
     }
 
@@ -1501,7 +1501,7 @@
             type: 'POST',
             data: JSON.stringify(data),
             contentType: "application/json",
-            timeout: 15000
+            timeout: 60000
         };
         
         //call service action
