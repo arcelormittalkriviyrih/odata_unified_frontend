@@ -580,7 +580,7 @@
                 type: 'POST',
                 data: newData ? JSON.stringify(newData) : JSON.stringify(data),
                 contentType: "application/json",
-                timeout: 15000
+                timeout: 60000
             })
         };
         
