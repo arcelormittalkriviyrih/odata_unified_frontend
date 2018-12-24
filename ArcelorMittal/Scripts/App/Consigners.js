@@ -255,7 +255,7 @@ angular.module('indexApp')
 
         //WaybillList = $('#waybill_list').jstree('destroy');
         var pathWaybillList = "v_WGT_WaybillList";
-        pathWaybillList = pathWaybillList + ($scope.ckbx.HideUsedRejectWB ? "?$filter=Status eq null" : "");
+        pathWaybillList = pathWaybillList + ($scope.ckbx.HideUsedRejectWB ? "?$filter=Status eq null &" : "?") + "$orderby=ID";
         indexService.getInfo(pathWaybillList).then(function (response) {
             var months = ['December', 'November', 'October', 'September', 'August', 'July', 'June', 'May', 'April', 'March', 'February', 'January'];
             if (response.data.value.length) {

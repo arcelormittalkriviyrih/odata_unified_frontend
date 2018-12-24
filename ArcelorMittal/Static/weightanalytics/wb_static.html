@@ -227,7 +227,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="/*padding-top: 31px;*/ text-align: center" ng-style="{'padding-top': CurrentWeightSheet.EditDT ? '31px' : '67px'}">
+                        <td colspan="2" style="/*padding-top: 31px; */ text-align: center" ng-style="{'padding-top': CurrentWeightSheet.EditDT ? '31px' : '67px'}">
                             <button type="button"
                                 class="btn btn-default"
                                 style="width: 32%"
@@ -285,7 +285,7 @@
                     -- {{CurrentWeightSheet.WeightingMode.Description}} --
                 </div>
 
-                <div style="position:relative; text-align: center">
+                <div style="position: relative; text-align: center">
                     <div style="height: 145px; margin: 0px;"
                         id="plot-1000">
                     </div>
@@ -297,7 +297,8 @@
                                     title="{{ 'weightanalytics.Labels.zeroWB' | translate }}"
                                     ng-click="ZeroingScales()"
                                     ng-if="CurrentMeasuring.ZeroingEnable"
-                                    ng-disabled="CurrentMeasuring.Weight > 1 || CurrentMeasuring.Weight < -1 || CurrentMeasuring.Weight == 0 || CurrentMeasuring.Fault">=0=
+                                    ng-disabled="CurrentMeasuring.Weight > 1 || CurrentMeasuring.Weight < -1 || CurrentMeasuring.Weight == 0 || CurrentMeasuring.Fault">
+                                    =0=
                                 </button>
                                 <div class="weightstab" ng-show="CurrentMeasuring.WeightStab && CurrentMeasuring.Weight"></div>
                                 <div style="font-weight: bold;" ng-show="!CurrentMeasuring.Weight">&gt;0&lt; </div>
@@ -485,32 +486,32 @@
                     <td>{{ 'weightanalytics.Labels.markedTare' | translate }}
                     </td>
                     <td>
-                        <input type="text" class="form-control"
+                        <input type="text" class="form-control" style="display: inline-block; width: 35%;"
                             ng-model="SelectedObjects.MarkedTare"
-                            placeholder="{{ 'weightanalytics.Placeholders.enterMarkedTare' | translate }}"
                             title="{{ 'weightanalytics.Placeholders.enterMarkedTare' | translate }}"
                             ng-required="false"
                             ng-disabled="!CurrentWeightSheet.WeightSheetID || !(CurrentWeightSheet.WeightingMode.Description == 'Тарирование') || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
                             ng-pattern="'([0-9]{1,2}[.])?([0-9]{1,2})'" />
+                        {{ 'weightanalytics.ton' | translate }}
                     </td>
                 </tr>
                 <tr>
-                    <td>{{ 'weightanalytics.Labels.carrying' | translate }}
+                    <td style="font-size: 13px;">{{ 'weightanalytics.Labels.carrying' | translate }}
                     </td>
                     <td>
-                        <input type="text" class="form-control"
+                        <input type="text" class="form-control" style="display: inline-block; width: 35%;"
                             ng-model="SelectedObjects.Carrying"
-                            placeholder="{{ 'weightanalytics.Placeholders.enterCarrying' | translate }}"
                             title="{{ 'weightanalytics.Placeholders.enterCarrying' | translate }}"
                             ng-required="false"
                             ng-disabled="!CurrentWeightSheet.WeightSheetID || !(CurrentWeightSheet.WeightingMode.Description == 'Тарирование') || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1)"
                             ng-pattern="'([0-9]{1,3}[.])?([0-9]{1,2})'" />
+                        {{ 'weightanalytics.ton' | translate }}
                     </td>
                 </tr>
                 <tr>
                     <td>{{ 'weightanalytics.Labels.currentTare' | translate }}
                     </td>
-<!--                    <td style="padding-left: 10px" ng-show="CurrentPairNumberTare">{{CurrentPairNumberTare.Tare}} {{ 'weightanalytics.ton' | translate }} ({{CurrentPairNumberTare.DT | date:'dd.MM.yyyy HH:mm'}})
+                    <!--                    <td style="padding-left: 10px" ng-show="CurrentPairNumberTare">{{CurrentPairNumberTare.Tare}} {{ 'weightanalytics.ton' | translate }} ({{CurrentPairNumberTare.DT | date:'dd.MM.yyyy HH:mm'}})
                     </td>-->
                     <td style="padding-left: 10px" ng-show="CurrentWagonProperties">{{CurrentWagonProperties.Tare}} {{ 'weightanalytics.ton' | translate }} ({{CurrentWagonProperties.TareDT | date:'dd.MM.yyyy HH:mm'}})
                     </td>
