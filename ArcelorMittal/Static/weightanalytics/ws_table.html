@@ -98,10 +98,11 @@
     <table class="table table-bordered" ng-class="{'TT' : toprint}">
         <thead>
             <tr>
-                <th style="width: 4%">№</th>
-                <th style="width: 10%">{{ 'weightanalytics.Labels.wagon' | translate }}</th>
-                <th style="width: 10%">{{ 'weightanalytics.Labels.waybill' | translate }}</th>
-                <th style="width: 10%; word-wrap: break-word; word-break: break-all; font-size: 0.9em;">{{ 'weightanalytics.Labels.carrying' | translate }}</th>
+                <th style="width: 3%">№</th>
+                <th style="width: 9%">{{ 'weightanalytics.Labels.wagon' | translate }}</th>
+                <th style="width: 9%">{{ 'weightanalytics.Labels.waybill' | translate }}</th>
+                <th style="width: 7%">{{ 'weightanalytics.Labels.carryingShort' | translate }}</th>
+                <th style="width: 7%">{{ 'weightanalytics.Labels.markedTare' | translate }}</th>
                 <th>{{ 'weightanalytics.Labels.cargo' | translate }}</th>
                 <th style="width: 8%">{{ 'weightanalytics.Labels.brutto' | translate }}</th>
                 <th style="width: 8%">{{ 'weightanalytics.Labels.tare' | translate }}</th>
@@ -115,9 +116,10 @@
                 ng-class="{'reject': ($parent.$parent.language == 'en' && WS.Status == 'reject'), 'reject ru': ($parent.$parent.language != 'en' && WS.Status == 'reject')}"
                 ng-style="(WS.Status == 'reject') && {'background-color':'rgb(255, 169, 169)', 'background-repeat':'repeat', 'text-decoration': 'line-through'}">
                 <td ng-init="CurrentWeightSheet.Weighings.Totals.Count = CurrentWeightSheet.Weighings.Totals.Count + (WS.Status == 'reject' ? 0 : 1)">{{$index+1}}</td>
-                <td>{{WS.WagonNumber}}</td>
-                <td>{{WS.WaybillNumber}}</td>
+                <td style="text-align: center;">{{WS.WagonNumber}}</td>
+                <td style="text-align: center;">{{WS.WaybillNumber}}</td>
                 <td style="text-align: center;">{{WS.Carrying}}</td>
+                <td style="text-align: center;">{{WS.MarkedTare}}</td>
                 <td style="overflow: hidden; /*white-space: nowrap; text-overflow: ellipsis; */ text-align: left;">{{WS.CargoTypeID}}{{WS.CargoTypeID ? '.': '-'}} {{WS.CargoType}}<span ng-show="WS.CargoTypeNotes"> ({{WS.CargoTypeNotes}})</span></td>
                 <td style="text-align: center; padding-bottom: 0px;">
                     <div>{{WS.Brutto ? (WS.Brutto | currency:'') : '-'}}</div>
