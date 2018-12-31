@@ -1487,27 +1487,6 @@
 
             })
     }
-/*
-    // получение тары вагона
-    function vmGetWagonTare(wagon_id) {
-        if (!wagon_id) { return; }
-        $scope.CurrentPairNumberTare = null;
-        var filter_str = "Вес тары";
-        filter_str = encodeURI(filter_str);
-        indexService.getInfo("v_KP4_PackagingUnitsProperty?$filter=ID eq {0} and Parameter eq '{1}'".format(wagon_id, filter_str))
-            .then(function (resp) {
-                var TareInfo = resp.data.value;
-                if (TareInfo.length) {
-                    var DT = null;
-                    if (TareInfo[0]['ValueTime']) {
-                        DT = new Date(TareInfo[0]['ValueTime']);
-                        DT.setMinutes(DT.getMinutes() + DT.getTimezoneOffset());
-                    }
-                    $scope.CurrentPairNumberTare = { Tare: TareInfo[0]['Value'], DT: DT };
-                }
-            })
-    }
-*/
 
     // получение тары, тары с бруса и грузоподъемности вагона
     function vmGetWagonTare(wagon_id) {

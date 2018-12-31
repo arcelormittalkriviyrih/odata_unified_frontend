@@ -186,7 +186,7 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
 			    //abstract: true,
 			    url: '/consigners',
 			    //templateUrl: 'Static/consigners/index.html',
-			    templateUrl: 'Static/consigners/consigners.html',
+			    templateUrl: 'Static/consigners/index.html',
 			    //template: '<div ui-view>app.Consigners</div>',
 			    controller: 'ConsignersCtrl',
 

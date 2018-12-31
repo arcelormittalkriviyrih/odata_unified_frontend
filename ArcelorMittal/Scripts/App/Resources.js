@@ -8,6 +8,7 @@
             Marker: 'Marker',
             PA: 'PA',
             WeightAnalytics: 'WeightAnalytics',
+            Weighman: 'Weighman',
             AutomationLab: 'Automation Lab',
             Consigners: 'Consigners'
         },
@@ -613,6 +614,7 @@
             Marker: 'Маркировщик',
             PA: 'Специалист АСУТП',
             WeightAnalytics: 'Аналитик',
+            Weighman: 'Весовщик',
             Consigners: 'Приемосдатчик',
             AutomationLab: 'Лаборатория автоматизации'
         },
@@ -1213,6 +1215,7 @@
             Marker: 'Маркувальник',
             PA: 'Спеціаліст АСУТП',
             WeightAnalytics: 'Аналітик',
+            Weighman: 'Ваговик',
             Consigners: 'Прийомоздавач',
             AutomationLab: 'Лабораторія автоматизації'
         },

@@ -5,24 +5,24 @@ angular.module('indexApp')
 
     $stateProvider
 
-        .state('app.Consigners.Index', {
+        .state('app.Consigners.Main', {
 
-            url: '/index',
+            url: '/main',
             //templateUrl: 'Static/consigners/index.html',
-            //controller: 'ConsignersIndexCtrl',
+            //controller: 'ConsignersMainCtrl',
             params: { waybill_id: null },
             views: {
                 "": {
-                    templateUrl: "Static/consigners/index.html",
-                    controller: 'ConsignersIndexCtrl',
+                    templateUrl: "Static/consigners/main.html",
+                    controller: 'ConsignersMainCtrl',
                     //params: { waybill_id: 1111 }
                 },
-                "waybill_toprint@app.Consigners.Index": {
+                "waybill_toprint@app.Consigners.Main": {
                     templateUrl: "Static/consigners/waybill.html",
                     //controller: 'ConsignersPrintCtrl',
                     //params: { rrr: 2222 }
                 },
-                "explosion_cert@app.Consigners.Index": {
+                "explosion_cert@app.Consigners.Main": {
                     templateUrl: "Static/consigners/explosion_cert.html",
                 }
             }
@@ -72,9 +72,10 @@ angular.module('indexApp')
 .controller('ConsignersCtrl', ['$scope', '$translate', 'indexService', '$state', function ($scope, $translate, indexService, $state) {
 
     console.log("ConsignersCtrl");
+    //alert("ConsignersCtrl");
 
     //console.log("go to app.Consigners.Index");
-    //$state.go('app.Consigners.Index');
+    //$state.go('app.Consigners.Main');
 
 }])
 
@@ -85,10 +86,10 @@ angular.module('indexApp')
 
 
 
-.controller('ConsignersIndexCtrl', ['$q', '$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', 'printService', '$state', 'user', function ($q, $scope, $translate, indexService, consignersService, LocalStorageService, printService, $state, user) {
+.controller('ConsignersMainCtrl', ['$q', '$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', 'printService', '$state', 'user', function ($q, $scope, $translate, indexService, consignersService, LocalStorageService, printService, $state, user) {
 
-    //alert("ConsignersIndexCtrl");
-    console.log("ConsignersIndexCtrl");
+    //alert("ConsignersMainCtrl");
+    console.log("ConsignersMainCtrl");
 
     //$state.go('app.Consigners.Index');
     var enter_waybill_id = $state.params.waybill_id;
@@ -193,7 +194,7 @@ angular.module('indexApp')
         else {
             alert($translate.instant('consigners.Messages.noWaybill')); //alert("$scope.CurrentWaybill.ID is null");
         }
-    }    
+    }
 
     // функция отправки на сервис печати
     function SendToPrintService(content, wb) {
@@ -462,6 +463,7 @@ angular.module('indexApp')
     };
     $scope.WagonNumberPattern = null;
 
+    $scope.WagonNumberChange = vmWagonNumberChange;
     $scope.GetWagonNumberPattern = vmGetWagonNumberPattern;
     $scope.CargoSenderShopSelect = vmCargoSenderShopSelect;
     $scope.CargoReceiverShopSelect = vmCargoReceiverShopSelect;
@@ -651,19 +653,21 @@ angular.module('indexApp')
         }
     }
 
+    // ввод номера вагона
+    function vmWagonNumberChange() {
+        var type = consignersService.WagonNumberCRC($scope.CurrentWaybill.WagonNumber);
+        var wtype = $scope.WagonTypes.filter(function (item) { return item['Description'] == type; });
+        $scope.CurrentWaybill.WagonType = wtype.length ? wtype[0] : $scope.CurrentWaybill.WagonType;
+        console.log($scope.CurrentWaybill.WagonNumber + ' - ' + type);
+    }
+
     // получение шаблона номера вагона при выборе вида ЖД вагона
     function vmGetWagonNumberPattern(wagon) {
-        var wagon_id = wagon['ID'];
-        //$scope.WagonNumberPattern = "^[0-9]{1,3}-[0-9]{1,3}$";
-        //$scope.WagonNumberPattern = "^[0-9]{3,6}$";
-        //$scope.WagonNumberPattern = "^[0-9]{8}$";
-        var pathWagonTypes = "PackagingClassProperty?$filter=Description eq '{0}'and PackagingClassID eq {1} &$orderby=ID".format('Wagon number template', wagon_id);
-        indexService.getInfo(pathWagonTypes)
+        consignersService.GetWagonNumberPattern(wagon)
         .then(function (response) {
-            pattern = response.data.value;
-            if (pattern[0] != null) {
-                $scope.WagonNumberPattern = pattern[0]['Value'];
-            }
+            $scope.WagonNumberPattern = response;
+            var type = consignersService.WagonNumberCRC($scope.CurrentWaybill.WagonNumber);
+
         });
     }
 
@@ -1279,7 +1283,6 @@ angular.module('indexApp')
         filter_str = encodeURI(filter_str);
         var pathWagonTypes = "v_PackagingClass?$filter=ParentDescription eq '{0}'&$orderby=ID".format(filter_str);
         var request = indexService.getInfo(pathWagonTypes);
-        //return request;
         return request.then(function (response) {
             if (response.data && response.data.value && response.data.value.length) {
                 for (var i = 0; i < response.data.value.length; i++) {
@@ -1289,9 +1292,11 @@ angular.module('indexApp')
                             tooltip += "XX(X)-XX(X)";
                             break;
                         }
-                        case "Цистерна УЗ":
-                        case "Платформа УЗ":
-                        case "Полувагон УЗ": {
+                        case "Вагон местный":{
+                            tooltip += "XXX(XXXXX)";
+                            break;
+                        }
+                        case "Вагон УЗ": {
                             tooltip += "XXXXXXXX";
                             break;
                         }
@@ -1326,44 +1331,6 @@ angular.module('indexApp')
         return request;
     };
 
-    /*
-    // получение списка поставщиков груза
-    function vmGetCargoSenders() {
-        indexService.getInfo("v_WGT_Consigners?$filter=PropertyDescription eq 'CONSIGNEE'&$orderby=Description")
-        .then(function (response) {
-            CargoSenders = response.data.value;
-            $scope.CargoSenderShops = [];
-            for (i = 0; i < CargoSenders.length; i++) {
-                var CargoSenderShop = {};
-                CargoSenderShop['ID'] = CargoSenders[i]['ParentID'];
-                CargoSenderShop['Description'] = CargoSenders[i]['ParentDescription'];
-
-                if ($scope.CargoSenderShops.map(function (elem) { return elem['ID']; }).indexOf(CargoSenderShop['ID']) == -1) {
-                    $scope.CargoSenderShops.push(CargoSenderShop);
-                }
-            }
-        });
-    };
-
-    // получение списка получателей груза
-    function vmGetCargoReceivers() {
-        indexService.getInfo("v_WGT_Consigners?$filter=PropertyDescription eq 'CONSIGNER'&$orderby=Description")
-        .then(function (response) {
-            CargoReceivers = response.data.value;
-            $scope.CargoReceiverShops = [];
-            for (i = 0; i < CargoReceivers.length; i++) {
-                var CargoReceiverShop = {};
-                CargoReceiverShop['ID'] = CargoReceivers[i]['ParentID'];
-                CargoReceiverShop['Description'] = CargoReceivers[i]['ParentDescription'];
-
-                if ($scope.CargoReceiverShops.map(function (elem) { return elem['ID']; }).indexOf(CargoReceiverShop['ID']) == -1) {
-                    $scope.CargoReceiverShops.push(CargoReceiverShop);
-                }
-            }
-        });
-    };
-    */
-
     this.GetWagonNumberPattern = function (wagon) {
         var wagon_id = wagon['ID'];
         var pathWagonTypes = "PackagingClassProperty?$filter=Description eq '{0}'and PackagingClassID eq {1} &$orderby=ID".format('Wagon number template', wagon_id);
@@ -1375,6 +1342,51 @@ angular.module('indexApp')
                     return pattern[0]['Value'];
                 }
             });
+    }
+
+    this.WagonNumberCRC = function (number) {
+        var type = 0;
+        number = number + '';
+        var numArray = number.split('');
+        // 8 digits
+        if ((new RegExp('^[0-9]{8}$')).test(number)) {
+            numArray[0] *= 2;
+            numArray[2] *= 2;
+            numArray[4] *= 2;
+            numArray[6] *= 2;
+            var sum = 0;
+            for (var i = 0; i < numArray.length - 1; i++) {
+                var item = numArray[i];
+                sum += (numArray[i] / 10) >> 0;
+                sum += numArray[i] % 10;
+            }
+            sum = sum % 10;
+            var CRC = sum == 0 ? 0 : (10 - sum);
+
+            if (CRC == numArray[7] && [0, 1].indexOf(numArray[0] / 2) == -1) {
+                type = 1;   // UZ wagons
+            }
+            else {
+                type = 2;   // not UZ wagons
+            }
+        }
+        // 3..6 digits
+        else if ((new RegExp('^[0-9]{3,6}$')).test(number)) {
+            type = 2;   // not UZ wagons
+        }
+        // XXX-YYY
+        else if ((new RegExp('^[0-9]{1,3}-[0-9]{1,3}$')).test(number)) {
+            type = 12;  // Lafet-Korob
+        }
+        // automobile number (AAA)000(000)(-000)(AAA)(-000)
+        else if ((new RegExp('^[A-zА-я]{0,3}[0-9]{1,6}(\-[0-9]{1,3})?[A-zА-я]{0,3}\-?[0-9]{0,3}$')).test(number)) {
+            type = 13;  // automobile number
+        }
+        //type = 0;   // not matches
+        //return type;
+        var wagon_types = [{ ID: 1, Description: 'Вагон УЗ' }, { ID: 2, Description: 'Вагон местный' }, { ID: 12, Description: 'Лафет-короб' }, { ID: 13, Description: 'Автомобиль' }]
+        type = wagon_types.filter(function (item) { return item['ID'] == type; });
+        return type[0] ? type[0]['Description'] : null;
     }
 
     this.GetWaybillObject = function (waybill_id) {
