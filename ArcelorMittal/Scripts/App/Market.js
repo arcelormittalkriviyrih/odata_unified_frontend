@@ -388,7 +388,7 @@
 
     }
 
-    indexService.getInfo("Files?$filter = FileType eq '{0}'".format($state.params.fileType))
+    indexService.getInfo("Files?$select=ID,Name&$filter = FileType eq '{0}'".format($state.params.fileType))
                 .then(function (response) {
 
                     $scope.files = response.data.value;
