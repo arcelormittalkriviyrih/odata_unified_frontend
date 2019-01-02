@@ -170,7 +170,6 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
             })
 
 			.state('app.WeightAnalytics', {
-			    //abstract: true,
 			    url: '/weightanalytics',
 			    templateUrl: 'Static/weightanalytics/index.html',
 			    controller: 'WeightAnalyticsCtrl',
@@ -183,13 +182,9 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
 			})
 
 			.state('app.Consigners', {
-			    //abstract: true,
 			    url: '/consigners',
-			    //templateUrl: 'Static/consigners/index.html',
 			    templateUrl: 'Static/consigners/index.html',
-			    //template: '<div ui-view>app.Consigners</div>',
 			    controller: 'ConsignersCtrl',
-
 			    onEnter: function ($state, roles) {
 
 			        if (!vmIsAuthorized('Consigners', roles))

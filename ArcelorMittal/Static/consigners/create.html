@@ -41,7 +41,7 @@
 
                 <div class="controlsRowConsigners">
                     <div class="captionConsigners">{{ 'consigners.Labels.wagonTypeNumber' | translate }}</div>
-                    <div class="controlConsigners">
+                    <div class="controlConsigners" style="position:relative;">
 
                         <input type="text" class="form-control selectConsigners"
                             ng-model="CurrentWaybill.WagonNumber"
@@ -52,7 +52,7 @@
                             ng-required="true"
                             ng-disabled="(CurrentWaybill.Status == 'used')"
                             ng-pattern="WagonNumberPattern" />
-
+                        <span class="checksum" ng-class="{active: WagonNumberCRC}" title="{{ 'consigners.Labels.wagonNumberCRC' | translate }}">CS</span>
                         <ui-select 
                             ng-model="CurrentWaybill.WagonType" 
                             on-select="GetWagonNumberPattern($item)" 
@@ -67,7 +67,6 @@
                             <div ng-bind-html="type.Description | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
-
                     </div>
                 </div>
 

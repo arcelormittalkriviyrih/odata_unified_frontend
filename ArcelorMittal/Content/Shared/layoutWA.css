@@ -363,6 +363,22 @@ input.ng-touched.ng-invalid {
             width: 35%;
         }
 
+.checksum {
+    position: absolute;
+    font-size: 16px;
+    font-weight: bold;
+    color: lightgray;
+    z-index: 1;
+    top: 7px;
+    right: 24%;
+    letter-spacing: -2px;
+    transform: scale(0.8, 1);
+}
+
+    .checksum.active {
+        color: green;
+    }
+
 /**/
 .jstree-default .jstree-finalize {
     background: url("../Tree/img/32px.png") -3px -68px no-repeat;

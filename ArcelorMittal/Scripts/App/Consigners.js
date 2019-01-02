@@ -69,19 +69,12 @@ angular.module('indexApp')
 }])
 
 
-.controller('ConsignersCtrl', ['$scope', '$translate', 'indexService', '$state', function ($scope, $translate, indexService, $state) {
 
-    console.log("ConsignersCtrl");
-    //alert("ConsignersCtrl");
-
-    //console.log("go to app.Consigners.Index");
-    //$state.go('app.Consigners.Main');
-
+.controller('ConsignersCtrl', ['$scope', function ($scope) {
+    var message = "ConsignersCtrl";
+    //console.log(message);
+    //alert(message);
 }])
-
-
-
-
 
 
 
@@ -89,7 +82,7 @@ angular.module('indexApp')
 .controller('ConsignersMainCtrl', ['$q', '$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', 'printService', '$state', 'user', function ($q, $scope, $translate, indexService, consignersService, LocalStorageService, printService, $state, user) {
 
     //alert("ConsignersMainCtrl");
-    console.log("ConsignersMainCtrl");
+    //console.log("ConsignersMainCtrl");
 
     //$state.go('app.Consigners.Index');
     var enter_waybill_id = $state.params.waybill_id;
@@ -354,7 +347,7 @@ angular.module('indexApp')
             //$state.params.id = data.node.original.WorkPerfomanceID;
             var waybill_id = data.node.original.DocumentationsID;
 
-            /* !!! get full waybill info here */
+            // get full waybill info here
             consignersService.GetWaybillObject(waybill_id)
             .then(function (waybill_obj) {
                 $scope.CurrentWaybill = waybill_obj;
@@ -417,7 +410,7 @@ angular.module('indexApp')
 
 .controller('ConsignersCreateCtrl', ['$scope', 'indexService', 'consignersService', 'LocalStorageService', '$state', '$q', '$filter', '$translate', 'roles', 'user', function ($scope, indexService, consignersService, LocalStorageService, $state, $q, $filter, $translate, roles, user) {
     //alert("ConsignersCreateCtrl");
-    console.log("ConsignersCreateCtrl");
+    //console.log("ConsignersCreateCtrl");
     // throw main tab change
     //$scope.$emit('mainTabChange', 'Consigners');
     var copy_id = $state.params.copy_id;
@@ -658,6 +651,7 @@ angular.module('indexApp')
         var type = consignersService.WagonNumberCRC($scope.CurrentWaybill.WagonNumber);
         var wtype = $scope.WagonTypes.filter(function (item) { return item['Description'] == type; });
         $scope.CurrentWaybill.WagonType = wtype.length ? wtype[0] : $scope.CurrentWaybill.WagonType;
+        $scope.WagonNumberCRC = type == "Вагон УЗ";
         console.log($scope.CurrentWaybill.WagonNumber + ' - ' + type);
     }
 
@@ -1105,7 +1099,7 @@ angular.module('indexApp')
 
 .controller('ConsignersFindCtrl', ['$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', '$state', function ($scope, $translate, indexService, consignersService, LocalStorageService, $state) {
 
-    console.log("ConsignersFindCtrl");
+    //console.log("ConsignersFindCtrl");
 
     $scope.CurrentWaybill = [];
 
@@ -1192,46 +1186,8 @@ angular.module('indexApp')
         return out;
     };
 })
-/*
-.filter('unique', function () {
 
-    return function (items, filterOn) {
 
-        if (filterOn === false) {
-            return items;
-        }
-
-        if ((filterOn || angular.isUndefined(filterOn)) && angular.isArray(items)) {
-            var hashCheck = {}, newItems = [];
-
-            var extractValueToCompare = function (item) {
-                if (angular.isObject(item) && angular.isString(filterOn)) {
-                    return item[filterOn];
-                } else {
-                    return item;
-                }
-            };
-
-            angular.forEach(items, function (item) {
-                var valueToCheck, isDuplicate = false;
-
-                for (var i = 0; i < newItems.length; i++) {
-                    if (angular.equals(extractValueToCompare(newItems[i]), extractValueToCompare(item))) {
-                        isDuplicate = true;
-                        break;
-                    }
-                }
-                if (!isDuplicate) {
-                    newItems.push(item);
-                }
-
-            });
-            items = newItems;
-        }
-        return items;
-    };
-})
-*/
 .directive('placeholder', function ($timeout) {
     var i = document.createElement('input');
     if ('placeholder' in i) {
@@ -1391,7 +1347,7 @@ angular.module('indexApp')
 
     this.GetWaybillObject = function (waybill_id) {
 
-        /* !!! get full waybill info here */
+        //-- get full waybill info here
         return $q.all([indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
                         indexService.getInfo("v_WGT_DocumentsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id))])
                 .then(function (responses) {

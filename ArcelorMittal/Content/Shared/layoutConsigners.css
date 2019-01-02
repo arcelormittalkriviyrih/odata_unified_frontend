@@ -16,6 +16,22 @@
     margin-bottom: 5px;
 }
 
+.checksum {
+    position: absolute;
+    font-size: 16px;
+    font-weight: bold;
+    color: lightgray;
+    z-index: 1;
+    top: 6px;
+    left: 38%;
+    letter-spacing: -2px;
+    transform: scale(0.8, 1);
+}
+
+    .checksum.active {
+        color: green;
+    }
+
 div.captionConsigners {
     width: 200px;
     text-align: left;
@@ -79,7 +95,7 @@ input.ng-touched.ng-invalid {
 }
 
 .jstree-default .jstree-reject {
-  background: url("../Tree/img/32px.png") -36px -68px no-repeat;
+    background: url("../Tree/img/32px.png") -36px -68px no-repeat;
 }
 
 .jstree-default .jstree-finalize {

@@ -1219,7 +1219,7 @@
     // выбор вида вагона
     function vmWagonTypeSelect(wagon_type) {
         if (!wagon_type || !wagon_type['ID']) { return; }
-
+        //console.log('vmWagonTypeSelect: ' + wagon_type['Description']);
         // получение WagonNumberPattern
         consignersService.GetWagonNumberPattern(wagon_type)
         .then(function (pattern) {
@@ -1254,7 +1254,7 @@
     }
 
 
-    // получение списка номеров пар лафет-короб
+    // получение списка номеров вагонов
     function vmGetWagonNumbers(search) {
         var array = [];
         if ($scope.WagonManualEnterDisabled) {
@@ -1267,8 +1267,15 @@
         return array;
     }
 
-    // выбор номера пары лафет-короб
+    // выбор номера вагона
     function vmSelectWagonNumber(selected_wagon_number) {
+        //console.log('=====');
+        //console.log('enter WagonNumber: ' + selected_wagon_number);
+        // check CRC
+        var type = consignersService.WagonNumberCRC(selected_wagon_number);
+        var wtype = $scope.WagonTypes.filter(function (item) { return item['Description'] == type; });
+        $scope.WagonNumberCRC = type == "Вагон УЗ";
+
         // если № вагона не null
         if ($scope.SelectedObjects.WagonNumber) {
             if ($scope.SelectedObjects.WBNumber == null) {
@@ -1290,7 +1297,9 @@
                 $scope.SelectedObjects.MarkedTare = null;
                 $scope.CurrentWeightSheet.CurrentWeighting['WagonNumber'] = selected_wagon_number;
                 $scope.CurrentWeightSheet.CurrentWeighting['WagonID'] = null;
+                //console.log('selected_wagon_number: ' + selected_wagon_number);
                 if (!selected_wagon_number) { return; }
+                //console.log('PackagingUnits query: ' + selected_wagon_number);
                 indexService.getInfo("PackagingUnits?$filter=Description eq '{0}'".format(selected_wagon_number))
                 .then(function (response) {
                     if (response.data.value[0]) {
@@ -1301,6 +1310,12 @@
                         vmWagonTypeSelect($scope.SelectedObjects.WagonType);
                         // получить тару
                         vmGetWagonTare(wagon_id);
+                    }
+                    else {
+                        //console.log('new PackagingUnits: ' + selected_wagon_number);
+                        $scope.SelectedObjects.WagonType = wtype.length ? wtype[0] : $scope.SelectedObjects.WagonType;
+                        vmWagonTypeSelect($scope.SelectedObjects.WagonType);
+                        //console.log('$scope.SelectedObjects.WagonType: ' + $scope.SelectedObjects.WagonType['Description']);
                     }
                 })
                 return;
@@ -1325,6 +1340,7 @@
         }
             // если № вагона = null
         else {
+            //console.log('№ вагона = null');
             if ($scope.WBManualEnterDisabled) {
                 $scope.SelectedObjects.WBNumber = null;
                 vmClearSelected();
@@ -1334,6 +1350,11 @@
             $scope.SelectedObjects.Carrying = null;
             $scope.SelectedObjects.MarkedTare = null;
         }
+
+        $scope.SelectedObjects.WagonType = wtype.length ? wtype[0] : $scope.SelectedObjects.WagonType;
+        vmWagonTypeSelect($scope.SelectedObjects.WagonType);
+        //console.log('$scope.SelectedObjects.WagonType: ' + $scope.SelectedObjects.WagonType['Description']);
+
     };
 
 
@@ -1409,6 +1430,7 @@
         $scope.SelectedObjects.MarkedTare = null;
         //$scope.CurrentPairNumberTare = null;
         $scope.CurrentWagonProperties = null;
+        $scope.WagonNumberCRC = null;
 
         angular.forEach($scope.CurrentWeightSheet.CurrentWeighting, function (value, key) {
             $scope.CurrentWeightSheet.CurrentWeighting[key] = null;
@@ -1797,12 +1819,11 @@
     // возвращает список отвесных для заданных весов
     this.GetWSList = function (wb_id, show_active) {
         var pathGetWSList = "v_WGT_WeightsheetList";
-        //pathGetWSList = pathGetWSList + (show_active ? "?$filter=(WeightbridgeID eq '{0}' or WeightbridgeID eq null) and (Status eq 'active' or ParentID eq '%23')" : "?$filter=WeightbridgeID eq '{0}' or WeightbridgeID eq null");
         pathGetWSList = pathGetWSList + (show_active ? "?$filter=(WeightbridgeID eq '{0}' or WeightbridgeID eq null) and (Status eq 'active' or Status eq null)" : "?$filter=WeightbridgeID eq '{0}' or WeightbridgeID eq null");
         pathGetWSList = pathGetWSList + " &$orderby=ID";
         return indexService.getInfo(pathGetWSList.format(wb_id))
         .then(function (response) {
-            var months = ['December','November','October','September','August','July','June','May','April','March','February','January'];
+            var months = ['December', 'November', 'October', 'September', 'August', 'July', 'June', 'May', 'April', 'March', 'February', 'January'];
             var list = response.data.value;
             if (list.length) {
                 list.forEach(function (e) {
