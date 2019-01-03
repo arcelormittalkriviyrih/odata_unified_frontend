@@ -11,8 +11,8 @@
 
 <!--основная часть, когда страница прогрузилась-->
 <div ng-show="!$root.showLoadingState">
-    
-<!--    <div>
+
+    <!--    <div>
         ArchiveWaybillSelected:{{ArchiveWaybillSelected}}
     <br />
         CurrentWaybill.ID:{{CurrentWaybill.ID}}
@@ -20,7 +20,7 @@
 
     <div class="row" style="background-color: #eeeeee; padding: 10px">
         <div class="col-md-5 col-sm-5 col-xs-12" style="border-right: 1px solid #d4d4d4">
-            
+
             <div class="controlsRowConsigners" style="width: 100%; text-align: center">
                 <button type="button"
                     class="btn btn-default"
@@ -58,10 +58,15 @@
 
             <div class="treeContainerConsigners" style="height: auto">
                 <!--<input type="text" class="form-control" placeholder="Search node .." id="search">-->
-                <input type="checkbox" 
-                       ng-model="ckbx.HideUsedRejectWB"
-                       ng-change="ckbxHideUsedRejectWB()">  {{ 'consigners.Labels.hideUsedRejectWB' | translate }}
-                
+                <div>
+                    <input id="hide_used_wb"
+                        type="checkbox"
+                        ng-model="ckbx.HideUsedRejectWB"
+                        ng-change="ckbxHideUsedRejectWB()"
+                        style="vertical-align: middle;">
+                    <label for="hide_used_wb" style="display: inline; padding-left: 3px; vertical-align: middle;">{{ 'consigners.Labels.hideUsedRejectWB' | translate }}</label>
+                </div>
+
                 <ui-select
                     ng-model="search.SearchedWaybillShop"
                     on-select="WaybillShopSelect($item)"
@@ -81,12 +86,14 @@
                 <div class="" style="margin-top: 5px;">
                     <table style="width: 100%; font-size: 12px;">
                         <tr ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')">
-                            <td colspan="2">	
-                                <input type="checkbox"
+                            <td colspan="2">
+                                <input id="print_cert"
+                                    type="checkbox"
                                     ng-model="ckbx.PrintExplCert"
-                                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')">
-                                {{ 'consigners.Labels.printCert' | translate }}
-                                </td>
+                                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')"
+                                    style="vertical-align:middle;">
+                                <label for="print_cert" style="display: inline; vertical-align: middle; padding-left: 3px;">{{ 'consigners.Labels.printCert' | translate }}</label>
+                            </td>
                         </tr>
                         <tr ng-show="CurrentWaybill.Consigner">
                             <td>{{ 'consigners.Labels.consigner' | translate }}	</td>
@@ -95,8 +102,7 @@
                         <tr ng-show="CurrentWaybill.Status">
                             <td>{{ 'consigners.Labels.status' | translate }}	</td>
                             <td style="text-align: right; text-transform: uppercase"
-                                ng-style="{'color': CurrentWaybill.Status == 'reject' ? 'red' : 'auto'}">
-                                {{ 'consigners.Labels.reject.'+ CurrentWaybill.Status | translate }}
+                                ng-style="{'color': CurrentWaybill.Status == 'reject' ? 'red' : 'auto'}">{{ 'consigners.Labels.reject.'+ CurrentWaybill.Status | translate }}
                             </td>
                         </tr>
                         <tr ng-show="CurrentWaybill.CreateDT">
@@ -126,18 +132,18 @@
                 </div>
             </div>
 
-            <div id="waybill_toprint" 
+            <div id="waybill_toprint"
                 ng-show="CurrentWaybill.ID"
                 ui-view="waybill_toprint"
                 ng-class="{'reject': ($parent.$parent.language == 'en' && CurrentWaybill.Status == 'reject'), 'reject ru': ($parent.$parent.language != 'en' && CurrentWaybill.Status == 'reject')}"
                 style="background-color: white; padding-top: 5px;">
             </div>
-            <div id="explosion_cert" 
+            <div id="explosion_cert"
                 ng-show="false"
                 ui-view="explosion_cert">
             </div>
         </div>
-        
+
     </div>
 </div>
 

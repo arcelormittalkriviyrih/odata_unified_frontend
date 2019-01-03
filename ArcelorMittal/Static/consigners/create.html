@@ -52,7 +52,7 @@
                             ng-required="true"
                             ng-disabled="(CurrentWaybill.Status == 'used')"
                             ng-pattern="WagonNumberPattern" />
-                        <span class="checksum" ng-class="{active: WagonNumberCRC}" title="{{ 'consigners.Labels.wagonNumberCRC' | translate }}">CS</span>
+                        <span class="checksum" ng-class="{active: WagonNumberCRC}" title="{{ 'consigners.Labels.wagonNumberCRC' | translate }}">{{ 'consigners.Labels.checksum' | translate }}</span>
                         <ui-select 
                             ng-model="CurrentWaybill.WagonType" 
                             on-select="GetWagonNumberPattern($item)" 

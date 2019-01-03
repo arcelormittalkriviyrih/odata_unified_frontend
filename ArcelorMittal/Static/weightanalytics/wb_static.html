@@ -35,10 +35,14 @@
                 <div style="margin-top: 5px; padding-left: 5px">
                     <span>{{ 'weightanalytics.Labels.archiveWS' | translate }}</span>:
                 </div>
-                <input type="checkbox"
-                    ng-model="ckbx.ShowOnlyActiveWS"
-                    ng-change="ckbxShowOnlyActiveWS()">
-                {{ 'weightanalytics.Labels.showOnlyActiveWS' | translate }}
+                <div>
+                    <input id="show_active_ws"
+                        type="checkbox"
+                        ng-model="ckbx.ShowOnlyActiveWS"
+                        ng-change="ckbxShowOnlyActiveWS()"
+                        style="vertical-align: middle;">
+                    <label for="show_active_ws" style="display: inline; padding-left: 3px; vertical-align: middle;">{{ 'weightanalytics.Labels.showOnlyActiveWS' | translate }}</label>
+                </div>
                 <div id="weightsheet_tree" style="height: 215px; background-color: white; overflow: auto"></div>
 
                 <!-- Buttons table -->
@@ -105,11 +109,13 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <input type="checkbox"
+                                <input id="create_wb_first"
+                                    type="checkbox"
                                     ng-model="SelectedObjects.CreateWSAtFirstWeighing"
                                     ng-init="SelectedObjects.CreateWSAtFirstWeighing = (['Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) == -1)"
-                                    ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode">
-                                {{ 'weightanalytics.Placeholders.takeFirstWB' | translate }}
+                                    ng-disabled="(['Тарирование', 'Контроль брутто'].indexOf(SelectedObjects.WeightingMode.Description) > -1) || CurrentWeightSheet.WeightingMode"
+                                    style="vertical-align: middle;">
+                                <label for="create_wb_first" style="display: inline; padding-left: 3px; vertical-align: middle;">{{ 'weightanalytics.Placeholders.takeFirstWB' | translate }}</label>
                             </td>
                         </tr>
                         <tr ng-disabled="SelectedObjects.CreateWSAtFirstWeighing">
@@ -400,7 +406,7 @@
                                 </ui-select-choices>
                             </ui-select>
                             <div ng-if="WagonShowLoading" class="loading-gif" style="width: 200px"></div>
-                            <span class="checksum" ng-class="{active: WagonNumberCRC}" title="{{ 'consigners.Labels.wagonNumberCRC' | translate }}">CS</span>
+                            <span class="checksum" ng-class="{active: WagonNumberCRC}" title="{{ 'consigners.Labels.wagonNumberCRC' | translate }}">{{ 'consigners.Labels.checksum' | translate }}</span>
                         </div>
 
                     </td>

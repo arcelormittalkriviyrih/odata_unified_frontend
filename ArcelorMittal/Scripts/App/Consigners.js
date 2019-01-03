@@ -321,7 +321,8 @@ angular.module('indexApp')
         var node = null;
         for (var i = 0; i < ArchiveWaybills.length; i++) {
             var element = ArchiveWaybills[i];
-            if (element.parent != '#' && element.DocumentationsID == null && isNaN(element.text)) {
+            if ((enter_waybill_id && element.parent != '#' && element.DocumentationsID == enter_waybill_id)
+            || (!enter_waybill_id && element.parent != '#' && element.DocumentationsID == null && isNaN(element.text))) {
                 node = element;
                 break;
             }
@@ -652,7 +653,7 @@ angular.module('indexApp')
         var wtype = $scope.WagonTypes.filter(function (item) { return item['Description'] == type; });
         $scope.CurrentWaybill.WagonType = wtype.length ? wtype[0] : $scope.CurrentWaybill.WagonType;
         $scope.WagonNumberCRC = type == "Вагон УЗ";
-        console.log($scope.CurrentWaybill.WagonNumber + ' - ' + type);
+        //console.log($scope.CurrentWaybill.WagonNumber + ' - ' + type);
     }
 
     // получение шаблона номера вагона при выборе вида ЖД вагона
@@ -1086,7 +1087,7 @@ angular.module('indexApp')
         var waybill_id = last_waybill_id;
         //console.log("waybill_id = " + waybill_id);
         //console.log("go to app.Consigners.Index");
-        $state.go('app.Consigners.Index', { waybill_id: waybill_id });
+        $state.go('app.Consigners.Main', { waybill_id: waybill_id });
         //window.open('/Static/consigners/waybill.html');
     }
 
@@ -1137,7 +1138,7 @@ angular.module('indexApp')
     else {
         //console.log("waybill_object is NULL");
         //console.log("go to app.Consigners.Index");
-        $state.go('app.Consigners.Index');
+        $state.go('app.Consigners.Main');
     }
 
     //var CurrentWaybillID = $scope.common_var;
@@ -1248,7 +1249,7 @@ angular.module('indexApp')
                             tooltip += "XX(X)-XX(X)";
                             break;
                         }
-                        case "Вагон местный":{
+                        case "Вагон местный": {
                             tooltip += "XXX(XXXXX)";
                             break;
                         }
@@ -1326,15 +1327,15 @@ angular.module('indexApp')
                 type = 2;   // not UZ wagons
             }
         }
-        // 3..6 digits
+            // 3..6 digits
         else if ((new RegExp('^[0-9]{3,6}$')).test(number)) {
             type = 2;   // not UZ wagons
         }
-        // XXX-YYY
+            // XXX-YYY
         else if ((new RegExp('^[0-9]{1,3}-[0-9]{1,3}$')).test(number)) {
             type = 12;  // Lafet-Korob
         }
-        // automobile number (AAA)000(000)(-000)(AAA)(-000)
+            // automobile number (AAA)000(000)(-000)(AAA)(-000)
         else if ((new RegExp('^[A-zА-я]{0,3}[0-9]{1,6}(\-[0-9]{1,3})?[A-zА-я]{0,3}\-?[0-9]{0,3}$')).test(number)) {
             type = 13;  // automobile number
         }
