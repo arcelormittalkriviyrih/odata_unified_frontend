@@ -7,20 +7,29 @@
 
 
 <link href="Content/Shared/layoutConsigners.css" rel="stylesheet" />
+<style>
+    .ui-select-match-text {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 82%;
+    }
+</style>
 
 
 <!--основная часть, когда страница прогрузилась-->
 <div ng-show="!$root.showLoadingState">
 
     <div class="row" style="background-color: #eeeeee; padding: 10px">
-        <div class="col-md-5 col-sm-5 col-xs-12" style="border-right: 1px solid #d4d4d4">
+        <div class="col-md-5 col-sm-5 col-xs-12" style="padding: 0px 8px; border-right: 1px solid #d4d4d4">
 
-            <div class="_controlsRowConsigners" style="width: 100%; display:table;">
-                <div style="display: table-cell; width: 35%; text-align: left; vertical-align:middle;">Waybill Number</div>
+            <div class="" style="width: 100%; display: table;">
+                <div style="display: table-cell; width: 30%; text-align: left; vertical-align: middle;">{{ 'weightanalytics.Labels.waybill' | translate }}</div>
                 <div style="display: table-cell;">
                     <input type="text" class="form-control"
-                        ng-model="SelectedObjects.MarkedTare"
-                        on-enter=""
+                        ng-model="SelectedObjects.WaybillNumber"
+                        ng-model-options="{ debounce: 1000 }"
+                        ng-change="Find()"
                         placeholder=""
                         title=""
                         ng-required="false"
@@ -28,12 +37,13 @@
                         ng-pattern="" />
                 </div>
             </div>
-            <div class="_controlsRowConsigners" style="width: 100%;  display:table;">
-                <div style="display: table-cell; width: 35%; text-align: left; vertical-align:middle;">Wagon Number</div>
+            <div class="" style="width: 100%; display: table;">
+                <div style="display: table-cell; width: 30%; text-align: left; vertical-align: middle;">{{ 'weightanalytics.Labels.wagon' | translate }}</div>
                 <div style="display: table-cell;">
                     <input type="text" class="form-control"
-                        ng-model="SelectedObjects.MarkedTare"
-                        on-enter=""
+                        ng-model="SelectedObjects.WagonNumber"
+                        ng-model-options="{ debounce: 1000 }"
+                        ng-change="Find()"
                         placeholder=""
                         title=""
                         ng-required="false"
@@ -41,70 +51,95 @@
                         ng-pattern="" />
                 </div>
             </div>
-            <div class="_controlsRowConsigners" style="width: 100%;  display:table;">
-                <div style="display: table-cell; width: 35%; text-align: left; vertical-align:middle;">Sender Shop</div>
+            <div class="" style="width: 100%; display: table; table-layout: fixed;">
+                <div style="display: table-cell; width: 30%; text-align: left; vertical-align: middle;">{{ 'weightanalytics.Labels.sender' | translate }}</div>
                 <div style="display: table-cell;">
                     <ui-select
-                        ng-model="search.SearchedWaybillShop"
-                        on-select="WaybillShopSelect($item)"
+                        ng-model="SelectedObjects.SenderShop"
+                        on-select="Find()"
                         search-enabled="true"
                         ng-required="false"
-                        class="selectConsigners"
+                        class="_selectConsigners"
                         style="width: 100%"
                         theme="bootstrap"
                         title="Select a shop">
-                        <ui-select-match allow-clear="true" placeholder="{{ 'consigners.Placeholders.selectShop' | translate }}">{{$select.selected.Description}}</ui-select-match>
-                        <ui-select-choices repeat="shop in WaybillShops | propsFilter: {Description: $select.search}" position='down'>
+                        <ui-select-match allow-clear="true" placeholder="{{ 'weightanalytics.Placeholders.selectSender' | translate }}">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="shop in SenderShops | propsFilter: {Description: $select.search}" position='down'>
                         <div ng-bind-html="shop.Description | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
             </div>
-            <div class="_controlsRowConsigners" style="width: 100%;  display:table;">
-                <div style="display: table-cell; width: 35%; text-align: left; vertical-align:middle;">Receiver Shop</div>
+            <div class="" style="width: 100%; display: table; table-layout: fixed;">
+                <div style="display: table-cell; width: 30%; text-align: left; vertical-align: middle;">{{ 'weightanalytics.Labels.receiver' | translate }}</div>
                 <div style="display: table-cell;">
                     <ui-select
-                        ng-model="search.SearchedWaybillShop"
-                        on-select="WaybillShopSelect($item)"
+                        ng-model="SelectedObjects.ReceiverShop"
+                        on-select="Find()"
                         search-enabled="true"
                         ng-required="false"
-                        class="selectConsigners"
+                        class="_selectConsigners"
                         style="width: 100%"
                         theme="bootstrap"
                         title="Select a shop">
-                        <ui-select-match allow-clear="true" placeholder="{{ 'consigners.Placeholders.selectShop' | translate }}">{{$select.selected.Description}}</ui-select-match>
-                        <ui-select-choices repeat="shop in WaybillShops | propsFilter: {Description: $select.search}" position='down'>
+                        <ui-select-match allow-clear="true" placeholder="{{ 'weightanalytics.Placeholders.selectReceiver' | translate }}">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="shop in ReceiverShops | propsFilter: {Description: $select.search}" position='down'>
                         <div ng-bind-html="shop.Description | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
             </div>
-
-            <div class="treeContainerConsigners" style="height: auto">
-
-
-
-                <div class="treeContainerConsigners" id="waybill_list" style="background-color: white; height: 350px;">
+            <div>
+                <div ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')"
+                    style="display: inline-block; width: 50%;">
+                    <input id="print_cert"
+                        type="checkbox"
+                        ng-model="ckbx.PrintExplCert"
+                        ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')"
+                        style="vertical-align: middle;">
+                    <label for="print_cert" style="display: inline; vertical-align: middle; padding-left: 3px;">{{ 'consigners.Labels.printCert' | translate }}</label>
                 </div>
+                <button type="button"
+                    class="btn btn-default"
+                    style="width: 48%; margin: 4px 0px; float: right;"
+                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')"
+                    ng-click="Print()">
+                    {{ 'consigners.Buttons.print' | translate }}
+                </button>
+            </div>
+
+            <div class="" style="height: auto; position: relative; clear: both;">
+                <div class="treeContainerConsigners" id="waybill_list" style="background-color: white; height: 470px;"></div>
+                <div ng-if="LoadingTree" class="loading-gif"></div>
 
                 <div class="" style="margin-top: 5px;">
                     <table style="width: 100%; font-size: 12px;">
+                        <!--                        <tr ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')">
+                            <td colspan="2">
+                                <input id="print_cert"
+                                    type="checkbox"
+                                    ng-model="ckbx.PrintExplCert"
+                                    ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')"
+                                    style="vertical-align: middle;">
+                                <label for="print_cert" style="display: inline; vertical-align: middle; padding-left: 3px;">{{ 'consigners.Labels.printCert' | translate }}</label>
+                            </td>
+                        </tr>-->
                         <tr ng-show="CurrentWaybill.Consigner">
                             <td>{{ 'consigners.Labels.consigner' | translate }}	</td>
                             <td style="text-align: right">{{CurrentWaybill.Consigner}}</td>
                         </tr>
                         <tr ng-show="CurrentWaybill.Status">
-                            <td>{{ 'consigners.Labels.status' | translate }}	</td>
+                            <td>{{ 'consigners.Labels.status' | translate }}</td>
                             <td style="text-align: right; text-transform: uppercase"
                                 ng-style="{'color': CurrentWaybill.Status == 'reject' ? 'red' : 'auto'}">{{ 'consigners.Labels.reject.'+ CurrentWaybill.Status | translate }}
                             </td>
                         </tr>
                         <tr ng-show="CurrentWaybill.CreateDT">
-                            <td>{{ 'consigners.Labels.creatingDT' | translate }}	</td>
+                            <td>{{ 'consigners.Labels.creatingDT' | translate }}</td>
                             <td style="text-align: right">{{CurrentWaybill.CreateDT | date:'dd.MM.yyyy HH:mm'}}</td>
                         </tr>
                         <tr ng-show="CurrentWaybill.EditDT">
-                            <td>{{ 'consigners.Labels.modifyingDT' | translate }}	</td>
+                            <td>{{ 'consigners.Labels.modifyingDT' | translate }}</td>
                             <td style="text-align: right">{{CurrentWaybill.EditDT | date:'dd.MM.yyyy HH:mm'}}</td>
                         </tr>
                     </table>

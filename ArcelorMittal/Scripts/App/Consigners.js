@@ -40,9 +40,20 @@ angular.module('indexApp')
         .state('app.Consigners.Find', {
 
             url: '/find',
-            templateUrl: 'Static/consigners/find.html',
-            controller: 'ConsignersFindCtrl',
-
+            //templateUrl: 'Static/consigners/find.html',
+            //controller: 'ConsignersFindCtrl',
+            views: {
+                "": {
+                    templateUrl: "Static/consigners/find.html",
+                    controller: 'ConsignersFindCtrl',
+                },
+                "waybill_toprint@app.Consigners.Find": {
+                    templateUrl: "Static/consigners/waybill.html",
+                },
+                "explosion_cert@app.Consigners.Find": {
+                    templateUrl: "Static/consigners/explosion_cert.html",
+                }
+            }
         })
 
         .state('app.Consigners.Print', {
@@ -640,6 +651,7 @@ angular.module('indexApp')
         //}
 
         $scope.CurrentWaybill = angular.copy(waybill_object);
+        vmWagonNumberChange();
         // если создаем как копию - сбрасываем номер вагона и инкрементируем номер путевой
         if (copy_id) {
             $scope.CurrentWaybill.Status = null;
@@ -649,10 +661,13 @@ angular.module('indexApp')
 
     // ввод номера вагона
     function vmWagonNumberChange() {
+        if (!$scope.CurrentWaybill.WagonNumber) { $scope.CurrentWaybill.WagonType = null; }
         var type = consignersService.WagonNumberCRC($scope.CurrentWaybill.WagonNumber);
         var wtype = $scope.WagonTypes.filter(function (item) { return item['Description'] == type; });
-        $scope.CurrentWaybill.WagonType = wtype.length ? wtype[0] : $scope.CurrentWaybill.WagonType;
+        if (copy_id) return;
         $scope.WagonNumberCRC = type == "Вагон УЗ";
+        if (modify_id) return;
+        $scope.CurrentWaybill.WagonType = wtype.length ? wtype[0] : null;//$scope.CurrentWaybill.WagonType;
         //console.log($scope.CurrentWaybill.WagonNumber + ' - ' + type);
     }
 
@@ -1098,13 +1113,271 @@ angular.module('indexApp')
 
 
 
-.controller('ConsignersFindCtrl', ['$scope', '$translate', 'indexService', 'consignersService', 'LocalStorageService', '$state', function ($scope, $translate, indexService, consignersService, LocalStorageService, $state) {
+.controller('ConsignersFindCtrl', ['$scope', '$translate', '$q', 'indexService', 'consignersService', 'LocalStorageService', 'printService', '$state', function ($scope, $translate, $q, indexService, consignersService, LocalStorageService, printService, $state) {
 
     //console.log("ConsignersFindCtrl");
+    $scope.ckbx = {};
+    $scope.ckbx.PrintExplCert = LocalStorageService.getData("PrintExplCert") == "true" ? true : false;
 
-    $scope.CurrentWaybill = [];
+    $scope.SelectedObjects = {};
+    $scope.CurrentWaybill = {};
+    $scope.SenderShops = [];
+    $scope.ReceiverShops = [];
+    var ArchiveWaybills = [];
+    var FoundWaybills = [];
+    var WaybillList = $('#waybill_list').jstree('destroy');
 
-    $scope.WaybillShops = [{ Description: "kfbf kjbsfjksbd fjbsfbf jbjksk fg jn   kljdb kj  kj  jf" }, { Description: "kfbf kjbsfjksbd fjbsfbf1117y18714784 y8778 4y4y2f" }];
+    $scope.Find = vmFind;
+
+    vmGetConsignersServiceArrays();
+    vmGetAllWaybills();
+    vmCreateWaybillListTree();
+    //vmGetWaybillTree();
+
+
+
+    // создание дерева путевых
+    function vmCreateWaybillListTree() {
+        WaybillList.jstree({
+            search: {
+                "case_insensitive": true,
+                "show_only_matches": true
+            },
+            plugins: ["search"]
+        });
+    };
+
+    // загрузка данных в дерево путевых
+    function vmLoadWaybillListTree(data) {
+        WaybillList.jstree(true).settings.core.data = data;
+        WaybillList.jstree(true).refresh(true, true);
+    };
+
+
+    // получение дерева архивных путевых
+    function vmGetWaybillTree(wbs) {
+        var months = ['December', 'November', 'October', 'September', 'August', 'July', 'June', 'May', 'April', 'March', 'February', 'January'];
+        if (wbs.length) {
+            wbs.forEach(function (e) {
+                e.id = e.ID;
+                e.parent = e.ParentID;
+                e.text = e.Description;
+                if (e.DocumentationsID) {
+                    e.icon = 'jstree-file';
+                    if (e.Status == 'reject') {
+                        e.icon = 'jstree-reject';
+                    }
+                    if (e.Status == 'used') {
+                        e.icon = 'jstree-finalize';
+                    }
+                }
+                else {
+                    if (months.indexOf(e.Description) != -1) {
+                        e.text = $translate.instant('weightanalytics.Months.' + e.Description);
+                    }
+                };
+                delete e.ID;
+                delete e.ParentID;
+                delete e.Description;
+            });
+
+            //FoundWaybills = wbs;
+            //vmLoadWaybillListTree(FoundWaybills);
+            vmRemoveEmptyTreeNodes(wbs);
+            vmLoadWaybillListTree(wbs);
+        }
+    };
+
+    // выбор элемента в дереве путевых
+    WaybillList.on('select_node.jstree', function (e, data) {
+        //alert('select_node');
+        $scope.CurrentWaybill = {};
+        $scope.ArchiveWaybillSelected = false;
+        $scope.$applyAsync();
+        if (data.node.original.DocumentationsID) {
+            $scope.ArchiveWaybillSelected = true;
+
+            //$scope.common_var = data.node.original.DocumentationsID;
+            //$state.params.id = data.node.original.WorkPerfomanceID;
+            var waybill_id = data.node.original.DocumentationsID;
+
+            // get full waybill info here
+            consignersService.GetWaybillObject(waybill_id)
+            .then(function (waybill_obj) {
+                $scope.CurrentWaybill = waybill_obj;
+            })
+        };
+    });
+
+    // заполнение справочников
+    function vmGetConsignersServiceArrays() {
+        $q.all([consignersService.GetCargoSenders(),
+                consignersService.GetCargoReceivers()]).then(function (responses) {
+                    var resp_0 = responses[0].data.value;
+                    var resp_1 = responses[1].data.value;
+                    // получение уникальных цехов поставщиков груза
+                    vmGetCargoClient(resp_0, $scope.SenderShops);
+                    vmGetCargoClient(resp_1, $scope.ReceiverShops);
+                })
+    }
+
+    // получение списка пользователей (поставщиков и получателей) груза
+    function vmGetCargoClient(array, unique_array) {
+        // array - массив участков
+        // unique_array - массив уникальных цехов участков (ParentID)
+        for (i = 0; i < array.length; i++) {
+            var CargoUserObject = {};
+            CargoUserObject['ID'] = array[i]['ParentID'];
+            CargoUserObject['Description'] = array[i]['ParentDescription'];
+            // выбираем уникальные ParentID
+            if (unique_array.map(function (elem) { return elem['ID']; }).indexOf(CargoUserObject['ID']) == -1) {
+                unique_array.push(CargoUserObject);
+            }
+        }
+    }
+
+    // получение всего списка путевых
+    function vmGetAllWaybills() {
+        $scope.LoadingTree = true;
+        return indexService.getInfo("v_WGT_WaybillList?$orderby=ID").then(function (response) {
+            ArchiveWaybills = response.data.value;
+            vmGetWaybillTree(angular.copy(ArchiveWaybills));
+            $scope.LoadingTree = false;
+        })
+    }
+
+    // главная функция поиска путевых
+    function vmFind() {
+        var query = "v_WGT_WaybillWagonMatching?$select=WaybillID";
+        var filter = "";
+        var filter_array = [];
+        if ($scope.SelectedObjects.WaybillNumber) {
+            filter = "WaybillNumber eq '{0}'".format($scope.SelectedObjects.WaybillNumber);
+            filter_array.push(filter);
+        }
+        if ($scope.SelectedObjects.WagonNumber) {
+            filter = "WagonNumber eq '{0}'".format($scope.SelectedObjects.WagonNumber);
+            filter_array.push(filter);
+        }
+        if ($scope.SelectedObjects.SenderShop) {
+            filter = "SenderShop eq '{0}'".format($scope.SelectedObjects.SenderShop['ID']);
+            filter_array.push(filter);
+        }
+        if ($scope.SelectedObjects.ReceiverShop) {
+            filter = "ReceiverShop eq '{0}'".format($scope.SelectedObjects.ReceiverShop['ID']);
+            filter_array.push(filter);
+        }
+        filter = filter_array.length ? "&$filter=" : "";
+        for (var i = 0; i < filter_array.length; i++) {
+            var item = filter_array[i];
+            filter += (i > 0) ? " and " : "";
+            filter += item;
+        }
+        query += filter;
+        //alert(query);
+        $scope.CurrentWaybill = {};
+        $scope.LoadingTree = true;
+        return indexService.getInfo(query).then(function (response) {
+            var filtered_wb_ids = response.data.value;
+            for (var i = 0; i < filtered_wb_ids.length; i++) {
+                filtered_wb_ids[i] = filtered_wb_ids[i]['WaybillID'];
+            }
+            //if (filtered_wb_ids.length == 0) {
+            //    WaybillList.empty();
+            //    return false;
+            //}
+            FoundWaybills.length = 0;
+            FoundWaybills = ArchiveWaybills.filter(function (item) {
+                return item['DocumentationsID'] == null || filtered_wb_ids.indexOf(item['DocumentationsID']) != -1;
+            })
+            vmGetWaybillTree(angular.copy(FoundWaybills));
+            if (FoundWaybills.length < 800) WaybillList.jstree('open_all');
+            $scope.LoadingTree = false;
+            return true;
+        })
+
+    }
+
+    // удаление неиспользующихся месяцев в дереве при поиске путевых
+    function vmRemoveEmptyTreeNodes(wbs) {
+        var needed_ids = [];
+
+        for (i = 0; i < wbs.length; i++) {
+            var item = wbs[i];
+            if (item['DocumentationsID'] != null || item['parent'] == '#') {
+                if (needed_ids.indexOf(item['id']) == -1) {
+                    needed_ids.push(item['id']);
+                }
+                if (item['parent'] != '#' && needed_ids.indexOf(parseInt(item['parent'])) == -1) {
+                    needed_ids.push(parseInt(item['parent']));
+                }
+            }
+        }
+        for (i = wbs.length - 1; i >= 0; i--) {
+            var item = wbs[i];
+            if (needed_ids.indexOf(item['id']) == -1) {
+                wbs.splice(i, 1);
+            }
+        }
+    }
+
+    // нажатие кнопки "Печать"
+    $scope.Print = function () {
+
+        if ($scope.CurrentWaybill.ID) {
+            var waybill_toprint_html = document.getElementById('waybill_toprint');
+            // Проверяем печать сертификата
+            var print_cert = $scope.ckbx.PrintExplCert || false;
+            LocalStorageService.setData("PrintExplCert", print_cert);
+            var explosion_cert_html = document.getElementById('explosion_cert');
+            var inner_html = waybill_toprint_html.innerHTML;
+            var inner_html_cert = print_cert ? explosion_cert_html.innerHTML : "";
+
+            var str = "\n\
+            <!DOCTYPE html>\n\
+            <html>\n\
+            <head>\n\
+                <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">\n\
+                <meta name=\"viewport\" content=\"width=device-width\">\n\
+                <meta http-equiv=\"X-UA-Compatible\" content=\"IE=9\">\n\
+                <title>Путевая № {0}</title>\n\
+            </head>\n\
+            <body>\n\
+            ".format($scope.CurrentWaybill.WaybillNumber);
+
+            inner_html = str + inner_html + inner_html_cert + "</body></html>"
+
+            // Открыть документ в новом окне (или послать inner_html в сервис печати)
+            window.open().document.write(inner_html);
+            //SendToPrintService(inner_html, $scope.CurrentWaybill);
+            // Открыть в app.Consigners
+            //console.log("go to app.Consigners.Print");
+            //$state.go('app.Consigners.Print', { print_id: $scope.CurrentWaybill.ID, waybill_object: $scope.CurrentWaybill });
+        }
+        else {
+            alert($translate.instant('consigners.Messages.noWaybill')); //alert("$scope.CurrentWaybill.ID is null");
+        }
+    }
+
+    // функция отправки на сервис печати
+    function SendToPrintService(content, wb) {
+        var id = wb.ID;
+        var data = { ID: id, DocumentName: "Путевая №" + wb.WaybillNumber, Content: content, User: user };
+        printService.Print(data)
+            .then(function (response) {
+                var result = response.data;
+                if (result && result["StatusCode"] == 0) {
+                    alert("Document has been added to PrintService queue.");
+                }
+                else {
+                    alert("Error during sending to PrintService" + ((result && result["StatusMessage"]) ? (":\n" + result["StatusMessage"] + ".") : "!"));
+                }
+
+            }, function (error) {
+                alert("Error during sending to PrintService!");
+            });
+    }
+
 
 }])
 
@@ -1132,6 +1405,9 @@ angular.module('indexApp')
         consignersService.GetWaybillObject(waybill_id)
             .then(function (waybill_obj) {
                 $scope.CurrentWaybill = waybill_obj;
+                if ($scope.CurrentWaybill['DocumentType'] != 'Путевая') {
+                    $state.go('app.Consigners.Main');
+                }
             })
     }
         // если все значения пустые, переходим на Consigners.Index

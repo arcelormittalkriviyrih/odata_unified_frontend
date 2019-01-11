@@ -117,3 +117,16 @@ input.ng-touched.ng-invalid {
     .reject.ru {
         background-image: url("images/reject_ru.png");
     }
+
+.loading-gif {
+    background-image: url("../Tree/img/throbber.gif");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: lightgray;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}

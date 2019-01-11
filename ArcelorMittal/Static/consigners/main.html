@@ -19,7 +19,7 @@
     </div>-->
 
     <div class="row" style="background-color: #eeeeee; padding: 10px">
-        <div class="col-md-5 col-sm-5 col-xs-12" style="border-right: 1px solid #d4d4d4">
+        <div class="col-md-5 col-sm-5 col-xs-12" style="padding: 0px 8px; border-right: 1px solid #d4d4d4">
 
             <div class="controlsRowConsigners" style="width: 100%; text-align: center">
                 <button type="button"
@@ -91,7 +91,7 @@
                                     type="checkbox"
                                     ng-model="ckbx.PrintExplCert"
                                     ng-disabled="!CurrentWaybill.ID || !ArchiveWaybillSelected || (CurrentWaybill.Status == 'reject')"
-                                    style="vertical-align:middle;">
+                                    style="vertical-align: middle;">
                                 <label for="print_cert" style="display: inline; vertical-align: middle; padding-left: 3px;">{{ 'consigners.Labels.printCert' | translate }}</label>
                             </td>
                         </tr>

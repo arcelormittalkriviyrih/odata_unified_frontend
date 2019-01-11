@@ -464,6 +464,8 @@
                 discardReject: 'Discard rejecting',
             },
             Labels: {
+                main: 'Main',
+                find: 'Find',
                 waybill: 'Waybill',
                 ticketWaybill: 'Ticket for waybill',
                 wagon: 'Wagon',
@@ -1062,6 +1064,8 @@
                 discardReject: 'Отмена брака',
             },
             Labels: {
+                main: 'Главная',
+                find: 'Поиск',
                 waybill: 'Путевая',
                 ticketWaybill: 'Квитанция к путевой',
                 wagon: 'Вагон',
@@ -1661,6 +1665,8 @@
                 discardReject: 'Відміна браку',
             },
             Labels: {
+                main: 'Головна',
+                find: 'Пошук',
                 waybill: 'Путіва',
                 ticketWaybill: 'Квитанція до путівої',
                 wagon: 'Вагон',

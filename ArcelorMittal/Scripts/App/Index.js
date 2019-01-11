@@ -433,10 +433,12 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
     if (responseText && typeof responseText == 'object')
         responseText = responseText.error ? responseText.error.innererror.message : params.responseText.message;
 
-    $scope.errorCode = error.status + ' ' + error.statusText + '\n' + responseText;
+    var date = getTimeToUpdate();
+    $scope.errorCode = '{2}.{1}.{0} {3}:{4}:{5}'.format(date.year, date.month, date.day, date.hour, date.minute, date.second) + '\n\n';
+    $scope.errorCode += error.status + ' ' + error.statusText + '\n' + responseText;
 
     var stacktrace = getLastChild(error, ['data', 'error', 'innererror'], 'stacktrace');
-    $scope.errorCode += stacktrace;
+    $scope.errorCode += '\n' + stacktrace;
 
 
     $scope.sendError = vmSendError;
