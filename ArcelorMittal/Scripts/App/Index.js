@@ -509,6 +509,17 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
         return request;
     };
 
+    this.updInfo = function (url, data) {
+
+        var request = $http({
+            method: 'patch',
+            url: serviceUrl + url,
+            data: data,
+            withCredentials: withCredentials,
+        });
+        return request;
+    };
+
     this.getDateChartFormat = function (date, toUTC) {
 
         var dateItem = getTimeToUpdate(date, toUTC);

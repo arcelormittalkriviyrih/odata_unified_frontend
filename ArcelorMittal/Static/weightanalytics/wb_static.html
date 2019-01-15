@@ -579,6 +579,28 @@
 </div>
 
 
+<!-- Modal for Transfering -->
+<div class="modal" id="TransferModal" role="dialog">
+    <div class="modal-dialog" style="top: 25%; width: auto; display: table">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:400px;">
+            <div class="modal-header" style="padding:10px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top:2px;"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{ 'weightanalytics.Labels.weighingTransfer' | translate }}</h4>
+            </div>
+            <div class="modal-body" style="max-height: 100%; overflow-y: visible;">
+                <div id="TransferModalLoading" class="loading-gif" style="width: 100%;"></div>
+                <div
+                    ng-init="weighing_id = weighing_id"
+                    ng-if="ShowTransferModal"
+                    ng-show="TransferInfoReady"
+                    ui-view="transfer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--<div ng-init="tttt = true"
     ng-show="tttt">
     <br />

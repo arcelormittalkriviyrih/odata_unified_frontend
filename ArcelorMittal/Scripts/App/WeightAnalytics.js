@@ -30,6 +30,10 @@
                 "waybill_toprint@app.WeightAnalytics.WBStatic": {
                     templateUrl: "Static/consigners/waybill.html",
                     controller: 'WaybillPreviewCtrl',
+                },
+                "transfer@app.WeightAnalytics.WBStatic": {
+                    templateUrl: "Static/weightanalytics/ws_transfer.html",
+                    controller: 'WeighingTransferCtrl',
                 }
             },
             //controller: 'WeightAnalyticsWBCtrl',
@@ -521,7 +525,7 @@
             vmGetWSTree();
             // запускаем таймер опроса весового контроллера
             Timer = $interval(function () {
-                vmGetScaleData();
+                //vmGetScaleData();
             }, scalesRefresh);
         })
     }
@@ -1581,7 +1585,12 @@
 
     // перенести взвешивание в другую отвесную
     $scope.TransferWeighing = function (weighing_id) {
-        alert(weighing_id);
+        //alert(weighing_id);
+        var yyy = $scope.CurrentWeightSheet.WeightingMode;
+        $scope.weighing_id = weighing_id;
+        //alert('weighing_id: ' + weighing_id + '\n' + yyy['Description']);
+        $('#TransferModal').modal('show');
+
     }
 
 
@@ -1600,6 +1609,20 @@
         $scope.ShowWaybillModal = false;
     })
 
+
+    // открытие модального окна Переноса взвешивания
+    $('#TransferModal').on('show.bs.modal', function (e) {
+        $scope.ShowTransferModal = true;
+        $('#TransferModalLoading').css("display", "block");
+    })
+
+    // закрытие модального окна Переноса взвешивания
+    $('#TransferModal').on('hide.bs.modal', function (e) {
+        $scope.ShowTransferModal = false;
+        $scope.FinishInfo = false;
+        //!!!update table
+        vmGetWagonTable($scope.CurrentWeightSheet.WeightSheetID);
+    })
 
     // при выходе из контроллера останавливаем таймер
     $scope.$on('$destroy', function () {
@@ -1758,8 +1781,209 @@
 
 }])
 
+.controller('WeighingTransferCtrl', ['$scope', '$q', 'indexService', 'weightanalyticsService', 'consignersService', '$translate', 'user', function ($scope, $q, indexService, weightanalyticsService, consignersService, $translate, user) {
+
+    var WeighingID = $scope.weighing_id;
+    $scope.NewWeightSheet = {
+        WeightingMode: null,
+        Status: null,
+        Weigher: null,
+        WeightSheetNumber: null,
+        WeightSheetID: null,
+        WeightBridgeID: null,
+        WeightBridge: null,
+        SenderShop: null,
+        ReceiverShop: null,
+        CreateDT: null,
+        EditDT: null,
+    };
+    $scope.SelectedObjects = {
+        TransferType: null,
+        NewWSNumber: null,
+        ExistingWS: null,
+    };
+    $scope.$parent.TransferInfoReady = false;
+    $scope.TransferFirstChoice = true;
+    $scope.FinishInfo = false;
+
+    $scope.NewOnEnter = vmNewOnEnter;
+    $scope.ExistingOnEnter = vmExistingOnEnter;
+    $scope.OK = vmOK;
+
+    $scope.TransferType = [{ name: 'New', description: $translate.instant('weightanalytics.Labels.newWS'), disabled: false }];
+    $scope.ExistingWS = [];
+    var ExistingWSIDs = [];
+
+    vmGetRecentWS();
 
 
+
+    // получаем последние отвесные (активные, с такими же данными по весам,  виду взвешивания, отправителю, получателю)
+    function vmGetRecentWS() {
+        var WeightSheetID = $scope.CurrentWeightSheet.WeightSheetID;
+        var WeightBridgeID = $scope.CurrentWeightSheet.WeightBridgeID;
+        var DocClassID = $scope.CurrentWeightSheet.WeightingMode.ID;
+        var SenderID = $scope.CurrentWeightSheet.SenderShop ? $scope.CurrentWeightSheet.SenderShop.ID : null;
+        var ReceiverID = $scope.CurrentWeightSheet.ReceiverShop ? $scope.CurrentWeightSheet.ReceiverShop.ID : null;
+        var shop_filter = (SenderID && ReceiverID) ? "and SenderShop eq '{0}' and ReceiverShop eq '{1}'".format(SenderID, ReceiverID) : "";
+        var pathRecentWS = "v_WGT_DocumentationsExistCheck?$filter=Weightbridge eq '{0}' and Status eq 'active' and DocumentationsClassID eq {1} and ID ne {2} {3} &$orderby=ID desc".format(WeightBridgeID, DocClassID, WeightSheetID, shop_filter);
+        //var pathRecentWS = "v_WGT_DocumentationsExistCheck?$filter=Weightbridge eq '{0}' and DocumentationsClassID eq {1} and ID ne {2} {3} &$orderby=ID desc".format(WeightBridgeID, DocClassID, WeightSheetID, shop_filter);
+        var request = indexService.getInfo(pathRecentWS);
+        return request.then(function (response) {
+            $scope.$parent.TransferInfoReady = true;
+            $('#TransferModalLoading').css("display", "none");
+            if (response.data && response.data.value && response.data.value.length) {
+                $scope.TransferType.push({ name: 'Existing', description: $translate.instant('weightanalytics.Labels.existingWS'), disabled: false });
+                $scope.ExistingWS = response.data.value;
+                ExistingWSIDs = response.data.value.filter(function (item) {
+                    return item['ID'];
+                });
+            }
+            else {
+                $scope.TransferType.push({ name: 'Existing', description: $translate.instant('weightanalytics.Labels.existingWS'), disabled: true });
+            }
+        })
+    }
+
+    // событие выбора в Новую отвесную
+    function vmNewOnEnter() {
+        //alert('NewOnEnter');
+        $scope.FinishInfo = false;
+        vmGetLastWSNumber().then(function (number) {
+            $scope.SelectedObjects.NewWSNumber = number;
+        });
+    }
+
+    // событие выбора в Существующую отвесную
+    function vmExistingOnEnter() {
+        //alert('ExistingOnEnter');
+        $scope.FinishInfo = false;
+    }
+
+    function vmOK() {
+        // нажатие ОК в последнем экране FinishInfo
+        if ($scope.SelectedObjects.TransferType == null && $scope.FinishInfo) {
+            $scope.FinishInfo = false;
+            $('#TransferModal').modal('hide');
+        }
+        // нажатие Далее при переносе в Новую отвесную
+        if ($scope.SelectedObjects.TransferType == 'New' && !$scope.FinishInfo) {
+            //alert('New OK');
+            var WeightSheetNumber = $scope.SelectedObjects.NewWSNumber.toString();
+            var ScalesID = parseInt($scope.CurrentWeightSheet.WeightBridgeID);
+            var DocumentationsClassID = $scope.CurrentWeightSheet.WeightingMode.ID;
+            var SenderID = $scope.CurrentWeightSheet.SenderShop ? $scope.CurrentWeightSheet.SenderShop.ID : null;
+            var ReceiverID = $scope.CurrentWeightSheet.ReceiverShop ? $scope.CurrentWeightSheet.ReceiverShop.ID : null;
+
+            return insCreateWeightsheet(WeightSheetNumber, DocumentationsClassID, ScalesID, user, SenderID, ReceiverID).then(function (response) {
+                // если вернулся результат сохранения (ID записи), то возвращаем сохраненный объект
+                if (response.data && response.data.ActionParameters) {
+                    $scope.SelectedObjects.weightsheet_id = response.data.ActionParameters[0]['Value'];
+                    //$scope.SelectedObjects.weightsheet_id = 3745;
+                    // !!! TRansfer weighing HERE!!!
+                    TransferWeightingOperation(WeighingID, $scope.SelectedObjects.weightsheet_id).then(function (response) {
+                        if (response.status >= 200 && response.status < 300) {
+                            $scope.SelectedObjects.TransferType = null;
+                            $scope.FinishInfo = true;
+                            //$('#TransferModal').modal({ backdrop: "static" });
+                            return weightanalyticsService.GetWSInfo($scope.SelectedObjects.weightsheet_id).then(function (ws_obj) {
+                                // копируем все свойства ws_obj в $scope.NewWeightSheet
+                                for (key in ws_obj) {
+                                    if ($scope.NewWeightSheet.hasOwnProperty(key)) {
+                                        $scope.NewWeightSheet[key] = ws_obj[key];
+                                    }
+                                }
+                            })
+                        }
+                        else {
+                            $scope.FinishInfo = false;
+                            $('#TransferModal').modal('hide');
+                            alert($translate.instant('weightanalytics.Messages.savingWSRejected'));//alert('Saving has been rejected!');
+                            return false;
+                        }
+                    })
+                }
+                    // если вернулся false, сообщение об отмене
+                else {
+                    $scope.FinishInfo = false;
+                    $('#TransferModal').modal('hide');
+                    alert($translate.instant('weightanalytics.Messages.savingWSRejected'));//alert('Saving has been rejected!');
+                    return false;
+                }
+            });
+        }
+        
+        // нажатие Далее при переносе в Существующую отвесную
+        if ($scope.SelectedObjects.TransferType == 'Existing' && !$scope.FinishInfo) {
+            //alert('Existing OK');
+            if (!$scope.SelectedObjects.ExistingWS) {
+                alert('Weightsheet is not chosen!');
+            }
+            TransferWeightingOperation(WeighingID, $scope.SelectedObjects.ExistingWS.ID).then(function (response) {
+                if (response.status >= 200 && response.status < 300) {
+                    $scope.SelectedObjects.TransferType = null;
+                    $scope.FinishInfo = true;
+                    return weightanalyticsService.GetWSInfo($scope.SelectedObjects.ExistingWS.ID).then(function (ws_obj) {
+                        // копируем все свойства ws_obj в $scope.NewWeightSheet
+                        for (key in ws_obj) {
+                            if ($scope.NewWeightSheet.hasOwnProperty(key)) {
+                                $scope.NewWeightSheet[key] = ws_obj[key];
+                            }
+                        }
+                    })
+                }
+                else {
+                    $scope.FinishInfo = false;
+                    $('#TransferModal').modal('hide');
+                    alert($translate.instant('weightanalytics.Messages.savingWSRejected'));//alert('Saving has been rejected!');
+                    return false;
+                }
+            })
+        }
+
+    }
+
+    function vmGetLastWSNumber() {
+        // автоинкремент номера отвесной (для текущего года)
+        var query = "v_WGT_DocumentationsExistCheck?$top=1&$select=WeightsheetNumber &$filter=Weightbridge eq '{0}' and DocumentationsType eq '{1}' and Status ne 'reject' and year(StartTime) eq {2} &$orderby=StartTime desc".format($scope.CurrentWeightSheet.WeightBridgeID, encodeURI("Отвесная"), new Date().getFullYear());
+        return indexService.getInfo(query)
+            .then(function (response) {
+                if (response.data.value && response.data.value[0]) {
+                    var last_number = response.data.value[0]['WeightsheetNumber'];
+                    last_number = last_number || 0;
+                    last_number++;
+                    return last_number;
+                }
+                else {
+                    return 1;
+                }
+            })
+    }
+
+    // вставка новой отвесной в БД
+    function insCreateWeightsheet(weightsheet_number, doc_class_id, scales_id, user, sender_id, receiver_id) {
+        //return $q.when({ status: 200, data: { ActionParameters: [{ Value: 3745 }] } });
+        return indexService.sendInfo('ins_CreateWeightsheet', {
+            WeightSheetNumber: weightsheet_number,
+            DocumentationsClassID: doc_class_id,
+            ScalesID: scales_id,
+            PersonName: user,
+            SenderID: sender_id,
+            ReceiverID: receiver_id,
+            DocumentationID: 0
+        })
+    }
+
+    function TransferWeightingOperation(wo_id, new_ws_id) {
+        //return $q.when({ status: 200, data: { ActionParameters: [{ Value: 3745 }] } });
+        return indexService.updInfo('WeightingOperations({0})'.format(wo_id), {
+            DocumentationsID: new_ws_id
+        });
+    }
+
+
+
+}])
 
 
 .service('weightanalyticsService', ['indexService', '$translate', '$q', '$filter', function (indexService, $translate, $q, $filter) {

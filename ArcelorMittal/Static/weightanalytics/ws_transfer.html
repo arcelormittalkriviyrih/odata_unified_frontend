@@ -1,0 +1,93 @@
+﻿<style>
+    .screen {
+        min-height: 80px;
+    }
+</style>
+
+<div class="screen" ng-show="TransferFirstChoice">
+    {{ 'weightanalytics.Placeholders.chooseTransfer' | translate }}
+    <div class="radio" ng-repeat="tt in TransferType track by $index">
+        <label>
+            <input type="radio" name="types" ng-value="tt.name" ng-model="SelectedObjects.TransferType" ng-disabled="tt.disabled" />{{ tt.description }}
+        </label>
+    </div>
+</div>
+
+
+<div class="screen" ng-if="!TransferFirstChoice && SelectedObjects.TransferType=='New'" ng-init="NewOnEnter()">
+    {{ 'weightanalytics.Labels.newWSNumber' | translate }} <span style="font-weight: bold;">{{SelectedObjects.NewWSNumber}}</span>
+
+</div>
+
+
+<div class="screen" ng-if="!TransferFirstChoice && SelectedObjects.TransferType=='Existing'" ng-init="ExistingOnEnter()">
+    {{ 'weightanalytics.Placeholders.chooseExistingTransfer' | translate }}:
+    <div>
+        <ui-select
+            ng-model="SelectedObjects.ExistingWS"
+            on-select=""
+            ng-required="true"
+            ng-disabled="false"
+            class=""
+            style=""
+            theme="bootstrap"
+            title="Select WS"
+            id="">
+               <ui-select-match placeholder="Select WS">№ {{$select.selected.WeightsheetNumber}}</ui-select-match>
+               <ui-select-choices repeat="ws in ExistingWS | propsFilter: {WeightsheetNumber: $select.search}" position='down'>
+                    <div ng-bind-html="('№' + ws.WeightsheetNumber + ' (' + (ws.StartTime | date:'dd.MM.yyyy') + ')') | highlight: $select.search"></div>
+               </ui-select-choices>
+        </ui-select>
+    </div>
+</div>
+
+
+<div ng-if="!TransferFirstChoice && FinishInfo" ng-init="">
+    {{ 'weightanalytics.Labels.transferSuccess' | translate }}:
+    <table class="param_table">
+        <tr>
+            <td>{{ 'weightanalytics.Labels.weightsheet' | translate }}</td>
+            <td style="font-weight: bold;">{{NewWeightSheet.WeightSheetNumber}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'weightanalytics.Labels.weightbridge' | translate }}</td>
+            <td>{{NewWeightSheet.WeightBridge}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'weightanalytics.Labels.sender' | translate }}</td>
+            <td>{{NewWeightSheet.SenderShop ? NewWeightSheet.SenderShop.Description : '---'}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'weightanalytics.Labels.receiver' | translate }}</td>
+            <td>{{NewWeightSheet.ReceiverShop ? NewWeightSheet.ReceiverShop.Description : '---'}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'weightanalytics.Labels.weigher' | translate }}</td>
+            <td>{{NewWeightSheet.Weigher}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'consigners.Labels.creatingDT' | translate }}</td>
+            <td>{{NewWeightSheet.CreateDT}}</td>
+        </tr>
+    </table>
+</div>
+
+
+<div class="modal-footer" style="padding: 10px 0px 0px 0px; background-color: #fff;">
+    <button type="button"
+        class="btn btn-default"
+        style="width: 30%;"
+        ng-show="TransferFirstChoice"
+        ng-disabled="!SelectedObjects.TransferType"
+        ng-click="TransferFirstChoice = false;">
+        {{ 'weightanalytics.Buttons.next' | translate }}
+    </button>
+    <button type="button"
+        class="btn btn-default"
+        style="width: 30%;"
+        ng-show="!TransferFirstChoice"
+        ng-disabled="!SelectedObjects.NewWSNumber && !SelectedObjects.ExistingWS"
+        ng-click="OK()">
+        OK
+    </button>
+</div>

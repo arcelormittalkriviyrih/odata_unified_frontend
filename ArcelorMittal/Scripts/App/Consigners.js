@@ -1623,7 +1623,7 @@ angular.module('indexApp')
     }
 
     this.GetWaybillObject = function (waybill_id) {
-
+        if (!waybill_id) { return $q.when({}); }
         //-- get full waybill info here
         return $q.all([indexService.getInfo("PackagingUnitsDocs?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id)),
                         indexService.getInfo("v_WGT_DocumentsProperty?$filter=DocumentationsID eq {0} &$orderby=ID".format(waybill_id))])

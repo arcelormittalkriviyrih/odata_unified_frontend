@@ -347,6 +347,7 @@
                 close: 'Close',
                 cancel: 'Cancel',
                 updateTare: 'Update Tare',
+                next: 'Next',
 
             },
             Labels: {
@@ -388,6 +389,11 @@
                 },
                 showOnlyActiveWS: 'Show only active weightsheets',
                 zeroWB: 'Zeroing scales',
+                weighingTransfer: 'Weighing transfer',
+                newWS: 'Into new weightsheet',
+                existingWS: 'Into existing weightsheet',
+                newWSNumber: 'New weightsheet will be created with number',
+                transferSuccess: 'Weighting has been transfered successfully into weightsheet',
             },
             Placeholders: {
                 createWS: 'Create new weightsheet',
@@ -402,6 +408,8 @@
                 enterCarrying: 'Enter a carrying weight',
                 waybillUsed: 'Waybill has already been used!',
                 takeFirstWB: ' Take Sender and Receiver from the first Waybill',
+                chooseTransfer: 'Choose where to transfer',
+                chooseExistingTransfer: 'Choose Existing WS you want to transfer weighing into',
             },
             Modal: {
                 enterWSNo: 'Enter weightsheet number'
@@ -947,6 +955,7 @@
                 close: 'Закрыть',
                 cancel: 'Отмена',
                 updateTare: 'Обновить тару',
+                next: 'Далее',
 
             },
             Labels: {
@@ -988,6 +997,11 @@
                 },
                 showOnlyActiveWS: 'Показать только активные отвесные',
                 zeroWB: 'Обнулить весы',
+                weighingTransfer: 'Перенос взвешивания',
+                newWS: 'В новую отвесную',
+                existingWS: 'В существующую отвесную',
+                newWSNumber: 'Новая отвесная будет создана с номером',
+                transferSuccess: 'Взвешивание было успешно перенесено в отвесную',
             },
             Placeholders: {
                 createWS: 'Создать новую отвесную',
@@ -1002,6 +1016,8 @@
                 enterCarrying: 'Введите грузоподъемность',
                 waybillUsed: 'Путевая уже использована!',
                 takeFirstWB: 'Выбрать отправителя и получателя из первой путевой',
+                chooseTransfer: 'Выберите, куда перенести взвешивание',
+                chooseExistingTransfer: 'Выберите существующую отвесную, в которую вы хотите перенести взвешивание',
             },
             Table: {
                 weightsheet: 'Отвесная',
@@ -1549,6 +1565,7 @@
                 close: 'Закрити',
                 cancel: 'Відміна',
                 updateTare: 'Обновити тару',
+                next: 'Далі',
             },
             Labels: {
                 archiveWS: 'Архівні вагові',
@@ -1589,6 +1606,11 @@
                 },
                 showOnlyActiveWS: 'Показати тільки активні вагові',
                 zeroWB: 'Обнулити ваги',
+                weighingTransfer: 'Перенос зважування',
+                newWS: 'В нову вагову',
+                existingWS: 'В існуючу вагову',
+                newWSNumber: 'Нова вагова буде створена з номером',
+                transferSuccess: 'Зважування було успішно перенесено в вагову',
             },
             Placeholders: {
                 createWS: 'Створити нову вагову',
@@ -1603,6 +1625,8 @@
                 enterCarrying: 'Введіть вантажопідйомність',
                 waybillUsed: 'Путіва вже використана!',
                 takeFirstWB: 'Вибрати відправника та отримувача з першої путівої',
+                chooseTransfer: 'Виберіть, куди перенести зважування',
+                chooseExistingTransfer: 'Виберіть існуючу вагову, в яку ви хочете перенести зважування',
             },
             Table: {
                 weightsheet: 'Вагова',
