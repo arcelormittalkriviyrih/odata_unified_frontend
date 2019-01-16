@@ -525,7 +525,7 @@
             vmGetWSTree();
             // запускаем таймер опроса весового контроллера
             Timer = $interval(function () {
-                //vmGetScaleData();
+                vmGetScaleData();
             }, scalesRefresh);
         })
     }
@@ -1781,6 +1781,7 @@
 
 }])
 
+
 .controller('WeighingTransferCtrl', ['$scope', '$q', 'indexService', 'weightanalyticsService', 'consignersService', '$translate', 'user', function ($scope, $q, indexService, weightanalyticsService, consignersService, $translate, user) {
 
     var WeighingID = $scope.weighing_id;
@@ -1827,7 +1828,6 @@
         var ReceiverID = $scope.CurrentWeightSheet.ReceiverShop ? $scope.CurrentWeightSheet.ReceiverShop.ID : null;
         var shop_filter = (SenderID && ReceiverID) ? "and SenderShop eq '{0}' and ReceiverShop eq '{1}'".format(SenderID, ReceiverID) : "";
         var pathRecentWS = "v_WGT_DocumentationsExistCheck?$filter=Weightbridge eq '{0}' and Status eq 'active' and DocumentationsClassID eq {1} and ID ne {2} {3} &$orderby=ID desc".format(WeightBridgeID, DocClassID, WeightSheetID, shop_filter);
-        //var pathRecentWS = "v_WGT_DocumentationsExistCheck?$filter=Weightbridge eq '{0}' and DocumentationsClassID eq {1} and ID ne {2} {3} &$orderby=ID desc".format(WeightBridgeID, DocClassID, WeightSheetID, shop_filter);
         var request = indexService.getInfo(pathRecentWS);
         return request.then(function (response) {
             $scope.$parent.TransferInfoReady = true;
@@ -1860,6 +1860,7 @@
         $scope.FinishInfo = false;
     }
 
+    // нажатие на кнопку ОК
     function vmOK() {
         // нажатие ОК в последнем экране FinishInfo
         if ($scope.SelectedObjects.TransferType == null && $scope.FinishInfo) {
@@ -1879,7 +1880,6 @@
                 // если вернулся результат сохранения (ID записи), то возвращаем сохраненный объект
                 if (response.data && response.data.ActionParameters) {
                     $scope.SelectedObjects.weightsheet_id = response.data.ActionParameters[0]['Value'];
-                    //$scope.SelectedObjects.weightsheet_id = 3745;
                     // !!! TRansfer weighing HERE!!!
                     TransferWeightingOperation(WeighingID, $scope.SelectedObjects.weightsheet_id).then(function (response) {
                         if (response.status >= 200 && response.status < 300) {
@@ -1943,6 +1943,7 @@
 
     }
 
+    // получение следующего номера отвесной
     function vmGetLastWSNumber() {
         // автоинкремент номера отвесной (для текущего года)
         var query = "v_WGT_DocumentationsExistCheck?$top=1&$select=WeightsheetNumber &$filter=Weightbridge eq '{0}' and DocumentationsType eq '{1}' and Status ne 'reject' and year(StartTime) eq {2} &$orderby=StartTime desc".format($scope.CurrentWeightSheet.WeightBridgeID, encodeURI("Отвесная"), new Date().getFullYear());
@@ -1974,6 +1975,7 @@
         })
     }
 
+    // перенос взвешивания в БД
     function TransferWeightingOperation(wo_id, new_ws_id) {
         //return $q.when({ status: 200, data: { ActionParameters: [{ Value: 3745 }] } });
         return indexService.updInfo('WeightingOperations({0})'.format(wo_id), {
