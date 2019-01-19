@@ -1,0 +1,210 @@
+﻿﻿<link href="Content/Shared/layoutWA.css" rel="stylesheet" />
+
+<!--когда еще грузится страница-->
+<div class="container loading" ng-show="$root.showLoadingState">
+    <div class="loading-msg">
+        <h1>Loading ...</h1>
+    </div>
+</div>
+
+
+
+<!--основная часть, когда страница прогрузилась-->
+<div ng-show="!$root.showLoadingState">
+
+    <div class="row" style="background-color: #eeeeee; padding: 5px; margin-top: 0px;">
+
+        <div class="col-sm-5 col-md-5 WApanels" style="height: 335px; border-right: 1px solid #d4d4d4;">
+            <div class="panel panel-default" style="margin-bottom: 5px">
+                <div class="panel-heading" style="text-align: center; height: 30px; padding: 5px 5px">
+                    {{ 'weightanalytics.Labels.enterWData' | translate }}:
+                </div>
+            </div>
+
+            <table class="param_table">
+                <tr>
+                    <td>{{ 'weightanalytics.Labels.weightbridge' | translate }}</td>
+                    <td>
+                        <div style="position: relative">
+                            <ui-select
+                                ng-model="SelectedObjects.Scales"
+                                on-select="SelectScales($item.ID)"
+                                ng-disabled=""
+                                ng-required="true"
+                                ng-pattern=""
+                                style=""
+                                theme="bootstrap"
+                                title="">
+                                <ui-select-match placeholder="">
+                                    {{$select.selected.Description}}
+                                </ui-select-match>
+                                <ui-select-choices 
+                                    repeat="sc in Scales | filter: $select.search" position='down'>
+                                    <div ng-bind="sc.Description"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'weightanalytics.Labels.WSType' | translate }}</td>
+                    <td>
+                        <div style="position: relative">
+                            <ui-select
+                                ng-model="SelectedObjects.WeightingMode"
+                                on-select="Find()"
+                                ng-required="false"
+                                ng-disabled="!SelectedObjects.Scales"
+                                class=""
+                                style=""
+                                theme="bootstrap"
+                                title="{{ 'weightanalytics.Placeholders.selectWSType' | translate }}">
+                        <ui-select-match 
+                            placeholder="{{ 'weightanalytics.Placeholders.selectWSType' | translate }}"
+                            allow-clear="true">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="WSType in WSTypes" position='down'>
+                        <div title="{{WSType.Tooltip}}" ng-bind-html="WSType.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                </ui-select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'weightanalytics.Table.weightsheet' | translate }}</td>
+                    <td>
+                        <input type="text" class="form-control"
+                            ng-model="SelectedObjects.WeightSheetNumber"
+                            ng-model-options="{ debounce: 1000 }"
+                            ng-change="Find()"
+                            placeholder="{{ 'weightanalytics.Placeholders.enterWSNumber' | translate }}"
+                            title="{{ 'weightanalytics.Placeholders.enterWSNumber' | translate }}"
+                            ng-required="false"
+                            ng-disabled="!SelectedObjects.Scales"
+                            ng-pattern="'[0-9]{1,4}'" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'weightanalytics.Table.waybill' | translate }}</td>
+                    <td>
+                        <input type="text" class="form-control"
+                            ng-model="SelectedObjects.WaybillNumber"
+                            ng-model-options="{ debounce: 1000 }"
+                            ng-change="Find()"
+                            placeholder="{{ 'weightanalytics.Placeholders.enterWBNumber' | translate }}"
+                            title="{{ 'weightanalytics.Placeholders.enterWBNumber' | translate }}"
+                            ng-required="false"
+                            ng-disabled="!SelectedObjects.Scales"
+                            ng-pattern="'[0-9]{1,4}'" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'weightanalytics.Labels.sender' | translate }}</td>
+                    <td>
+                        <ui-select
+                            ng-model="SelectedObjects.SenderShop"
+                            on-select="Find()"
+                            ng-required=""
+                            ng-disabled="!SelectedObjects.Scales"
+                            class=""
+                            style=""
+                            theme="bootstrap"
+                            title="{{ 'weightanalytics.Placeholders.selectSender' | translate }}">
+                        <ui-select-match 
+                            placeholder="{{ 'weightanalytics.Placeholders.selectSender' | translate }}"
+                            allow-clear="true">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="type in CargoSenderShops | propsFilter: {Description: $select.search}" position='down'>
+                        <div title="{{type.Tooltip}}" ng-bind-html="type.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'weightanalytics.Labels.receiver' | translate }} </td>
+                    <td>
+                        <ui-select
+                            ng-model="SelectedObjects.ReceiverShop"
+                            on-select="Find()"
+                            ng-required=""
+                            ng-disabled="!SelectedObjects.Scales"
+                            class=""
+                            style=""
+                            theme="bootstrap"
+                            title="{{ 'weightanalytics.Placeholders.selectReceiver' | translate }}">
+                        <ui-select-match 
+                            placeholder="{{ 'weightanalytics.Placeholders.selectReceiver' | translate }}"
+                            allow-clear="true">{{$select.selected.Description}}</ui-select-match>
+                        <ui-select-choices repeat="type in CargoSenderShops | propsFilter: {Description: $select.search}" position='down'>
+                        <div ng-bind-html="type.Description | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'weightanalytics.Table.wagon' | translate }}</td>
+                    <td>
+                        <input type="text" class="form-control"
+                            ng-model="SelectedObjects.WagonNumber"
+                            ng-model-options="{ debounce: 1000 }"
+                            ng-change="Find()"
+                            placeholder="{{ 'weightanalytics.Placeholders.enterWagonNumber' | translate }}"
+                            title="{{ 'weightanalytics.Placeholders.enterWagonNumber' | translate }}"
+                            ng-required="false"
+                            ng-disabled="!SelectedObjects.Scales"
+                            ng-pattern="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-top: 5px; text-align: center">
+                        <div class="dropdown"
+                            style="width: 40%; display: inline-block">
+                            <button
+                                class="btn btn-default dropdown-toggle" style="width: 100%"
+                                type="button" id="printDropdownMenu"
+                                ng-disabled="(['reject', 'active'].indexOf(CurrentWeightSheet.Status) > -1) || !CurrentWeightSheet.Weighings.length || !ArchiveWeightsheetSelected"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                {{ 'weightanalytics.Buttons.print' | translate }}
+                                    <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="printDropdownMenu">
+                                <li><a href="javascript:void(0)" ng-click="PrintWS(SelectedObjects.weightsheet_id, false)">{{ 'weightanalytics.Buttons.localPrint' | translate }}</a></li>
+                                <li><a href="javascript:void(0)" ng-click="PrintWS(SelectedObjects.weightsheet_id, true)">{{ 'weightanalytics.Buttons.remotePrint' | translate }}</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <div class="col-sm-7 col-md-7 WApanels" style="">
+            <div class="" style="height: auto; position: relative; clear: both;">
+                <div class="" id="weightsheet_tree" style="background-color: white; height: 330px; overflow: auto;"></div>
+                <div ng-if="LoadingTree" class="loading-gif" style="width: 100%;"></div>
+            </div>
+        </div>
+
+    </div>
+    
+    <div ng-show="SelectedObjects.weightsheet_id && !ArchiveWeightsheetSelected" style="display: table; width: 100%; height: 100%">
+        <div style="color: gray; text-align: center;">
+            <h1>{{ 'consigners.Placeholders.loading' | translate }}</h1>
+        </div>
+    </div>
+
+    <div
+        ui-view="WS_table"
+        ng-if="CurrentWeightSheet.WeightSheetID"
+        ng-init="toprint=true; find=true;"
+        style="margin-top: 5px; margin-left: -2mm; margin-bottom: 10px;">
+    </div>
+
+    <div
+        id="WS_toprint"
+        ui-view="WS_toprint"
+        ng-if="CreateWSToPrint"
+        ng-show="false">
+    </div>
+
+
+</div>
+

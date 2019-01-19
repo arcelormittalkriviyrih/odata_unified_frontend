@@ -327,6 +327,7 @@
     <Content Include="Static\pa\physicalasset.html" />
     <Content Include="Static\pa\version.html" />
     <Content Include="Static\pa\sapcommunication.html" />
+    <Content Include="Static\weightanalytics\find.html" />
     <Content Include="Static\weightanalytics\ws_transfer.html" />
     <Content Include="Static\weightanalytics_old\index.html" />
     <Content Include="Static\weightanalytics_old\link1.html" />

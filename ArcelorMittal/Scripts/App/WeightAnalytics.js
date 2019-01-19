@@ -78,7 +78,66 @@
             }
         })
 
+        .state('app.WeightAnalytics.Find', {
+            url: '/find/{wb_id:int}/{ws_id:int}?',
+            views: {
+                "": {
+                    templateUrl: 'Static/weightanalytics/find.html',
+                    controller: 'WeightAnalyticsFindCtrl',
+                },
+                "WS_table@app.WeightAnalytics.Find": {
+                    templateUrl: 'Static/weightanalytics/ws_table.html',
+                },
+                "WS_toprint@app.WeightAnalytics.Find": {
+                    templateUrl: 'Static/weightanalytics/ws_table.html',
+                    controller: 'WeightAnalyticsWSPrintCtrl',
+                },
+            },
+            //controller: 'WeightAnalyticsWBCtrl',
+            params: {
+                wb_id: { squash: true, value: null },
+                ws_id: { squash: true, value: null, dynamic: true },
+            },
+            resolve: {
+                wb: function (indexService, $stateParams, $state, $q, $timeout) {
+                    // проверка существования WB_ID и WS_ID
+                    var WB_ID = $stateParams.wb_id;
+                    var WS_ID = $stateParams.ws_id;
+                    if (!WB_ID && !WS_ID) {
+                        return 0;
+                    }
 
+                    return $q.all([indexService.getInfo("v_AllWeighbridges?$filter=ID eq {0}".format(WB_ID)),
+                                   indexService.getInfo("v_WGT_WeightsheetList?$top=1&$filter=WeightbridgeID eq '{0}' and DocumentationsID eq {1}".format(WB_ID, WS_ID))])
+                    .then(function (responses) {
+                        var WB_aval = responses[0].data.value;
+                        var WS_aval = responses[1].data.value;
+                        // если нет таких весов - перенаправление на Find
+                        if (WB_aval.length == 0) {
+                            $timeout(function () {
+                                $state.go('app.WeightAnalytics.Find');
+                            }, 0)
+                            //$stateParams.wb_id = null;
+                            //$stateParams.ws_id = null;
+                        }
+                            // если не указан WS_ID или такой WS_ID существует для весов - загружаем контроллер
+                        else if (WS_ID == null || WS_aval.length != 0) {
+                            return 0;
+                        }
+                            // если указан несуществующий WS_ID - перенаправляем на Find для весов
+                        else {
+                            $timeout(function () {
+                                $state.go('app.WeightAnalytics.Find', { wb_id: WB_ID, ws_id: null });
+                            }, 0)
+                            //$stateParams.ws_id = null;
+                        }
+
+                        return $q.reject("WAFind Reject");
+                    });
+
+                }
+            }
+        })
 }])
 
 
@@ -1691,7 +1750,7 @@
         // add QRcode
         QRgen();
         var ws_toprint_html = document.getElementById('WS_toprint');
-        var inner_html = ws_toprint_html.innerHTML;
+        var inner_html = ws_toprint_html ? ws_toprint_html.innerHTML : "Nothing to print";
         var autoprint = "";
         var fix_print = "";
         autoprint = "\n\<script type=\"text/javascript\">\n\window.onload=function(){window.print();window.close();} \n\ </script>\n";
@@ -1730,12 +1789,13 @@
     // QR code generator
     function QRgen() {
         // Returns full URL
-        var url = $state.href($state.current.name, { wb_id: $scope.CurrentWeightSheet['WeightBridgeID'], ws_id: $scope.CurrentWeightSheet['WeightSheetID'] }, { absolute: true })
+        var state_name = 'app.WeightAnalytics.Find';//$state.current.name;
+        var url = $state.href(state_name, { wb_id: $scope.CurrentWeightSheet['WeightBridgeID'], ws_id: $scope.CurrentWeightSheet['WeightSheetID'] }, { absolute: true })
         // create QR as canvas (larger dimentions for better quality)
         var qr = $('#WS_QR').qrcode({
             //render: "table",
-            width: "300",
-            height: "300",
+            width: "80",
+            height: "80",
             text: url
         });
         var canvas = angular.element("#WS_QR > canvas");
@@ -1912,7 +1972,7 @@
                 }
             });
         }
-        
+
         // нажатие Далее при переносе в Существующую отвесную
         if ($scope.SelectedObjects.TransferType == 'Existing' && !$scope.FinishInfo) {
             //alert('Existing OK');
@@ -1986,6 +2046,397 @@
 
 
 }])
+
+
+
+.controller('WeightAnalyticsFindCtrl', ['$scope', '$q', '$translate', 'indexService', 'weightanalyticsService', 'consignersService', 'LocalStorageService', '$state', '$interval', '$filter', function ($scope, $q, $translate, indexService, weightanalyticsService, consignersService, LocalStorageService, $state, $interval, $filter) {
+
+    // Init
+    var wb_id = $state.params.wb_id;
+    var ws_id = $state.params.ws_id;
+
+    var ArchiveWeightSheets = [];
+    var FoundWeightSheets = [];
+
+    var CargoSenders = [];          // Districts
+    var CargoReceivers = [];        // Districts//$scope.Platforms = [];
+    $scope.CargoSenderShops = [];   // unique shops from Districts
+    $scope.CargoReceiverShops = []; // unique shops from Districts
+    $scope.CargoTypes = [];
+    $scope.WagonTypes = [];
+    $scope.WagonNumbers = [];
+    $scope.WSTypes = [];
+
+    $scope.SelectedObjects = {
+        Scales: null,
+        WeightingMode: null,
+        WeightSheetNumber: null,
+        WaybillNumber: null,
+        WagonNumber: null,
+        SenderShop: null,
+        ReceiverShop: null,
+    };
+
+    $scope.CurrentWeightSheet = {
+        WeightingMode: null,
+        Status: null,
+        Weigher: null,
+        WeightSheetNumber: null,
+        WeightSheetID: null,
+        WeightBridgeID: null,
+        WeightBridge: null,
+        SenderShop: null,
+        ReceiverShop: null,
+        CreateDT: null,
+        EditDT: null,
+
+        CurrentWeighting: {
+            WaybillNumber: null,
+            WaybillID: null,
+            //PersonName: null,
+            WagonNumber: null,
+            WagonID: null,
+            WagonNumberPattern: null,
+            CargoTypeID: null,
+        },
+        Weighings: [],
+    }
+
+    $scope.SelectScales = vmSelectScales;
+    $scope.Find = vmFind;
+    $scope.PrintWS = vmPrintWS;
+    $scope.ReadyToPrint = vmReadyToPrint;
+
+    var WeightSheetTree = $('#weightsheet_tree').jstree('destroy');
+
+    vmGetAllScales();
+    vmGetConsignersServiceArrays();
+    vmCreateWSTree();
+    /*
+    if (wb_id && ws_id) {
+        $scope.ArchiveWeightsheetSelected = false;
+        $scope.CurrentWeightSheet.WeightSheetID = null;
+        $scope.SelectedObjects.weightsheet_id = ws_id;
+        // get full WS info here
+        weightanalyticsService.GetWSInfo($scope.SelectedObjects.weightsheet_id).then(function (weightsheet_object) {
+            // копируем все свойства weightsheet_object в $scope.CurrentWeightSheet
+            for (key in weightsheet_object) {
+                if ($scope.CurrentWeightSheet.hasOwnProperty(key)) {
+                    $scope.CurrentWeightSheet[key] = weightsheet_object[key];
+                }
+            }
+            $scope.ArchiveWeightsheetSelected = true;
+        })
+
+    }
+    */
+    // создание дерева отвесных
+    function vmCreateWSTree() {
+        WeightSheetTree.jstree({
+            search: {
+                "case_insensitive": true,
+                "show_only_matches": true
+            },
+            plugins: ["search"]
+        });
+    };
+
+    // загрузка данных в дерево отвесных
+    function vmLoadWSTree(data) {
+        WeightSheetTree.jstree(true).settings.core.data = data;
+        WeightSheetTree.jstree(true).refresh(true, true);
+    };
+
+    // загрузка дерева отвесных
+    WeightSheetTree.on('redraw.jstree', function (e, data) {
+        if (!ws_id) return;
+        var node = null;
+        for (var i = 0; i < ArchiveWeightSheets.length; i++) {
+            var element = ArchiveWeightSheets[i];
+            if (element.parent != '#' && element.DocumentationsID == ws_id) {
+                node = element;
+                break;
+            }
+        }
+        if (node) {
+            var node_id = node['id'];
+            WeightSheetTree.jstree('select_node', node_id, false);
+            WeightSheetTree.jstree(true).get_node(node_id, true).children('.jstree-anchor').focus();
+            WeightSheetTree.jstree('open_node', node_id);
+        }
+    });
+
+    // выбор элемента в дереве отвесных
+    WeightSheetTree.on('select_node.jstree', function (e, data) {
+        //alert('select_node');
+        $scope.ArchiveWeightsheetSelected = false;
+        $scope.CurrentWeightSheet.WeightSheetID = null;
+        $scope.SelectedObjects.weightsheet_id = null;
+        $scope.$applyAsync();
+        if (data.node.original.DocumentationsID) {
+            $scope.SelectedObjects.weightsheet_id = data.node.original.DocumentationsID;
+            $state.go('app.WeightAnalytics.Find', { wb_id: $scope.SelectedObjects.Scales['ID'], ws_id: $scope.SelectedObjects.weightsheet_id }, { notify: false });
+            // get full WS info here
+            weightanalyticsService.GetWSInfo($scope.SelectedObjects.weightsheet_id).then(function (weightsheet_object) {
+                // копируем все свойства weightsheet_object в $scope.CurrentWeightSheet
+                for (key in weightsheet_object) {
+                    if ($scope.CurrentWeightSheet.hasOwnProperty(key)) {
+                        $scope.CurrentWeightSheet[key] = weightsheet_object[key];
+                    }
+                }
+                $scope.ArchiveWeightsheetSelected = true;
+            })
+        };
+    });
+
+    // получение списка всех платф. весов
+    function vmGetAllScales() {
+        var query = "v_AllWeighbridges?$orderby=ID";
+        return indexService.getInfo(query).then(function (response) {
+            if (response.data && response.data.value) {
+                $scope.Scales = response.data.value;
+
+                if (wb_id) {
+                    var selected_wb = $scope.Scales.filter(function (item) { return item['ID'] == wb_id });
+                    if (selected_wb.length) {
+                        $scope.SelectedObjects.Scales = selected_wb[0];
+                        vmSelectScales($scope.SelectedObjects.Scales['ID']);
+                    }
+                }
+            }
+        })
+    }
+
+    // получение списков отправителей, получателей, станция, видов груза
+    function vmGetConsignersServiceArrays() {
+        $q.all([consignersService.GetCargoSenders(),
+                consignersService.GetCargoReceivers(),
+                weightanalyticsService.GetWSTypes()])
+        .then(function (responses) {
+            var resp_0 = responses[0].data.value;
+            var resp_1 = responses[1].data.value;
+            var resp_2 = responses[2].data.value;
+            if (resp_0) {
+                // получение списка поставщиков груза
+                CargoSenders = resp_0;
+                // получение уникальных цехов поставщиков груза
+                vmGetCargoClient(CargoSenders, $scope.CargoSenderShops);
+            }
+            if (resp_1) {
+                // получение списка получателей груза
+                CargoReceivers = resp_1;
+                // получение уникальных цехов получателей груза
+                vmGetCargoClient(CargoReceivers, $scope.CargoReceiverShops);
+            }
+            if (resp_2) {
+                // получение списка видов отвесных
+                $scope.WSTypes = resp_2;
+
+            }
+        })
+    }
+
+    // получение списка пользователей (поставщиков и получателей) груза
+    function vmGetCargoClient(array, unique_array) {
+        // array - массив участков
+        // unique_array - массив уникальных цехов участков (ParentID)
+        for (i = 0; i < array.length; i++) {
+            var CargoUserObject = {};
+            CargoUserObject['ID'] = array[i]['ParentID'];
+            CargoUserObject['Description'] = array[i]['ParentDescription'];
+            // выбираем уникальные ParentID
+            if (unique_array.map(function (elem) { return elem['ID']; }).indexOf(CargoUserObject['ID']) == -1) {
+                unique_array.push(CargoUserObject);
+            }
+        }
+    }
+
+    // выбор весов из списка
+    function vmSelectScales(wb_id) {
+        this.wb_id = wb_id;
+        if (ArchiveWeightSheets.length) {
+            ws_id = null;
+        }
+        $state.go('app.WeightAnalytics.Find', { wb_id: $scope.SelectedObjects.Scales['ID'], ws_id: ws_id }, { notify: false, reload: false, inherit: true });
+        return weightanalyticsService.GetWSList(wb_id, false).then(function (response) {
+            ArchiveWeightSheets = response;
+            vmFind();
+        })
+    }
+
+    // главная функция поиска путевых
+    function vmFind() {
+        var query1 = "v_WGT_DocumentationsExistCheck?$select=ID &$filter=DocumentationsType eq '{0}'".format(encodeURI("Отвесная"));
+        var filter = "";
+        var filter_array = [];
+        if ($scope.SelectedObjects.Scales) {
+            filter = "Weightbridge eq '{0}'".format($scope.SelectedObjects.Scales['ID']);
+            filter_array.push(filter);
+        }
+        if ($scope.SelectedObjects.WeightingMode) {
+            filter = "DocumentationsClassID eq {0}".format($scope.SelectedObjects.WeightingMode['ID']);
+            filter_array.push(filter);
+        }
+        if ($scope.SelectedObjects.SenderShop) {
+            filter = "SenderShop eq '{0}'".format($scope.SelectedObjects.SenderShop['ID']);
+            filter_array.push(filter);
+        }
+        if ($scope.SelectedObjects.ReceiverShop) {
+            filter = "ReceiverShop eq '{0}'".format($scope.SelectedObjects.ReceiverShop['ID']);
+            filter_array.push(filter);
+        }
+        if ($scope.SelectedObjects.WeightSheetNumber) {
+            filter = "WeightsheetNumber eq {0}".format($scope.SelectedObjects.WeightSheetNumber);
+            filter_array.push(filter);
+        }
+        var filter = "";
+        for (var i = 0; i < filter_array.length; i++) {
+            var item = filter_array[i];
+            filter += " and " + item;
+        }
+        // получаем отвесные из v_WGT_DocumentationsExistCheck с фильтром
+        query1 += filter + " &$orderby=ID";
+
+        var query2 = "v_WGT_Weightsheet?$select=WeightsheetID";
+        var filter = "";
+        var filter_array = [];
+        if ($scope.SelectedObjects.WagonNumber) {
+            filter = "WagonNumber eq '{0}'".format($scope.SelectedObjects.WagonNumber);
+            filter_array.push(filter);
+        }
+        if ($scope.SelectedObjects.WaybillNumber) {
+            filter = "WaybillNumber eq '{0}'".format($scope.SelectedObjects.WaybillNumber);
+            filter_array.push(filter);
+        }
+        filter = filter_array.length ? "&$filter=" : "";
+        for (var i = 0; i < filter_array.length; i++) {
+            var item = filter_array[i];
+            filter += (i > 0) ? " and " : "";
+            filter += item;
+        }
+        // получаем отвесные из v_WGT_Weightsheet с фильтром
+        query2 += filter + " &$orderby=WeightsheetID";
+
+        if ($scope.SelectedObjects.WeightingMode || $scope.SelectedObjects.SenderShop || $scope.SelectedObjects.ReceiverShop ||
+            $scope.SelectedObjects.WeightSheetNumber || $scope.SelectedObjects.WagonNumber || $scope.SelectedObjects.WaybillNumber) {
+            ws_id = null;
+            $state.go('app.WeightAnalytics.Find', { wb_id: $scope.SelectedObjects.Scales['ID'], ws_id: ws_id }, { notify: false, reload: false, inherit: true });
+        }
+
+        var filtered_ws_ids = [];
+        $scope.CurrentWeightSheet.WeightSheetID = null;
+        $scope.LoadingTree = true;
+        return $q.all([indexService.getInfo(query1),
+                       indexService.getInfo(query2)])
+       .then(function (responses) {
+           var resp_0 = responses[0].data.value;
+           var resp_1 = responses[1].data.value;
+           for (var i = 0; i < resp_0.length; i++) {
+               resp_0[i] = resp_0[i]['ID'];
+           }
+           for (var i = 0; i < resp_1.length; i++) {
+               resp_1[i] = resp_1[i]['WeightsheetID'];
+           }
+           // получаем join массивов
+           var arr = resp_0.filter(function (value) {
+               return resp_1.indexOf(value) != -1;
+           });
+           // получаем уникальные значения массива
+           filtered_ws_ids = arr.filter(function (value, index, self) {
+               return self.indexOf(value) === index;
+           });
+
+           FoundWeightSheets.length = 0;
+           FoundWeightSheets = ArchiveWeightSheets.filter(function (item) {
+               return item['DocumentationsID'] == null || filtered_ws_ids.indexOf(item['DocumentationsID']) != -1;
+           })
+           var ws = angular.copy(FoundWeightSheets);
+           vmRemoveEmptyTreeNodes(ws);
+           vmLoadWSTree(ws);
+           if (FoundWeightSheets.length < 800) WeightSheetTree.jstree('open_all');
+           $scope.LoadingTree = false;
+           return true;
+
+       })
+    }
+
+    // удаление неиспользующихся месяцев в дереве при поиске путевых
+    function vmRemoveEmptyTreeNodes(wbs) {
+        var needed_ids = [];
+
+        for (i = 0; i < wbs.length; i++) {
+            var item = wbs[i];
+            if (item['DocumentationsID'] != null || item['parent'] == '#') {
+                if (needed_ids.indexOf(item['id']) == -1) {
+                    needed_ids.push(item['id']);
+                }
+                if (item['parent'] != '#' && needed_ids.indexOf(parseInt(item['parent'])) == -1) {
+                    needed_ids.push(parseInt(item['parent']));
+                }
+            }
+        }
+        for (i = wbs.length - 1; i >= 0; i--) {
+            var item = wbs[i];
+            if (needed_ids.indexOf(item['id']) == -1) {
+                wbs.splice(i, 1);
+            }
+        }
+    }
+
+    // получение списка уникальных ID (distinct)
+    function vmGetUniqueArray(array) {
+        // unique_array - массив уникальных занчений
+        var unique_array = [];
+        for (i = 0; i < array.length; i++) {
+            var obj = {};
+            obj['ID'] = array[i]['ID'];
+            // выбираем уникальные ID
+            if (unique_array.map(function (elem) { return elem['ID']; }).indexOf(obj['ID']) == -1) {
+                unique_array.push(obj);
+            }
+        }
+        return unique_array;
+    }
+
+    // нажатие кнопки "Печать отвесной"
+    function vmPrintWS(id, remotePrint) {
+        //alert("Remote print flag: " + remotePrint);
+        //alert(id);
+        if (!id || ($scope.CurrentWeightSheet.Status != 'closed' && $scope.CurrentWeightSheet.Status)) return;
+        $scope.RemotePrint = remotePrint;
+        $scope.CreateWSToPrint = true;
+    }
+
+    // Печать после отрисовки таблицы!
+    function vmReadyToPrint() {
+        //alert("Ready to Print!");
+        // add QRcode
+        QRgen();
+    }
+
+    // QR code generator
+    function QRgen() {
+        // Returns full URL
+        var state_name = $state.current.name;//'app.WeightAnalytics.Find';
+        var url = $state.href(state_name, { wb_id: $scope.CurrentWeightSheet['WeightBridgeID'], ws_id: $scope.CurrentWeightSheet['WeightSheetID'] }, { absolute: true })
+        // create QR as canvas (larger dimentions for better quality)
+        var qr_id = "#WS_QR_find";
+        var qr = $(qr_id).qrcode({
+            //render: "table",
+            width: "80",
+            height: "80",
+            text: url
+        });
+        var canvas = angular.element(qr_id + " > canvas");
+        if (canvas && canvas[0]) {
+            // convert canvas to PNG
+            var qr_img = canvas[0].toDataURL("image/png");
+            $(qr_id).replaceWith('<img id="qr" style="height:26mm;" src="' + qr_img + '"/>');
+        }
+    }
+
+}])
+
 
 
 .service('weightanalyticsService', ['indexService', '$translate', '$q', '$filter', function (indexService, $translate, $q, $filter) {

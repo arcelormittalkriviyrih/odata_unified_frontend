@@ -651,12 +651,12 @@ angular.module('indexApp')
         //}
 
         $scope.CurrentWaybill = angular.copy(waybill_object);
-        vmWagonNumberChange();
         // если создаем как копию - сбрасываем номер вагона и инкрементируем номер путевой
         if (copy_id) {
             $scope.CurrentWaybill.Status = null;
             resetWaybillNumber();
         }
+        vmWagonNumberChange();
     }
 
     // ввод номера вагона
@@ -664,7 +664,7 @@ angular.module('indexApp')
         if (!$scope.CurrentWaybill.WagonNumber) { $scope.CurrentWaybill.WagonType = null; }
         var type = consignersService.WagonNumberCRC($scope.CurrentWaybill.WagonNumber);
         var wtype = $scope.WagonTypes.filter(function (item) { return item['Description'] == type; });
-        if (copy_id) return;
+        //if (copy_id) return;
         $scope.WagonNumberCRC = type == "Вагон УЗ";
         if (modify_id) return;
         $scope.CurrentWaybill.WagonType = wtype.length ? wtype[0] : null;//$scope.CurrentWaybill.WagonType;
@@ -1007,15 +1007,36 @@ angular.module('indexApp')
         //window.open('/Static/consigners/waybill.html');
     }
 
-    // сброс номера вагона и инкремент номера отвесной
+    // сброс номера вагона и инкремент номера путевой
     function resetWaybillNumber() {
         $scope.CurrentWaybill.WagonNumber = null;
         $scope.CurrentWaybill.ID = null;
-        if ($scope.CurrentWaybill.WaybillNumber) {
-            $scope.CurrentWaybill.WaybillNumber = parseInt($scope.CurrentWaybill.WaybillNumber) + 1;
+        if ($scope.CurrentWaybill.WaybillNumber && $scope.CurrentWaybill.CargoSender) {
+            //$scope.CurrentWaybill.WaybillNumber = parseInt($scope.CurrentWaybill.WaybillNumber) + 1;
+            $scope.CurrentWaybill.WaybillNumber = null;
+            vmGetLastWSNumber().then(function (number) {
+                $scope.CurrentWaybill.WaybillNumber = number;
+            });
+
         }
     };
 
+    // получение следующего номера путевой
+    function vmGetLastWSNumber() {
+        // автоинкремент номера путевой (для текущего года)
+        var query = "v_WGT_DocumentationsExistCheck?$top=1&$select=WaybillNumber &$filter=SenderShop eq '{0}' and DocumentationsType eq '{1}' and Status ne 'reject' and year(StartTime) eq {2} &$orderby=StartTime desc".format($scope.CurrentWaybill.CargoSender['ParentID'], encodeURI("Путевая"), new Date().getFullYear());
+        return indexService.getInfo(query).then(function (response) {
+            if (response.data.value && response.data.value[0]) {
+                var last_number = response.data.value[0]['WaybillNumber'];
+                last_number = last_number || 0;
+                last_number++;
+                return last_number;
+            }
+            else {
+                return 1;
+            }
+        })
+    }
 
     // нажатие "Сохранить"
     function vmSaveOnly() {

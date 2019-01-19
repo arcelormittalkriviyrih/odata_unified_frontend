@@ -4,19 +4,12 @@
 
 <ul class="nav nav-tabs">
 
-    <!--    <li class="tab" ui-sref-active="active"
-        ng-click="SelectMainTab()">
-        <a>Main</a>
+     <li class="tab" ui-sref-active="active">
+        <a ui-sref="app.WeightAnalytics.Main" ui-sref-opts="{reload: true}" ng-if="false">Main</a>
     </li>
 
-    <li ng-repeat="Weighbridge in AvalWeighbridges"
-        class="tab" ui-sref-active="active"
-        ng-click="SelectWeighbridge(Weighbridge.ID)">
-        <a>{{Weighbridge.Description}} {{$state}}</a>
-    </li>-->
-
      <li class="tab" ui-sref-active="active">
-        <a ui-sref="app.WeightAnalytics.Main" ui-sref-opts="{reload: true}">Main</a>
+        <a ui-sref="app.WeightAnalytics.Find" ui-sref-opts="{reload: true}">{{ 'consigners.Labels.find' | translate }}</a>
     </li>
 
     <li ng-repeat="Weighbridge in AvalWeighbridges"

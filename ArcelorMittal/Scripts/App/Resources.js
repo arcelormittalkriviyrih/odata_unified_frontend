@@ -394,6 +394,7 @@
                 existingWS: 'Into existing weightsheet',
                 newWSNumber: 'New weightsheet will be created with number',
                 transferSuccess: 'Weighting has been transfered successfully into weightsheet',
+                WSType: 'Weightsheet type',
             },
             Placeholders: {
                 createWS: 'Create new weightsheet',
@@ -410,6 +411,7 @@
                 takeFirstWB: ' Take Sender and Receiver from the first Waybill',
                 chooseTransfer: 'Choose where to transfer',
                 chooseExistingTransfer: 'Choose Existing WS you want to transfer weighing into',
+                selectWSType: 'Select weightsheet type',
             },
             Modal: {
                 enterWSNo: 'Enter weightsheet number'
@@ -1002,6 +1004,7 @@
                 existingWS: 'В существующую отвесную',
                 newWSNumber: 'Новая отвесная будет создана с номером',
                 transferSuccess: 'Взвешивание было успешно перенесено в отвесную',
+                WSType: 'Вид отвесной',
             },
             Placeholders: {
                 createWS: 'Создать новую отвесную',
@@ -1018,10 +1021,11 @@
                 takeFirstWB: 'Выбрать отправителя и получателя из первой путевой',
                 chooseTransfer: 'Выберите, куда перенести взвешивание',
                 chooseExistingTransfer: 'Выберите существующую отвесную, в которую вы хотите перенести взвешивание',
+                selectWSType: 'Выберите вид отвесной',
             },
             Table: {
                 weightsheet: 'Отвесная',
-                wagon: 'Лафет-короб',
+                wagon: 'Вагон',
                 waybill: 'Путевая',
                 CSH: 'Код',
                 brutto: 'Брутто',
@@ -1611,6 +1615,7 @@
                 existingWS: 'В існуючу вагову',
                 newWSNumber: 'Нова вагова буде створена з номером',
                 transferSuccess: 'Зважування було успішно перенесено в вагову',
+                WSType: 'Вид вагової',
             },
             Placeholders: {
                 createWS: 'Створити нову вагову',
@@ -1627,10 +1632,11 @@
                 takeFirstWB: 'Вибрати відправника та отримувача з першої путівої',
                 chooseTransfer: 'Виберіть, куди перенести зважування',
                 chooseExistingTransfer: 'Виберіть існуючу вагову, в яку ви хочете перенести зважування',
+                selectWSType: 'Виберіть вид вагової',
             },
             Table: {
                 weightsheet: 'Вагова',
-                wagon: 'Лафет-короб',
+                wagon: 'Вагон',
                 waybill: 'Путіва',
                 CSH: 'Код',
                 brutto: 'Бруто',
