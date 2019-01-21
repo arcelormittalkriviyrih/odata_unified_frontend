@@ -434,10 +434,11 @@ var app = angular.module('indexApp', ['ui.router', 'pascalprecht.translate', 'ng
         responseText = responseText.error ? responseText.error.innererror.message : params.responseText.message;
 
     var date = getTimeToUpdate();
-    $scope.errorCode = '{2}.{1}.{0} {3}:{4}:{5}'.format(date.year, date.month, date.day, date.hour, date.minute, date.second) + '\n\n';
-    $scope.errorCode += error.status + ' ' + error.statusText + '\n' + responseText;
-
     var stacktrace = getLastChild(error, ['data', 'error', 'innererror'], 'stacktrace');
+    var internalException = getLastChild(error, ['data', 'error', 'innererror', 'internalexception'], 'message');
+    internalException = internalException ? '\n Internal error: \n' + internalException + '\n' : "";
+    $scope.errorCode = '{2}.{1}.{0} {3}:{4}:{5}'.format(date.year, date.month, date.day, date.hour, date.minute, date.second) + '\n\n';
+    $scope.errorCode += error.status + ' ' + error.statusText + '\n' + internalException + '\n' + responseText;
     $scope.errorCode += '\n' + stacktrace;
 
 
