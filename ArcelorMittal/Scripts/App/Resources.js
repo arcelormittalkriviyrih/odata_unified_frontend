@@ -395,6 +395,7 @@
                 newWSNumber: 'New weightsheet will be created with number',
                 transferSuccess: 'Weighting has been transfered successfully into weightsheet',
                 WSType: 'Weightsheet type',
+                empty: 'Empty',
             },
             Placeholders: {
                 createWS: 'Create new weightsheet',
@@ -1005,6 +1006,7 @@
                 newWSNumber: 'Новая отвесная будет создана с номером',
                 transferSuccess: 'Взвешивание было успешно перенесено в отвесную',
                 WSType: 'Вид отвесной',
+                empty: 'Пустой',
             },
             Placeholders: {
                 createWS: 'Создать новую отвесную',
@@ -1616,6 +1618,7 @@
                 newWSNumber: 'Нова вагова буде створена з номером',
                 transferSuccess: 'Зважування було успішно перенесено в вагову',
                 WSType: 'Вид вагової',
+                empty: 'Порожній',
             },
             Placeholders: {
                 createWS: 'Створити нову вагову',
