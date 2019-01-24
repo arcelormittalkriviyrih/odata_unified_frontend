@@ -119,30 +119,40 @@
                             if (a.value > b.value)
                                 return 1;
                             return 0;
-                        }).forEach(function (item) {
-                                
-                            if (item.value == '')
-                                item.value = 'no name';
-                           
-                            var li = $('<li />').appendTo(ul);
-
-
-                            var a = $('<a />').attr({
-                                                    href: '#',
-                                                    dataValue: item.key                            
-                                                    })
-                                                    .text(item.value)
-                                                    .on('click', function(e){
-
-                                                        e.preventDefault();
-
-                                                        selectedComboTextValue.val($.trim($(this).text()));
-                                                        selectedComboDataValue.val($(this).attr('dataValue'));
-
-                                                        $(this).closest('.dropdown').removeClass('wrong');
-                                                    })
-                                                    .appendTo(li);
                         });
+
+                        function showItems(data) {
+
+                            $(ul).empty();
+
+                            data.slice(0, 10)
+                                .forEach(function (item) {
+
+                                    if (item.value == '')
+                                        item.value = 'no name';
+
+                                    var li = $('<li />').appendTo(ul);
+
+                                    var a = $('<a />').attr({
+                                        href: '#',
+                                        dataValue: item.key
+                                    })
+                                    .text(item.value)
+                                    .on('click', function (e) {
+
+                                        e.preventDefault();
+
+                                        selectedComboTextValue.val($.trim($(this).text()));
+                                        selectedComboDataValue.val($(this).attr('dataValue'));
+
+                                        $(this).closest('.dropdown').removeClass('wrong');
+                                    })
+                                    .appendTo(li);
+                                });
+                        };                        
+
+                        showItems(data);
+
                         var filterField = controlsControlGroup.find('#filter');
 
                         if (!properties.filter)
@@ -150,44 +160,10 @@
                         else {
                             filterField.keyup(function () {
 
-                                var comboList = ul.find('li a');
                                 var val = $(this).val().toLowerCase();
 
-                                if (val.length > 0) {
-
-                                    var notEqual = 0;//hack for ie9
-                                    var itemLength = comboList.length;//hack for ie9
-
-                                    comboList.each(function (i, item) {
-
-                                        $(item).parent().show();
-                                    });
-
-                                    comboList.each(function (i, item) {
-
-                                        if ($(item).text().toLowerCase().indexOf(val) == -1) {
-
-                                            notEqual++;//hack for ie9
-                                            $(item).parent().hide();
-                                        }
-
-                                    });
-
-                                    if (notEqual == itemLength)//hack for ie9 
-                                        ul.addClass('zeroHeight'); //hack for ie9                              
-                                    else//hack for ie9
-                                        ul.removeClass('zeroHeight');//hack for ie9
-
-                                } else {
-
-                                    comboList.each(function (i, item) {
-
-                                        $(item).parent().show();
-                                    });
-
-
-                                    ul.removeClass('zeroHeight');//hack for ie9
-                                }
+                                var filtered = data.filter(function (x) { return x.value.indexOf(val) >= 0; });
+                                showItems(filtered);                                
 
                             })
                         }                                               
