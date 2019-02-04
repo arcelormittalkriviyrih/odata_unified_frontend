@@ -162,7 +162,7 @@
 
                                 var val = $(this).val().toLowerCase();
 
-                                var filtered = data.filter(function (x) { return x.value.indexOf(val) >= 0; });
+                                var filtered = data.filter(function (x) { return x.value.toLowerCase().indexOf(val) >= 0; });
                                 showItems(filtered);                                
 
                             })
