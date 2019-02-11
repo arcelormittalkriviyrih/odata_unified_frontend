@@ -456,7 +456,7 @@
                             ng-model="SelectedObjects.WagonType"
                             on-select="WagonTypeSelect($item)"
                             ng-required="true"
-                            ng-disabled="!CurrentWeightSheet.WeightSheetID || isWagonTypeDisabled || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1) || !(['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) > -1)"
+                            ng-disabled="!CurrentWeightSheet.WeightSheetID || isWagonTypeDisabled || (['reject', 'closed'].indexOf(CurrentWeightSheet.Status) > -1) || !(['Тарирование', 'Контроль брутто'].indexOf(CurrentWeightSheet.WeightingMode.Description) > -1) || true"
                             class=""
                             style=""
                             theme="bootstrap"

@@ -57,7 +57,7 @@
                             ng-model="CurrentWaybill.WagonType" 
                             on-select="GetWagonNumberPattern($item)" 
                             ng-required="true" 
-                            ng-disabled="(CurrentWaybill.Status == 'used')" 
+                            ng-disabled="(CurrentWaybill.Status == 'used') || true" 
                             search-enabled="true" 
                             class="selectConsigners" 
                             theme="bootstrap"
