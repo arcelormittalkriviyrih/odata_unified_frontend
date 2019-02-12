@@ -120,7 +120,7 @@
                 <td style="text-align: center;">{{WS.Carrying}}</td>
                 <td style="text-align: center;">{{WS.MarkedTare}}</td>
                 <td style="overflow: hidden; /*white-space: nowrap; text-overflow: ellipsis; */ text-align: left;">
-                    {{WS.CargoTypeID ? (WS.CargoTypeID + '. ' + WS.CargoType) : (CurrentWeightSheet.WeightingMode.Description == 'Тарирование' ? (('weightanalytics.Labels.tare' | translate) + ', ' + ('weightanalytics.Labels.empty' | translate)) : '-')}}
+                    {{WS.CargoTypeID ? (WS.CargoSAPCode + '. ' + WS.CargoType) : (CurrentWeightSheet.WeightingMode.Description == 'Тарирование' ? (('weightanalytics.Labels.tare' | translate) + ', ' + ('weightanalytics.Labels.empty' | translate)) : '-')}}
                     <span ng-show="WS.CargoTypeNotes"> ({{WS.CargoTypeNotes}})</span></td>
                 <td style="text-align: center; padding-bottom: 0px;">
                     <div>{{WS.Brutto ? (WS.Brutto | currency:'') : '-'}}</div>
