@@ -623,7 +623,8 @@ angular.module('indexApp')
 
         //
         if (waybill_object && waybill_object['WagonType']) {
-            vmGetWagonNumberPattern(waybill_object['WagonType']);
+            // dsguk 13.02.2019
+            //vmGetWagonNumberPattern(waybill_object['WagonType']);
         }
         //
         if (waybill_object && waybill_object['SenderShop']) {
@@ -666,7 +667,8 @@ angular.module('indexApp')
         var wtype = $scope.WagonTypes.filter(function (item) { return item['Description'] == type; });
         //if (copy_id) return;
         $scope.WagonNumberCRC = type == "Вагон УЗ";
-        if (modify_id) return;
+        // dsguk 13.02.2019
+        //if (modify_id) return;
         $scope.CurrentWaybill.WagonType = wtype.length ? wtype[0] : null;//$scope.CurrentWaybill.WagonType;
         //console.log($scope.CurrentWaybill.WagonNumber + ' - ' + type);
     }
