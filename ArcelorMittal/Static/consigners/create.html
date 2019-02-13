@@ -42,7 +42,6 @@
                 <div class="controlsRowConsigners">
                     <div class="captionConsigners">{{ 'consigners.Labels.wagonTypeNumber' | translate }}</div>
                     <div class="controlConsigners" style="position:relative;">
-
                         <input type="text" class="form-control selectConsigners"
                             ng-model="CurrentWaybill.WagonNumber"
                             ng-model-options="{ debounce: 400 }" 
@@ -82,9 +81,9 @@
                             style="width: 505px"  
                             theme="bootstrap" 
                             title="{{ 'consigners.Placeholders.selectCargoType' | translate }}">
-                            <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoType' | translate }}">{{$select.selected.ID}}.{{$select.selected.Description}}</ui-select-match>
+                            <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoType' | translate }}">{{$select.selected.SAPCode}}.{{$select.selected.Description}}</ui-select-match>
                             <ui-select-choices repeat="type in CargoTypes | propsFilter: {Description: $select.search, ID: $select.search}" position='auto'>
-                            <div ng-bind-html="type.ID + '.' + type.Description | highlight: $select.search"></div>
+                            <div ng-bind-html="type.SAPCode + '.' + type.Description | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
                     </div>

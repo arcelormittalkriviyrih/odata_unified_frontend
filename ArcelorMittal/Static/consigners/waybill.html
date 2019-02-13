@@ -111,7 +111,7 @@
         <tr>
             <td style="vertical-align: top; padding-top: 3px;">{{ 'consigners.Labels.cargoType' | translate }}</td>
             <td colspan="3" style="font-weight: bold; vertical-align: top; padding-top: 3px;">
-                {{CurrentWaybill.CargoType.ID}}. {{CurrentWaybill.CargoType.Description | limitTo : 50}} 
+                {{CurrentWaybill.CargoType.SAPCode}}. {{CurrentWaybill.CargoType.Description | limitTo : 50}} 
                 <span ng-show="CurrentWaybill.CargoTypeNotes">({{CurrentWaybill.CargoTypeNotes}})</span>
             </td>
         </tr>
