@@ -82,7 +82,7 @@
                             theme="bootstrap" 
                             title="{{ 'consigners.Placeholders.selectCargoType' | translate }}">
                             <ui-select-match placeholder="{{ 'consigners.Placeholders.selectCargoType' | translate }}">{{$select.selected.SAPCode}}.{{$select.selected.Description}}</ui-select-match>
-                            <ui-select-choices repeat="type in CargoTypes | propsFilter: {Description: $select.search, SAPCode: $select.search}" position='auto'>
+                            <ui-select-choices repeat="type in CargoTypesForSelect | propsFilter: {Description: $select.search, SAPCode: $select.search}" position='auto'>
                             <div ng-bind-html="type.SAPCode + '.' + type.Description | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
