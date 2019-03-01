@@ -346,6 +346,8 @@
     $scope.CargoSenderShops = [];   // unique shops from Districts
     $scope.CargoReceiverShops = []; // unique shops from Districts
     $scope.CargoTypes = [];
+    ///// dsg
+    $scope.CargoTypesForSelect = []; // Массив для отключения родов груза
     $scope.WagonTypes = [];
     $scope.WagonNumbers = [];
     //$scope.WaybillNumbers = [];
@@ -523,6 +525,15 @@
             }
             if (resp_2) {
                 // получение списка видов лома
+                ///// dsg start
+                var NewCargoTypes = [];
+                for (var i = 0; i < resp_2.length; i++) {
+                    if (resp_2[i].InUse == 1 ) {
+                        NewCargoTypes.push(resp_2[i]);
+                    }
+                }
+                $scope.CargoTypesForSelect = NewCargoTypes;
+                ///// dsg end
                 $scope.CargoTypes = resp_2;
             }
             if (resp_3) {
