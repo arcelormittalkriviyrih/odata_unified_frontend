@@ -483,7 +483,7 @@
                             title="{{ 'weightanalytics.Placeholders.selectCargoType' | translate }}"
                             id="cargo_type">
                         <ui-select-match placeholder="{{ 'weightanalytics.Placeholders.selectCargoType' | translate }}">{{$select.selected.Description}}</ui-select-match>
-                        <ui-select-choices repeat="type in CargoTypes | propsFilter: {Description: $select.search, ID: $select.search}" position='down'>
+                        <ui-select-choices repeat="type in CargoTypes | propsFilter: {Description: $select.search, SAPCode: $select.search}" position='down'>
                         <div ng-bind-html="type.SAPCode + '.' + type.Description | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>
