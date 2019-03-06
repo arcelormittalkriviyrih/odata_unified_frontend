@@ -192,6 +192,8 @@
     <Content Include="Content\Shared\layoutWAD.css" />
     <Content Include="Content\Shared\select.css" />
     <Content Include="Content\Shared\layoutWA.css" />
+    <Content Include="Content\sounds\Bike-ring-bell.mp3" />
+    <Content Include="Content\sounds\Sound.mp3" />
     <Content Include="Content\Table\jsgrid-theme.css" />
     <Content Include="Content\Table\jsgrid.css" />
     <Content Include="Content\Table\style.css" />
