@@ -250,6 +250,24 @@
     var _commOrder, _brigadeNo, _prodDate;
 
     vmInit();
+    SoundInit();
+
+    // инициализация звуков уведомления
+    function SoundInit() {
+        $scope.bell_sound = document.createElement('audio');
+        // определяем, поддерживается ли звук в браузере
+        if (typeof $scope.bell_sound.canPlayType === "function" && $scope.bell_sound.canPlayType("audio/mpeg;codecs=mp3") !== "") {
+            $scope.bell_sound.canplay = true;
+            $scope.bell_sound.src = "Content/sounds/Sound.mp3";
+        }
+    }
+
+    // проиграть звук
+    function PlayBellSound() {
+        if ($scope.bell_sound.canplay) {
+            $scope.bell_sound.play();
+        }
+    }
 
     function vmInit() {
 
@@ -739,6 +757,9 @@
                                            scale[i] = scaleData[i];
                                    };                                  
 
+                                   if (scale.SCALES_TYPE == "LINEPACK" && (scale.WEIGHT_STAB && !scale.WEIGHT_ZERO && !scale.WEIGHT_OK)) {
+                                       PlayBellSound();
+                                   }
                                    scale.rodsQuantity = scaleData.RodsQuantity;
 
                                    if (scale.MinWeight != scaleData.MinWeight ||

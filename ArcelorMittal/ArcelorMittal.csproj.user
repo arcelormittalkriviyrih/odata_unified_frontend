@@ -3,7 +3,7 @@
   <PropertyGroup>
     <NameOfLastUsedPublishProfile>Dev</NameOfLastUsedPublishProfile>
     <UseIISExpress>true</UseIISExpress>
-    <ProjectView>ProjectFiles</ProjectView>
+    <ProjectView>ShowAllFiles</ProjectView>
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
