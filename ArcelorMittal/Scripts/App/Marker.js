@@ -764,11 +764,12 @@
                                            PlayBellSound();
                                            flagSound = true;
                                        }
-
                                    }
-                                   else {
+                                   if (scale.WEIGHT_ZERO && scale.SCALES_TYPE != 'MANUAL') {
                                        flagSound = false;
                                    }
+
+                                   
                                    scale.rodsQuantity = scaleData.RodsQuantity;
 
                                    if (scale.MinWeight != scaleData.MinWeight ||
