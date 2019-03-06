@@ -765,7 +765,7 @@
                                            flagSound = true;
                                        }
                                    }
-                                   if (scale.WEIGHT_ZERO && scale.SCALES_TYPE != 'MANUAL') {
+                                   if (scale.SCALES_TYPE == "LINEPACK" && scale.WEIGHT_ZERO && scale.SCALES_TYPE != 'MANUAL') {
                                        flagSound = false;
                                    }
 
