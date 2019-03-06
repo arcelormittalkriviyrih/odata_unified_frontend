@@ -759,13 +759,13 @@
                                            scale[i] = scaleData[i];
                                    };                                  
 
-                                   if (scale.SCALES_TYPE == "LINEPACK" && (scale.WEIGHT_STAB && !scale.WEIGHT_ZERO && !scale.WEIGHT_OK)) {
+                                   if ((scale.SCALES_TYPE == "LINEPACK" || scale.SCALES_TYPE == 'BUNT') && (scale.WEIGHT_STAB && !scale.WEIGHT_ZERO && !scale.WEIGHT_OK)) {
                                        if (!flagSound) {
                                            PlayBellSound();
                                            flagSound = true;
                                        }
                                    }
-                                   if (scale.SCALES_TYPE == "LINEPACK" && scale.WEIGHT_ZERO && scale.SCALES_TYPE != 'MANUAL') {
+                                   if ((scale.SCALES_TYPE == "LINEPACK" || scale.SCALES_TYPE == 'BUNT') && scale.WEIGHT_ZERO && scale.SCALES_TYPE != 'MANUAL') {
                                        flagSound = false;
                                    }
 
