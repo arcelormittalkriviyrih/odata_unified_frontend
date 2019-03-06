@@ -249,6 +249,8 @@
     //these global variables for correct showing commorderValue in special mode (without blinking)
     var _commOrder, _brigadeNo, _prodDate;
 
+    var flagSound = false;
+
     vmInit();
     SoundInit();
 
@@ -758,7 +760,14 @@
                                    };                                  
 
                                    if (scale.SCALES_TYPE == "LINEPACK" && (scale.WEIGHT_STAB && !scale.WEIGHT_ZERO && !scale.WEIGHT_OK)) {
-                                       PlayBellSound();
+                                       if (!flagSound) {
+                                           PlayBellSound();
+                                           flagSound = true;
+                                       }
+
+                                   }
+                                   else {
+                                       flagSound = false;
                                    }
                                    scale.rodsQuantity = scaleData.RodsQuantity;
 
