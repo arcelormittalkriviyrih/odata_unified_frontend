@@ -1547,8 +1547,10 @@ angular.module('indexApp')
 
     this.GetWagonTypes = function () {
         var filter_str = "ЖД вагоны";
+        var filter_str_auto = "Автомобильный транспорт";
         filter_str = encodeURI(filter_str);
-        var pathWagonTypes = "v_PackagingClass?$filter=ParentDescription eq '{0}'&$orderby=ID".format(filter_str);
+        filter_str_auto = encodeURI(filter_str_auto);
+        var pathWagonTypes = "v_PackagingClass?$filter=ParentDescription eq '{0}' or ParentDescription eq '{1}' &$orderby=ID".format(filter_str, filter_str_auto);
         var request = indexService.getInfo(pathWagonTypes);
         return request.then(function (response) {
             if (response.data && response.data.value && response.data.value.length) {
