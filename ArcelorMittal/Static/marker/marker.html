@@ -456,8 +456,12 @@
             {{ 'marker.byAccept' | translate }}
         </span>
 
-        <p class="msgRed" ng-show="scalesDetailsInfo.PEREBOR">
+        <p class="msgRed" ng-show="(scalesDetailsInfo.PEREBOR && (scalesDetailsInfo.SCALES_TYPE != 'BUNT' || scalesDetailsInfo.SCALES_TYPE != 'LINEPACK') )">
             {{'marker.weightOver' | translate}}
+        </p>
+
+        <p class="msgRed" ng-show="(scalesDetailsInfo.PEREBOR && (scalesDetailsInfo.SCALES_TYPE == 'BUNT' || scalesDetailsInfo.SCALES_TYPE == 'LINEPACK') )">
+            {{'marker.weightOver2' | translate}}
         </p>
 
         <p>
@@ -524,7 +528,10 @@
                     ||
                     (sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')) || scalesDetailsInfo.Send_OPC_Error"
                     ng-click="doAction('ins_JobOrderOPCCommandTakeWeight','takeWeightLabel', 'marker.takeWeightButton')">
-                {{takeWeightLabel}}
+                 
+
+                    {{(scalesDetailsInfo.PEREBOR && (scalesDetailsInfo.SCALES_TYPE == 'BUNT' || scalesDetailsInfo.SCALES_TYPE == 'LINEPACK') ) ? passWeightButton : takeWeightLabel}}
+     
             </button>
 
             <button type="button"
