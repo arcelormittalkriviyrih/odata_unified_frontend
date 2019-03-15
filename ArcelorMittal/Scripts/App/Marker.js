@@ -199,6 +199,8 @@
     $scope.separateMode = false;
     $scope.standard = true;
 
+    $scope.flagTakeWeight = true;
+
     $scope.packs = [1,2,3]
     $scope.packsLeft = $scope.packs[1];
     $scope.packsLeftCount = null; //count of packs left from procedure
@@ -752,6 +754,18 @@
                                });
 
                                if (scaleData) {
+
+                                   
+
+                                   if ($scope.flagTakeWeight && scaleData.PEREBOR && scaleData.SCALES_TYPE != 'BUNT' && scaleData.SCALES_TYPE != 'LINEPACK') {
+                                       $scope.takeWeightLabel = $translate.instant('marker.takeWeightButton');
+                                   }
+
+                                   if ($scope.flagTakeWeight && scaleData.PEREBOR && (scaleData.SCALES_TYPE == 'BUNT' || scaleData.SCALES_TYPE == 'LINEPACK')) {
+                                       $scope.takeWeightLabel = $translate.instant('marker.passWeightButton');
+                                   }
+
+
 
                                    for (var i in scaleData) {
 
@@ -2010,8 +2024,8 @@
 
     };
 
-    function vmDoAction(url, label, text) {
-        
+    function vmDoAction(url, label, text, stateObj) {
+        $scope.flagTakeWeight = false;
         if (label == 'testPrintLabel' && !$scope.isAcceptedOrder) {
 
             alert($translate.instant('marker.errorMessages.acceptOrder'))
@@ -2040,7 +2054,9 @@
 
                             } else {
 
-                                $scope[label] = $translate.instant('marker.takeWeightButton');
+                                //$scope[label] = $translate.instant('marker.takeWeightButton');
+                                $scope.flagTakeWeight = true;
+
                                 $timeout(function () {
                                     cmdTakeWeightWatcher();
                                 }, 0);

@@ -527,10 +527,12 @@
                     (!sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')
                     ||
                     (sandwichModeAccepted && (!scalesDetailsInfo.KEY_MANU || !scalesDetailsInfo.AUTO_MANU) && scalesDetailsInfo.WEIGHT_STAB && !scalesDetailsInfo.WEIGHT_ZERO && scalesDetailsInfo.TAKE_WEIGHT_LOCKED!='1')) || scalesDetailsInfo.Send_OPC_Error"
-                    ng-click="doAction('ins_JobOrderOPCCommandTakeWeight','takeWeightLabel', 'marker.takeWeightButton')">
+                    ng-click="doAction('ins_JobOrderOPCCommandTakeWeight','takeWeightLabel', 'marker.takeWeightButton', scalesDetailsInfo)">
                  
 
-                    {{(scalesDetailsInfo.PEREBOR && scalesDetailsInfo.SCALES_TYPE != 'BUNT' && scalesDetailsInfo.SCALES_TYPE != 'LINEPACK') ? takeWeightLabel : passWeightButton}}
+                    {{takeWeightLabel}}
+                
+
      
             </button>
 
