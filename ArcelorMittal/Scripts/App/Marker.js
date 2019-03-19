@@ -902,6 +902,12 @@
                 $scope.takeWeightLabel = $translate.instant('marker.passWeightButton');
             }
 
+            if ($scope.flagTakeWeight && $scope.scalesDetailsInfo.PEREBOR == null ) {
+                $scope.takeWeightLabel = $translate.instant('marker.takeWeightButton');
+            }
+
+
+
             //this variable created for watching change CMD_TAKE_WEIGHT parameter from controller
             //true/false meaning of this parameter influences on caption of 'take weight' button
             $scope.cmdTakeWeight = $scope.scalesDetailsInfo.CMD_TAKE_WEIGHT;
