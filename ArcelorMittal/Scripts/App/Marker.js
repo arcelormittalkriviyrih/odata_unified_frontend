@@ -252,6 +252,7 @@
     var _commOrder, _brigadeNo, _prodDate;
 
     var flagSound = false;
+    $scope.flagCurrentScales = false;
 
     vmInit();
     SoundInit();
@@ -756,17 +757,6 @@
                                if (scaleData) {
 
                                    
-
-                                   if ($scope.flagTakeWeight && scaleData.PEREBOR && scaleData.SCALES_TYPE != 'BUNT' && scaleData.SCALES_TYPE != 'LINEPACK') {
-                                       $scope.takeWeightLabel = $translate.instant('marker.takeWeightButton');
-                                   }
-
-                                   if ($scope.flagTakeWeight && scaleData.PEREBOR && (scaleData.SCALES_TYPE == 'BUNT' || scaleData.SCALES_TYPE == 'LINEPACK')) {
-                                       $scope.takeWeightLabel = $translate.instant('marker.passWeightButton');
-                                   }
-
-
-
                                    for (var i in scaleData) {
 
                                        if (i != 'WEIGHT_CURRENT' && i != 'MinWeight' && i != 'MaxWeight' && i != 'MaxPossibleWeight')
@@ -903,6 +893,14 @@
                 if (item.ID == id)
                     return item;
             });
+            
+            if ($scope.flagTakeWeight && $scope.scalesDetailsInfo.PEREBOR && $scope.scalesDetailsInfo.SCALES_TYPE != 'BUNT' && $scope.scalesDetailsInfo.SCALES_TYPE != 'LINEPACK') {
+                $scope.takeWeightLabel = $translate.instant('marker.takeWeightButton');
+            }
+
+            if ($scope.flagTakeWeight && $scope.scalesDetailsInfo.PEREBOR && ($scope.scalesDetailsInfo.SCALES_TYPE == 'BUNT' || $scope.scalesDetailsInfo.SCALES_TYPE == 'LINEPACK')) {
+                $scope.takeWeightLabel = $translate.instant('marker.passWeightButton');
+            }
 
             //this variable created for watching change CMD_TAKE_WEIGHT parameter from controller
             //true/false meaning of this parameter influences on caption of 'take weight' button
