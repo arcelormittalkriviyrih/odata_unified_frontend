@@ -902,7 +902,7 @@
                 $scope.takeWeightLabel = $translate.instant('marker.passWeightButton');
             }
 
-            if ($scope.flagTakeWeight && $scope.scalesDetailsInfo.PEREBOR == null ) {
+            if ($scope.flagTakeWeight && ($scope.scalesDetailsInfo.PEREBOR == null || $scope.scalesDetailsInfo.PEREBOR == false || $scope.scalesDetailsInfo.PEREBOR == undefined)) {
                 $scope.takeWeightLabel = $translate.instant('marker.takeWeightButton');
             }
 
