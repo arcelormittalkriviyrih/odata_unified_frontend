@@ -470,6 +470,22 @@ angular.module('indexApp')
     };
     $scope.WagonNumberPattern = null;
 
+    // translate chars ang transform to UPPER case
+    var arr_translates = [
+        { rus_ukr: 'Е', eng: 'E' },
+        { rus_ukr: 'Т', eng: 'T' },
+        { rus_ukr: 'О', eng: 'O' },
+        { rus_ukr: 'Р', eng: 'P' },
+        { rus_ukr: 'А', eng: 'A' },
+        { rus_ukr: 'Н', eng: 'H' },
+        { rus_ukr: 'К', eng: 'K' },
+        { rus_ukr: 'Х', eng: 'X' },
+        { rus_ukr: 'С', eng: 'C' },
+        { rus_ukr: 'В', eng: 'B' },
+        { rus_ukr: 'М', eng: 'M' },
+        { rus_ukr: 'І', eng: 'I' }
+    ];
+
     $scope.WagonNumberChange = vmWagonNumberChange;
     $scope.GetWagonNumberPattern = vmGetWagonNumberPattern;
     $scope.CargoSenderShopSelect = vmCargoSenderShopSelect;
@@ -671,9 +687,53 @@ angular.module('indexApp')
         vmWagonNumberChange();
     }
 
+    // translate chars ang transform to UPPER case
+    function MainCompareString(oldv, newv) {
+        var test_o = "";
+        var test_n = "";
+        var oldvvv = oldv.split('');
+        var newvvv = newv.split('');
+        for (var i = 0; i < oldvvv.length; i++) {
+            test_o += oldvvv[i].charCodeAt() + " - ";
+        }
+        for (var i = 0; i < newvvv.length; i++) {
+            test_n += newvvv[i].charCodeAt() + " - ";
+        }
+        alert(test_o + "\r\n" + test_n);
+    }
+
+    // translate chars ang transform to UPPER case
+    function TranslateChars(number) {
+        //var copy = number;
+        var chars = number.split('');
+        for (var i = 0; i < chars.length; i++) {
+            for (var j = 0; j < arr_translates.length; j++) {
+                if (chars[i].charCodeAt() == arr_translates[j].rus_ukr.charCodeAt()) {
+                    chars[i] = arr_translates[j].eng;
+                    break;
+                }
+            }
+        }
+        var answer = chars.join("");
+        //MainCompareString(copy, answer);
+        return answer;
+    }
+
     // ввод номера вагона
     function vmWagonNumberChange() {
+
+        // translate chars ang transform to UPPER case
+       var selected_wagon_number = "";
+       if ($scope.CurrentWaybill.WagonNumber != null && $scope.CurrentWaybill.WagonNumber != undefined) {
+            selected_wagon_number = $scope.CurrentWaybill.WagonNumber.toUpperCase();
+            selected_wagon_number = TranslateChars(selected_wagon_number);
+        }
+
         if (!$scope.CurrentWaybill.WagonNumber) { $scope.CurrentWaybill.WagonType = null; }
+
+        // translate chars ang transform to UPPER case
+        $scope.CurrentWaybill.WagonNumber = selected_wagon_number;
+
         var type = consignersService.WagonNumberCRC($scope.CurrentWaybill.WagonNumber);
         var wtype = $scope.WagonTypes.filter(function (item) { return item['Description'] == type; });
         //if (copy_id) return;

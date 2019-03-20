@@ -1,6 +1,10 @@
 ﻿
 /*weightanalytics*/
 
+#WagonNumberSelect input, #WagonNumberSelect ul li a {
+    text-transform: uppercase;
+}
+
 .weightanalytics {
     width: 180px;
 }
