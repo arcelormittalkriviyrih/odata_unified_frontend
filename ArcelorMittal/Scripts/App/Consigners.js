@@ -1747,7 +1747,8 @@ angular.module('indexApp')
             type = 12;  // Lafet-Korob
         }
             // automobile number (AAA)000(000)(-000)(AAA)(-000)
-        else if ((new RegExp('^[A-zА-я]{0,3}[0-9]{1,6}(\-[0-9]{1,3})?[A-zА-я]{0,3}\-?[0-9]{0,3}$')).test(number)) {
+        //else if ((new RegExp('^[A-zА-я]{0,3}[0-9]{1,6}(\-[0-9]{1,3})?[A-zА-я]{0,3}\-?[0-9]{0,3}$')).test(number)) {
+        else if ((new RegExp('^[A-zА-я]{0,3}[0-9]{1,6}(\-[0-9]{1,3})?[A-zА-я]{0,3}\-?[0-9]{0,3}(\/[A-zА-я]{0,3}[0-9]{1,6}(\-[0-9]{1,3})?[A-zА-я]{0,3}\-?[0-9]{0,3})?$')).test(number)) {
             type = 13;  // automobile number
         }
         //type = 0;   // not matches
