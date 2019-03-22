@@ -115,7 +115,7 @@
                 ng-class="{'reject': ($parent.$parent.language == 'en' && WS.Status == 'reject'), 'reject ru': ($parent.$parent.language != 'en' && WS.Status == 'reject')}"
                 ng-style="(WS.Status == 'reject') && {'background-color':'rgb(255, 169, 169)', 'background-repeat':'repeat', 'text-decoration': 'line-through'}">
                 <td ng-init="CurrentWeightSheet.Weighings.Totals.Count = CurrentWeightSheet.Weighings.Totals.Count + (WS.Status == 'reject' ? 0 : 1)">{{$index+1}}</td>
-                <td style="text-align: center;">{{WS.WagonNumber}}</td>
+                <td style="text-align: center;word-wrap:break-word;">{{WS.WagonNumber}}</td>
                 <td style="text-align: center;">{{WS.WaybillNumber ? WS.WaybillNumber : '-'}}</td>
                 <td style="text-align: center;">{{WS.Carrying}}</td>
                 <td style="text-align: center;">{{WS.MarkedTare}}</td>
