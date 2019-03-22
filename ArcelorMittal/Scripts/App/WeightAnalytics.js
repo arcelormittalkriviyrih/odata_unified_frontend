@@ -47,8 +47,20 @@
                     var WB_ID = $stateParams.wb_id;
                     var WS_ID = $stateParams.ws_id;
                     return $q.all([indexService.getInfo("v_AvailableWeighbridges?$filter=ID eq {0}".format(WB_ID)),
-                                   indexService.getInfo("v_WGT_WeightsheetList?$top=1&$filter=DocumentationsID eq {0}".format(WS_ID))])
+                                   indexService.getInfo("v_WGT_WeightsheetList?$top=1&$filter=DocumentationsID eq {0}".format(WS_ID)),
+                                   indexService.getInfo("v_PersonProperty_view_only")])
                         .then(function (responses) {
+
+                            // check find property
+                            var PersonProperty = responses[2].data.value;
+                            if (PersonProperty != null && PersonProperty != undefined && PersonProperty.length > 0) {
+                                if (PersonProperty[0]['Value'] == 'true')
+                                {
+                                    $state.go('app.error', { code: 'unauthorized' });
+                                    return;
+                                }
+                                else { }
+                            } else { }
                             var WB_aval = responses[0].data.value;
                             var WS_aval = responses[1].data.value;
                             // если параметр WB_ID не задан - переходим к состоянию 'app.WeightAnalytics'
@@ -108,8 +120,11 @@
                     }
 
                     return $q.all([indexService.getInfo("v_AllWeighbridges?$filter=ID eq {0}".format(WB_ID)),
-                                   indexService.getInfo("v_WGT_WeightsheetList?$top=1&$filter=WeightbridgeID eq '{0}' and DocumentationsID eq {1}".format(WB_ID, WS_ID))])
+                                   indexService.getInfo("v_WGT_WeightsheetList?$top=1&$filter=WeightbridgeID eq '{0}' and DocumentationsID eq {1}".format(WB_ID, WS_ID)),
+                                   indexService.getInfo("v_PersonProperty_view_only")
+                    ])
                     .then(function (responses) {
+
                         var WB_aval = responses[0].data.value;
                         var WS_aval = responses[1].data.value;
                         // если нет таких весов - перенаправление на Find
@@ -152,10 +167,21 @@
 
     // получение списка доступных весов
     function vmGetAvalWeighbridges() {
-        $q.all([indexService.getInfo("v_AvailableWeighbridges?$orderby=Description")])
+        $q.all([indexService.getInfo("v_AvailableWeighbridges?$orderby=Description"),
+                indexService.getInfo("v_PersonProperty_view_only")])
         .then(function (responses) {
             //AvalWeighbridges - коллекция доступных весов
             $scope.AvalWeighbridges = responses[0].data.value;
+            var PersonProperty = responses[1].data.value;
+            if (PersonProperty != null && PersonProperty != undefined && PersonProperty.length > 0) {
+                if (PersonProperty[0]['Value'] == 'true') {
+                    $scope.PersonPropAval = true;
+                } else {
+                    $scope.PersonPropAval = false;
+                }
+            } else {
+                $scope.PersonPropAval = false;
+            }
         });
 
     };
@@ -2131,6 +2157,8 @@
     $scope.WagonTypes = [];
     $scope.WagonNumbers = [];
     $scope.WSTypes = [];
+    
+    $scope.REMOTE_PRINT = false;
 
     $scope.SelectedObjects = {
         Scales: null,
@@ -2276,7 +2304,8 @@
     function vmGetConsignersServiceArrays() {
         $q.all([consignersService.GetCargoSenders(),
                 consignersService.GetCargoReceivers(),
-                weightanalyticsService.GetWSTypes()])
+                weightanalyticsService.GetWSTypes(),
+                indexService.getInfo("v_PersonProperty_remote_print")])
         .then(function (responses) {
             var resp_0 = responses[0].data.value;
             var resp_1 = responses[1].data.value;
@@ -2297,6 +2326,18 @@
                 // получение списка видов отвесных
                 $scope.WSTypes = resp_2;
 
+            }
+
+            var PersonPropertyPrint = responses[3].data.value;
+            if (PersonPropertyPrint != null && PersonPropertyPrint != undefined && PersonPropertyPrint.length > 0) {
+                if (PersonPropertyPrint[0]['Value'] == 'true') {
+                    $scope.REMOTE_PRINT = true;
+                }
+                else {
+                    $scope.REMOTE_PRINT = false;
+                }
+            } else {
+                $scope.REMOTE_PRINT = false;
             }
         })
     }

@@ -34,7 +34,27 @@ angular.module('indexApp')
             templateUrl: 'Static/consigners/create.html',
             controller: 'ConsignersCreateCtrl',
             params: { copy_id: null, modify_id: null, waybill_object: null },
+            resolve: {
+                wb: function (indexService, $stateParams, $state, $q, $timeout) {
+                    return $q.all([indexService.getInfo("v_PersonProperty_view_only")])
+                    .then(function (responses) {
+                        // check find property
+                        var PersonProperty = responses[0].data.value;
+                        if (PersonProperty != null && PersonProperty != undefined && PersonProperty.length > 0) {
+                            if (PersonProperty[0]['Value'] == 'true') {
+                                $timeout(function () {
+                                    $state.go('app.error', { code: 'unauthorized' });
+                                }, 0);
+                            }
+                            else {
+                                
+                            }
+                        } else {
 
+                        }
+                    });
+                }
+            }
         })
 
         .state('app.Consigners.Find', {
@@ -81,10 +101,29 @@ angular.module('indexApp')
 
 
 
-.controller('ConsignersCtrl', ['$scope', function ($scope) {
+.controller('ConsignersCtrl', ['$scope', '$q', 'indexService', function ($scope, $q, indexService) {
     var message = "ConsignersCtrl";
     //console.log(message);
     //alert(message);
+    vmGetAvalCons();
+
+    // получение списка доступных весов
+    function vmGetAvalCons() {
+        $q.all([indexService.getInfo("v_PersonProperty_view_only")])
+        .then(function (responses) {
+            var PersonProperty = responses[0].data.value;
+            if (PersonProperty != null && PersonProperty != undefined && PersonProperty.length > 0) {
+                if (PersonProperty[0]['Value'] == 'true') {
+                    $scope.PersonPropAval = true;
+                } else {
+                    $scope.PersonPropAval = false;
+                }
+            } else {
+                $scope.PersonPropAval = false;
+            }
+        });
+
+    };
 }])
 
 

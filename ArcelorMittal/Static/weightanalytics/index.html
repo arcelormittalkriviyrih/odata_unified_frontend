@@ -12,7 +12,7 @@
         <a ui-sref="app.WeightAnalytics.Find" ui-sref-opts="{reload: true}">{{ 'consigners.Labels.find' | translate }}</a>
     </li>
 
-    <li ng-repeat="Weighbridge in AvalWeighbridges"
+    <li ng-if="!PersonPropAval" ng-repeat="Weighbridge in AvalWeighbridges"
         class="tab" ui-sref-active="active">
         <a ui-sref=".{{Weighbridge.ScaleType}} ({ wb_id: Weighbridge.ID, ws_id: null })">{{Weighbridge.Description}}</a>
     </li>

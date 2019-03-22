@@ -167,7 +167,7 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="printDropdownMenu">
                                 <li><a href="javascript:void(0)" ng-click="PrintWS(SelectedObjects.weightsheet_id, false)">{{ 'weightanalytics.Buttons.localPrint' | translate }}</a></li>
-                                <li><a href="javascript:void(0)" ng-click="PrintWS(SelectedObjects.weightsheet_id, true)">{{ 'weightanalytics.Buttons.remotePrint' | translate }}</a></li>
+                                <li ng-if="REMOTE_PRINT"><a href="javascript:void(0)" ng-click="PrintWS(SelectedObjects.weightsheet_id, true)">{{ 'weightanalytics.Buttons.remotePrint' | translate }}</a></li>
                             </ul>
                         </div>
                     </td>
